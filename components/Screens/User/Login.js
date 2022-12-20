@@ -1,19 +1,29 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight } from 'react-native';
+import font from '../../../constants/font';
+import { useDispatch } from 'react-redux';
+import { Controller, useForm } from 'react-hook-form';
+import userActions from '../../../redux/user/actions';
 
-const width = Dimensions.get('screen').width
-const height = Dimensions.get('screen').height
+const width = Dimensions.get('window').width
+const height = Dimensions.get('window').height
 
 const Login = ({ navigation }) => {
+    const dispatch = useDispatch();
+    const { control, handleSubmit, formState: { errors, isValid } } = useForm({ mode: 'onBlur' })
+
+    const OnLogin = () => {
+            // dispatch({type:userActions.GET_USER_LOGIN,payload:'test'});
+    }
 
     return (
         <View style={style.SplashSection}>
-            <ImageBackground source={require('../../Assert/Images/background.png')} style={style.SplashBgImage} resizeMode="cover">
-                <Image style={style.BrandLogoSplash} source={require('../../Assert/Images/white-logo.png')} />
+            <ImageBackground source={require('../../../Assert/Images/background.png')} style={style.SplashBgImage} resizeMode="cover">
+                <Image style={style.BrandLogoSplash} source={require('../../../Assert/Images/white-logo.png')} />
                 <View style={style.SocialLogin}>
-                    <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/facebook.png')} /></View>
-                    <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/google.png')} /></View>
+                    <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../../Assert/Images/icon/facebook.png')} /></View>
+                    <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../../Assert/Images/icon/google.png')} /></View>
                 </View>
                 <View style={style.orDash}>
                     <Text style={style.OrLine}></Text>
@@ -38,13 +48,13 @@ const Login = ({ navigation }) => {
                         </TouchableHighlight>
                     </View>
                     <View style={style.LoginBtnSec}>
-                        <TouchableHighlight style={style.btnLogin}>
+                        <TouchableHighlight style={style.btnLogin} onPress={() => navigation.navigate('bottomNavigation')}>
                             <Text style={style.btnLoginText}>SIGN IN</Text>
                         </TouchableHighlight>
                     </View>
                     <View style={style.continewGuestSec}>
-                        <TouchableHighlight style={style.btnSighnUp}>
-                            <Text style={style.btnSighnUpText}>Forgot Password</Text>
+                        <TouchableHighlight style={style.btnSighnUp} onPress={() => navigation.navigate('SignUp')}>
+                            <Text style={style.btnSighnUpText}>Sign Up</Text>
                         </TouchableHighlight>
                         <View style={style.orDashBotton}>
                             <Text style={style.OrLine}></Text>
@@ -64,12 +74,13 @@ const Login = ({ navigation }) => {
 const style = StyleSheet.create({
     btnSighnUpText: {
         color: '#EDF2F7',
-        fontSize:12,
+        fontSize: 12,
+        fontFamily: font.font,
     },
     btnGuestText: {
         color: '#EDF2F7',
-        fontSize:12,
-        letterSpacing:1,
+        fontSize: 12,
+        letterSpacing: 1,
     },
     continewGuestSec: {
         flexDirection: 'column',
@@ -83,7 +94,7 @@ const style = StyleSheet.create({
         fontSize: 15,
     },
     btnLogin: {
-        backgroundColor: '#0086ea',
+        backgroundColor: '#0041F2',
         paddingVertical: 10,
         paddingHorizontal: 60,
         borderRadius: 100,
