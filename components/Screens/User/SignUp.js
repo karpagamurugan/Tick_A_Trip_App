@@ -56,32 +56,32 @@ const SignUp = ({ navigation }) => {
         }
     ]
     const onSubmit = (data) => {
-        console.log('data', data)
+        // console.log('data', data)
+        // console.log('dob..',moment(data.dob).format('MM/DD/YYYY'))
         dispatch({
             type: userAction.GET_USER_REGISTER, payload: {
-                first_name: data.firstName,
-                last_name: data.lastName,
-                username: data.userName,
+                first_name: data.firstName.toLowerCase(),
+                last_name: data.lastName.toLowerCase(),
+                username: data.userName.toLowerCase(),
                 mobilenumber: data.mobileNumber,
                 email: data.email,
-                dob: moment(data.dob).format('MM/DD/YYYY'),
+                dob: moment(data.dob).format('YYYY-MM-DD'),
                 password: data.password,
                 confirmuserpasseword: data.confirmPassword,
                 maritalstatus: data.marriedStatus,
                 gender: data.gender,
-
                 country: data.usercountry,
                 currency: data.usercurrency,
                 aboutme: data.aboutme,
                 occupation: data.occupation,
                 favouritedest: data.fovouritedestination,
                 fovouritefood: data.fovouritefood,
-
                 flyernumber: data.frequentFlyerNumber,
                 passportnumber: data.passportNumber,
                 issuecountry: data.issuingCountry,
                 postalcode: data.postalCode,
-                expirydate: moment(data.passportExDate).format('MM/DD/YYYY'),
+                expirydate:'',
+                // expirydate: moment(data.passportExDate).format('YYYY-MM-DD'),
                 pan: data.pan,
             }
         })
@@ -306,7 +306,7 @@ const SignUp = ({ navigation }) => {
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput   {...register("email")} name="email"
-                                        onChangeText={value => onChange(value)}
+                                        onChangeText={value => onChange(value.toLowerCase())}
                                         value={value} keyboardType='default' placeholder='Enter the email address' style={style.input} />
                                 )}
                                 name="email"
@@ -554,10 +554,10 @@ const SignUp = ({ navigation }) => {
                         mode="date"
                         {...register("dob")}
                         name="dob"
-                        onConfirm={(dob) => {
-                            onChange(dobDate = dob)
+                        onConfirm={(DOB) => {
+                            onChange(dobDate = DOB)
                             setOpen(!open);
-                            setDobDate(dobDate = dob);
+                            setDobDate(dobDate = DOB);
                         }}
                         onCancel={() => {
                             setOpen(!open);
