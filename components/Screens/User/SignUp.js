@@ -11,26 +11,18 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import { useForm, Controller } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup'; // install @hookform/resolvers (not @hookform/resolvers/yup)
 import * as yup from 'yup';
+import { useDispatch } from 'react-redux';
+import userAction from '../../../redux/user/actions'
 
-const schema = yup.object().shape({
-    title: yup.string()
-        .required('Required')
-        .min(3, 'Too short')
-        .max(30, 'Too long'),
-    content: yup.string(),
-    language: yup.string()
-        .required('Required'),
-});
+
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const SignUp = ({ navigation }) => {
-    // const { control, handleSubmit, errors, setValue, reset, getValues, watch } = useForm({
-    //     resolver: yupResolver(schema)
-    //   });
-    const { handleSubmit, control, formState: { errors }, reset, register } = useForm();
-
+    const dispatch = useDispatch()
+    const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
+    // const { handleSubmit, control, formState: { errors }, reset, register } = useForm();
     let [dobDate, setDobDate] = useState(new Date());
     let [passportExDate, setPassportExDate] = useState(new Date());
     const [passportExDateopen, setpassportExDateOpen] = useState(false);
@@ -40,6 +32,8 @@ const SignUp = ({ navigation }) => {
     const [otherOption, setOtherOption] = useState(false)
     const [privacyBox, setPrivacyBox] = useState(false)
     const [policyBox, setPolicyBox] = useState(false)
+    const [userPassword, setUserPassword] = useState('')
+    const [userConfirmPassword, setUserConfirmPassword] = useState('')
 
     const maridalStatus = [
         {
@@ -61,10 +55,38 @@ const SignUp = ({ navigation }) => {
             value: 'Female'
         }
     ]
-    const onSubmit = (data) => (
+    const onSubmit = (data) => {
         console.log('data', data)
-    )
-    console.log("test", errors)
+        dispatch({
+            type: userAction.GET_USER_REGISTER, payload: {
+                first_name: data.firstName,
+                last_name: data.lastName,
+                username: data.userName,
+                mobilenumber: data.mobileNumber,
+                email: data.email,
+                dob: moment(data.dob).format('MM/DD/YYYY'),
+                password: data.password,
+                confirmuserpasseword: data.confirmPassword,
+                maritalstatus: data.marriedStatus,
+                gender: data.gender,
+
+                country: data.usercountry,
+                currency: data.usercurrency,
+                aboutme: data.aboutme,
+                occupation: data.occupation,
+                favouritedest: data.fovouritedestination,
+                fovouritefood: data.fovouritefood,
+
+                flyernumber: data.frequentFlyerNumber,
+                passportnumber: data.passportNumber,
+                issuecountry: data.issuingCountry,
+                postalcode: data.postalCode,
+                expirydate: moment(data.passportExDate).format('MM/DD/YYYY'),
+                pan: data.pan,
+            }
+        })
+    }
+
     return (
         // <ScrollView contentInsetAdjustmentBehavior="automatic" showsVerticalScrollIndicator={false} horizontal={false} showsHorizontalScrollIndicator={false}>
         <View style={{ position: 'relative', width: width, backgroundColor: '#fff', }}>
@@ -76,89 +98,110 @@ const SignUp = ({ navigation }) => {
                     <View style={style.signUpForm}>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Gender *</Text>
-                            {/* <Controller
+                            <Controller
                                 control={control}
-                                render={({ field: { onChange,  value } }) => ( */}
-                            <Dropdown
-                                maxHeight={150}
-                                data={selectTitle}
-                                labelField="value"
-                                valueField="value"
-                                value={title}
-                                showsVerticalScrollIndicator={true}
-                                placeholder="Select program"
-                                onChange={(item) => {
-                                    setTitle(item.value)
-                                }}
-                                selectedTextProps={{
-                                    style: {
-                                        fontSize: 13,
-                                        fontWeight: '500',
-                                        fontFamily: font.font,
-                                        letterSpacing: 0.5,
-                                        padding: 0,
+                                name="gender"
+                                rules={{
+                                    required: {
+                                        value: true,
+                                        message: 'Select your gender!',
                                     },
                                 }}
-                                style={{ padding: 0, backgroundColor: '#EDF2F7', paddingVertical: 5, paddingHorizontal: 20, marginBottom: 15, borderRadius: 5, }}
-                                renderRightIcon={() => (
-                                    <MaterialIcon
-                                        name="chevron-down-circle-outline"
-                                        size={25}
-                                        style={{ fontSize: 18, color: color.colorTheme, }}
-                                    />)}
+                                render={({ field: { onChange, value } }) => (
+                                    <Dropdown
+                                        maxHeight={150}
+                                        data={selectTitle}
+                                        labelField="value"
+                                        valueField="value"
+                                        value={title}
+                                        showsVerticalScrollIndicator={true}
+                                        placeholder="Select your gender"
+                                        {...register("gender")}
+                                        name="gender"
+                                        onChange={(item) => {
+                                            onChange(item.value)
+                                            setTitle(item.value)
+                                        }}
+                                        selectedTextProps={{
+                                            style: {
+                                                fontSize: 13,
+                                                fontWeight: '500',
+                                                fontFamily: font.font,
+                                                letterSpacing: 0.5,
+                                                padding: 0,
+                                            },
+                                        }}
+                                        style={{ padding: 0, backgroundColor: '#EDF2F7', paddingVertical: 5, paddingHorizontal: 20, borderRadius: 5, }}
+                                        renderRightIcon={() => (
+                                            <MaterialIcon
+                                                name="chevron-down-circle-outline"
+                                                size={25}
+                                                style={{ fontSize: 18, color: color.colorTheme, }}
+                                            />)}
+                                    />
+                                )}
                             />
-                            {/* )}
-                                name="gender"
-                                rules={{ required: true }}
-                            /> */}
+                            {errors.gender && (
+                                <Text style={style.errorMessage}>{errors.gender.message}</Text>
+                            )}
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Maridal Status *</Text>
-                            {/* <Controller
+                            <Controller
                                 control={control}
-                                render={({ field: { onChange,  value } }) => ( */}
-                            <Dropdown
-                                maxHeight={150}
-                                data={maridalStatus}
-                                labelField="value"
-                                valueField="value"
-                                value={marriedStatus}
-                                showsVerticalScrollIndicator={true}
-                                placeholder="Select program"
-                                onChange={(item) => {
-                                    setMarriedStatus(item.value)
-                                }}
-                                selectedTextProps={{
-                                    style: {
-                                        fontSize: 13,
-                                        fontWeight: '500',
-                                        fontFamily: font.font,
-                                        letterSpacing: 0.5,
+                                name="marriedStatus"
+                                rules={{
+                                    required: {
+                                        value: true,
+                                        message: 'Select your maridal status!',
                                     },
                                 }}
-                                style={{ padding: 0, backgroundColor: '#EDF2F7', paddingVertical: 5, paddingHorizontal: 20, marginBottom: 15, borderRadius: 5, }}
-                                renderRightIcon={() => (
-                                    <MaterialIcon
-                                        name="chevron-down-circle-outline"
-                                        size={25}
-                                        style={{ fontSize: 18, color: color.colorTheme, }}
-                                    />)}
+                                render={({ field: { onChange, value } }) => (
+                                    <Dropdown
+                                        maxHeight={150}
+                                        data={maridalStatus}
+                                        labelField="value"
+                                        valueField="value"
+                                        value={marriedStatus}
+                                        showsVerticalScrollIndicator={true}
+                                        placeholder="Select program"
+                                        {...register("marriedStatus")}
+                                        name="marriedStatus"
+                                        onChange={(item) => {
+                                            onChange(item.value)
+                                            setMarriedStatus(item.value)
+                                        }}
+                                        selectedTextProps={{
+                                            style: {
+                                                fontSize: 13,
+                                                fontWeight: '500',
+                                                fontFamily: font.font,
+                                                letterSpacing: 0.5,
+                                            },
+                                        }}
+                                        style={{ padding: 0, backgroundColor: '#EDF2F7', paddingVertical: 5, paddingHorizontal: 20, borderRadius: 5, }}
+                                        renderRightIcon={() => (
+                                            <MaterialIcon
+                                                name="chevron-down-circle-outline"
+                                                size={25}
+                                                style={{ fontSize: 18, color: color.colorTheme, }}
+                                            />)}
+                                    />
+                                )}
                             />
-                            {/* )}
-                                name="maridalStatus"
-                                rules={{ required: true }}
-                            /> */}
+                            {errors.marriedStatus && (
+                                <Text style={style.errorMessage}>{errors.marriedStatus.message}</Text>
+                            )}
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>User name *</Text>
-
                             <Controller
                                 control={control}
                                 name="userName"
                                 rules={{
                                     required: {
                                         value: true,
-                                        message: ' Enter Valid UserName!',
+                                        message: 'Enter your user name!',
                                     },
                                 }}
                                 render={({ field: { onChange, value } }) => (
@@ -176,6 +219,9 @@ const SignUp = ({ navigation }) => {
                                     />
                                 )}
                             />
+                            {errors.userName && (
+                                <Text style={style.errorMessage}>{errors.userName.message}</Text>
+                            )}
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>First name *</Text>
@@ -185,7 +231,7 @@ const SignUp = ({ navigation }) => {
                                 rules={{
                                     required: {
                                         value: true,
-                                        message: ' Enter Valid First name!'
+                                        message: 'Enter your first name!'
                                     },
                                 }}
                                 render={({ field: { onChange, value } }) => (
@@ -195,12 +241,15 @@ const SignUp = ({ navigation }) => {
                                         onChangeText={(value) => onChange(value)}
                                         value={value}
                                         keyboardType='default'
-                                        placeholder='Enter the firs name'
+                                        placeholder='Enter your first name'
                                         style={style.input}
                                     />
                                 )}
 
                             />
+                            {errors.firstName && (
+                                <Text style={style.errorMessage}>{errors.firstName.message}</Text>
+                            )}
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Last name *</Text>
@@ -210,7 +259,7 @@ const SignUp = ({ navigation }) => {
                                 rules={{
                                     required: {
                                         value: true,
-                                        message: ' Enter Valid lastName!'
+                                        message: 'Enter your last name!'
                                     }
                                 }}
                                 render={({ field: { onChange, value } }) => (
@@ -225,19 +274,31 @@ const SignUp = ({ navigation }) => {
                                     />
                                 )}
                             />
+                            {errors.lastName && (
+                                <Text style={style.errorMessage}>{errors.lastName.message}</Text>
+                            )}
                         </View>
-                        {/* <View style={style.formGroup}>
+                        <View style={style.formGroup}>
                             <Text style={style.label}>Mobile Number *</Text>
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
-                                    <TextInput   {...register("mobileNumber")} name="mobileNumber"
-                                        onChangeText={value => onChange(value)}
-                                        value={value} keyboardType='default' placeholder='Enter the mobile number' style={style.input} />
+                                    <TextInput  {...register("mobileNumber")} name="mobileNumber"
+                                        onChangeText={value => onChange(value)} maxLength={10}
+                                        value={value} keyboardType='numeric' placeholder='Enter the mobile number' style={style.input} />
                                 )}
                                 name="mobileNumber"
-                                rules={{ required: true }}
+                                rules={{
+                                    required: "Enter your mobile number!",
+                                    pattern: {
+                                        value: /^(?:0\.(?:0[0-9]|[0-9]\d?)|[0-9]\d*(?:\.\d{1,2})?)(?:e[+-]?\d+)?$/,
+                                        message: 'Enter valid mobile number!',
+                                    },
+                                }}
                             />
+                            {errors.mobileNumber && (
+                                <Text style={style.errorMessage}>{errors.mobileNumber.message}</Text>
+                            )}
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Email *</Text>
@@ -249,8 +310,17 @@ const SignUp = ({ navigation }) => {
                                         value={value} keyboardType='default' placeholder='Enter the email address' style={style.input} />
                                 )}
                                 name="email"
-                                rules={{ required: true }}
+                                rules={{
+                                    required: "Enter your mail!",
+                                    pattern: {
+                                        value: /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/,
+                                        message: 'Enter valid mail!',
+                                    },
+                                }}
                             />
+                            {errors.email && (
+                                <Text style={style.errorMessage}>{errors.email.message}</Text>
+                            )}
                         </View>
 
                         <View style={style.formGroup}>
@@ -258,20 +328,51 @@ const SignUp = ({ navigation }) => {
                             <TouchableOpacity style={style.input} onPress={() => setOpen(!open)}>
                                 <Text style={{ color: 'black', paddingVertical: 5, borderRadius: 5, }}>{moment(dobDate).format('DD/MM/YYYY').toString()}</Text>
                             </TouchableOpacity>
+                            {errors.dob && (
+                                <Text style={style.errorMessage}>{errors.dob.message}</Text>
+                            )}
                         </View>
-
+                        <View style={style.formGroup}>
+                            <Text style={style.label}>Postal Code *</Text>
+                            <Controller
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput  {...register("postalCode")} name="postalCode"
+                                        onChangeText={value => onChange(value)} maxLength={6}
+                                        value={value} keyboardType='numeric' placeholder='Enter the postalCode' style={style.input} />
+                                )}
+                                name="postalCode"
+                                rules={{
+                                    required: "Enter your postalCode!",
+                                }}
+                            />
+                            {errors.postalCode && (
+                                <Text style={style.errorMessage}>{errors.postalCode.message}</Text>
+                            )}
+                        </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Password *</Text>
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput   {...register("password")} name="password"
-                                        onChangeText={value => onChange(value)}
+                                        onChangeText={value => {
+                                            setUserPassword(value)
+                                            onChange(value)
+                                        }}
                                         value={value} style={style.input} textContentType="newPassword" secureTextEntry placeholder='Enter your password' />
                                 )}
                                 name="password"
-                                rules={{ required: true }}
+                                rules={{
+                                    required: {
+                                        value: true,
+                                        message: 'Enter your password!',
+                                    },
+                                }}
                             />
+                            {errors.password && (
+                                <Text style={style.errorMessage}>{errors.password.message}</Text>
+                            )}
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Confirm Password *</Text>
@@ -279,12 +380,26 @@ const SignUp = ({ navigation }) => {
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput   {...register("confirmPassword")} name="confirmPassword"
-                                        onChangeText={value => onChange(value)}
+                                        onChangeText={value => {
+                                            setUserConfirmPassword(value)
+                                            onChange(value)
+                                        }}
                                         value={value} style={style.input} textContentType="newPassword" secureTextEntry placeholder='Enter your confirm password' />
                                 )}
                                 name="confirmPassword"
-                                rules={{ required: true }}
+                                rules={{
+                                    required: {
+                                        value: true,
+                                        message: 'Enter the confirm password!',
+                                    },
+                                }}
                             />
+                            {errors.confirmPassword && (
+                                <Text style={style.errorMessage}>{errors.confirmPassword.message}</Text>
+                            )}
+                            {userPassword === userConfirmPassword ? null : (
+                                <Text style={style.errorMessage}>Password does not match</Text>
+                            )}
                         </View>
 
                         <View style={style.formGroup}>
@@ -312,7 +427,7 @@ const SignUp = ({ navigation }) => {
                                                 value={value} keyboardType='default' placeholder='Enter the Frequent flyer number' style={style.input} />
                                         )}
                                         name="frequentFlyerNumber"
-                                        rules={{ required: true }}
+                                        rules={{ required: false }}
                                     />
                                 </View>
                                 <View style={style.formGroup}>
@@ -325,7 +440,7 @@ const SignUp = ({ navigation }) => {
                                                 value={value} keyboardType='default' placeholder='Enter the Passport number' style={style.input} />
                                         )}
                                         name="passportNumber"
-                                        rules={{ required: true }}
+                                        rules={{ required: false }}
                                     />
                                 </View>
                                 <View style={style.formGroup}>
@@ -338,7 +453,7 @@ const SignUp = ({ navigation }) => {
                                                 value={value} keyboardType='default' placeholder='Enter the Issuing country*' style={style.input} />
                                         )}
                                         name="issuingCountry"
-                                        rules={{ required: true }}
+                                        rules={{ required: false }}
                                     />
                                 </View>
                                 <View style={style.formGroup}>
@@ -357,7 +472,7 @@ const SignUp = ({ navigation }) => {
                                                 value={value} keyboardType='default' placeholder='Enter the PAN' style={style.input} />
                                         )}
                                         name="pan"
-                                        rules={{ required: true }}
+                                        rules={{ required: false }}
                                     />
                                 </View>
                             </View>
@@ -413,41 +528,64 @@ const SignUp = ({ navigation }) => {
                                     </Text>
                                 </TouchableOpacity>
                             </View>
-                        </View> */}
+                        </View>
                         {/* <Button title='Submit' onPress={handleSubmit(onSubmit)}/> */}
                         <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30 }}>
-                            <TouchableOpacity style={style.button} onPress={handleSubmit(onSubmit)}><Text style={{ color: '#fff' }} >SING UP</Text></TouchableOpacity>
+                            <TouchableOpacity disabled={(privacyBox !== true) || (policyBox !== true)} style={((privacyBox !== true) || (policyBox !== true)) ? style.buttonError : style.button} onPress={handleSubmit(onSubmit)}><Text style={{ color: '#fff' }} >SING UP</Text></TouchableOpacity>
                         </View>
                     </View>
                 </View>
             </ScrollView>
 
-
-            <DatePicker
-                modal
-                open={open}
-                date={dobDate}
-                mode="date"
-                onConfirm={(dob) => {
-                    setOpen(!open);
-                    setDobDate(dobDate = dob);
+            <Controller
+                control={control}
+                name="dob"
+                rules={{
+                    required: {
+                        value: true,
+                        message: 'Select your dob!',
+                    },
                 }}
-                onCancel={() => {
-                    setOpen(!open);
-                }}
+                render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                        modal
+                        open={open}
+                        date={dobDate}
+                        mode="date"
+                        {...register("dob")}
+                        name="dob"
+                        onConfirm={(dob) => {
+                            onChange(dobDate = dob)
+                            setOpen(!open);
+                            setDobDate(dobDate = dob);
+                        }}
+                        onCancel={() => {
+                            setOpen(!open);
+                        }}
+                    />
+                )}
             />
-            <DatePicker
-                modal
-                open={passportExDateopen}
-                date={passportExDate}
-                mode="date"
-                onConfirm={(dob) => {
-                    setOpen(!passportExDateopen);
-                    setPassportExDate(passportExDate = dob);
-                }}
-                onCancel={() => {
-                    setOpen(!open);
-                }}
+            <Controller
+                control={control}
+                name="passportExDate"
+                render={({ field: { onChange, value } }) => (
+                    <DatePicker
+                        modal
+                        open={passportExDateopen}
+                        date={passportExDate}
+                        mode="date"
+                        {...register("passportExDate")}
+                        name="passportExDate"
+                        onConfirm={(dob) => {
+                            onChange(passportExDate = dob)
+                            setOpen(!passportExDateopen);
+                            setPassportExDate(passportExDate = dob);
+                        }}
+                        onCancel={() => {
+                            setOpen(!open);
+                        }}
+                    />
+                )}
             />
         </View>
         // </ScrollView>
@@ -455,6 +593,16 @@ const SignUp = ({ navigation }) => {
     )
 }
 const style = StyleSheet.create({
+    errorMessage: {
+        color: 'red',
+        fontSize: 12,
+    },
+    buttonError: {
+        backgroundColor: '#cccccc',
+        paddingVertical: 10,
+        paddingHorizontal: 60,
+        borderRadius: 100,
+    },
     button: {
         backgroundColor: '#0041F2',
         paddingVertical: 10,
@@ -464,7 +612,6 @@ const style = StyleSheet.create({
     input: {
         backgroundColor: '#EDF2F7',
         paddingVertical: 10,
-        marginBottom: 15,
         paddingHorizontal: 20,
         color: '#999999',
         borderRadius: 5,
@@ -495,7 +642,8 @@ const style = StyleSheet.create({
         bottom: 0,
     },
     formGroup: {
-        flexDirection: 'column'
+        flexDirection: 'column',
+        marginBottom: 10,
     }
 })
 export default SignUp

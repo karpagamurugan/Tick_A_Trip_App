@@ -28,18 +28,24 @@ const getUserRegister = function* (data) {
         form_data.append(key, payload[key]);
     }
     try {
+        console.log('form_data', form_data);
+        console.log('form_data', API_URL);
+
         const result = yield call(() =>
-            axios.post(`${API_URL}/register`,
+            axios.post(
+                `${API_URL}/register`,
                 form_data, {
                 headers: {
                     "Content-Type": "multipart/form-data",
-                }
+                },
             }
             )
-        )
-        yield put({ type: actions.SET_USER_REGISTER, payload: result.data })
+        );
+        console.log('result', result)
+        yield put({ type: actions.SET_USER_REGISTER, payload: result.data });
     } catch (err) {
-        yield put({ type: actions.SET_USER_REGISTER, payload: err.data })
+        console.log('err', err)
+        yield put({ type: actions.SET_USER_REGISTER, payload: err.data });
     }
 }
 
