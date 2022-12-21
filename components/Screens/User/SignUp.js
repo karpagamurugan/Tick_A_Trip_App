@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
-import { ScrollView, Dimensions, Text, View, StyleSheet, ImageBackground, TextInput, Image, TouchableOpacity } from 'react-native';
+import { Button, ScrollView, Dimensions, Text, View, StyleSheet, ImageBackground, TextInput, Image, TouchableOpacity } from 'react-native';
 import font from '../../../constants/font';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
@@ -8,11 +8,28 @@ import { Dropdown } from 'react-native-element-dropdown'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import color from '../../../constants/color'
 import Fontisto from 'react-native-vector-icons/Fontisto'
+import { useForm, Controller } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup'; // install @hookform/resolvers (not @hookform/resolvers/yup)
+import * as yup from 'yup';
+
+const schema = yup.object().shape({
+    title: yup.string()
+        .required('Required')
+        .min(3, 'Too short')
+        .max(30, 'Too long'),
+    content: yup.string(),
+    language: yup.string()
+        .required('Required'),
+});
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
 
 const SignUp = ({ navigation }) => {
+    // const { control, handleSubmit, errors, setValue, reset, getValues, watch } = useForm({
+    //     resolver: yupResolver(schema)
+    //   });
+    const { handleSubmit, control, formState: { errors }, reset, register } = useForm();
 
     let [dobDate, setDobDate] = useState(new Date());
     let [passportExDate, setPassportExDate] = useState(new Date());
@@ -44,6 +61,10 @@ const SignUp = ({ navigation }) => {
             value: 'Female'
         }
     ]
+    const onSubmit = (data) => (
+        console.log('data', data)
+    )
+    console.log("test", errors)
     return (
         // <ScrollView contentInsetAdjustmentBehavior="automatic" showsVerticalScrollIndicator={false} horizontal={false} showsHorizontalScrollIndicator={false}>
         <View style={{ position: 'relative', width: width, backgroundColor: '#fff', }}>
@@ -55,11 +76,14 @@ const SignUp = ({ navigation }) => {
                     <View style={style.signUpForm}>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Gender *</Text>
+                            {/* <Controller
+                                control={control}
+                                render={({ field: { onChange,  value } }) => ( */}
                             <Dropdown
                                 maxHeight={150}
                                 data={selectTitle}
-                                labelField="name"
-                                valueField="name"
+                                labelField="value"
+                                valueField="value"
                                 value={title}
                                 showsVerticalScrollIndicator={true}
                                 placeholder="Select program"
@@ -83,14 +107,21 @@ const SignUp = ({ navigation }) => {
                                         style={{ fontSize: 18, color: color.colorTheme, }}
                                     />)}
                             />
+                            {/* )}
+                                name="gender"
+                                rules={{ required: true }}
+                            /> */}
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Maridal Status *</Text>
+                            {/* <Controller
+                                control={control}
+                                render={({ field: { onChange,  value } }) => ( */}
                             <Dropdown
                                 maxHeight={150}
                                 data={maridalStatus}
-                                labelField="name"
-                                valueField="name"
+                                labelField="value"
+                                valueField="value"
                                 value={marriedStatus}
                                 showsVerticalScrollIndicator={true}
                                 placeholder="Select program"
@@ -113,26 +144,113 @@ const SignUp = ({ navigation }) => {
                                         style={{ fontSize: 18, color: color.colorTheme, }}
                                     />)}
                             />
+                            {/* )}
+                                name="maridalStatus"
+                                rules={{ required: true }}
+                            /> */}
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>User name *</Text>
-                            <TextInput keyboardType='default' placeholder='Enter the name' style={style.input} />
+
+                            <Controller
+                                control={control}
+                                name="userName"
+                                rules={{
+                                    required: {
+                                        value: true,
+                                        message: ' Enter Valid UserName!',
+                                    },
+                                }}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput
+                                        {...register("userName")}
+                                        maxLength={10}
+                                        name="userName"
+                                        value={value}
+                                        onChangeText={(value) => {
+                                            onChange(value)
+                                        }}
+                                        keyboardType='default'
+                                        placeholder='Enter the name'
+                                        style={style.input}
+                                    />
+                                )}
+                            />
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>First name *</Text>
-                            <TextInput keyboardType='default' placeholder='Enter the firs name' style={style.input} />
+                            <Controller
+                                control={control}
+                                name="firstName"
+                                rules={{
+                                    required: {
+                                        value: true,
+                                        message: ' Enter Valid First name!'
+                                    },
+                                }}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput
+                                        {...register("firstName")}
+                                        name="firstName"
+                                        onChangeText={(value) => onChange(value)}
+                                        value={value}
+                                        keyboardType='default'
+                                        placeholder='Enter the firs name'
+                                        style={style.input}
+                                    />
+                                )}
+
+                            />
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Last name *</Text>
-                            <TextInput keyboardType='default' placeholder='Enter the last name' style={style.input} />
+                            <Controller
+                                control={control}
+                                name="lastName"
+                                rules={{
+                                    required: {
+                                        value: true,
+                                        message: ' Enter Valid lastName!'
+                                    }
+                                }}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput
+                                        {...register("lastName")}
+                                        name="lastName"
+                                        onChangeText={(value) => onChange(value)}
+                                        value={value}
+                                        keyboardType='default'
+                                        placeholder='Enter the last name'
+                                        style={style.input}
+                                    />
+                                )}
+                            />
                         </View>
-                        <View style={style.formGroup}>
+                        {/* <View style={style.formGroup}>
                             <Text style={style.label}>Mobile Number *</Text>
-                            <TextInput keyboardType='default' placeholder='Enter the mobile number' style={style.input} />
+                            <Controller
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput   {...register("mobileNumber")} name="mobileNumber"
+                                        onChangeText={value => onChange(value)}
+                                        value={value} keyboardType='default' placeholder='Enter the mobile number' style={style.input} />
+                                )}
+                                name="mobileNumber"
+                                rules={{ required: true }}
+                            />
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Email *</Text>
-                            <TextInput keyboardType='default' placeholder='Enter the email address' style={style.input} />
+                            <Controller
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput   {...register("email")} name="email"
+                                        onChangeText={value => onChange(value)}
+                                        value={value} keyboardType='default' placeholder='Enter the email address' style={style.input} />
+                                )}
+                                name="email"
+                                rules={{ required: true }}
+                            />
                         </View>
 
                         <View style={style.formGroup}>
@@ -144,11 +262,29 @@ const SignUp = ({ navigation }) => {
 
                         <View style={style.formGroup}>
                             <Text style={style.label}>Password *</Text>
-                            <TextInput style={style.input} textContentType="newPassword" secureTextEntry placeholder='Enter your password' />
+                            <Controller
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput   {...register("password")} name="password"
+                                        onChangeText={value => onChange(value)}
+                                        value={value} style={style.input} textContentType="newPassword" secureTextEntry placeholder='Enter your password' />
+                                )}
+                                name="password"
+                                rules={{ required: true }}
+                            />
                         </View>
                         <View style={style.formGroup}>
                             <Text style={style.label}>Confirm Password *</Text>
-                            <TextInput style={style.input} textContentType="newPassword" secureTextEntry placeholder='Enter your confirm password' />
+                            <Controller
+                                control={control}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput   {...register("confirmPassword")} name="confirmPassword"
+                                        onChangeText={value => onChange(value)}
+                                        value={value} style={style.input} textContentType="newPassword" secureTextEntry placeholder='Enter your confirm password' />
+                                )}
+                                name="confirmPassword"
+                                rules={{ required: true }}
+                            />
                         </View>
 
                         <View style={style.formGroup}>
@@ -168,15 +304,42 @@ const SignUp = ({ navigation }) => {
                             <View style={{ backgroundColor: '#efefef9c', padding: 20 }}>
                                 <View style={style.formGroup}>
                                     <Text style={style.label}>Frequent flyer number</Text>
-                                    <TextInput keyboardType='default' placeholder='Enter the Frequent flyer number' style={style.input} />
+                                    <Controller
+                                        control={control}
+                                        render={({ field: { onChange, value } }) => (
+                                            <TextInput   {...register("frequentFlyerNumber")} name="frequentFlyerNumber"
+                                                onChangeText={value => onChange(value)}
+                                                value={value} keyboardType='default' placeholder='Enter the Frequent flyer number' style={style.input} />
+                                        )}
+                                        name="frequentFlyerNumber"
+                                        rules={{ required: true }}
+                                    />
                                 </View>
                                 <View style={style.formGroup}>
                                     <Text style={style.label}>Passport number</Text>
-                                    <TextInput keyboardType='default' placeholder='Enter the Passport number' style={style.input} />
+                                    <Controller
+                                        control={control}
+                                        render={({ field: { onChange, value } }) => (
+                                            <TextInput   {...register("passportNumber")} name="passportNumber"
+                                                onChangeText={value => onChange(value)}
+                                                value={value} keyboardType='default' placeholder='Enter the Passport number' style={style.input} />
+                                        )}
+                                        name="passportNumber"
+                                        rules={{ required: true }}
+                                    />
                                 </View>
                                 <View style={style.formGroup}>
                                     <Text style={style.label}>Issuing country</Text>
-                                    <TextInput keyboardType='default' placeholder='Enter the Issuing country*' style={style.input} />
+                                    <Controller
+                                        control={control}
+                                        render={({ field: { onChange, value } }) => (
+                                            <TextInput   {...register("issuingCountry")} name="issuingCountry"
+                                                onChangeText={value => onChange(value)}
+                                                value={value} keyboardType='default' placeholder='Enter the Issuing country*' style={style.input} />
+                                        )}
+                                        name="issuingCountry"
+                                        rules={{ required: true }}
+                                    />
                                 </View>
                                 <View style={style.formGroup}>
                                     <Text style={style.label}>Expiry date</Text>
@@ -186,7 +349,16 @@ const SignUp = ({ navigation }) => {
                                 </View>
                                 <View style={style.formGroup}>
                                     <Text style={style.label}>PAN</Text>
-                                    <TextInput keyboardType='default' placeholder='Enter the PAN' style={style.input} />
+                                    <Controller
+                                        control={control}
+                                        render={({ field: { onChange, value } }) => (
+                                            <TextInput   {...register("pan")} name="pan"
+                                                onChangeText={value => onChange(value)}
+                                                value={value} keyboardType='default' placeholder='Enter the PAN' style={style.input} />
+                                        )}
+                                        name="pan"
+                                        rules={{ required: true }}
+                                    />
                                 </View>
                             </View>
                             :
@@ -198,52 +370,53 @@ const SignUp = ({ navigation }) => {
                             </View>
                             <Text style={{ marginLeft: 10, color: color.colorText, fontSize: 14, fontWeight: '500', }}>Complete Your Profile And Enjoy 5000 As Joining Bonus</Text>
                         </View>
-                        <View style={{marginVertical:30}}>
-                            <View style={{flexDirection:'column'}}>
-                                <TouchableOpacity style={{flexDirection:'row',alignItems:'center',marginBottom:10}} onPress={() => setPolicyBox(!policyBox)}>
+                        <View style={{ marginVertical: 30 }}>
+                            <View style={{ flexDirection: 'column' }}>
+                                <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }} onPress={() => setPolicyBox(!policyBox)}>
                                     <View >
-                                    {policyBox === true ?
-                                        <Fontisto
-                                            name='checkbox-active'
-                                            size={15}
-                                            style={{color:color.colorBtn}}
-                                        />
-                                        :
-                                        <Fontisto
-                                            name='checkbox-passive'
-                                            size={15}
-                                            style={{color:'#000'}}
-                                        />
-                                    }
+                                        {policyBox === true ?
+                                            <Fontisto
+                                                name='checkbox-active'
+                                                size={15}
+                                                style={{ color: color.colorBtn }}
+                                            />
+                                            :
+                                            <Fontisto
+                                                name='checkbox-passive'
+                                                size={15}
+                                                style={{ color: '#000' }}
+                                            />
+                                        }
                                     </View>
-                                   <Text style={{marginLeft:10, color:'#666666',fontSize:14,fontWeight:'500'}}>
-                                   I have read and accepted the Terms of Use.
-                                   </Text>
+                                    <Text style={{ marginLeft: 10, color: '#666666', fontSize: 14, fontWeight: '500' }}>
+                                        I have read and accepted the Terms of Use.
+                                    </Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{marginBottom:10,flexDirection:'row',alignItems:'center'}} onPress={() => setPrivacyBox(!privacyBox)}>
+                                <TouchableOpacity style={{ marginBottom: 10, flexDirection: 'row', alignItems: 'center' }} onPress={() => setPrivacyBox(!privacyBox)}>
                                     <View >
-                                    {privacyBox === true ?
-                                        <Fontisto
-                                            name='checkbox-active'
-                                            size={15}
-                                            style={{color:color.colorBtn}}
-                                        />
-                                        :
-                                        <Fontisto
-                                            name='checkbox-passive'
-                                            size={15}
-                                            style={{color:'#000'}}
-                                        />
-                                    }
+                                        {privacyBox === true ?
+                                            <Fontisto
+                                                name='checkbox-active'
+                                                size={15}
+                                                style={{ color: color.colorBtn }}
+                                            />
+                                            :
+                                            <Fontisto
+                                                name='checkbox-passive'
+                                                size={15}
+                                                style={{ color: '#000' }}
+                                            />
+                                        }
                                     </View>
-                                   <Text style={{marginLeft:10, color:'#666666',fontSize:14,fontWeight:'500'}}>
-                                   The Tickatrip may send me promotional offers including emails about products and services.
-                                   </Text>
+                                    <Text style={{ marginLeft: 10, color: '#666666', fontSize: 14, fontWeight: '500' }}>
+                                        The Tickatrip may send me promotional offers including emails about products and services.
+                                    </Text>
                                 </TouchableOpacity>
                             </View>
-                        </View>
-                        <View style={{flexDirection:'row',justifyContent:'center',marginBottom:30}}>
-                            <TouchableOpacity style={style.button}><Text style={{color:'#fff'}}>SING UP</Text></TouchableOpacity>
+                        </View> */}
+                        {/* <Button title='Submit' onPress={handleSubmit(onSubmit)}/> */}
+                        <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30 }}>
+                            <TouchableOpacity style={style.button} onPress={handleSubmit(onSubmit)}><Text style={{ color: '#fff' }} >SING UP</Text></TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -282,7 +455,7 @@ const SignUp = ({ navigation }) => {
     )
 }
 const style = StyleSheet.create({
-    button:{
+    button: {
         backgroundColor: '#0041F2',
         paddingVertical: 10,
         paddingHorizontal: 60,
