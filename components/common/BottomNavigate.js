@@ -5,11 +5,25 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from '../Home/Home'
 import Hotel from '../Screens/Hotel/Hotel'
 import Flight from '../Screens/Flight/Flight'
-import Profile from '../Screens/User/Profile'
+import Profile from '../Profile/Profile';
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+const Stack = createNativeStackNavigator();
+
+
+function ProfileTab(){
+    return(
+        <Stack.Navigator initialRouteName='Profile'>
+            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
+           {/* <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/> */}
+        </Stack.Navigator>
+    )
+
+}
 
 
 const BottomNavigate = ({ navigation }) => {
@@ -20,9 +34,10 @@ const BottomNavigate = ({ navigation }) => {
             tabBarStyle: {
                 backgroundColor: '#E9F3FF',
                 height: 60,
-                borderRadius: 10,
-                marginBottom: 5,
-                marginHorizontal: 5,
+                borderRadius: 15,
+                // padding
+                // marginBottom: 5,
+                // marginHorizontal: 5,
             },
             tabBarShowLabel: false
         }}>
@@ -74,7 +89,7 @@ const BottomNavigate = ({ navigation }) => {
                     ),
                 }}
             />
-            <Tab.Screen name="Profile" component={Profile}
+            <Tab.Screen name="ProfileTab" component={ProfileTab}
                 options={{
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ focused, color, size }) => (

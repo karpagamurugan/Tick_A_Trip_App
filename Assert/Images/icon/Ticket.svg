@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="25.5" height="23.122" viewBox="0 0 25.5 23.122">
+  <g id="Ticket" transform="translate(0.75 0.75)">
+    <g id="Ticket_Star" data-name="Ticket Star" transform="translate(0 0)">
+      <path id="Stroke_1" data-name="Stroke 1" d="M19.6,21.622a4.4,4.4,0,0,0,4.4-4.4v-3.5a2.9,2.9,0,0,1,0-5.809v-3.5A4.4,4.4,0,0,0,19.6,0H4.4A4.4,4.4,0,0,0,0,4.4V8.021a2.806,2.806,0,0,1,2.9,2.792,2.9,2.9,0,0,1-2.9,2.9v3.5a4.4,4.4,0,0,0,4.4,4.4Z" transform="translate(0 0)" fill="none" stroke="#4c94f2" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+      <path id="Stroke_3" data-name="Stroke 3" d="M4.158,6.719,6.415,7.906a.289.289,0,0,0,.419-.3L6.4,5.087,8.23,3.309a.288.288,0,0,0-.16-.492L5.546,2.45,4.411.161a.288.288,0,0,0-.519,0L2.77,2.45.247,2.817a.288.288,0,0,0-.16.492L1.914,5.087,1.482,7.6a.289.289,0,0,0,.419.3L4.158,6.719Z" transform="translate(7.841 6.39)" fill="none" stroke="#4c94f2" stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"/>
+    </g>
+  </g>
+</svg>
