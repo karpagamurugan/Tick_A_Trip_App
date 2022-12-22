@@ -1,4 +1,5 @@
-import React,{useState} from 'react';
+/* eslint-disable prettier/prettier */
+import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import color from '../../constants/color';
 import font from '../../constants/font';
@@ -11,14 +12,23 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Fontisto from 'react-native-vector-icons/Fontisto'
+import { useDispatch, useSelector } from 'react-redux';
+import userActions from '../../redux/user/actions'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 
 export default function Profile() {
-
+    const dispatch = useDispatch()
+    const { userProfileData } = useSelector((state) => state.userReducer)
     var [ticketShown, setTicketShown] = useState(false)
+    console.log('userProfileData', userProfileData)
+    useEffect((async) => {
+        dispatch({ type: userActions.GET_USER_PROFILE, payload: [] })
+        AsyncStorage.getItem('tickatrip-token').then((res) => console.log('tock-pro', res))
+    }, [dispatch])
 
 
     return (
@@ -32,93 +42,93 @@ export default function Profile() {
                     <EditIcon height={22} width={22} />
                 </TouchableHighlight>
             </View>
-           <ScrollView>
-          <View style={{height:height}}>
-          <View style={styles.subContainer}>
-                <View style={{ alignItems: 'center' }}>
-                    <Image source={{ uri: 'https://wallpapers.com/images/hd/cute-chibi-profile-picture-s52z1uggme5sj92d.jpg' }}
-                        style={styles.profileImage} />
+            <ScrollView>
+                <View style={{ height: height }}>
+                    <View style={styles.subContainer}>
+                        <View style={{ alignItems: 'center' }}>
+                            <Image source={{ uri: 'https://wallpapers.com/images/hd/cute-chibi-profile-picture-s52z1uggme5sj92d.jpg' }}
+                                style={styles.profileImage} />
 
-                    <Text style={styles.name}>Durga Devi</Text>
-                    <Text style={styles.email}>durgadevi@gmail.com</Text>
-                    <Text style={styles.number}>+91 9876543213</Text>
-                </View>
+                            <Text style={styles.name}>Durga Devi</Text>
+                            <Text style={styles.email}>durgadevi@gmail.com</Text>
+                            <Text style={styles.number}>+91 9876543213</Text>
+                        </View>
 
-                <View style={styles.divider} />
+                        <View style={styles.divider} />
 
-                <View style={styles.navView}>
+                        <View style={styles.navView}>
 
-                    <TouchableHighlight onPress={() => setTicketShown(!ticketShown)} underlayColor='transparent'>
-                        <View>
-                            <View style={styles.navBtn}>
-                                <TicketIcon height={22} width={22} />
-                                <Text style={styles.navTitle}>My Tickets</Text>
-                            </View>
-
-                            {
-                                (!ticketShown) ?
-                                    <View style={{paddingLeft:30}}>
-                                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                                            <View style={styles.navBtn}>
-                                                {/* <TicketIcon height={22} width={22} /> */}
-                                                <MaterialIcons name='flight' size={22} color='#4C94F2'/>
-                                                <Text style={styles.navTitle}>Flight</Text>
-                                            </View>
-                                        </TouchableHighlight>
-                                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                                            <View style={styles.navBtn}>
-                                                {/* <TicketIcon height={22} width={22} /> */}
-                                                <FontAwesome name='hotel' size={22} color='#4C94F2'/>
-                                                <Text style={styles.navTitle}>Hotel</Text>
-                                            </View>
-                                        </TouchableHighlight>
+                            <TouchableHighlight onPress={() => setTicketShown(!ticketShown)} underlayColor='transparent'>
+                                <View>
+                                    <View style={styles.navBtn}>
+                                        <TicketIcon height={22} width={22} />
+                                        <Text style={styles.navTitle}>My Tickets</Text>
                                     </View>
-                                    : <View />
-                            }
+
+                                    {
+                                        (!ticketShown) ?
+                                            <View style={{ paddingLeft: 30 }}>
+                                                <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                                    <View style={styles.navBtn}>
+                                                        {/* <TicketIcon height={22} width={22} /> */}
+                                                        <MaterialIcons name='flight' size={22} color='#4C94F2' />
+                                                        <Text style={styles.navTitle}>Flight</Text>
+                                                    </View>
+                                                </TouchableHighlight>
+                                                <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                                    <View style={styles.navBtn}>
+                                                        {/* <TicketIcon height={22} width={22} /> */}
+                                                        <FontAwesome name='hotel' size={22} color='#4C94F2' />
+                                                        <Text style={styles.navTitle}>Hotel</Text>
+                                                    </View>
+                                                </TouchableHighlight>
+                                            </View>
+                                            : <View />
+                                    }
+                                </View>
+                            </TouchableHighlight>
+
+                            <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                <View style={styles.navBtn}>
+                                    <Fontisto name='persons' size={22} color='#4C94F2' />
+                                    <Text style={styles.navTitle}>Add Traveller</Text>
+                                </View>
+                            </TouchableHighlight>
+
+                            <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                <View style={styles.navBtn}>
+                                    {/* <TicketIcon height={22} width={22} /> */}
+                                    <MaterialCommunityIcons name='brightness-percent' size={22} color='#4C94F2' />
+                                    <Text style={styles.navTitle}>Offers</Text>
+                                </View>
+                            </TouchableHighlight>
+
+                            <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                <View style={styles.navBtn}>
+                                    <ShareIcon height={22} width={22} />
+                                    <Text style={styles.navTitle}>Share App</Text>
+                                </View>
+                            </TouchableHighlight>
+
+
+
                         </View>
-                        </TouchableHighlight>
 
-                    <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                        <View style={styles.navBtn}>
-                            <Fontisto name='persons' size={22} color='#4C94F2'/>
-                            <Text style={styles.navTitle}>Add Traveller</Text>
-                        </View>
-                    </TouchableHighlight>
-
-                    <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                        <View style={styles.navBtn}>
-                            {/* <TicketIcon height={22} width={22} /> */}
-                            <MaterialCommunityIcons name='brightness-percent' size={22} color='#4C94F2'/>
-                            <Text style={styles.navTitle}>Offers</Text>
-                        </View>
-                    </TouchableHighlight>
-
-                    <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                        <View style={styles.navBtn}>
-                            <ShareIcon height={22} width={22} />
-                            <Text style={styles.navTitle}>Share App</Text>
-                        </View>
-                    </TouchableHighlight>
+                        <View style={styles.divider} />
 
 
 
-                </View>
-
-                <View style={styles.divider} />
-
-
-
-            </View>
-            <View style={{ paddingLeft: 35 }}>
-                <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                    <View style={styles.navBtn}>
-                        <LogoutIcon height={22} width={22} />
-                        <Text style={styles.navTitle}>Logout</Text>
                     </View>
-                </TouchableHighlight>
-            </View>
-          </View>
-           </ScrollView>
+                    <View style={{ paddingLeft: 35 }}>
+                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                            <View style={styles.navBtn}>
+                                <LogoutIcon height={22} width={22} />
+                                <Text style={styles.navTitle}>Logout</Text>
+                            </View>
+                        </TouchableHighlight>
+                    </View>
+                </View>
+            </ScrollView>
 
         </View>
     )

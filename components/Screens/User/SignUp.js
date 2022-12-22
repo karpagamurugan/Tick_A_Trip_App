@@ -9,8 +9,6 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import color from '../../../constants/color'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import { useForm, Controller } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup'; // install @hookform/resolvers (not @hookform/resolvers/yup)
-import * as yup from 'yup';
 import { useDispatch } from 'react-redux';
 import userAction from '../../../redux/user/actions'
 
@@ -45,6 +43,7 @@ const SignUp = ({ navigation }) => {
             value: 'Married'
         },
     ]
+
     const selectTitle = [
         {
             name: 'Male',
@@ -55,6 +54,7 @@ const SignUp = ({ navigation }) => {
             value: 'Female'
         }
     ]
+    
     const onSubmit = (data) => {
         console.log('data', data)
         dispatch({

@@ -3,7 +3,8 @@ import actions from './actions';
 
 const initialState = {
     isAuthenticated: [],
-    registerUser:[],
+    registerUser: [],
+    userProfileData: [],
 }
 
 const userReducer = (state = initialState, action) => {
@@ -18,6 +19,11 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 registerUser: action.payload
+            }
+        case actions.SET_USER_PROFILE:
+            return {
+                ...state,
+                userProfileData: action.payload
             }
         default:
             return state;

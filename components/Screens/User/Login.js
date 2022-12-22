@@ -3,7 +3,7 @@ import React from 'react';
 import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import font from '../../../constants/font';
 import { useDispatch } from 'react-redux';
-import { Controller, useForm } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import userActions from '../../../redux/user/actions';
 
 const width = Dimensions.get('window').width
@@ -11,10 +11,16 @@ const height = Dimensions.get('window').height
 
 const Login = ({ navigation }) => {
     const dispatch = useDispatch();
-    const { control, handleSubmit, formState: { errors, isValid } } = useForm({ mode: 'onBlur' })
+    const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
 
-    const OnLogin = () => {
-            // dispatch({type:userActions.GET_USER_LOGIN,payload:'test'});
+    const onSubmit = (data) =>{
+        // console.log('data',data)
+        dispatch({ type: userActions.GET_USER_LOGIN, payload: {
+            email: data.userMail,
+            password: data.userPassword,
+        },
+        navigation:navigation
+    });
     }
 
     return (
@@ -31,14 +37,59 @@ const Login = ({ navigation }) => {
                     <Text style={style.OrLine}></Text>
                 </View>
                 <View style={style.LoginForm}>
+
                     <View style={style.FormGroup}>
                         <Text style={style.FormLabelText}>Email | Phone</Text>
-                        <TextInput keyboardType="default" style={style.LoginInput} placeholder="Enter Your Email | Phone" />
+                        <Controller
+                            control={control}
+                            name="userMail"
+                            rules={{
+                                required: {
+                                    value: true,
+                                    message: 'Enter your user name',
+                                },
+                            }}
+                            render={({ field: { onChange, value } }) => (
+                                <TextInput
+                                    {...register("userMail")}
+                                    name="userMail"
+                                    onChangeText={value => onChange(value)}
+                                    keyboardType="default"
+                                    style={style.LoginInput}
+                                    placeholder="Enter Your Email | Phone" />
+                            )}
+                        />
+                        {errors.userMail && (
+                            <Text style={style.errorMessage}>{errors.userMail.message}</Text>
+                        )}
                     </View>
+
                     <View style={style.FormGroup}>
                         <Text style={style.FormLabelText}>Password</Text>
-                        <TextInput textContentType="newPassword" secureTextEntry style={style.LoginInput} placeholder="Enter the password" />
+                        <Controller
+                            control={control}
+                            name="userPassword"
+                            rules={{
+                                required: {
+                                    value: true,
+                                    message: 'Select your maridal status!',
+                                },
+                            }}
+                            render={({ field: { onChange, value } }) => (
+                                <TextInput
+                                    {...register("userPassword")}
+                                    name="userPassword"
+                                    onChangeText={value => onChange(value)}
+                                    textContentType="newPassword"
+                                    secureTextEntry style={style.LoginInput}
+                                    placeholder="Enter the password" />
+                            )}
+                        />
+                        {errors.userPassword && (
+                            <Text style={style.errorMessage}>{errors.userPassword.message}</Text>
+                        )}
                     </View>
+
                     <View style={style.fogetPassword}>
                         <TouchableHighlight>
                             <Text style={style.forgetText}>Forgot Password</Text>
@@ -48,7 +99,7 @@ const Login = ({ navigation }) => {
                         </TouchableHighlight>
                     </View>
                     <View style={style.LoginBtnSec}>
-                        <TouchableHighlight style={style.btnLogin} onPress={() => navigation.navigate('bottomNavigation')}>
+                        <TouchableHighlight style={style.btnLogin} onPress={handleSubmit(onSubmit)}>
                             <Text style={style.btnLoginText}>SIGN IN</Text>
                         </TouchableHighlight>
                     </View>
@@ -61,7 +112,7 @@ const Login = ({ navigation }) => {
                             <Text style={style.orText}>Or</Text>
                             <Text style={style.OrLine}></Text>
                         </View>
-                        <TouchableHighlight style={style.btnSighnUp}>
+                        <TouchableHighlight style={style.btnSighnUp} onPress={()=>navigation.navigate('')}>
                             <Text style={style.btnGuestText}>CONTINUE AS A GUEST</Text>
                         </TouchableHighlight>
                     </View>
@@ -72,6 +123,10 @@ const Login = ({ navigation }) => {
 };
 
 const style = StyleSheet.create({
+    errorMessage: {
+        color: 'red',
+        fontSize: 12,
+    },
     btnSighnUpText: {
         color: '#EDF2F7',
         fontSize: 12,
