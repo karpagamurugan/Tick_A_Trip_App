@@ -112,7 +112,7 @@ const Login = ({ navigation }) => {
                             <Text style={style.orText}>Or</Text>
                             <Text style={style.OrLine}></Text>
                         </View>
-                        <TouchableHighlight style={style.btnSighnUp} onPress={()=>navigation.navigate('')}>
+                        <TouchableHighlight style={style.btnSighnUp} onPress={()=>navigation.navigate('bottomNavigation')}>
                             <Text style={style.btnGuestText}>CONTINUE AS A GUEST</Text>
                         </TouchableHighlight>
                     </View>

@@ -56,13 +56,11 @@ const SignUp = ({ navigation }) => {
     ]
     
     const onSubmit = (data) => {
-        // console.log('data', data)
-        // console.log('dob..',moment(data.dob).format('MM/DD/YYYY'))
         dispatch({
             type: userAction.GET_USER_REGISTER, payload: {
-                first_name: data.firstName.toLowerCase(),
-                last_name: data.lastName.toLowerCase(),
-                username: data.userName.toLowerCase(),
+                first_name: data.firstName,
+                last_name: data.lastName,
+                username: data.userName,
                 mobilenumber: data.mobileNumber,
                 email: data.email,
                 dob: moment(data.dob).format('YYYY-MM-DD'),
@@ -80,10 +78,10 @@ const SignUp = ({ navigation }) => {
                 passportnumber: data.passportNumber,
                 issuecountry: data.issuingCountry,
                 postalcode: data.postalCode,
-                expirydate:'',
-                // expirydate: moment(data.passportExDate).format('YYYY-MM-DD'),
+                expirydate: moment(data.passportExDate).format('YYYY-MM-DD'),
                 pan: data.pan,
-            }
+            },
+            navigation:navigation
         })
     }
 
@@ -207,7 +205,6 @@ const SignUp = ({ navigation }) => {
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         {...register("userName")}
-                                        maxLength={10}
                                         name="userName"
                                         value={value}
                                         onChangeText={(value) => {
@@ -355,7 +352,7 @@ const SignUp = ({ navigation }) => {
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
-                                    <TextInput   {...register("password")} name="password"
+                                    <TextInput  minLength={8}  {...register("password")} name="password"
                                         onChangeText={value => {
                                             setUserPassword(value)
                                             onChange(value)
@@ -379,7 +376,7 @@ const SignUp = ({ navigation }) => {
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
-                                    <TextInput   {...register("confirmPassword")} name="confirmPassword"
+                                    <TextInput  minLength={8} {...register("confirmPassword")} name="confirmPassword"
                                         onChangeText={value => {
                                             setUserConfirmPassword(value)
                                             onChange(value)

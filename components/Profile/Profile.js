@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal } from 'react-native';
 import color from '../../constants/color';
 import font from '../../constants/font';
 import TicketIcon from '../../Assert/Images/icon/Ticket.svg';
@@ -15,44 +15,90 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import { useDispatch, useSelector } from 'react-redux';
 import userActions from '../../redux/user/actions'
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { PROFILE_URL } from '../../constants/constProfileApi';
+import setAuthToken from '../../constants/setAuthToken';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 
-export default function Profile() {
+export default function Profile({ navigation }) {
     const dispatch = useDispatch()
     const { userProfileData } = useSelector((state) => state.userReducer)
     var [ticketShown, setTicketShown] = useState(false)
+    var [openModel, setOpenModel] = useState(false)
     console.log('userProfileData', userProfileData)
+
     useEffect((async) => {
-        dispatch({ type: userActions.GET_USER_PROFILE, payload: [] })
-        AsyncStorage.getItem('tickatrip-token').then((res) => console.log('tock-pro', res))
+
+        dispatch({ type: userActions.GET_USER_PROFILE })
+        // AsyncStorage.getItem('tickatrip-token').then((res) => console.log('tock-pro', res))
     }, [dispatch])
 
+    const LogOut = () => {
+        AsyncStorage.removeItem('tickatrip-token')
+        AsyncStorage.removeItem('tickatrip-token')
+        AsyncStorage.removeItem('email')
+        AsyncStorage.removeItem('phone')
+        AsyncStorage.removeItem('username')
+        navigation.navigate('Login')
+        dispatch({ type: userActions.SET_USER_PROFILE, payload: null })
+        setAuthToken(null)
+    }
 
     return (
         <View style={styles.mainContainer}>
+            <Modal
+                visible={openModel}
+                transparent={true}
+                animationType="fade"
+            >
+                <View style={{ position: 'absolute', backgroundColor: 'red', top: height * 0.2 }}>
+                    <View style={{ height: height * 0.5, width: width, alignItems: 'center', marginTop: 80 }}>
+                        <Text>ajsfhjsda</Text>
+                    </View>
+                </View>
+            </Modal>
             <View style={styles.appbar}>
                 <View style={styles.iconBack}>
                     <BackArrow height={22} width={22} />
                 </View>
                 <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035 }}>Profile</Text>
-                <TouchableHighlight style={styles.iconBack}>
-                    <EditIcon height={22} width={22} />
-                </TouchableHighlight>
-            </View>
+                {
+                    openModel !== true ?
+
+                        <TouchableHighlight style={styles.iconBack} onPress={() =>
+                            setOpenModel(true)
+                        }>
+                            < View >
+                                < EditIcon height={22} width={22} />
+                            </View>
+                        </TouchableHighlight>
+                        :
+                        <TouchableHighlight style={styles.iconBack} onPress={() =>
+                            setOpenModel(false)
+                        }>
+                            < View >
+                                < MaterialIcons name='cancel' height={22} width={22} />
+                            </View>
+                        </TouchableHighlight>
+                }
+
+            </View >
             <ScrollView>
                 <View style={{ height: height }}>
                     <View style={styles.subContainer}>
-                        <View style={{ alignItems: 'center' }}>
-                            <Image source={{ uri: 'https://wallpapers.com/images/hd/cute-chibi-profile-picture-s52z1uggme5sj92d.jpg' }}
-                                style={styles.profileImage} />
+                        {userProfileData &&
+                            <View style={{ alignItems: 'center' }}>
+                                <Image source={{ uri: `${PROFILE_URL}${userProfileData?.profile_image}` }}
+                                    style={styles.profileImage} />
 
-                            <Text style={styles.name}>Durga Devi</Text>
-                            <Text style={styles.email}>durgadevi@gmail.com</Text>
-                            <Text style={styles.number}>+91 9876543213</Text>
-                        </View>
+                                <Text style={styles.name}>{userProfileData?.name}</Text>
+                                <Text style={styles.email}>{userProfileData?.email}</Text>
+                                <Text style={styles.number}>{userProfileData?.phone}</Text>
+                            </View>
+                        }
+
 
                         <View style={styles.divider} />
 
@@ -120,7 +166,7 @@ export default function Profile() {
 
                     </View>
                     <View style={{ paddingLeft: 35 }}>
-                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                        <TouchableHighlight onPress={() => LogOut()} underlayColor='transparent'>
                             <View style={styles.navBtn}>
                                 <LogoutIcon height={22} width={22} />
                                 <Text style={styles.navTitle}>Logout</Text>
@@ -130,7 +176,7 @@ export default function Profile() {
                 </View>
             </ScrollView>
 
-        </View>
+        </View >
     )
 }
 

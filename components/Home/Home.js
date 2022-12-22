@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React, { useEffect } from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView } from 'react-native';
 import font from '../../constants/font';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -7,13 +7,19 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import color from '../../constants/color';
 import PopularPlaceCard from './PopularPlaceCard';
 import NearestPlaceCard from './NearestPlaceCard';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const Home = ({ navigation }) => {
-
+  const UserToken = (async) => {
+    AsyncStorage.getItem('tickatrip-token').then((res) => console.log('token', res))
+  }
+  useEffect(() => {
+    UserToken()
+  }, [])
   return (
     <ScrollView >
       <View style={{ width: width, paddingHorizontal: 20, }}>
@@ -39,11 +45,11 @@ const Home = ({ navigation }) => {
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {/* <View style={style.PopularPlaceList}> */}
-              {[...Array(5)].map((val, index) => (
-                <View style={style.PopularPlaceCard} key={index} >
-                  <PopularPlaceCard />
-                </View>
-              ))}
+            {[...Array(5)].map((val, index) => (
+              <View style={style.PopularPlaceCard} key={index} >
+                <PopularPlaceCard />
+              </View>
+            ))}
             {/* </View> */}
           </ScrollView>
 
@@ -74,7 +80,7 @@ const style = StyleSheet.create({
   },
   PopularPlaceCard: {
     width: width * 0.4,
-    marginRight:20
+    marginRight: 20
   },
   PopularPlaceHeadmore: {
     fontFamily: font.fontSemi,
