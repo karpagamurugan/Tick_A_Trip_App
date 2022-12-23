@@ -91,20 +91,20 @@ const Login = ({ navigation }) => {
                     </View>
 
                     <View style={style.fogetPassword}>
-                        <TouchableHighlight>
+                        <TouchableHighlight underlayColor={'transparent'}>
                             <Text style={style.forgetText}>Forgot Password</Text>
                         </TouchableHighlight>
-                        <TouchableHighlight>
+                        <TouchableHighlight underlayColor={'transparent'}>
                             <Text style={style.forgetText}>SEND OTP</Text>
                         </TouchableHighlight>
                     </View>
                     <View style={style.LoginBtnSec}>
-                        <TouchableHighlight style={style.btnLogin} onPress={handleSubmit(onSubmit)}>
+                        <TouchableHighlight underlayColor={'transparent'} style={style.btnLogin} onPress={handleSubmit(onSubmit)}>
                             <Text style={style.btnLoginText}>SIGN IN</Text>
                         </TouchableHighlight>
                     </View>
                     <View style={style.continewGuestSec}>
-                        <TouchableHighlight style={style.btnSighnUp} onPress={() => navigation.navigate('SignUp')}>
+                        <TouchableHighlight underlayColor={'transparent'} style={style.btnSighnUp} onPress={() => navigation.navigate('SignUp')}>
                             <Text style={style.btnSighnUpText}>Sign Up</Text>
                         </TouchableHighlight>
                         <View style={style.orDashBotton}>
@@ -112,7 +112,7 @@ const Login = ({ navigation }) => {
                             <Text style={style.orText}>Or</Text>
                             <Text style={style.OrLine}></Text>
                         </View>
-                        <TouchableHighlight style={style.btnSighnUp} onPress={()=>navigation.navigate('bottomNavigation')}>
+                        <TouchableHighlight underlayColor={'transparent'} style={style.btnSighnUp} onPress={()=>navigation.navigate('bottomNavigation')}>
                             <Text style={style.btnGuestText}>CONTINUE AS A GUEST</Text>
                         </TouchableHighlight>
                     </View>
@@ -141,7 +141,7 @@ const style = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
-        marginVertical: 40
+        marginVertical: 20
     },
     btnLoginText: {
         color: '#fff',
@@ -155,9 +155,10 @@ const style = StyleSheet.create({
         borderRadius: 100,
     },
     LoginBtnSec: {
-        display: 'flex',
+        // display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
+        // backgroundColor:'white'
     },
     SplashSection: {
         width: width,
@@ -173,7 +174,8 @@ const style = StyleSheet.create({
         width: '60%',
         height: '20%',
         resizeMode: 'contain',
-        marginBottom: 30,
+        // marginBottom: 30,
+        // backgroundColor:'white'
     },
     SocialLogin: {
         flexDirection: 'row'
@@ -183,7 +185,7 @@ const style = StyleSheet.create({
         width: 40,
         height: 40,
         marginLeft: 10,
-        display: 'flex',
+        // display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 7,
@@ -236,7 +238,7 @@ const style = StyleSheet.create({
         marginTop: 15,
         paddingLeft: 20,
         paddingRight: 20,
-        marginBottom: 50,
+        marginBottom: 30,
     },
     forgetText: {
         color: '#EDF2F7',

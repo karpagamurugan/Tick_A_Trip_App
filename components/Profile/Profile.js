@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
-import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal } from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable, ActivityIndicator, Animated,TextInput } from 'react-native';
 import color from '../../constants/color';
 import font from '../../constants/font';
 import TicketIcon from '../../Assert/Images/icon/Ticket.svg';
@@ -17,6 +17,11 @@ import userActions from '../../redux/user/actions'
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { PROFILE_URL } from '../../constants/constProfileApi';
 import setAuthToken from '../../constants/setAuthToken';
+import moment from 'moment';
+import CalendarIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import RNFS from 'react-native-fs';
+import DocumentPicker from 'react-native-document-picker'
+import DatePicker from 'react-native-date-picker';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -25,10 +30,16 @@ let height = Dimensions.get('window').height;
 export default function Profile({ navigation }) {
     const dispatch = useDispatch()
     const { userProfileData } = useSelector((state) => state.userReducer)
-    var [ticketShown, setTicketShown] = useState(false)
-    var [openModel, setOpenModel] = useState(false)
-    console.log('userProfileData', userProfileData)
+    //picker 
+    var [showPicker, setShowPicker] = useState(false) //show date picker for dob
+    var [dob, setDob] = useState(new Date()); //set DOB in profile update
 
+    var [ticketShown, setTicketShown] = useState(false)
+
+    var [openModel, setOpenModel] = useState(false)
+
+    // console.log('userProfileData', userProfileData)
+    var [image,setImage]=useState()
     useEffect((async) => {
 
         dispatch({ type: userActions.GET_USER_PROFILE })
@@ -46,49 +57,256 @@ export default function Profile({ navigation }) {
         setAuthToken(null)
     }
 
+
+    async function filePicker() {
+        var res = null
+        try {
+            res = await DocumentPicker.pickSingle({
+                type: DocumentPicker.types.allFiles,
+            });
+            let val = 'image';
+            let mimeType = res?.name?.split('.')[1]
+
+            const urlComponents = res.uri.split('/')
+            const fileNameAndExtension = urlComponents[urlComponents.length - 1]
+            const destPath = `${RNFS.DocumentDirectoryPath}/${res.name}`
+            await RNFS.copyFile(res.uri, destPath)
+
+            let url = 'file://' + destPath
+                console.log(url)
+            setImage(image = {
+                URL: url,
+                type: res.type,
+                name: res?.name,
+            })
+
+        } catch (e) {
+            if (DocumentPicker.isCancel(e)) {
+                setImage('')
+                console.log('No File selected')
+            } else {
+                setImage('')
+                Snackbar.show({
+                    text: e,
+                    duration: Snackbar.LENGTH_SHORT,
+                })
+                console.log(e)
+                throw e;
+            }
+        }
+    } //file pickers function...
+
+
     return (
         <View style={styles.mainContainer}>
             <Modal
                 visible={openModel}
                 transparent={true}
                 animationType="fade"
+                style={{padding:0}}
             >
-                <View style={{ position: 'absolute', backgroundColor: 'red', top: height * 0.2 }}>
-                    <View style={{ height: height * 0.5, width: width, alignItems: 'center', marginTop: 80 }}>
-                        <Text>ajsfhjsda</Text>
+                <Pressable
+                    onPress={() => setOpenModel(!openModel)}
+                    style={{
+                        position: 'absolute',
+                        backgroundColor: '#000000',
+                        opacity: 0.3,
+                        top: 0,
+                        bottom: 0,
+                        left: 0,
+                        right: 0,
+                        // backgroundColor:'red'
+                    }} />
+
+
+
+                <View style={{ flex: 1, justifyContent: 'center'}} >
+                    <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'flex-end', paddingRight: 30, paddingBottom: 5 }} onPress={() =>
+                        setOpenModel(!openModel)
+                    }>
+                        <MaterialIcons name='cancel' size={23} color='red' />
+                    </TouchableHighlight>
+                    <View style={{
+                        width: '85%', borderRadius: 10, backgroundColor: 'white', flexDirection: 'column',height:'70%',
+                        alignItems: 'center',  alignContent: 'center', alignSelf: 'center',paddingBottom:30
+                    }}>
+                      <ScrollView>
+                        <View>
+                        <Text style={{fontFamily:font.fontBold,alignSelf:'center',paddingTop:20,color:'black',fontSize:height*0.025}}>Profile Edit</Text>
+
+                        <View style={{backgroundColor:'white',width:width*0.8,paddingHorizontal:10}}>
+                            <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
+                               {
+                                (image?.URL === undefined ||image?.URL === null ||image?.URL === '')?
+                                <View/>:
+                                <Image style={{height:50,width:50,borderColor:'#2BAB38',borderWidth:1,borderRadius:100}} source={{uri:image?.URL}}/>
+                               }
+                            <TouchableHighlight underlayColor={'transparent'} onPress={()=>filePicker()}>
+                                <Text style={{color:'white',backgroundColor:'green',paddingVertical:2,paddingHorizontal:5,borderRadius:15,fontSize:height*0.02}}>
+                                    Choose Profile
+                                </Text>
+                            </TouchableHighlight>
+                            </View>
+
+
+
+                            {/* First Name*/}
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>Gender</Text>
+                                <TextInput
+                                    placeholderTextColor={"gray"}
+                                    style={styles.inputeEditor}
+                                    placeholder="gender"
+                                    keyboardType='default'
+                                    // onChangeText={(f) => {
+                                    //     setFname(f)
+                                    // }}
+                                    numberOfLines={1}
+                                    // value={fname}
+                                />
+                            </View>
+                               {/* First Name*/}
+                               <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>UserName</Text>
+                                <TextInput
+                                    placeholderTextColor={"gray"}
+                                    style={styles.inputeEditor}
+                                    placeholder="UserName"
+                                    keyboardType='default'
+                                    // onChangeText={(f) => {
+                                    //     setFname(f)
+                                    // }}
+                                    numberOfLines={1}
+                                    // value={fname}
+                                />
+                            </View>
+                            {/* First Name*/}
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>FirstName</Text>
+                                <TextInput
+                                    placeholderTextColor={"gray"}
+                                    style={styles.inputeEditor}
+                                    placeholder="FirstName"
+                                    keyboardType='default'
+                                    // onChangeText={(f) => {
+                                    //     setFname(f)
+                                    // }}
+                                    numberOfLines={1}
+                                    // value={fname}
+                                />
+                            </View>
+                            {/* last Name*/}
+
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>LastName</Text>
+                                <TextInput
+
+                                    placeholderTextColor={"gray"}
+                                    style={styles.inputeEditor}
+                                    placeholder="LastName"
+                                    keyboardType='default'
+                                    // onChangeText={(l) => setLname(l)}
+                                    numberOfLines={1}
+                                    // value={lname}
+                                />
+                            </View>
+
+                            {/* DOB */}
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>Date-Of-Birth</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Text style={{ fontFamily:font.font, color: 'black', paddingVertical: 10, paddingLeft: 7 }}>{moment(dob).format('YYYY-MM-DD')}</Text>
+                                    <TouchableHighlight onPress={() => setShowPicker(!showPicker)} underlayColor='transparent' style={{ paddingRight: 5}}>
+                                        <CalendarIcon name="calendar" size={25} color="gray" />
+                                    </TouchableHighlight>
+                                </View>
+                            </View>
+
+                            {/* personal mail id */}
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>Maritial Status</Text>
+                                <TextInput
+                                    placeholderTextColor={"gray"}
+                                    style={styles.inputeEditor}
+                                    placeholder="Maritial Status"
+                                    // onChangeText={(pmail) => {
+                                    //     setPrmail(pmail)
+                                    // }}
+                                    numberOfLines={1}
+                                    // value={prmail}
+                                />
+                            </View>
+
+
+                            {/* personal mail id */}
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>Mobile Number</Text>
+                                <TextInput
+                                    placeholderTextColor={"gray"}
+                                    style={styles.inputeEditor}
+                                    placeholder="mobilenumber"
+                                    keyboardType='number-pad'
+                                    // onChangeText={(no) => {
+                                    //     setMobileNo(no)
+                                    // }}
+                                    numberOfLines={1}
+                                    maxLength={10}
+                                    // value={mobileNo}
+                                />
+                            </View>
+                        </View>
+
+                        <View style={{ backgroundColor: 'green', borderRadius: 10, marginTop: 20, justifyContent: 'center', alignSelf: 'center' }}>
+                            <TouchableHighlight onPress={() => ProfileUpdateVal()} underlayColor='transparent'>
+                                <Text style={{ color: 'white', fontFamily: font.font, alignSelf: 'center', paddingVertical: 7, paddingHorizontal: 10 }}>
+                                    Update
+                                </Text>
+                            </TouchableHighlight>
+                        </View>
+                        </View>
+                      </ScrollView>
+
                     </View>
                 </View>
             </Modal>
+
+
+
             <View style={styles.appbar}>
-                <View style={styles.iconBack}>
-                    <BackArrow height={22} width={22} />
-                </View>
+                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
+                    <View style={styles.iconBack}>
+                        <BackArrow height={22} width={22} />
+                    </View>
+                </TouchableHighlight>
                 <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035 }}>Profile</Text>
                 {
-                    openModel !== true ?
+                    // openModel !== true ?
 
-                        <TouchableHighlight style={styles.iconBack} onPress={() =>
-                            setOpenModel(true)
-                        }>
-                            < View >
-                                < EditIcon height={22} width={22} />
-                            </View>
-                        </TouchableHighlight>
-                        :
-                        <TouchableHighlight style={styles.iconBack} onPress={() =>
-                            setOpenModel(false)
-                        }>
-                            < View >
-                                < MaterialIcons name='cancel' height={22} width={22} />
-                            </View>
-                        </TouchableHighlight>
+                    <TouchableHighlight underlayColor='transparent' style={styles.iconBack} onPress={() =>
+                        setOpenModel(true)
+                    }>
+                        <View>
+                            <EditIcon height={22} width={22} />
+                        </View>
+                    </TouchableHighlight>
+                    // :
+                    // <TouchableHighlight style={styles.iconBack} onPress={() =>
+                    //     setOpenModel(false)
+                    // }>
+                    //     <View>
+                    //         <MaterialIcons name='cancel' height={22} width={22} />
+                    //     </View>
+                    // </TouchableHighlight>
                 }
 
-            </View >
-            <ScrollView>
-                <View style={{ height: height }}>
+            </View>
+
+
+            <ScrollView contentInsetAdjustmentBehavior="automatic" showsVerticalScrollIndicator={false} horizontal={false}>
+                <View style={{ height: height, marginBottom: 35 }}>
                     <View style={styles.subContainer}>
-                        {userProfileData &&
+                        {
+                            userProfileData &&
                             <View style={{ alignItems: 'center' }}>
                                 <Image source={{ uri: `${PROFILE_URL}${userProfileData?.profile_image}` }}
                                     style={styles.profileImage} />
@@ -99,13 +317,12 @@ export default function Profile({ navigation }) {
                             </View>
                         }
 
-
                         <View style={styles.divider} />
 
                         <View style={styles.navView}>
 
                             <TouchableHighlight onPress={() => setTicketShown(!ticketShown)} underlayColor='transparent'>
-                                <View>
+                                <Animated.View>
                                     <View style={styles.navBtn}>
                                         <TicketIcon height={22} width={22} />
                                         <Text style={styles.navTitle}>My Tickets</Text>
@@ -114,14 +331,14 @@ export default function Profile({ navigation }) {
                                     {
                                         (!ticketShown) ?
                                             <View style={{ paddingLeft: 30 }}>
-                                                <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                                <TouchableHighlight onPress={() => navigation.navigate('FlightTicket')} underlayColor='transparent'>
                                                     <View style={styles.navBtn}>
                                                         {/* <TicketIcon height={22} width={22} /> */}
                                                         <MaterialIcons name='flight' size={22} color='#4C94F2' />
                                                         <Text style={styles.navTitle}>Flight</Text>
                                                     </View>
                                                 </TouchableHighlight>
-                                                <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                                <TouchableHighlight onPress={() => navigation.navigate('HotelTicket')} underlayColor='transparent'>
                                                     <View style={styles.navBtn}>
                                                         {/* <TicketIcon height={22} width={22} /> */}
                                                         <FontAwesome name='hotel' size={22} color='#4C94F2' />
@@ -131,10 +348,10 @@ export default function Profile({ navigation }) {
                                             </View>
                                             : <View />
                                     }
-                                </View>
+                                </Animated.View>
                             </TouchableHighlight>
 
-                            <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                            <TouchableHighlight onPress={() => navigation.navigate('addTraveller')} underlayColor='transparent'>
                                 <View style={styles.navBtn}>
                                     <Fontisto name='persons' size={22} color='#4C94F2' />
                                     <Text style={styles.navTitle}>Add Traveller</Text>
@@ -174,6 +391,23 @@ export default function Profile({ navigation }) {
                         </TouchableHighlight>
                     </View>
                 </View>
+
+
+                <DatePicker
+                modal
+                open={showPicker}
+                date={dob}
+                mode="date"
+                maximumDate={new Date()}
+                onConfirm={(date) => {
+                    setShowPicker(!showPicker)
+                    setDob(dob = date)
+                }}
+                onCancel={() => {
+                    setShowPicker(!showPicker)
+                }}
+            />
+
             </ScrollView>
 
         </View >
@@ -218,7 +452,6 @@ const styles = StyleSheet.create({
         opacity: 0.1,
         marginTop: 20,
         width: width * 0.86,
-        // marginHorizontal: 20
     },
     navView: {
         paddingTop: 10,
@@ -235,5 +468,30 @@ const styles = StyleSheet.create({
         color: color.colorText,
         fontSize: 16,
         paddingLeft: 15
-    }
+    },
+    editTextBorder: {
+        borderWidth: 1,
+        height: 45,
+        borderRadius: 7,
+        borderColor: 'gray',
+        marginTop: 20,
+    },
+    inputeEditor: {
+        paddingLeft: 10,
+        fontFamily:font.font,
+        color: "#000000",
+        width: width * 0.5
+    },
+
+    placeHolderText: {
+        color: 'gray',
+        position: 'absolute',
+        fontSize: 12,
+        paddingLeft: 5,
+        paddingRight: 5,
+        top: -11,
+        left: 10,
+        backgroundColor: '#ffffff',
+        fontFamily:font.font
+    },
 })

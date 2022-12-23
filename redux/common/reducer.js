@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import actions from './actions';
+import actions from '../common/actions';
 
 const initialState = {
     common_loader:false

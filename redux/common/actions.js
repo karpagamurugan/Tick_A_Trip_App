@@ -5,3 +5,5 @@ const actions = {
     HOTEL_LOADER:'HOTEL_LOADER',
     FLIGHT_LOADER:'FLIGHT_LOADER'
 }
+
+export default actions

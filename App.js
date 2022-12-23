@@ -14,6 +14,7 @@ import VerifyOtp from './components/Screens/User/VerifyOtp';
 import BottomNavigate from './components/common/BottomNavigate';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import setAuthToken from './constants/setAuthToken';
+import Loader from './components/common/Loader';
 
 function App() {
   const Stack = createNativeStackNavigator();
@@ -26,6 +27,7 @@ function App() {
   
   return (
     <Provider store={store}>
+      <Loader/>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Login'>
           <Stack.Screen name="Splash" component={Splash} />

@@ -11,6 +11,9 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import FlightTickets from '../Profile/MyTickets/Flight';
+import HotelTicket from '../Profile/MyTickets/Hotel'
+import AddTraveller from '../Profile/AddTraveller'
 
 const Stack = createNativeStackNavigator();
 
@@ -19,10 +22,11 @@ function ProfileTab(){
     return(
         <Stack.Navigator initialRouteName='Profile'>
             <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
-           {/* <Stack.Screen name="Home" component={Home} options={{ headerShown: false }}/> */}
+            <Stack.Screen name="FlightTicket" component={FlightTickets} options={{ headerShown: false }}/>
+            <Stack.Screen name="HotelTicket" component={HotelTicket} options={{ headerShown: false }}/>
+            <Stack.Screen name="addTraveller" component={AddTraveller} options={{ headerShown: false }}/>
         </Stack.Navigator>
     )
-
 }
 
 
@@ -56,6 +60,11 @@ const BottomNavigate = ({ navigation }) => {
                             <Fontisto color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='home' />
                     ),
                 }}
+                listeners={({ navigation }) => ({
+                    tabPress: (e) => {
+                      navigation.navigate('Home')
+                    }
+                  })}
             />
             <Tab.Screen name="Flight" component={Flight}
                 options={{
@@ -72,6 +81,11 @@ const BottomNavigate = ({ navigation }) => {
                             <MaterialIcons color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='flight' />
                     ),
                 }}
+                listeners={({ navigation }) => ({
+                    tabPress: (e) => {
+                      navigation.navigate('Flight')
+                    }
+                  })}
             />
             <Tab.Screen name="Hotel" component={Hotel}
                 options={{
@@ -88,6 +102,11 @@ const BottomNavigate = ({ navigation }) => {
                             <FontAwesome color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='hotel' />
                     ),
                 }}
+                listeners={({ navigation }) => ({
+                    tabPress: (e) => {
+                      navigation.navigate('Hotel')
+                    }
+                  })}
             />
             <Tab.Screen name="ProfileTab" component={ProfileTab}
                 options={{
@@ -104,6 +123,11 @@ const BottomNavigate = ({ navigation }) => {
                             <FontAwesome color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='user' />
                     ),
                 }}
+                listeners={({ navigation }) => ({
+                    tabPress: (e) => {
+                      navigation.navigate('ProfileTab')
+                    }
+                  })}
             />
         </Tab.Navigator>
     )

@@ -1,19 +1,32 @@
 import React from 'react';
-import {View,Text,Dimensions} from 'react-native';
+import {View,Text,Dimensions,StyleSheet,TouchableHighlight} from 'react-native';
 import EditIcon from '../../Assert/Images/icon/edit.svg';
 import BackArrow from '../../Assert/Images/icon/backward-arrow.svg';
+import color from '../../constants/color';
+import font from '../../constants/font';
+import { useNavigation} from '@react-navigation/native';
 
-export default function Appbar(){
+
+let width =Dimensions.get('window').width;
+let height =Dimensions.get('window').height;
+
+
+export default function Appbar({title}){
+
+    const navigation = useNavigation();
     return(
         <View>
                 <View style={styles.appbar}>
+                    <TouchableHighlight underlayColor={'transparent'} onPress={()=>navigation.goBack()}>
                     <View style={styles.iconBack}>
                         <BackArrow height={22} width={22} />
                     </View>
-                    <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035 }}>Profile</Text>
-                    <TouchableHighlight style={styles.iconBack}>
-                        <EditIcon height={22} width={22} />
                     </TouchableHighlight>
+                    <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.03 }}>{title}</Text>
+                    {/* <TouchableHighlight style={styles.iconBack}>
+                        <EditIcon height={22} width={22} />
+                    </TouchableHighlight> */}
+                    <View style={{width:10}}/>
                 </View>
         </View>
     )

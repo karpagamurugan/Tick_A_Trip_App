@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { View , Text, ActivityIndicator,Pressable,Modal,Image} from "react-native";
 import { useSelector } from "react-redux";
 
-export default function LazyLoader(){
+export default function HotelLoader(){
 
 const {common_loader} =useSelector((state)=>state.CommonReducer)
 
@@ -30,7 +30,7 @@ const {common_loader} =useSelector((state)=>state.CommonReducer)
 <View style={{ flex: 1, justifyContent: 'center', alignItems: "center"}} >
         <View style={{borderRadius: 100, backgroundColor: 'white',flexDirection:'column',alignItems:'center',padding:0 }}>
           
-            <Image source={require('../../Assert/loader/common.gif')} style={{width:150,height:150}}/>
+            <Image source={require('../../components/common/hotelLoader.js')} style={{width:150,height:150}}/>
             {/* <ActivityIndicator size={40} color={'red'}/> */}
             {/* <Text
                 style={

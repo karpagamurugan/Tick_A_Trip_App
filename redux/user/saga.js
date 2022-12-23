@@ -6,6 +6,7 @@ import actions from './actions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import setAuthToken from '../../constants/setAuthToken'
 import { PROFILE_URL } from '../../constants/constProfileApi'
+import CommonAction from '../../redux/common/actions';
 
 const userSaga = function* () {
     yield all([
@@ -43,6 +44,7 @@ const getUserRegister = function* (data) {
     }
 }
 const userAthentification = function* (data) {
+    yield put({ type: CommonAction.COMMON_LOADER, payload: true });
     const { payload, navigation } = data
     try {
         const result = yield call(() =>
@@ -63,9 +65,11 @@ const userAthentification = function* (data) {
         AsyncStorage.setItem('username', result.data.success.user.username)
         yield put({ type: actions.SET_USER_LOGIN, payload: result.data.user })
         yield put({ type: actions.GET_USER_PROFILE })
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false });
         navigation.navigate('bottomNavigation')
     } catch (err) {
         console.log('result err', err)
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false });
         yield put({ type: actions.SET_USER_LOGIN, payload: err.data })
     }
 }
