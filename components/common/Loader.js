@@ -27,7 +27,7 @@ const {common_loader} =useSelector((state)=>state.CommonReducer)
                 // backgroundColor:'red'
             }} />
 
-<View style={{ flex: 1, justifyContent: 'center', alignItems: "center"}} >
+<View style={{ flex: 1, justifyContent: 'center', alignItems: "center"}}>
         <View style={{borderRadius: 100, backgroundColor: 'white',flexDirection:'column',alignItems:'center',padding:0 }}>
           
             <Image source={require('../../Assert/loader/common.gif')} style={{width:150,height:150}}/>

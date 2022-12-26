@@ -4,6 +4,7 @@ const color = {
     colorBtn: '#0041F2',
     colorText: '#333333',
     colorGrey:'#898989',
-    AppbarColor:'#E9F3FF'
+    AppbarColor:'#E9F3FF',
+    textBlue:'#0050A6',
 };
 export default color

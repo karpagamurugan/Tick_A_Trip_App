@@ -257,7 +257,7 @@ export default function Profile({ navigation }) {
                         </View>
 
                         <View style={{ backgroundColor: 'green', borderRadius: 10, marginTop: 20, justifyContent: 'center', alignSelf: 'center' }}>
-                            <TouchableHighlight onPress={() => ProfileUpdateVal()} underlayColor='transparent'>
+                            <TouchableHighlight onPress={() => null} underlayColor='transparent'>
                                 <Text style={{ color: 'white', fontFamily: font.font, alignSelf: 'center', paddingVertical: 7, paddingHorizontal: 10 }}>
                                     Update
                                 </Text>

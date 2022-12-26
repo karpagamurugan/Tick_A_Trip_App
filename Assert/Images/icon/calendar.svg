@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24.5" height="25" viewBox="0 0 24.5 25">
+  <g id="calendar" transform="translate(0.25 0.25)">
+    <path id="Path_79" data-name="Path 79" d="M21.25,64.668H2.75A2.752,2.752,0,0,1,0,61.918v-16.5a2.752,2.752,0,0,1,2.75-2.75h18.5A2.752,2.752,0,0,1,24,45.418v16.5A2.752,2.752,0,0,1,21.25,64.668Zm-18.5-20.5a1.252,1.252,0,0,0-1.25,1.25v16.5a1.252,1.252,0,0,0,1.25,1.25h18.5a1.252,1.252,0,0,0,1.25-1.25v-16.5a1.252,1.252,0,0,0-1.25-1.25Zm0,0" transform="translate(0 -40.168)" fill="#0050a6" stroke="#0050a6" stroke-width="0.5"/>
+    <path id="Path_80" data-name="Path 80" d="M23.25,172.168H.75a.75.75,0,0,1,0-1.5h22.5a.75.75,0,0,1,0,1.5Zm0,0" transform="translate(0 -162.668)" fill="#0050a6" stroke="#0050a6" stroke-width="0.5"/>
+    <path id="Path_81" data-name="Path 81" d="M107.418,6a.75.75,0,0,1-.75-.75V.75a.75.75,0,0,1,1.5,0v4.5A.75.75,0,0,1,107.418,6Zm0,0" transform="translate(-101.668)" fill="#0050a6" stroke="#0050a6" stroke-width="0.5"/>
+    <path id="Path_82" data-name="Path 82" d="M374.082,6a.75.75,0,0,1-.75-.75V.75a.75.75,0,0,1,1.5,0v4.5A.75.75,0,0,1,374.082,6Zm0,0" transform="translate(-355.832)" fill="#0050a6" stroke="#0050a6" stroke-width="0.5"/>
+  </g>
+</svg>
