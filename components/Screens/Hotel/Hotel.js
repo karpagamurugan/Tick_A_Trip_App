@@ -1,9 +1,13 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
-import { View,Text } from 'react-native'
+import { View } from 'react-native'
+import HotelSearch from './HotelSearch'
+
 const Hotel = () => {
   return (
-    <View><Text>Hotel</Text></View>
+    <View>
+      <HotelSearch />
+    </View>
   )
 }
 
