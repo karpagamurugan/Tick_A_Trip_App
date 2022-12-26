@@ -86,10 +86,10 @@ export default function Profile({ navigation }) {
                 console.log('No File selected')
             } else {
                 setImage('')
-                Snackbar.show({
-                    text: e,
-                    duration: Snackbar.LENGTH_SHORT,
-                })
+                // Snackbar.show({
+                //     text: e,
+                //     duration: Snackbar.LENGTH_SHORT,
+                // })
                 console.log(e)
                 throw e;
             }
