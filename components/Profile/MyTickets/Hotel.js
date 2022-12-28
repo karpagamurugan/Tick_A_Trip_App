@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React,{useState} from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import color from '../../../constants/color';
@@ -186,20 +187,4 @@ const style = StyleSheet.create({
         color: '#0041F2',
         textDecorationLine: 'underline'
     },
-     tabsBar: {
-        flexDirection: 'row',
-        justifyContent: "space-around",
-        backgroundColor: '#E3E7F0',
-        margin: 12,
-        // borderRadius: 25,
-        padding: 8,
-        width: "100%",
-        alignSelf: 'center',
-    },
-    tabText: {
-        fontSize: 12.5,
-        fontFamily: font.font,
-        alignSelf: 'center'
-    },
-
 })

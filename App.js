@@ -15,6 +15,7 @@ import BottomNavigate from './components/common/BottomNavigate';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import setAuthToken from './constants/setAuthToken';
 import Loader from './components/common/Loader';
+import Hotel from './components/Screens/Hotel/Hotel';
 
 function App() {
   const Stack = createNativeStackNavigator();
@@ -29,7 +30,7 @@ function App() {
     <Provider store={store}>
       <Loader/>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Login'>
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Hotel'>
           <Stack.Screen name="Splash" component={Splash} />
           <Stack.Screen name="Home" component={Home} />
           <Stack.Screen name="Login" component={Login} />
@@ -37,6 +38,7 @@ function App() {
           <Stack.Screen name="SuccessPage" component={SuccessPage} />
           <Stack.Screen name='ForgetVerify' component={ForgetVerify} />
           <Stack.Screen name='VerifyOtp' component={VerifyOtp} />
+          <Stack.Screen name='Hotel' component={Hotel} />
           <Stack.Screen name='bottomNavigation' component={BottomNavigate} />
         </Stack.Navigator>
       </NavigationContainer>
