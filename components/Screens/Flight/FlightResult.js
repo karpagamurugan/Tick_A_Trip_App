@@ -1,3 +1,5 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable no-undef */
 import React, { useState } from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ImageBackground, Modal, Pressable } from 'react-native';
 import Appbar from '../../common/Appbar';

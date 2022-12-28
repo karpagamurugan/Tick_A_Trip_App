@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
-import { View, Text, StyleSheet, Dimensions,Image } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from '../Home/Home'
 import Hotel from '../Screens/Hotel/Hotel'
@@ -19,24 +19,31 @@ import FlightResult from '../Screens/Flight/FlightResult'
 const Stack = createNativeStackNavigator();
 
 
-function ProfileTab(){
-    return(
+function ProfileTab() {
+    return (
         <Stack.Navigator initialRouteName='Profile'>
-            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }}/>
-            <Stack.Screen name="FlightTicket" component={FlightTickets} options={{ headerShown: false }}/>
-            <Stack.Screen name="HotelTicket" component={HotelTicket} options={{ headerShown: false }}/>
-            <Stack.Screen name="addTraveller" component={AddTraveller} options={{ headerShown: false }}/>
+            <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+            <Stack.Screen name="FlightTicket" component={FlightTickets} options={{ headerShown: false }} />
+            <Stack.Screen name="HotelTicket" component={HotelTicket} options={{ headerShown: false }} />
+            <Stack.Screen name="addTraveller" component={AddTraveller} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }
 
+function HotelTab() {
+    return (
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='Hotel' component={Hotel} />
+        </Stack.Navigator>
+    )
+}
 
-function FlightTab(){
-    return(
+function FlightTab() {
+    return (
         <Stack.Navigator initialRouteName='flight'>
-        <Stack.Screen name="flight" component={Flight} options={{ headerShown: false }}/>
-        <Stack.Screen name="FlightResult" component={FlightResult} options={{ headerShown: false }}/>
-    </Stack.Navigator>
+            <Stack.Screen name="flight" component={Flight} options={{ headerShown: false }} />
+            <Stack.Screen name="FlightResult" component={FlightResult} options={{ headerShown: false }} />
+        </Stack.Navigator>
     )
 }
 
@@ -58,10 +65,10 @@ const BottomNavigate = ({ navigation }) => {
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ focused, color, size }) => (
                         focused ?
-                            <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                                 <Fontisto color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='home' />
                                 <View>
-                                    <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')}/>
+                                    <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')} />
                                 </View>
                             </View>
                             :
@@ -70,19 +77,19 @@ const BottomNavigate = ({ navigation }) => {
                 }}
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {
-                      navigation.navigate('Home')
+                        navigation.navigate('Home')
                     }
-                  })}
+                })}
             />
             <Tab.Screen name="Flight" component={FlightTab}
                 options={{
                     tabBarLabel: 'Flight',
                     tabBarIcon: ({ focused, color, size }) => (
                         focused ?
-                            <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                                 <MaterialIcons color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='flight' />
                                 <View>
-                                    <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')}/>
+                                    <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')} />
                                 </View>
                             </View>
                             :
@@ -91,19 +98,19 @@ const BottomNavigate = ({ navigation }) => {
                 }}
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {
-                      navigation.navigate('Flight')
+                        navigation.navigate('Flight')
                     }
-                  })}
+                })}
             />
-            <Tab.Screen name="Hotel" component={Hotel}
+            <Tab.Screen name="HotelTab" component={HotelTab}
                 options={{
                     tabBarLabel: 'Hotel',
                     tabBarIcon: ({ focused, color, size }) => (
                         focused ?
-                            <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                                 <FontAwesome color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='hotel' />
                                 <View>
-                                    <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')}/>
+                                    <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')} />
                                 </View>
                             </View>
                             :
@@ -112,19 +119,19 @@ const BottomNavigate = ({ navigation }) => {
                 }}
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {
-                      navigation.navigate('Hotel')
+                        navigation.navigate('Hotel')
                     }
-                  })}
+                })}
             />
             <Tab.Screen name="ProfileTab" component={ProfileTab}
                 options={{
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ focused, color, size }) => (
                         focused ?
-                            <View style={{flexDirection:'column',justifyContent:'center',alignItems:'center'}}>
+                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
                                 <FontAwesome color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='user' />
                                 <View>
-                                    <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')}/>
+                                    <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')} />
                                 </View>
                             </View>
                             :
@@ -133,16 +140,16 @@ const BottomNavigate = ({ navigation }) => {
                 }}
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {
-                      navigation.navigate('ProfileTab')
+                        navigation.navigate('ProfileTab')
                     }
-                  })}
+                })}
             />
         </Tab.Navigator>
     )
 }
 const style = StyleSheet.create({
-    navActiveIcon:{
-        marginTop:5
+    navActiveIcon: {
+        marginTop: 5
     }
 })
 export default BottomNavigate

@@ -38,7 +38,6 @@ function App() {
           <Stack.Screen name="SuccessPage" component={SuccessPage} />
           <Stack.Screen name='ForgetVerify' component={ForgetVerify} />
           <Stack.Screen name='VerifyOtp' component={VerifyOtp} />
-          <Stack.Screen name='Hotel' component={Hotel} />
           <Stack.Screen name='bottomNavigation' component={BottomNavigate} />
         </Stack.Navigator>
       </NavigationContainer>
