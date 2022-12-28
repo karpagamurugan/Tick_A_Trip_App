@@ -32,19 +32,10 @@ export default function Flight() {
             <Appbar title={'FLIGHT BOOKINGS'} />
             {/* tab bar */}
             <View style={style.tabsBar}>
-
                 <TouchableHighlight onPress={() => hadleClick(0)}
                     activeOpacity={0.2}
                     underlayColor={"#dddddd"}
-                    style={{
-                        backgroundColor: selectedTab === 0 ? 'white' : 'transparent',
-                        paddingRight: 12,
-                        paddingLeft: 12,
-                        paddingTop: 3,
-                        paddingBottom: 3,
-                        borderRadius: 15,
-                        alignItems: 'center'
-                    }}
+                    style={[style.tabBtn,{backgroundColor: selectedTab === 0 ? 'white' : 'transparent',}]}
                 >
                     <Text style={[style.tabText, { color: selectedTab === 0 ? 'black' : 'gray' }]}>Upcoming Trip</Text>
                 </TouchableHighlight>
@@ -53,15 +44,7 @@ export default function Flight() {
                 <TouchableHighlight onPress={() => hadleClick(1)}
                     activeOpacity={0.2}
                     underlayColor={"#dddddd"}
-                    style={{
-                        backgroundColor: selectedTab === 1 ? 'white' : 'transparent',
-                        paddingRight: 12,
-                        paddingLeft: 12,
-                        paddingTop: 3,
-                        paddingBottom: 3,
-                        borderRadius: 15,
-                        alignItems: 'center'
-                    }}
+                    style={[style.tabBtn,{backgroundColor: selectedTab === 1 ? 'white' : 'transparent', }]}
                 >
                     <Text style={[style.tabText, { color: selectedTab === 1 ? 'black' : 'gray' }]}>Cancelled Trip</Text>
                 </TouchableHighlight>
@@ -70,19 +53,12 @@ export default function Flight() {
                 <TouchableHighlight onPress={() => hadleClick(2)}
                     activeOpacity={0.2}
                     underlayColor={"#dddddd"}
-                    style={{
-                        backgroundColor: selectedTab === 2 ? 'white' : 'transparent',
-                        paddingRight: 12,
-                        paddingLeft: 12,
-                        paddingTop: 3,
-                        paddingBottom: 3,
-                        borderRadius: 15,
-                        alignItems: 'center'
-                    }}
+                    style={[style.tabBtn,{backgroundColor: selectedTab === 2 ? 'white' : 'transparent',}]}
                 >
                     <Text style={[style.tabText, { color: selectedTab === 2 ? 'black' : 'gray' }]}>Completed Trip</Text>
                 </TouchableHighlight>
             </View>
+            
             <ScrollView>
                 <View style={style.listView}>
 
@@ -124,16 +100,8 @@ export default function Flight() {
 }
 
 const style = StyleSheet.create({
-    mainContainer: {
-        height: height,
-        width: width,
-        backgroundColor: 'white'
-    },
-    listView: {
-        height: height,
-        marginBottom:50
-        // backgroundColor:'red'
-    },
+    mainContainer: {height: height, width: width,backgroundColor: 'white'},
+    listView: { height: height,marginBottom:50},
     tabsBar: {
         flexDirection: 'row',
         justifyContent: "space-around",
@@ -144,11 +112,7 @@ const style = StyleSheet.create({
         width: "60%",
         alignSelf: 'center',
     },
-    tabText: {
-        fontSize: 12.5,
-        fontFamily: font.font,
-        alignSelf: 'center'
-    },
+    tabText: {fontSize: 12.5,fontFamily: font.font,alignSelf: 'center'},
     card: {
         backgroundColor: 'white',
         elevation: 3,
@@ -158,12 +122,8 @@ const style = StyleSheet.create({
         borderRadius: 10,
         padding: 10
     },
-    cardView: {
-        flexDirection: 'row'
-    },
-    cardText: {
-        paddingLeft: 15
-    },
+    cardView: { flexDirection: 'row'},
+    cardText: {paddingLeft: 15},
     title: {
         fontFamily: font.fontBold,
         color: color.colorText,
@@ -191,15 +151,18 @@ const style = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: '#E3E7F0',
         margin: 12,
-        // borderRadius: 25,
         padding: 8,
         width: "100%",
         alignSelf: 'center',
     },
-    tabText: {
-        fontSize: 12.5,
-        fontFamily: font.font,
-        alignSelf: 'center'
+    tabText: {fontSize: 12.5,fontFamily: font.font, alignSelf: 'center'},
+    tabBtn: {
+        paddingRight: 12,
+        paddingLeft: 12,
+        paddingTop: 3,
+        paddingBottom: 3,
+        borderRadius: 15,
+        alignItems: 'center'
     },
 
 })

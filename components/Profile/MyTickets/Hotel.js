@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React,{useState} from 'react';
+import React, { useState } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import color from '../../../constants/color';
 import font from '../../../constants/font';
@@ -33,20 +33,10 @@ export default function Hotel() {
             <Appbar title={'HOTEL BOOKINGS'} />
             {/* tab bar */}
             <View style={style.tabsBar}>
-
                 <TouchableHighlight onPress={() => hadleClick(0)}
                     activeOpacity={0.2}
                     underlayColor={"#dddddd"}
-                    style={{
-                        backgroundColor: selectedTab === 0 ? 'white' : 'transparent',
-                        paddingRight: 12,
-                        paddingLeft: 12,
-                        paddingTop: 3,
-                        paddingBottom: 3,
-                        borderRadius: 15,
-                        alignItems: 'center'
-                    }}
-                >
+                    style={[style.tabBtn, { backgroundColor: selectedTab === 0 ? 'white' : 'transparent' }]}>
                     <Text style={[style.tabText, { color: selectedTab === 0 ? 'black' : 'gray' }]}>Upcoming Trip</Text>
                 </TouchableHighlight>
 
@@ -54,16 +44,7 @@ export default function Hotel() {
                 <TouchableHighlight onPress={() => hadleClick(1)}
                     activeOpacity={0.2}
                     underlayColor={"#dddddd"}
-                    style={{
-                        backgroundColor: selectedTab === 1 ? 'white' : 'transparent',
-                        paddingRight: 12,
-                        paddingLeft: 12,
-                        paddingTop: 3,
-                        paddingBottom: 3,
-                        borderRadius: 15,
-                        alignItems: 'center'
-                    }}
-                >
+                    style={[style.tabBtn,{backgroundColor: selectedTab === 1 ? 'white' : 'transparent',}]}>
                     <Text style={[style.tabText, { color: selectedTab === 1 ? 'black' : 'gray' }]}>Cancelled Trip</Text>
                 </TouchableHighlight>
 
@@ -71,19 +52,13 @@ export default function Hotel() {
                 <TouchableHighlight onPress={() => hadleClick(2)}
                     activeOpacity={0.2}
                     underlayColor={"#dddddd"}
-                    style={{
-                        backgroundColor: selectedTab === 2 ? 'white' : 'transparent',
-                        paddingRight: 12,
-                        paddingLeft: 12,
-                        paddingTop: 3,
-                        paddingBottom: 3,
-                        borderRadius: 15,
-                        alignItems: 'center'
-                    }}
-                >
+                    style={[style.tabBtn,{backgroundColor: selectedTab === 2 ? 'white' : 'transparent',}]}>
                     <Text style={[style.tabText, { color: selectedTab === 2 ? 'black' : 'gray' }]}>Completed Trip</Text>
                 </TouchableHighlight>
             </View>
+
+
+
             <ScrollView>
                 <View style={style.listView}>
 
@@ -125,30 +100,25 @@ export default function Hotel() {
 }
 
 const style = StyleSheet.create({
-    mainContainer: {
-        height: height,
-        width: width,
-        backgroundColor: 'white'
-    },
-    listView: {
-        height: height,
-        marginBottom:50
-        // backgroundColor:'red'
-    },
+    mainContainer: { height: height, width: width, backgroundColor: 'white' },
+    listView: { height: height, marginBottom: 50 },
     tabsBar: {
         flexDirection: 'row',
         justifyContent: "space-around",
         backgroundColor: '#E3E7F0',
         margin: 12,
-        borderRadius: 25,
         padding: 8,
-        width: "60%",
+        width: "100%",
         alignSelf: 'center',
     },
-    tabText: {
-        fontSize: 12.5,
-        fontFamily: font.font,
-        alignSelf: 'center'
+    tabText: { fontSize: 12.5, fontFamily: font.font, alignSelf: 'center' },
+    tabBtn: {
+        paddingRight: 12,
+        paddingLeft: 12,
+        paddingTop: 3,
+        paddingBottom: 3,
+        borderRadius: 15,
+        alignItems: 'center'
     },
     card: {
         backgroundColor: 'white',
@@ -159,12 +129,8 @@ const style = StyleSheet.create({
         borderRadius: 10,
         padding: 10
     },
-    cardView: {
-        flexDirection: 'row'
-    },
-    cardText: {
-        paddingLeft: 15
-    },
+    cardView: { flexDirection: 'row' },
+    cardText: { paddingLeft: 15 },
     title: {
         fontFamily: font.fontBold,
         color: color.colorText,

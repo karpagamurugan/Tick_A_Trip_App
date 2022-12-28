@@ -1,17 +1,31 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect } from 'react';
 import { View, Text, Dimensions, ImageBackground, Image, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const width = Dimensions.get('screen').width
 const height = Dimensions.get('screen').height
 
 const Splash = ({navigation}) => {
 
+const loggedIn =async()=>{
+  await AsyncStorage.getItem('LoggedIn').then(
+    (res) => {
+      login = res
+
+      setTimeout(() => {
+        if(login === 'Sucess'){
+          navigation.replace('bottomNavigation')
+        }else{
+          navigation.replace('Login')
+        }
+      }, 3000);
+    })
+}
+   
   useEffect(() => {
-    setTimeout(() => {
-      navigation.replace('Login')
-    }, 3000)
-  })
+    loggedIn()
+  },[])
   
   return (
     <View style={style.SplashSection}>

@@ -81,7 +81,7 @@ const BottomNavigate = ({ navigation }) => {
                     }
                 })}
             />
-            <Tab.Screen name="Flight" component={FlightTab}
+            <Tab.Screen name="FlightTab" component={FlightTab}
                 options={{
                     tabBarLabel: 'Flight',
                     tabBarIcon: ({ focused, color, size }) => (
@@ -98,7 +98,7 @@ const BottomNavigate = ({ navigation }) => {
                 }}
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {
-                        navigation.navigate('Flight')
+                        navigation.navigate('FlightTab')
                     }
                 })}
             />
@@ -119,7 +119,7 @@ const BottomNavigate = ({ navigation }) => {
                 }}
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {
-                        navigation.navigate('Hotel')
+                        navigation.navigate('HotelTab')
                     }
                 })}
             />

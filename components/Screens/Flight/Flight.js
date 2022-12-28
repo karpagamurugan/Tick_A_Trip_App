@@ -36,13 +36,13 @@ const Flight = ({ navigation }) => {
   var [adult, setAdult] = useState(0) //set adult count
   var [child, setchild] = useState(0) //set child count
   var [infant, setInfant] = useState(0) //set infant count
-  var [classType,setClassType]=useState('Economy');
+  var [classType, setClassType] = useState('Economy');
 
 
   let ChildAndInfant = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }] //child and infant count
   let AdultCount = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }, { value: '7' }, { value: '8' }, { value: '9' }] //adult count
 
-  let classList =[{value:'Business'},{value:'Economy'}];
+  let classList = [{ value: 'Business' }, { value: 'Economy' }];
 
   return (
     <View style={style.MainContainer}>
@@ -64,22 +64,20 @@ const Flight = ({ navigation }) => {
             right: 0,
           }} />
         <View style={{ flex: 1, justifyContent: 'flex-end' }}>
-          <View style={{
-            width: '100%', borderRadius: 10, backgroundColor: 'white', flexDirection: 'column',
-            alignSelf: 'center',paddingBottom:20,paddingTop:15
-          }}>
-            <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center',marginLeft:20}}>
-              <Text style={{fontFamily:font.fontBold,color:color.colorText,fontSize:height*0.025}}>selected a traveller</Text>
-            <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'flex-end', paddingRight: 15, paddingBottom: 10}} onPress={() =>
-                        setShowTraveller(!showTraveller)
-                    }>
-                        <MaterialIcons name='cancel' size={23} color='red'/>
-            </TouchableHighlight>
+          <View style={style.mainModal}>
+            <View style={style.subModal}>
+              <Text style={style.modalTitle}>selected a traveller</Text>
+              <TouchableHighlight underlayColor={'transparent'} style={style.modalCancel}
+                onPress={() =>
+                  setShowTraveller(!showTraveller)
+                }>
+                <MaterialIcons name='cancel' size={23} color='red' />
+              </TouchableHighlight>
             </View>
-            <View style={{backgroundColor:'grey',width:width,height:0.5,opacity:0.5}}/>
-            <View style={{alignItems:'center',marginTop:10}}>
-              
-              <View style={{ flexDirection: 'row',alignItems:'center',width:'80%',justifyContent:'space-between',marginBottom:15 }}>
+            <View style={{ backgroundColor: 'grey', width: width, height: 0.5, opacity: 0.5 }} />
+            <View style={{ alignItems: 'center', marginTop: 10 }}>
+
+              <View style={style.dropDown}>
                 <Text style={{ fontFamily: font.fontBold }}>Adults (12y+)</Text>
                 <Dropdown
                   data={AdultCount}
@@ -101,17 +99,17 @@ const Flight = ({ navigation }) => {
                       padding: 0,
                     },
                   }}
-                  style={{ backgroundColor: '#EDF2F7', paddingVertical: 5, paddingLeft: 30, paddingRight: 10, borderRadius: 5, }}
+                  style={style.dropStyle}
                   renderRightIcon={() => (
                     <MaterialIcon
                       name="chevron-down-circle-outline"
                       size={25}
-                      style={{ fontSize: 18, color: color.colorTheme, marginLeft: 20 }}
+                      style={style.dropIcon}
                     />)}
                 />
               </View>
 
-              <View style={{ flexDirection: 'row',alignItems:'center',width:'80%',justifyContent:'space-between',marginBottom:15 }}>
+              <View style={style.dropDown}>
                 <Text style={{ fontFamily: font.fontBold }}>Children ( 2y - 12y)</Text>
                 <Dropdown
                   data={ChildAndInfant}
@@ -133,17 +131,17 @@ const Flight = ({ navigation }) => {
                       padding: 0,
                     },
                   }}
-                  style={{ backgroundColor: '#EDF2F7', paddingVertical: 5, paddingLeft: 30, paddingRight: 10, borderRadius: 5, }}
+                  style={style.dropStyle}
                   renderRightIcon={() => (
                     <MaterialIcon
                       name="chevron-down-circle-outline"
                       size={25}
-                      style={{ fontSize: 18, color: color.colorTheme, marginLeft: 20 }}
+                      style={style.dropIcon}
                     />)}
                 />
               </View>
 
-              <View style={{ flexDirection: 'row',alignItems:'center',width:'80%',justifyContent:'space-between',marginBottom:15  }}>
+              <View style={style.dropDown}>
                 <Text style={{ fontFamily: font.fontBold }}>Infant (below 2y)</Text>
                 <Dropdown
                   data={ChildAndInfant}
@@ -165,22 +163,19 @@ const Flight = ({ navigation }) => {
                       padding: 0,
                     },
                   }}
-                  style={{ backgroundColor: '#EDF2F7', paddingVertical: 5, paddingLeft: 30, paddingRight: 10, borderRadius: 5, }}
+                  style={style.dropStyle}
                   renderRightIcon={() => (
                     <MaterialIcon
                       name="chevron-down-circle-outline"
                       size={25}
-                      style={{ fontSize: 18, color: color.colorTheme, marginLeft: 20 }}
+                      style={style.dropIcon}
                     />)}
                 />
               </View>
-             
-              <View style={{ alignItems: 'center', marginTop: 10, backgroundColor: color.textBlue, borderRadius: 20,width:width*0.8}}>
-                <TouchableHighlight underlayColor={'transparent'} onPress={()=>setShowTraveller(!showTraveller)}>
-                  <Text style={{
-                    fontFamily: font.fontSemi, color: 'white',
-                    paddingVertical: 5, paddingHorizontal: 10, borderRadius: 10
-                  }}>DONE</Text>
+
+              <View style={style.doneBtn}>
+                <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowTraveller(!showTraveller)}>
+                  <Text style={style.doneText}>DONE</Text>
                 </TouchableHighlight>
               </View>
             </View>
@@ -194,18 +189,16 @@ const Flight = ({ navigation }) => {
       <ScrollView>
         <View style={{ height: height, marginBottom: 85 }}>
           <View style={{ height: height * 0.3, backgroundColor: 'white', borderColor: 'red', borderWidth: 1 }}>
-
+            {/* here replace this view flight image */}
           </View>
-          <ImageBackground source={require('../../../Assert/Images/map.jpg')} style={{ height: height * 0.7, width: width, paddingTop: 20 }}>
+          <ImageBackground source={require('../../../Assert/Images/map.jpg')} style={style.mapbg}>
 
             <View style={{ position: 'absolute', alignSelf: 'center', top: -20 }}>
               <View style={style.btn}>
                 <TouchableHighlight underlayColor={'transparent'}
                   onPress={() => {
-
                     if (oneTrip === true) {
                       setOneTrip(!oneTrip)
-                      // setRoundTrip(!roundTrip)
                     } else {
                       setOneTrip(!oneTrip)
                       setRoundTrip(!roundTrip)
@@ -233,98 +226,80 @@ const Flight = ({ navigation }) => {
               </View>
 
 
-              {/* <View style={[style.frombtn, { marginHorizontal: 20 ,paddingLeft:10,width:width*0.9}]}>
-                <FromIcon height={22} width={22}/>
-                <View style={{ paddingLeft: 15 }}>
-                  <Text style={style.title}>FROM</Text>
-                  <Text style={{ color: color.colorText, fontFamily: font.mediam }}>Sydney, Australia</Text>
-                </View>
-              </View> */}
               <AutoCompleteTextField
-                            hintText="Select.."
-                            defaultValue={classType}
-                            icon={FromIcon}
-                            placeHolderText="From"
-                            value={classType}
-                            type='from'
-                            data={
-                                classList.map((e, i) => {
-                                    return (
-                                        { display: e.value, value: e}
-                                    )
-                                })
-                            }
-                            onSelected={(e) => {
-                              // console.log(e.display)
-                                setClassType(classType = e.value)
-                            }}
-                        />
+                hintText="Select.."
+                defaultValue={classType}
+                icon={FromIcon}
+                placeHolderText="From"
+                value={classType}
+                type='from'
+                data={
+                  classList.map((e, i) => {
+                    return (
+                      { display: e.value, value: e }
+                    )
+                  })
+                }
+                onSelected={(e) => {
+                  setClassType(classType = e.value)
+                }}
+              />
 
-              {/* <View style={[style.frombtn, { marginHorizontal: 20 }]}>
-                <ToIcon height={25} width={25} />
-                <View style={{ paddingLeft: 15 }}>
-                  <Text  style={style.title}>TO</Text>
-                  <Text style={{ color: color.colorText, fontFamily: font.mediam }}>Sydney, Australia</Text>
-                </View>
-              </View> */}
-               <AutoCompleteTextField
-                            hintText="Select.."
-                            defaultValue={classType}
-                            icon={FromIcon}
-                            placeHolderText="From"
-                            value={classType}
-                            type='to'
-                            data={
-                                classList.map((e, i) => {
-                                    return (
-                                        { display: e.value, value: e}
-                                    )
-                                })
-                            }
-                            onSelected={(e) => {
-                              // console.log(e.display)
-                                setClassType(classType = e.value)
-                            }}
-                        />
+
+              <AutoCompleteTextField
+                hintText="Select.."
+                defaultValue={classType}
+                icon={FromIcon}
+                placeHolderText="From"
+                value={classType}
+                type='to'
+                data={
+                  classList.map((e, i) => {
+                    return (
+                      { display: e.value, value: e }
+                    )
+                  })
+                }
+                onSelected={(e) => {
+                  setClassType(classType = e.value)
+                }}
+              />
 
               <View style={{ flexDirection: 'row' }}>
-                <TouchableHighlight onPress={() => setShowTraveller(!showTraveller)} underlayColor='transparent' style={{marginRight:10}}>
+                <TouchableHighlight onPress={() => setShowTraveller(!showTraveller)} underlayColor='transparent' style={{ marginRight: 10 }}>
                   <View style={[style.frombtn, { marginLeft: 20 }]}>
-                    {/* <ToIcon height={25} width={25} /> */}
-                    <Ionicons name='md-person-outline' size={22} color={color.textBlue}/>
+                    <Ionicons name='md-person-outline' size={22} color={color.textBlue} />
                     <View style={{ paddingLeft: 15 }}>
-                      <Text  style={style.title}>TRAVELLERS</Text>
+                      <Text style={style.title}>TRAVELLERS</Text>
                       <Text style={{ color: color.colorText, fontFamily: font.mediam }}>{adult} Adult,{child} Child,{'\n'} {infant} Infant</Text>
                     </View>
                   </View>
                 </TouchableHighlight>
 
-                  
+
                 <View style={[style.frombtn, { marginRight: 20 }]}>
                   <ChairIcon height={25} width={25} />
                   <View style={{ paddingLeft: 15 }}>
-                    <Text  style={style.title}>CLASS</Text>
-                    {/* <Text style={{ color: color.colorText, fontFamily: font.mediam }}>Sydney, Australia</Text> */}
+                    <Text style={style.title}>CLASS</Text>
                     <Dropdown
-                  data={classList}
-                  labelField="value"
-                  valueField="value"
-                  value={classType}
-                  showsVerticalScrollIndicator={true}
-                  name="class"
-                  // placeholder='0'
-                  onChange={(item) => {
-                    setClassType(item.value)
-                  }}
-                  selectedTextProps={{
-                    style: {
-                      fontSize: 13,
-                      fontWeight: '500',
-                      fontFamily: font.font,
-                    },
-                  }}
-                  style={{  paddingRight: 15,paddingLeft:10}}
-                />
+                      data={classList}
+                      labelField="value"
+                      valueField="value"
+                      value={classType}
+                      showsVerticalScrollIndicator={true}
+                      name="class"
+                      onChange={(item) => {
+                        setClassType(item.value)
+                      }}
+                      selectedTextProps={{
+                        style: {
+                          fontSize: 13,
+                          fontWeight: '500',
+                          fontFamily: font.font,
+                        },
+                      }}
+                      style={{ paddingRight: 15, paddingLeft: 10 }}
+                    />
                   </View>
                 </View>
               </View>
@@ -334,7 +309,7 @@ const Flight = ({ navigation }) => {
                   <View style={[style.frombtn, { marginLeft: 20 }]}>
                     <CalendarIcon height={22} width={22} />
                     <View style={{ paddingLeft: 15 }}>
-                      <Text  style={style.title}>DEPARTURE ON</Text>
+                      <Text style={style.title}>DEPARTURE ON</Text>
                       <Text style={{ color: color.colorText, fontFamily: font.mediam }}>{moment(fromDate).format('DD/MM/YYYY')}</Text>
                     </View>
                   </View>
@@ -343,13 +318,13 @@ const Flight = ({ navigation }) => {
                   <View style={[style.frombtn, { marginRight: 20 }]}>
                     <CalendarIcon height={22} width={22} />
                     <View style={{ paddingLeft: 15 }}>
-                      <Text  style={style.title}>RETURN ON</Text>
+                      <Text style={style.title}>RETURN ON</Text>
                       <Text style={{ color: color.colorText, fontFamily: font.mediam }}>{moment(ToDate).format('DD/MM/YYYY')}</Text>
                     </View>
                   </View>
                 </TouchableHighlight>
               </View>
-           
+
 
 
               <View style={style.searchBtn}>
@@ -362,12 +337,12 @@ const Flight = ({ navigation }) => {
           </ImageBackground>
         </View>
 
+        {/* select departure date */}
         <DatePicker
           modal
           open={fromPicker}
           date={fromDate}
           mode="date"
-          // maximumDate={new Date()}
           minimumDate={new Date()}
           onConfirm={(date) => {
             setFromPicker(!fromPicker)
@@ -379,12 +354,12 @@ const Flight = ({ navigation }) => {
           }}
         />
 
+        {/* select return date */}
         <DatePicker
           modal
           open={toPicker}
           date={fromDate}
           mode="date"
-          // maximumDate={new Date()}
           minimumDate={new Date()}
           onConfirm={(date) => {
             setToPicker(!toPicker)
@@ -405,20 +380,10 @@ export default Flight
 
 
 const style = StyleSheet.create({
-  MainContainer: {
-    height: height,
-    width: width,
-    backgroundColor: 'white'
-  },
-  btn: {
-    flexDirection: 'row',
-    justifyContent: 'space-evenly'
-
-  },
+  MainContainer: { height: height, width: width, backgroundColor: 'white' },
+  btn: { flexDirection: 'row', justifyContent: 'space-evenly' },
   btnView: {
-    // backgroundColor: color.textBlue,
     paddingVertical: 7,
-    // paddingHorizontal:15,
     borderRadius: 20,
     width: width * 0.35,
     flexDirection: 'row',
@@ -426,12 +391,8 @@ const style = StyleSheet.create({
     justifyContent: 'center',
     elevation: 5
   },
-  onebtn: {
-    // color: 'white',
-    fontFamily: font.fontSemi,
-    paddingLeft: 10,
-    fontSize: height * 0.017
-  },
+  mapbg: { height: height * 0.7, width: width, paddingTop: 20 },
+  onebtn: { fontFamily: font.fontSemi, paddingLeft: 10, fontSize: height * 0.017 },
   frombtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -446,12 +407,7 @@ const style = StyleSheet.create({
     marginTop: 20,
     padding: 5,
   },
-  searchText: {
-    color: 'white',
-    fontFamily: font.mediam,
-    paddingVertical: 10,
-
-  },
+  searchText: { color: 'white', fontFamily: font.mediam, paddingVertical: 10, },
   searchBtn: {
     alignItems: 'center',
     backgroundColor: color.textBlue,
@@ -460,9 +416,20 @@ const style = StyleSheet.create({
     marginTop: 20,
     borderRadius: 30
   },
-  title:{
-     color: color.textBlue,
-      fontFamily: font.fontSemi,
-      opacity:0.5
-    }
+  title: { color: color.textBlue, fontFamily: font.fontSemi, opacity: 0.5 },
+  dropDown: { flexDirection: 'row', alignItems: 'center', width: '80%', justifyContent: 'space-between', marginBottom: 15 },
+  doneBtn: { alignItems: 'center', marginTop: 10, backgroundColor: color.textBlue, borderRadius: 20, width: width * 0.8 },
+  doneText: {
+    fontFamily: font.fontSemi, color: 'white',
+    paddingVertical: 5, paddingHorizontal: 10, borderRadius: 10
+  },
+  mainModal: {
+    width: '100%', borderRadius: 10, backgroundColor: 'white', flexDirection: 'column',
+    alignSelf: 'center', paddingBottom: 20, paddingTop: 15
+  },
+  subModal: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginLeft: 20 },
+  modalTitle: { fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.025 },
+  modalCancel: { alignSelf: 'flex-end', paddingRight: 15, paddingBottom: 10 },
+  dropStyle: { backgroundColor: '#EDF2F7', paddingVertical: 5, paddingLeft: 30, paddingRight: 10, borderRadius: 5, },
+  dropIcon: { fontSize: 18, color: color.colorTheme, marginLeft: 20 }
 })

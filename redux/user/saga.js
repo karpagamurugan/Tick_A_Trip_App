@@ -63,10 +63,16 @@ const userAthentification = function* (data) {
         AsyncStorage.setItem('email', result.data.success.user.email)
         AsyncStorage.setItem('phone', result.data.success.user.phone)
         AsyncStorage.setItem('username', result.data.success.user.username)
+        AsyncStorage.setItem('LoggedIn','Sucess')
         yield put({ type: actions.SET_USER_LOGIN, payload: result.data.user })
         yield put({ type: actions.GET_USER_PROFILE })
         yield put({ type: CommonAction.COMMON_LOADER, payload: false });
-        navigation.navigate('bottomNavigation')
+        // navigation.navigate('bottomNavigation')
+
+        navigation.reset({
+            index:0,
+            routes:[{name:'bottomNavigation'}] 
+          })
     } catch (err) {
         console.log('result err', err)
         yield put({ type: CommonAction.COMMON_LOADER, payload: false });

@@ -25,13 +25,13 @@ const Home = ({ navigation }) => {
       <View style={{ width: width, paddingHorizontal: 20, }}>
         <Text style={style.bannerTd}>Explore the  World with us</Text>
         <View style={style.bannerBtns}>
-          <TouchableHighlight >
+          <TouchableHighlight  underlayColor={"transparent"} onPress={()=>navigation.navigate('HotelTab')}>
             <View style={style.bannerBtnsGrid}>
               <View style={style.bannerBtnsIcon}><FontAwesome5 style={style.bannerBtnIconIn} name='hotel' /></View>
               <Text style={style.bannerBtnsTd}>Hotels</Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight style={{ marginLeft: 20 }}>
+          <TouchableHighlight style={{ marginLeft: 20 }} underlayColor={"transparent"} onPress={()=>navigation.navigate('FlightTab')}>
             <View style={style.bannerBtnsGrid}>
               <View style={style.bannerBtnsIcon}><MaterialCommunityIcons style={style.bannerBtnIconIn} name='airplane' /></View>
               <Text style={style.bannerBtnsTd}>Flights</Text>
