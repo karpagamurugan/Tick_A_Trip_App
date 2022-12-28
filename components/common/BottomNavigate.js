@@ -14,6 +14,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FlightTickets from '../Profile/MyTickets/Flight';
 import HotelTicket from '../Profile/MyTickets/Hotel'
 import AddTraveller from '../Profile/AddTraveller'
+import FlightResult from '../Screens/Flight/FlightResult'
 
 const Stack = createNativeStackNavigator();
 
@@ -30,6 +31,16 @@ function ProfileTab(){
 }
 
 
+function FlightTab(){
+    return(
+        <Stack.Navigator initialRouteName='flight'>
+        <Stack.Screen name="flight" component={Flight} options={{ headerShown: false }}/>
+        <Stack.Screen name="FlightResult" component={FlightResult} options={{ headerShown: false }}/>
+    </Stack.Navigator>
+    )
+}
+
+
 const BottomNavigate = ({ navigation }) => {
     const Tab = createBottomTabNavigator()
     return (
@@ -39,9 +50,6 @@ const BottomNavigate = ({ navigation }) => {
                 backgroundColor: '#E9F3FF',
                 height: 60,
                 borderRadius: 15,
-                // padding
-                // marginBottom: 5,
-                // marginHorizontal: 5,
             },
             tabBarShowLabel: false
         }}>
@@ -66,7 +74,7 @@ const BottomNavigate = ({ navigation }) => {
                     }
                   })}
             />
-            <Tab.Screen name="Flight" component={Flight}
+            <Tab.Screen name="Flight" component={FlightTab}
                 options={{
                     tabBarLabel: 'Flight',
                     tabBarIcon: ({ focused, color, size }) => (
