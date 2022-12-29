@@ -15,7 +15,7 @@ import FlightTickets from '../Profile/MyTickets/Flight';
 import HotelTicket from '../Profile/MyTickets/Hotel'
 import AddTraveller from '../Profile/AddTraveller'
 import FlightResult from '../Screens/Flight/FlightResult'
-
+import HotelList from '../Screens/Hotel/HotelList'
 const Stack = createNativeStackNavigator();
 
 
@@ -32,8 +32,9 @@ function ProfileTab() {
 
 function HotelTab() {
     return (
-        <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName='Hotel' screenOptions={{ headerShown: false }}>
             <Stack.Screen name='Hotel' component={Hotel} />
+            <Stack.Screen name='HotelList' component={HotelList}/>
         </Stack.Navigator>
     )
 }
