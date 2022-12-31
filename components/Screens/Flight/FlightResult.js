@@ -210,7 +210,7 @@ export default function FlightResult({ navigation }) {
                             </View>
                             <View style={{ width: 1, height: height * 0.06, backgroundColor: 'grey' }} />
                             <View style={styles.booknowBtn}>
-                                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.navigate('FlightResult')}>
+                                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.navigate('flightBooking')}>
                                     <Text style={styles.booknowText}>BOOK NOW</Text>
                                 </TouchableHighlight>
                             </View>
