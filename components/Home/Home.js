@@ -8,30 +8,39 @@ import color from '../../constants/color';
 import PopularPlaceCard from './PopularPlaceCard';
 import NearestPlaceCard from './NearestPlaceCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import userAction from '../../redux/user/actions'
 
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const Home = ({ navigation }) => {
-  const UserToken = (async) => {
-    AsyncStorage.getItem('tickatrip-token').then((res) => console.log('token', res))
+  const dispatch = useDispatch()
+  const userLogin = async () => {
+    await AsyncStorage.getItem('tickatrip-token').then(
+      (res) => {
+        if (res !== null) {
+          dispatch({ type: userAction.SET_IS_LOGIN, payload: true })
+        } else {
+          dispatch({ type: userAction.SET_IS_LOGIN, payload: false })
+        }
+      }
+    )
   }
-  useEffect(() => {
-    UserToken()
-  }, [])
+  userLogin()
   return (
     <ScrollView >
       <View style={{ width: width, paddingHorizontal: 20, }}>
         <Text style={style.bannerTd}>Explore the  World with us</Text>
         <View style={style.bannerBtns}>
-          <TouchableHighlight  underlayColor={"transparent"} onPress={()=>navigation.navigate('HotelTab')}>
+          <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('HotelTab')}>
             <View style={style.bannerBtnsGrid}>
               <View style={style.bannerBtnsIcon}><FontAwesome5 style={style.bannerBtnIconIn} name='hotel' /></View>
               <Text style={style.bannerBtnsTd}>Hotels</Text>
             </View>
           </TouchableHighlight>
-          <TouchableHighlight style={{ marginLeft: 20 }} underlayColor={"transparent"} onPress={()=>navigation.navigate('FlightTab')}>
+          <TouchableHighlight style={{ marginLeft: 20 }} underlayColor={"transparent"} onPress={() => navigation.navigate('FlightTab')}>
             <View style={style.bannerBtnsGrid}>
               <View style={style.bannerBtnsIcon}><MaterialCommunityIcons style={style.bannerBtnIconIn} name='airplane' /></View>
               <Text style={style.bannerBtnsTd}>Flights</Text>
