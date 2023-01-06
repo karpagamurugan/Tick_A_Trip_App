@@ -6,6 +6,7 @@ const actions = {
     SET_USER_LOGIN: 'SET_USER_LOGIN',
     GET_USER_PROFILE: 'GET_USER_PROFILE',
     SET_USER_PROFILE: 'SET_USER_PROFILE',
+    SET_IS_LOGIN:'SET_IS_LOGIN',
 }
 
 export default actions

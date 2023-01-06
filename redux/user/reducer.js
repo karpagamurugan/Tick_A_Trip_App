@@ -5,6 +5,7 @@ const initialState = {
     isAuthenticated: [],
     registerUser: [],
     userProfileData: [],
+    isLogin: false,
 }
 
 const userReducer = (state = initialState, action) => {
@@ -24,6 +25,11 @@ const userReducer = (state = initialState, action) => {
             return {
                 ...state,
                 userProfileData: action.payload
+            }
+        case actions.SET_IS_LOGIN:
+            return {
+                ...state,
+                isLogin: action.payload
             }
         default:
             return state;

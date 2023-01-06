@@ -22,6 +22,7 @@ import CalendarIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import RNFS from 'react-native-fs';
 import DocumentPicker from 'react-native-document-picker'
 import DatePicker from 'react-native-date-picker';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -29,7 +30,7 @@ let height = Dimensions.get('window').height;
 
 export default function Profile({ navigation }) {
     const dispatch = useDispatch()
-    const { userProfileData } = useSelector((state) => state.userReducer)
+    const { userProfileData, isLogin } = useSelector((state) => state.userReducer)
 
     var [showPicker, setShowPicker] = useState(false) //show date picker for dob
     var [dob, setDob] = useState(new Date()); //set DOB in profile update
@@ -270,12 +271,14 @@ export default function Profile({ navigation }) {
                         <BackArrow height={20} width={20} />
                     </View>
                 </TouchableHighlight>
-                <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035 }}>Profile</Text>
-                <TouchableHighlight underlayColor='transparent' style={styles.iconBack} onPress={() => setOpenModel(true)}>
-                    <View>
-                        <EditIcon height={22} width={22} />
-                    </View>
-                </TouchableHighlight>
+                <Text style={isLogin ? styles.profileAppText : styles.guestprofileAppText}>Profile</Text>
+                {isLogin &&
+                    <TouchableHighlight underlayColor='transparent' style={styles.iconBack} onPress={() => setOpenModel(true)}>
+                        <View>
+                            <EditIcon height={22} width={22} />
+                        </View>
+                    </TouchableHighlight>
+                }
             </View>
 
 
@@ -297,42 +300,63 @@ export default function Profile({ navigation }) {
                         <View style={styles.divider} />
 
                         <View style={styles.navView}>
-
-                            <TouchableHighlight onPress={() => setTicketShown(!ticketShown)} underlayColor='transparent'>
-                                <Animated.View>
-                                    <View style={styles.navBtn}>
-                                        <TicketIcon height={22} width={22} />
-                                        <Text style={styles.navTitle}>My Tickets</Text>
-                                    </View>
-
-                                    {
-                                        (!ticketShown) ?
-                                            <View style={{ paddingLeft: 30 }}>
-                                                <TouchableHighlight onPress={() => navigation.navigate('FlightTicket')} underlayColor='transparent'>
-                                                    <View style={styles.navBtn}>
-                                                        <MaterialIcons name='flight' size={22} color='#4C94F2' />
-                                                        <Text style={styles.navTitle}>Flight</Text>
-                                                    </View>
-                                                </TouchableHighlight>
-                                                <TouchableHighlight onPress={() => navigation.navigate('HotelTicket')} underlayColor='transparent'>
-                                                    <View style={styles.navBtn}>
-                                                        <FontAwesome name='hotel' size={22} color='#4C94F2' />
-                                                        <Text style={styles.navTitle}>Hotel</Text>
-                                                    </View>
-                                                </TouchableHighlight>
+                            {isLogin &&
+                                <View>
+                                    <TouchableHighlight onPress={() => setTicketShown(!ticketShown)} underlayColor='transparent'>
+                                        <Animated.View>
+                                            <View style={styles.navBtn}>
+                                                <TicketIcon height={22} width={22} />
+                                                <Text style={styles.navTitle}>My Tickets</Text>
                                             </View>
-                                            : <View />
-                                    }
-                                </Animated.View>
-                            </TouchableHighlight>
 
-                            <TouchableHighlight onPress={() => navigation.navigate('addTraveller')} underlayColor='transparent'>
-                                <View style={styles.navBtn}>
-                                    <Fontisto name='persons' size={22} color='#4C94F2' />
-                                    <Text style={styles.navTitle}>Add Traveller</Text>
+                                            {
+                                                (!ticketShown) ?
+                                                    <View style={{ paddingLeft: 30 }}>
+                                                        <TouchableHighlight onPress={() => navigation.navigate('FlightTicket')} underlayColor='transparent'>
+                                                            <View style={styles.navBtn}>
+                                                                <MaterialIcons name='flight' size={22} color='#4C94F2' />
+                                                                <Text style={styles.navTitle}>Flight</Text>
+                                                            </View>
+                                                        </TouchableHighlight>
+                                                        <TouchableHighlight onPress={() => navigation.navigate('HotelTicket')} underlayColor='transparent'>
+                                                            <View style={styles.navBtn}>
+                                                                <FontAwesome name='hotel' size={22} color='#4C94F2' />
+                                                                <Text style={styles.navTitle}>Hotel</Text>
+                                                            </View>
+                                                        </TouchableHighlight>
+                                                    </View>
+                                                    : <View />
+                                            }
+                                        </Animated.View>
+                                    </TouchableHighlight>
+
+                                    <TouchableHighlight onPress={() => navigation.navigate('addTraveller')} underlayColor='transparent'>
+                                        <View style={styles.navBtn}>
+                                            <Fontisto name='persons' size={22} color='#4C94F2' />
+                                            <Text style={styles.navTitle}>Add Traveller</Text>
+                                        </View>
+                                    </TouchableHighlight>
                                 </View>
-                            </TouchableHighlight>
-
+                            }
+                            {
+                                isLogin !== true ?
+                                    <View>
+                                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                            <View style={styles.navBtn}>
+                                                <MaterialIcons name='flight' size={22} color='#4C94F2' />
+                                                <Text style={styles.navTitle}>Flight cancel</Text>
+                                            </View>
+                                        </TouchableHighlight>
+                                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                            <View style={styles.navBtn}>
+                                                <FontAwesome5 name='hotel' size={22} color='#4C94F2' />
+                                                <Text style={styles.navTitle}>Hotel cancel</Text>
+                                            </View>
+                                        </TouchableHighlight>
+                                    </View>
+                                    :
+                                    null
+                            }
                             <TouchableHighlight onPress={() => null} underlayColor='transparent'>
                                 <View style={styles.navBtn}>
                                     <MaterialCommunityIcons name='brightness-percent' size={22} color='#4C94F2' />
@@ -356,7 +380,9 @@ export default function Profile({ navigation }) {
 
 
                     </View>
-                    <View style={{ paddingLeft: 35 }}>
+                    {
+                        isLogin === true ?
+                        <View style={{ paddingLeft: 35 }}>
                         <TouchableHighlight onPress={() => LogOut()} underlayColor='transparent'>
                             <View style={styles.navBtn}>
                                 <LogoutIcon height={22} width={22} />
@@ -364,6 +390,16 @@ export default function Profile({ navigation }) {
                             </View>
                         </TouchableHighlight>
                     </View>
+                        :
+                        <View style={{ paddingLeft: 35 }}>
+                        <TouchableHighlight onPress={() => navigation.navigate('Login')} underlayColor='transparent'>
+                            <View style={styles.navBtn}>
+                                <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} />
+                                <Text style={styles.navTitle}>Login</Text>
+                            </View>
+                        </TouchableHighlight>
+                    </View>
+                    }
                 </View>
 
                 {/* select dob date  */}
@@ -389,6 +425,12 @@ export default function Profile({ navigation }) {
 }
 
 const styles = StyleSheet.create({
+    loginIcon:{
+        color:'#4C94F2',
+        fontSize:20,
+    },
+    guestprofileAppText: {fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035,width:width * 0.5, },
+    profileAppText: { fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035 },
     mainContainer: { height: height, width: width, backgroundColor: 'white', },
     iconBack: { backgroundColor: 'white', borderRadius: 100, width: 45, height: 45, alignItems: 'center', justifyContent: 'center', elevation: 10 },
     appbar: {

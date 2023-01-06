@@ -80,15 +80,12 @@ const userAthentification = function* (data) {
     }
 }
 const getUserProfile = function* (data) {
-    // console.log(`${PROFILE_URL}/user`)
     try {
         const result = yield call(() =>
             axios.get(`${API_URL}/user`)
         )
-        // console.log('getUserProfile', result)
         yield put({ type: actions.SET_USER_PROFILE, payload: result.data })
     } catch (err) {
-        // console.log('getUserProfile err', err)
         yield put({ type: actions.SET_USER_PROFILE, payload: err.data })
     }
 }

@@ -1,32 +1,35 @@
+/* eslint-disable semi */
 /* eslint-disable prettier/prettier */
 import React, { useEffect } from 'react';
 import { View, Text, Dimensions, ImageBackground, Image, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import userAction from '../../redux/user/actions'
 
 const width = Dimensions.get('screen').width
 const height = Dimensions.get('screen').height
 
-const Splash = ({navigation}) => {
+const Splash = ({ navigation }) => {
+  const dispatch = useDispatch()
+  const loggedIn = async () => {
+    await AsyncStorage.getItem('tickatrip-token').then(
+      (res) => {
+        setTimeout(() => {
+          if (res !== null) {
+            navigation.replace('bottomNavigation')
+            dispatch({ type: userAction.SET_IS_LOGIN, payload: true })
+          } else {
+            navigation.replace('Login')
+            dispatch({ type: userAction.SET_IS_LOGIN, payload: false })
+          }
+        }, 3000);
+      })
+  }
 
-const loggedIn =async()=>{
-  await AsyncStorage.getItem('LoggedIn').then(
-    (res) => {
-      login = res
-
-      setTimeout(() => {
-        if(login === 'Sucess'){
-          navigation.replace('bottomNavigation')
-        }else{
-          navigation.replace('Login')
-        }
-      }, 3000);
-    })
-}
-   
   useEffect(() => {
     loggedIn()
-  },[])
-  
+  }, [])
+
   return (
     <View style={style.SplashSection}>
       <ImageBackground source={require('../../Assert/Images/background.png')} style={style.SplashBgImage} resizeMode="cover">

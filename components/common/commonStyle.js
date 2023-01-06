@@ -199,6 +199,7 @@ const style = StyleSheet.create({
     list: {
         fontFamily: font.font,
         color: color.colorGrey,
+        marginBottom:5,
     },
     listIcon: {
         color: '#0050A6',
