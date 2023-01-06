@@ -19,7 +19,7 @@ export default function Flight() {
         { id: '3', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRh3OR7_YQuvpGVlxZIHRPAO5wfkCpz1WCppQ&usqp=CAU' },
         { id: '4', title: 'Air Asia', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo_ShUmE0GjAvuNQWQyLz0OHyuFj-1y_MMXA6o202XPmzJ5np0Gn500crzKeyQhqqKnH8&usqp=CAU' },
         { id: '5', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw7cS6Loa2JeG-dx5PVfEgxNC3QaRZugod_Q&usqp=CAU' }
-    ]
+    ] 
 
 
     // setting tab item backgroundColor

@@ -77,7 +77,7 @@ const HotelList = ({ navigation }) => {
                     <View style={style.hotelSearchList}>
                         {
                             [...Array(5)].map((val, index) => (
-                                <View key={index} ><HotelCard /></View>
+                                <View key={index} ><HotelCard navigation={navigation}/></View>
                             ))
                         }
                     </View>

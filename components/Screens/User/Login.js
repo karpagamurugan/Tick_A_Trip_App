@@ -65,7 +65,9 @@ const Login = ({ navigation }) => {
                     </View>
 
                     <View style={style.FormGroup}>
-                        <Text style={style.FormLabelText}>Password</Text>
+                    <TouchableHighlight onPress={()=>navigation.navigate('ForgetVerify')} underlayColor='transparent'>
+                    <Text style={style.FormLabelText}>Password</Text>
+                    </TouchableHighlight>
                         <Controller
                             control={control}
                             name="userPassword"

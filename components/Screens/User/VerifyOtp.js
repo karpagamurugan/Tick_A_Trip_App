@@ -30,7 +30,7 @@ const VerifyOtp = ({ navigation }) => {
                         </View>
                     </View>
                     <View style={style.LoginBtnSec}>
-                        <TouchableHighlight style={style.btnLogin} onPress={() => OnLogin()}>
+                        <TouchableHighlight style={style.btnLogin} onPress={() => navigation.navigate('Login')} underlayColor='transparent'>
                             <Text style={style.btnLoginText}>Verify OTP</Text>
                         </TouchableHighlight>
                     </View>

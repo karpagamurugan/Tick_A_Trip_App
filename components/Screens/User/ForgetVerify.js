@@ -28,7 +28,7 @@ const ForgetVerify = ({ navigation }) => {
                         <TextInput keyboardType="default" style={style.LoginInput} placeholder="Enter Your Email" />
                     </View>
                     <View style={style.LoginBtnSec}>
-                        <TouchableHighlight style={style.btnLogin} onPress={() => OnLogin()}>
+                        <TouchableHighlight style={style.btnLogin} onPress={() => navigation.navigate('VerifyOtp')}>
                             <Text style={style.btnLoginText}>Send OTP</Text>
                         </TouchableHighlight>
                     </View>

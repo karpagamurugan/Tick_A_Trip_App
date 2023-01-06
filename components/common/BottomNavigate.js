@@ -36,7 +36,7 @@ function ProfileTab() {
 
 function HotelTab() {
     return (
-        <Stack.Navigator initialRouteName='HotelDetail' screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName='Hotel' screenOptions={{ headerShown: false }}>
             <Stack.Screen name='Hotel' component={Hotel} />
             <Stack.Screen name='HotelList' component={HotelList}/>
             <Stack.Screen name='HotelRoomType' component={HotelRoomType}/>

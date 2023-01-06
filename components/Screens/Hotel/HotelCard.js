@@ -51,7 +51,7 @@ const HotelCard = ({navigation}) => {
                         <Text style={style.ListHotelName}>HOTEL NAME</Text>
                         <Text style={style.ListHotelPrice}>5,500 <Text style={style.taxTect}>inclusing tax</Text></Text>
                         <Text style={style.ListHotelDescription}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel molestie nisl. Duis ac mi leo.</Text>
-                        <TouchableHighlight style={style.ListHotelBtn}>
+                        <TouchableHighlight style={style.ListHotelBtn} onPress={()=>navigation.navigate('HotelRoomType')}>
                             <Text style={style.ListHotelBtnText}>BOOK NOW</Text>
                         </TouchableHighlight>
                     </View>
