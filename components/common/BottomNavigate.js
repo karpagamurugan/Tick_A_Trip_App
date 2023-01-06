@@ -15,12 +15,11 @@ import FlightTickets from '../Profile/MyTickets/Flight';
 import HotelTicket from '../Profile/MyTickets/Hotel'
 import AddTraveller from '../Profile/AddTraveller'
 import FlightResult from '../Screens/Flight/FlightResult'
-<<<<<<< HEAD
 import HotelList from '../Screens/Hotel/HotelList'
-=======
 import FlightBooking from '../Screens/Flight/Flightbooking'
+import HotelDetail from '../Screens/Hotel/HotelDetail'
+import HotelRoomType from '../Screens/Hotel/HotelRoomType'
 
->>>>>>> 4e2b8be (flight)
 const Stack = createNativeStackNavigator();
 
 
@@ -37,9 +36,11 @@ function ProfileTab() {
 
 function HotelTab() {
     return (
-        <Stack.Navigator initialRouteName='Hotel' screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName='HotelDetail' screenOptions={{ headerShown: false }}>
             <Stack.Screen name='Hotel' component={Hotel} />
             <Stack.Screen name='HotelList' component={HotelList}/>
+            <Stack.Screen name='HotelRoomType' component={HotelRoomType}/>
+            <Stack.Screen name='HotelDetail' component={HotelDetail}/>
         </Stack.Navigator>
     )
 }
@@ -50,7 +51,6 @@ function FlightTab() {
             <Stack.Screen name="flight" component={Flight} options={{ headerShown: false }} />
             <Stack.Screen name="FlightResult" component={FlightResult} options={{ headerShown: false }} />
             <Stack.Screen name="flightBooking" component={FlightBooking} options={{ headerShown: false }} />
-
         </Stack.Navigator>
     )
 }

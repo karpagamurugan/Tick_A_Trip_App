@@ -13,42 +13,50 @@ let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 
-export default function Appbar({ title }) {
+export default function HotelAppbar({ title }) {
 
     const navigation = useNavigation();
 
     return (
         <View>
 
-            {
-                (title === 'Search Flight') ?
-                    <View style={styles.appbar}>
-                        <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
-                            <View style={[styles.iconBack, { width: 35, height: 35, marginRight: -30 }]}>
-                                <Arrow height={18} width={18} />
-                            </View>
-                        </TouchableHighlight>
-                        <Flight height={32} width={32} />
-                        <Text style={{ fontFamily: font.fontSemi, color: color.textBlue, fontSize: height * 0.027, marginLeft: -30 }}>{title}</Text>
-                        <View style={{ width: 10 }} />
+            <View style={styles.appbar}>
+                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
+                    <View style={styles.iconBack}>
+                        <BackArrow height={20} width={20} />
                     </View>
-                    :
-                    <View style={styles.appbar}>
-                        <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
-                            <View style={styles.iconBack}>
-                                <BackArrow height={20} width={20} />
-                            </View>
-                        </TouchableHighlight>
-                        <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.03 }}>{title}</Text>
-                        <View style={{ width: 10 }} />
-                    </View>
-            }
+                </TouchableHighlight>
+                <View style={styles.searchCity}>
+                    <Text style={styles.searchIn}>Coimbatore</Text>
+                    <Text style={styles.searchCount}>2 adults,2 Rooms</Text>
+                </View>
+            </View>
         </View>
     )
 }
 
 
 const styles = StyleSheet.create({
+    searchCount:{
+        fontFamily:font.font,
+        color:'gray',
+        fontSize:13,
+    },
+    searchIn:{
+        fontFamily:font.fontSemi,
+        alignSelf:'center',
+        letterSpacing:0.5,
+        color:color.colorText,
+        lineHeight:18,
+    },
+    searchCity:{
+        marginRight:width * 0.10,
+        alignSelf:'center',
+        backgroundColor:'#fff',
+        paddingVertical:5,
+        paddingHorizontal:35,
+        borderRadius:100,
+    },
     iconBack: { backgroundColor: 'white', borderRadius: 100, width: 45, height: 45, alignItems: 'center', justifyContent: 'center', elevation: 10 },
     appbar: {
         width: width * 0.9,

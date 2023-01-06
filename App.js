@@ -16,6 +16,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import setAuthToken from './constants/setAuthToken';
 import Loader from './components/common/Loader';
 import Hotel from './components/Screens/Hotel/Hotel';
+import { View } from 'react-native';
 
 function App() {
   const Stack = createNativeStackNavigator();

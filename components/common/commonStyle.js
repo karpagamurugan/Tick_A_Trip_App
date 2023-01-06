@@ -11,7 +11,7 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        backgroundColor:'#fff',
+        backgroundColor: '#fff',
     },
     hotelListCardHotelName: {
         flexDirection: 'row',
@@ -27,7 +27,7 @@ const style = StyleSheet.create({
         marginBottom: 20,
         marginLeft: 20
     },
-    
+
     hotelListCardImageBg: {
         width: '100%',
         height: 180,
@@ -116,8 +116,104 @@ const style = StyleSheet.create({
         },
         shadowOpacity: 0.58,
         shadowRadius: 16.00,
-
         elevation: 24,
+    },
+    RoomTitle: {
+        fontFamily: font.fontBold,
+        letterSpacing: 0.8,
+        alignSelf: 'center',
+        fontSize: 20,
+        color: color.colorText,
+        paddingTop: 20,
+        textTransform: 'capitalize',
+    },
+    RoomTypesSec: {
+        paddingBottom: height * 0.20,
+    },
+    HotelDetailBannerCon: {
+        height: height * 0.2,
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        justifyContent: 'space-between',
+        paddingHorizontal: 10,
+        paddingBottom: 10,
+    },
+    HotelDetailHotelName: {
+        fontFamily: font.mediam,
+        color: '#fff',
+        fontSize: 15,
+    },
+    HotelDetailBanner: {
+        position: 'relative',
+        marginTop: 15,
+    },
+    OverLay: {
+        position: 'absolute',
+        backgroundColor: '#00000052',
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+    },
+    HotelDetailHotelPrice: {
+        color: '#fff',
+        fontFamily: font.fontBold,
+        fontSize: 30,
+    },
+    HotelDetailHotelPriceTxt: {
+        fontFamily: font.font,
+        fontSize: 13,
+        color: '#fff',
+    },
+    HotelDetailHotelTax: {
+        color: '#fff',
+        fontFamily: font.font,
+        fontSize: 13,
+    },
+    HotelTitle: {
+        fontFamily: font.mediam,
+        color: '#52ADE5',
+        fontSize: 14,
+        flexDirection: 'row',
+        alignItems: 'center',
+        letterSpacing: 0.5,
+        paddingTop: 8,
+        marginBottom: 10,
+    },
+    HotelTitleIcon: {
+        color: '#FCC40A',
+        fontSize: 20,
+    },
+    TitleMain: {
+        fontFamily: font.fontSemi,
+        fontSize: 17,
+        color: color.colorText,
+        letterSpacing: 0.5,
+        marginTop: 15,
+    },
+    parrah: {
+        fontFamily: font.font,
+        fontSize: 15,
+        color: color.colorGrey,
+    },
+    list: {
+        fontFamily: font.font,
+        color: color.colorGrey,
+    },
+    listIcon: {
+        color: '#0050A6',
+    },
+    bookingBtn: {
+        backgroundColor: color.colorBtn,
+        alignItems: 'center',
+        paddingVertical: 12,
+        borderRadius: 100,
+        marginHorizontal: width * 0.2,
+        marginBottom: 30,
+    },
+    bookingBtnTxt: {
+        color: '#fff',
+        fontFamily:font.mediam,
     },
 })
 

@@ -1,12 +1,14 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react'
-import { View, Text, StyleSheet, Dimensions, ScrollView } from 'react-native'
+import { View, Modal, Text, StyleSheet, Dimensions, ScrollView, TouchableHighlight, TextInput } from 'react-native'
 import Appbar from '../../common/Appbar'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import font from '../../../constants/font';
 import HotelCard from './HotelCard';
+import HotelFilter from './HotelFilter';
+import HotelAppbar from '../../common/HotelAppbar';
 
 const data = [
     { label: 'Item 1', value: '1' },
@@ -21,15 +23,25 @@ const data = [
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const HotelList = ({navigation}) => {
-    const [value, setValue] = useState(null);
+const HotelList = ({ navigation }) => {
+    const [openFilter, setOpenFilter] = useState(false)
+
     return (
         <View>
+            <Modal
+                visible={openFilter}
+                transparent={true}
+                animationType="fade"
+            >
+                <ScrollView style={style.filterModelSec}>
+                    <HotelFilter setOpenFilter={setOpenFilter}/>
+                </ScrollView>
+            </Modal>
             <ScrollView>
-                <Appbar title='Hotel Detail' />
+                <HotelAppbar title='Hotel Detail' />
                 <View style={style.hotelDetailSec}>
                     <View style={style.HotelDetailFilterSec}>
-                        <View style={style.filterFileld}>
+                        {/* <View style={style.filterFileld}>
                             <Dropdown
                                 style={style.dropdown}
                                 placeholderStyle={style.placeholderStyle}
@@ -48,12 +60,14 @@ const HotelList = ({navigation}) => {
                                     setValue(item.value);
                                 }}
                             />
-                        </View>
+                        </View> */}
                         <View style={style.filterFileld}>
                             <Text style={style.totalHotel}>150 Hotels</Text>
                         </View>
                         <View style={style.filterFileldIcon}>
-                            <AntDesign style={style.filterIcon} name='filter' />
+                            <TouchableHighlight onPress={() => setOpenFilter(true)} underlayColor='transparent'>
+                                <AntDesign style={style.filterIcon} name='filter' />
+                            </TouchableHighlight>
                         </View>
                     </View>
                     <View style={style.searchPlace}>
@@ -77,6 +91,15 @@ const HotelList = ({navigation}) => {
 
 export default HotelList
 const style = StyleSheet.create({
+    filterModelSec: {
+        backgroundColor: '#E9F3FF',
+        position: 'absolute',
+        width: width * 0.8,
+        alignSelf:'center',
+        top:height * 0.1,
+        padding:20,
+        height:height * 0.7,
+    },
     hotelDetailSec: {
         paddingHorizontal: 15,
     },
@@ -84,8 +107,8 @@ const style = StyleSheet.create({
         color: '#FCC40A',
         fontSize: 23,
     },
-    hotelSearchList:{
-        marginBottom:50,
+    hotelSearchList: {
+        marginBottom: 50,
     },
     searchPlaceText: {
         color: '#52ADE5',
@@ -104,11 +127,21 @@ const style = StyleSheet.create({
         backgroundColor: '#E9F3FF',
         padding: 10,
         borderRadius: 100,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 12,
+        },
+        shadowOpacity: 0.58,
+        shadowRadius: 16.00,
+
+        elevation: 24,
     },
     HotelDetailFilterSec: {
         flexDirection: 'row',
         justifyContent: 'space-between',
-        alignItems: 'center'
+        alignItems: 'center',
+        paddingVertical:10,
     },
     dropdown: {
         margin: 16,

@@ -267,7 +267,7 @@ export default function Profile({ navigation }) {
             <View style={styles.appbar}>
                 <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
                     <View style={styles.iconBack}>
-                        <BackArrow height={22} width={22} />
+                        <BackArrow height={20} width={20} />
                     </View>
                 </TouchableHighlight>
                 <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035 }}>Profile</Text>
