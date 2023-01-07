@@ -10,6 +10,7 @@ import font from '../../../constants/font';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Fontisto from 'react-native-vector-icons/Fontisto'
+import moment from 'moment';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -20,26 +21,22 @@ const HotelSearch = ({ navigation }) => {
   const [open, setOpen] = useState(false)
   const [coDate, setCodate] = useState(new Date())
   const [openCo, setOpenCo] = useState(false)
-  // var [showGuestModel, setShowGuestModel] = useState(false)
   var [showGuestModal, setShowGuestModal] = useState(false);
-
+  const [selectDestination, setSelectDestination] = useState(false)
 
   useEffect(() => {
-    fetch('https://abooutreactapis.000webhostapp.com/demosearchables.php')
+    fetch('https://harvalnigeria.com/server/api/getHotelCitieSearch')
       .then((response) => response.json())
-      .then((responseJson) => {
-        setServerData(responseJson.results);
+      .then((json) => {
+        console.log('json',JSON.stringify(json))
+        setServerData(JSON.stringify(json));
       })
       .catch((error) => {
-        console.error(error);
+        console.log('errrrrror',error);
       });
   }, []);
 
-  // const OnselectGest = () => {
-  //   setShowGuestModel(showGuestModel = !showGuestModel)
-  //   alert('Click')
-  // }
-
+console.log('serverData',serverData)
   return (
     <View style={style.hotelSearch}>
       <ScrollView style={style.hotelSearchTop}>
@@ -50,8 +47,53 @@ const HotelSearch = ({ navigation }) => {
             </View>
             <View style={style.hotelSearchFieldGroupInput}>
               <Text style={style.Searchlabel}>DESTINATION OR HOTEL NAME</Text>
-              <TouchableHighlight style={style.inputField} onPress={() => setOpen(true)} underlayColor='transparent'>
-                <Text style={style.inputFieldText}>Sydney, Australia</Text>
+              <TouchableHighlight style={style.inputField} onPress={() => setSelectDestination(true)} underlayColor='transparent'>
+                {selectDestination !== true ?
+                  <Text style={style.inputFieldText}>Sydney, Australia</Text>
+                  :
+                  <SearchableDropdown
+                    onTextChange={(text) => console.log('text',text)}
+                    // Change listner on the searchable input
+                    onItemSelect={(item) => console.log('item',item)}
+                    // Called after the selection from the dropdown
+                    containerStyle={{ padding: 5 }}
+                    // Suggestion container style
+                    textInputStyle={{
+                      // Inserted text style
+                      padding: 12,
+                      borderWidth: 1,
+                      borderColor: '#ccc',
+                      backgroundColor: '#FAF7F6',
+                    }}
+                    itemStyle={{
+                      // Single dropdown item style
+                      padding: 10,
+                      marginTop: 2,
+                      backgroundColor: '#FAF9F8',
+                      borderColor: '#bbb',
+                      borderWidth: 1,
+                    }}
+                    itemTextStyle={{
+                      // Text style of a single dropdown item
+                      color: '#222',
+                    }}
+                    itemsContainerStyle={{
+                      // Items container style you can pass maxHeight
+                      // To restrict the items dropdown hieght
+                      maxHeight: '50%',
+                    }}
+                    items={serverData}
+                    // Mapping of item array
+                    defaultIndex={2}
+                    // Default selected item index
+                    placeholder="placeholder"
+                    // Place holder for the search input
+                    resetValue={false}
+                    // Reset textInput Value with true and false state
+                    underlineColorAndroid="transparent"
+                  // To remove the underline from the android input
+                  />
+                }
               </TouchableHighlight>
             </View>
           </View>
@@ -66,12 +108,13 @@ const HotelSearch = ({ navigation }) => {
                   <View>
                     <Text style={style.Searchlabel}>CHECK IN</Text>
                     <TouchableHighlight style={style.inputField} onPress={() => setOpen(true)} underlayColor='transparent'>
-                      <Text style={style.inputFieldText}>Check - in</Text>
+                      <Text style={style.inputFieldText}>{moment(ciDate).format('MMM Do YYYY')}</Text>
                     </TouchableHighlight>
                     <DatePicker
                       modal
                       open={open}
                       date={ciDate}
+                      mode="date"
                       onConfirm={(date) => {
                         setOpen(false)
                         setCidate(date)
@@ -91,11 +134,12 @@ const HotelSearch = ({ navigation }) => {
                   <View style={style.hotelSearchFieldGroupInput}>
                     <Text style={style.Searchlabel}>CHECK OUT</Text>
                     <TouchableHighlight style={style.inputField} onPress={() => setOpenCo(true)} underlayColor='transparent'>
-                      <Text style={style.inputFieldText}>Check - Out</Text>
+                      <Text style={style.inputFieldText}>{moment(coDate).format('MMM Do YYYY')}</Text>
                     </TouchableHighlight>
                     <DatePicker
                       modal
                       open={openCo}
+                      mode="date"
                       date={coDate}
                       onConfirm={(date) => {
                         setOpenCo(false)
@@ -124,7 +168,7 @@ const HotelSearch = ({ navigation }) => {
           </View>
 
           <View>
-            <TouchableHighlight underlayColor='transparent' onPress={() =>navigation.navigate('HotelList')}>
+            <TouchableHighlight underlayColor='transparent' onPress={() => navigation.navigate('HotelList')}>
               <View style={style.iconBoxBtn}>
                 <EvilIcons style={style.fieldIconBtn} name='search' />
                 <Text style={style.searchText}>Search</Text>
@@ -177,16 +221,15 @@ const style = StyleSheet.create({
   },
   fieldIconBtn: {
     color: '#fff',
-    fontWeight: font.block,
     fontFamily: font.block,
     fontSize: 22,
     marginRight: 5,
   },
   inputFieldText: {
     color: '#000000',
-    fontWeight: font.fontSemi,
-    fontFamily: font.fontSemi,
-    letterSpacing: 0.5,
+    fontFamily: font.font,
+    letterSpacing: 0.8,
+    fontSize: 15,
   },
   hotelSearchFieldGroupHalf: {
     flexDirection: 'row',
@@ -217,7 +260,6 @@ const style = StyleSheet.create({
     color: '#5c9adb',
     letterSpacing: 1,
     fontSize: 11,
-    fontWeight: font.fontSemi,
   },
   hotelSearchFieldGroup: {
     flexDirection: 'row',

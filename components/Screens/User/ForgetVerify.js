@@ -22,7 +22,7 @@ const ForgetVerify = ({ navigation }) => {
             <ImageBackground source={require('../../../Assert/Images/background.png')} style={style.SplashBgImage} resizeMode="cover">
                 <Image style={style.BrandLogoSplash} source={require('../../../Assert/Images/white-logo.png')} />
                 
-                <View style={style.LoginForm}>
+                <View style={style.LoginForm}>  
                     <View style={style.FormGroup}>
                         <Text style={style.FormLabelText}>Email</Text>
                         <TextInput keyboardType="default" style={style.LoginInput} placeholder="Enter Your Email" />

@@ -23,6 +23,7 @@ import RNFS from 'react-native-fs';
 import DocumentPicker from 'react-native-document-picker'
 import DatePicker from 'react-native-date-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
+import commonAction from '../../redux/common/actions'
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -42,6 +43,7 @@ export default function Profile({ navigation }) {
     var [image, setImage] = useState() //set selected profile image
 
     useEffect((async) => {
+        dispatch({ type: commonAction.COMMON_LOADER, payload: true })
         dispatch({ type: userActions.GET_USER_PROFILE })
         // AsyncStorage.getItem('tickatrip-token').then((res) => console.log('tock-pro', res))
     }, [dispatch])
@@ -382,23 +384,23 @@ export default function Profile({ navigation }) {
                     </View>
                     {
                         isLogin === true ?
-                        <View style={{ paddingLeft: 35 }}>
-                        <TouchableHighlight onPress={() => LogOut()} underlayColor='transparent'>
-                            <View style={styles.navBtn}>
-                                <LogoutIcon height={22} width={22} />
-                                <Text style={styles.navTitle}>Logout</Text>
+                            <View style={{ paddingLeft: 35 }}>
+                                <TouchableHighlight onPress={() => LogOut()} underlayColor='transparent'>
+                                    <View style={styles.navBtn}>
+                                        <LogoutIcon height={22} width={22} />
+                                        <Text style={styles.navTitle}>Logout</Text>
+                                    </View>
+                                </TouchableHighlight>
                             </View>
-                        </TouchableHighlight>
-                    </View>
-                        :
-                        <View style={{ paddingLeft: 35 }}>
-                        <TouchableHighlight onPress={() => navigation.navigate('Login')} underlayColor='transparent'>
-                            <View style={styles.navBtn}>
-                                <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} />
-                                <Text style={styles.navTitle}>Login</Text>
+                            :
+                            <View style={{ paddingLeft: 35 }}>
+                                <TouchableHighlight onPress={() => navigation.navigate('Login')} underlayColor='transparent'>
+                                    <View style={styles.navBtn}>
+                                        <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} />
+                                        <Text style={styles.navTitle}>Login</Text>
+                                    </View>
+                                </TouchableHighlight>
                             </View>
-                        </TouchableHighlight>
-                    </View>
                     }
                 </View>
 
@@ -425,11 +427,11 @@ export default function Profile({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    loginIcon:{
-        color:'#4C94F2',
-        fontSize:20,
+    loginIcon: {
+        color: '#4C94F2',
+        fontSize: 20,
     },
-    guestprofileAppText: {fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035,width:width * 0.5, },
+    guestprofileAppText: { fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035, width: width * 0.5, },
     profileAppText: { fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035 },
     mainContainer: { height: height, width: width, backgroundColor: 'white', },
     iconBack: { backgroundColor: 'white', borderRadius: 100, width: 45, height: 45, alignItems: 'center', justifyContent: 'center', elevation: 10 },

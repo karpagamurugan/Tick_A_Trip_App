@@ -1,4 +1,3 @@
-/* eslint-disable semi */
 /* eslint-disable prettier/prettier */
 import React, { useEffect } from 'react';
 import { View, Text, Dimensions, ImageBackground, Image, StyleSheet } from 'react-native';
@@ -28,7 +27,7 @@ const Splash = ({ navigation }) => {
 
   useEffect(() => {
     loggedIn()
-  }, [])
+  })
 
   return (
     <View style={style.SplashSection}>
