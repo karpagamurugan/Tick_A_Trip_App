@@ -12,17 +12,19 @@ import font from "../../constants/font";
 import color from "../../constants/color";
 import FromIcon from '../../Assert/Images/icon/take-off.svg';
 import ToIcon from '../../Assert/Images/icon/take-off-2.svg';
+import FlightAction from '../../redux/Flight/actions';
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
 export default function AutoCompleteTextField(props) {
+    const dispatch = useDispatch()
 
     const { data, hintText, placeHolderText, value, inputType, onSelected, dis , stateId , defaultValue,type } = props
-
+    console.log('value',value)
     var [filteredList, setFilteredList] = useState([])
     var [selectedVal, setSelectedVal] = useState( selectedVal = value+"")
-    const dispatch = useDispatch()
+
     var [showIndi, setShowIndi] = useState(false)
 
     handleSelection = (e) => {
@@ -36,7 +38,6 @@ export default function AutoCompleteTextField(props) {
         defaultValue(e.zipcode)
     }
 
-  console.log(type)
 
     return (
         <View style={{ flexDirection: 'column' }}>
@@ -65,9 +66,16 @@ export default function AutoCompleteTextField(props) {
                     placeholder={hintText}
                     placeholderTextColor="gray"
                     numberOfLines={1}
-                    value={selectedVal==="null"?defaultValue:selectedVal}
+                    value={selectedVal}
                     onChangeText={(e) => {                     
-                            if (e !== "") {
+                            if (e?.length >= 3) {
+                                console.log('from auto completed page',e)
+                                dispatch({
+                                    type:FlightAction.SET_FLIGHT_SEARCH_BY_NAME,
+                                    payload:{
+                                        name:e
+                                    }
+                                })
                                 setSelectedVal(selectedVal = e)
                                 setFilteredList(filteredList = data.filter((e) => e.display.toString()
                                     .toLowerCase().includes(selectedVal.toLowerCase())))
@@ -129,7 +137,10 @@ export default function AutoCompleteTextField(props) {
                                     return (
                                         <TouchableHighlight
                                             underlayColor={"transparent"}
-                                            onPress={() => handleSelection(e)}
+                                            onPress={() => {
+                                                console.log(e)
+                                                handleSelection(e)
+                                            }}
                                             key={i}>
                                             <Text
                                                 style={{

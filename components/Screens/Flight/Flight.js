@@ -16,6 +16,7 @@ import { Dropdown } from 'react-native-element-dropdown'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AutoCompleteTextField from '../../common/AutoComplete';
+import { useDispatch, useSelector } from 'react-redux';
 
 
 
@@ -24,6 +25,9 @@ let width = Dimensions.get('window').width;
 
 
 const Flight = ({ navigation }) => {
+
+  const dispatch = useDispatch()
+  const { Airport_Name } = useSelector((state) => state.FlightSearchReducer)
 
   var [oneTrip, setOneTrip] = useState(true);
   var [roundTrip, setRoundTrip] = useState(false);
@@ -37,12 +41,17 @@ const Flight = ({ navigation }) => {
   var [child, setchild] = useState(0) //set child count
   var [infant, setInfant] = useState(0) //set infant count
   var [classType, setClassType] = useState('Economy');
+  var [selctedFromPlace,setSelectedFromPlace]=useState('Select');
+  var [selctedToPlace,setSelectedToPlace]=useState('Select');
+
 
 
   let ChildAndInfant = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }] //child and infant count
   let AdultCount = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }, { value: '7' }, { value: '8' }, { value: '9' }] //adult count
 
   let classList = [{ value: 'Business' }, { value: 'Economy' }];
+
+console.log('Airport_Name',Airport_Name)
 
   return (
     <View style={style.MainContainer}>
@@ -197,8 +206,12 @@ const Flight = ({ navigation }) => {
               <View style={style.btn}>
                 <TouchableHighlight underlayColor={'transparent'}
                   onPress={() => {
-                    if (oneTrip === true) {
+                    console.log('oneTrip',oneTrip)
+                    console.log('round trip',roundTrip)
+
+                    if (oneTrip) {
                       setOneTrip(!oneTrip)
+                      setRoundTrip(!roundTrip)
                     } else {
                       setOneTrip(!oneTrip)
                       setRoundTrip(!roundTrip)
@@ -211,8 +224,9 @@ const Flight = ({ navigation }) => {
                 </TouchableHighlight>
                 <TouchableHighlight underlayColor={'transparent'}
                   onPress={() => {
-                    if (roundTrip === true) {
+                    if (roundTrip) {
                       setRoundTrip(!roundTrip)
+                      setOneTrip(!oneTrip)
                     } else {
                       setRoundTrip(!roundTrip)
                       setOneTrip(!oneTrip)
@@ -228,30 +242,31 @@ const Flight = ({ navigation }) => {
 
               <AutoCompleteTextField
                 hintText="Select.."
-                defaultValue={classType}
+                defaultValue={selctedFromPlace}
                 icon={FromIcon}
                 placeHolderText="From"
-                value={classType}
+                value={selctedFromPlace}
                 type='from'
                 data={
-                  classList.map((e, i) => {
+                  Airport_Name?.message?.map((e, i) => {
                     return (
-                      { display: e.value, value: e }
+                      { display: e?.city, value: e }
                     )
                   })
                 }
                 onSelected={(e) => {
-                  setClassType(classType = e.value)
+                  console.log('selected',e)
+                  setSelectedFromPlace(selctedFromPlace = e.value)
                 }}
               />
 
 
               <AutoCompleteTextField
                 hintText="Select.."
-                defaultValue={classType}
+                defaultValue={selctedToPlace}
                 icon={FromIcon}
                 placeHolderText="From"
-                value={classType}
+                value={selctedToPlace}
                 type='to'
                 data={
                   classList.map((e, i) => {
@@ -261,7 +276,7 @@ const Flight = ({ navigation }) => {
                   })
                 }
                 onSelected={(e) => {
-                  setClassType(classType = e.value)
+                  setSelectedToPlace(selctedToPlace = e.value)
                 }}
               />
 
