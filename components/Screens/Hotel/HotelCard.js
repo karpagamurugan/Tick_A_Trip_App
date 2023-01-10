@@ -12,16 +12,19 @@ import style from '../../common/commonStyle'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const HotelCard = ({navigation}) => {
+const HotelCard = (props, navigation) => {
+    const { val } = props
+
+    // console.log('val', val)
     return (
         <View style={style.hotelListCardSec}>
             <View style={styles.hotelListCard}>
-                <View style={style.hotelListCardImage}>
-                    <ImageBackground resizeMode='cover' style={style.hotelListCardImageBg} source={require('../../../Assert/Images/hotelImg.jpg')}>
+                <View style={styles.hotelListCardImage}>
+                    <ImageBackground resizeMode='cover' style={style.hotelListCardImageBg} source={{ uri: val?.thumbNailUrl }}>
                         <View style={style.hotelListCardReview}>
                             <View>
                                 <Stars
-                                    default={0}
+                                    default={val?.hotelRating}
                                     count={5}
                                     half={true}
                                     disabled={true}
@@ -40,18 +43,18 @@ const HotelCard = ({navigation}) => {
                     <View style={style.hotelListCardHotelLocat}>
                         <View style={style.hotelListCardHotelName}>
                             <FontAwesome5 style={style.hotelListLocIcon} name='hotel' />
-                            <Text style={style.hotelListLocName}>5 GUEST</Text>
+                            <Text style={style.hotelListLocName}>{val?.propertyType}</Text>
                         </View>
                         <View style={style.hotelListCardHotelName}>
                             <Ionicons style={style.hotelListLocIcon} name='location-outline' />
-                            <Text style={style.hotelListLocName}>RS Puram</Text>
+                            <Text style={style.hotelListLocName}>{val?.city}</Text>
                         </View>
                     </View>
                     <View style={style.hotelDesCont}>
-                        <Text style={style.ListHotelName}>HOTEL NAME</Text>
-                        <Text style={style.ListHotelPrice}>5,500 <Text style={style.taxTect}>inclusing tax</Text></Text>
-                        <Text style={style.ListHotelDescription}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel molestie nisl. Duis ac mi leo.</Text>
-                        <TouchableHighlight style={style.ListHotelBtn} onPress={()=>navigation.navigate('HotelRoomType')}>
+                        <Text style={style.ListHotelName}>{val?.hotelName}</Text>
+                        <Text style={style.ListHotelPrice}>{val?.currency} {val?.total} <Text style={style.taxTect}>inclusing tax</Text></Text>
+                        {/* <Text style={style.ListHotelDescription}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel molestie nisl. Duis ac mi leo.</Text> */}
+                        <TouchableHighlight style={style.ListHotelBtn} onPress={() => navigation.navigate('HotelRoomType')}>
                             <Text style={style.ListHotelBtnText}>BOOK NOW</Text>
                         </TouchableHighlight>
                     </View>
@@ -62,6 +65,9 @@ const HotelCard = ({navigation}) => {
     )
 }
 const styles = StyleSheet.create({
+    hotelListCardImage:{
+        backgroundColor:'#000',
+    },
     myStarStyle: {
         color: 'yellow',
         backgroundColor: 'transparent',

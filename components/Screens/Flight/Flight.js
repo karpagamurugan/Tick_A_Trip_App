@@ -1,5 +1,5 @@
-
 /* eslint-disable prettier/prettier */
+
 import React, { useState } from 'react'
 import { View, Text, Dimensions, StyleSheet, ScrollView, Modal, TouchableHighlight, Pressable, ImageBackground, TextInput, Keyboard } from 'react-native';
 import color from '../../../constants/color';
@@ -18,7 +18,6 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AutoCompleteTextField from '../../common/AutoComplete';
 import { useDispatch, useSelector } from 'react-redux';
-import Select from "react-select";
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import FlightAction from '../../../redux/Flight/actions';
 import Autocomplete from 'react-native-autocomplete-input';
@@ -51,7 +50,7 @@ const Flight = ({ navigation }) => {
   var [selectedFromVal, setSelectedFromVal] = useState(selectedFromVal = 'Select')
   var [selectedToVal, setSelectedToVal] = useState(selectedToVal = 'Select')
 
-  handleSelection = (e) => {
+  const handleSelection = (e) => {
     Keyboard.dismiss()
     dispatch({
       type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
@@ -61,7 +60,7 @@ const Flight = ({ navigation }) => {
 
   }
 
-  handleSelectionTo = (e) => {
+ const handleSelectionTo = (e) => {
     Keyboard.dismiss()
     dispatch({
       type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,

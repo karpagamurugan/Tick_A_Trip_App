@@ -14,6 +14,9 @@ import moment from 'moment';
 import axios from 'axios'
 import { API_URL } from '../../../constants/constApi'
 import HotelSelectRoomGuest from './HotelSelectRoomGuest'
+import { useDispatch } from 'react-redux'
+import hotelActions from '../../../redux/Hotel/actions'
+import commonAction from '../../../redux/common/actions'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -27,6 +30,8 @@ const data = [
   { key: '7', value: 'Drinks' },
 ]
 const HotelSearch = ({ navigation }) => {
+  const dispatch = useDispatch()
+
   const [selected, setSelected] = useState("");
   const [ciDate, setCidate] = useState(new Date())
   const [open, setOpen] = useState(false)
@@ -34,9 +39,17 @@ const HotelSearch = ({ navigation }) => {
   const [openCo, setOpenCo] = useState(false)
   var [showGuestModal, setShowGuestModal] = useState(false);
   const [selectDestination, setSelectDestination] = useState(false)
-  const [destination, setDestination] = useState('')
+  const [destination, setDestination] = useState({ city: 'chennai', country: 'india' })
   const [selectAddRoom, setSelectAddRoom] = useState([])
+  const [adultCount, setAdultCount] = useState('')
+  const [childCount, setChildCount] = useState('')
 
+
+  useEffect(() => {
+    var d = new Date();
+    d.setDate(d.getDate() + 1)
+    setCodate(d)
+  }, [])
 
   const AddRoom = () => {
     let temp = []
@@ -45,7 +58,7 @@ const HotelSearch = ({ navigation }) => {
       room_no: tempGuest.length + 1,
       adult: 0,
       child: 0,
-      childAge: []
+      child_age: []
     }]
     setSelectAddRoom(temp)
   }
@@ -54,6 +67,36 @@ const HotelSearch = ({ navigation }) => {
       index !== inx
     )))
   }
+  // console.log('selectAddRoom', selectAddRoom)
+  const OnSearchHotel = () => {
+    dispatch({ type: commonAction.HOTEL_LOADER, payload: true })
+    dispatch({
+      type: hotelActions.GET_HOTEL_SEARCH, payload: {
+        checkin: moment(ciDate).format('YYYY-MM-DD'),
+        checkout: moment(coDate).format('YYYY-MM-DD'),
+        city_name: destination.city,
+        country_name: destination.country,
+        requiredCurrency: 'INR',
+        occupancy: selectAddRoom,
+      },
+      navigation: navigation
+    })
+  }
+  // console.log('selectAddRoom', selectAddRoom)
+  useEffect(() => {
+    if (selectAddRoom.length !== 0) {
+      let tempAdultCount = 0
+      for (let i = 0; i < selectAddRoom.length; i++) {
+        tempAdultCount += selectAddRoom[i].adult
+      }
+      setAdultCount(tempAdultCount)
+      let tempChildCount = 0
+      for (let i = 0; i < selectAddRoom.length; i++) {
+        tempChildCount += selectAddRoom[i].child
+      }
+      setChildCount(tempChildCount)
+    }
+  }, [selectAddRoom])
 
   return (
     <View style={style.hotelSearch}>
@@ -67,7 +110,7 @@ const HotelSearch = ({ navigation }) => {
               <Text style={style.Searchlabel}>DESTINATION OR HOTEL NAME</Text>
               <TouchableHighlight style={style.inputField} onPress={() => setSelectDestination(true)} underlayColor='transparent'>
                 {selectDestination !== true ?
-                  <Text style={style.inputFieldText}>{destination ? destination : 'Search your destination'}</Text>
+                  <Text style={style.inputFieldText}>{destination ? destination.city : 'Search your destination'}</Text>
                   :
                   <SelectList
                     setSelected={(val) => setSelected(val)}
@@ -143,13 +186,23 @@ const HotelSearch = ({ navigation }) => {
             <View style={style.hotelSearchFieldGroupInput}>
               <Text style={style.Searchlabel}>GUESTS</Text>
               <TouchableHighlight style={style.inputField} onPress={() => setShowGuestModal(!showGuestModal)} underlayColor='transparent'>
-                <Text style={style.inputFieldText}>Select Guest</Text>
+                <View>
+                  {selectAddRoom.length === 0 ?
+                    <Text style={style.inputFieldText}>Select Guest</Text>
+                    :
+                    <View>
+                      <Text style={style.inputFieldText}>Room / Guests </Text>
+                      <Text>{selectAddRoom?.length} Rooms,{adultCount || childCount ? adultCount + childCount : 0} Guests</Text>
+                    </View>
+                  }
+
+                </View>
               </TouchableHighlight>
             </View>
           </View>
 
           <View>
-            <TouchableHighlight underlayColor='transparent' onPress={() => navigation.navigate('HotelList')}>
+            <TouchableHighlight underlayColor='transparent' onPress={() => OnSearchHotel()}>
               <View style={style.iconBoxBtn}>
                 <EvilIcons style={style.fieldIconBtn} name='search' />
                 <Text style={style.searchText}>Search</Text>
@@ -191,7 +244,7 @@ const HotelSearch = ({ navigation }) => {
                             e.preventDefault()
                             let temp = [...selectAddRoom]
                             temp[room_no - 1].child = 0
-                            temp[room_no - 1].childAge = []
+                            temp[room_no - 1].child_age = []
                             setSelectAddRoom([...temp])
                           }}
                         />
@@ -206,7 +259,7 @@ const HotelSearch = ({ navigation }) => {
                   <TouchableHighlight style={style.GuestSubmitBtn} underlayColor='transparent' onPress={() => AddRoom()}>
                     <Text style={{ color: '#fff', fontFamily: font.mediam }}>Add Room</Text>
                   </TouchableHighlight>
-                  <TouchableHighlight style={style.GuestSubmitBtn} underlayColor='transparent' >
+                  <TouchableHighlight style={style.GuestSubmitBtn} underlayColor='transparent' onPress={() => setShowGuestModal(false)}>
                     <Text style={{ color: '#fff', fontFamily: font.mediam }}>Done</Text>
                   </TouchableHighlight>
                 </View>

@@ -4,7 +4,6 @@ import actions from './actions';
 const initialState = {
     Airport_Name:{},
     Airport_to_Name:{}
-  
 }
 
 const FlightSearchReducer = (state = initialState, action) => {
