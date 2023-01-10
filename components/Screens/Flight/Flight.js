@@ -1,6 +1,7 @@
+
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react'
-import { View, Text, Dimensions, StyleSheet, ScrollView, Modal, TouchableHighlight, Pressable, ImageBackground, TextInput } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, ScrollView, Modal, TouchableHighlight, Pressable, ImageBackground, TextInput, Keyboard } from 'react-native';
 import color from '../../../constants/color';
 import font from '../../../constants/font';
 import Appbar from '../../common/Appbar';
@@ -17,8 +18,10 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import AutoCompleteTextField from '../../common/AutoComplete';
 import { useDispatch, useSelector } from 'react-redux';
-
-
+import Select from "react-select";
+import AntIcon from 'react-native-vector-icons/AntDesign'
+import FlightAction from '../../../redux/Flight/actions';
+import Autocomplete from 'react-native-autocomplete-input';
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
@@ -27,7 +30,7 @@ let width = Dimensions.get('window').width;
 const Flight = ({ navigation }) => {
 
   const dispatch = useDispatch()
-  const { Airport_Name } = useSelector((state) => state.FlightSearchReducer)
+  const { Airport_Name, Airport_to_Name } = useSelector((state) => state.FlightSearchReducer)
 
   var [oneTrip, setOneTrip] = useState(true);
   var [roundTrip, setRoundTrip] = useState(false);
@@ -41,17 +44,69 @@ const Flight = ({ navigation }) => {
   var [child, setchild] = useState(0) //set child count
   var [infant, setInfant] = useState(0) //set infant count
   var [classType, setClassType] = useState('Economy');
-  var [selctedFromPlace,setSelectedFromPlace]=useState('Select');
-  var [selctedToPlace,setSelectedToPlace]=useState('Select');
+  var [selctedFromPlace, setSelectedFromPlace] = useState('Select');
+  var [selctedToPlace, setSelectedToPlace] = useState('Select');
 
 
+  var [selectedFromVal, setSelectedFromVal] = useState(selectedFromVal = 'Select')
+  var [selectedToVal, setSelectedToVal] = useState(selectedToVal = 'Select')
+
+  handleSelection = (e) => {
+    Keyboard.dismiss()
+    dispatch({
+      type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
+      payload: []
+    })
+    setSelectedFromVal(selectedFromVal = e.city);
+
+  }
+
+  handleSelectionTo = (e) => {
+    Keyboard.dismiss()
+    dispatch({
+      type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,
+      payload: []
+    })
+    setSelectedToVal(selectedToVal = e.city);
+  }
 
   let ChildAndInfant = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }] //child and infant count
   let AdultCount = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }, { value: '7' }, { value: '8' }, { value: '9' }] //adult count
 
   let classList = [{ value: 'Business' }, { value: 'Economy' }];
 
-console.log('Airport_Name',Airport_Name)
+ const FlightSearch =()=>{
+//   {
+//     "journey_type" :"OneWay", 
+//     "airport_from_code": "BLR",
+// 	"airport_to_code": "DEL",
+// 	"departure_date": "2022-12-10",
+//     "return_date":"",
+// 	"adult_flight" :1,
+// 	"child_flight" :0,
+// 	"infant_flight" :0,
+// 	"class": "Economy",
+//     "target":"Test"
+// }
+
+const data = {
+      "journey_type" :(oneTrip === true)?'OneWay':'RoundTrip', 
+      "airport_from_code": "BLR",
+  	"airport_to_code": "DEL",
+  	"departure_date": "2022-12-10",
+      "return_date":"",
+  	"adult_flight" :adult,
+  	"child_flight" :child,
+  	"infant_flight" :infant,
+  	"class": classType,
+      "target":"Test"
+  }
+
+
+  console.log('data....',data)
+
+// navigation.navigate('FlightResult')
+ }
 
   return (
     <View style={style.MainContainer}>
@@ -195,7 +250,7 @@ console.log('Airport_Name',Airport_Name)
 
       <Appbar title={'Search Flight'} />
 
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <View style={{ height: height, marginBottom: 85 }}>
           <View style={{ height: height * 0.3, backgroundColor: 'white', borderColor: 'red', borderWidth: 1 }}>
             {/* here replace this view flight image */}
@@ -206,9 +261,6 @@ console.log('Airport_Name',Airport_Name)
               <View style={style.btn}>
                 <TouchableHighlight underlayColor={'transparent'}
                   onPress={() => {
-                    console.log('oneTrip',oneTrip)
-                    console.log('round trip',roundTrip)
-
                     if (oneTrip) {
                       setOneTrip(!oneTrip)
                       setRoundTrip(!roundTrip)
@@ -240,12 +292,262 @@ console.log('Airport_Name',Airport_Name)
               </View>
 
 
-              <AutoCompleteTextField
+
+
+              <View style={{ flexDirection: 'column' }}>
+
+
+                <View style={[style.frombtn, { marginHorizontal: 20, paddingLeft: 10, width: width * 0.9 }]}>
+
+                  <FromIcon height={22} width={22} />
+                  <View style={{ paddingLeft: 15 }}>
+                    <Text style={style.title}>FROM</Text>
+
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        height: 35,
+                        width: '100%',
+                        alignItems: 'center',
+                      }}
+                    >
+
+                      <TextInput
+                        keyboardType={'default'}
+                        placeholder={'Select ...'}
+                        placeholderTextColor="gray"
+                        numberOfLines={1}
+                        value={selectedFromVal}
+                        onChangeText={(e) => {
+                          if (e?.length >= 3) {
+                            dispatch({
+                              type: FlightAction.SET_FLIGHT_SEARCH_BY_NAME,
+                              payload: {
+                                name: e,
+                                type: 'from'
+                              }
+                            })
+
+                            setSelectedFromVal(selectedFromVal = e)
+
+
+
+                          } else {
+                            setSelectedFromVal(selectedFromVal = e)
+                            dispatch({
+                              type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
+                              payload: []
+                            })
+                          }
+                        }}
+                        style={{
+                          color: 'black',
+                          fontFamily: font.font,
+                          width: width * 0.6,
+                          paddingTop: 5,
+                          paddingBottom: 0,
+                        }}
+                      />
+
+
+                      {
+                        selectedFromVal !== "" ?
+                          <TouchableHighlight
+                            underlayColor={'transparent'}
+                            onPress={() => {
+                              setSelectedFromVal(selectedFromVal = "")
+                              dispatch({
+                                type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
+                                payload: []
+                              })
+                            }}
+                          >
+                            <AntIcon name="closecircle" size={15} color="gray" style={{
+                              marginLeft: 10, marginRight: 10,
+                            }} />
+                          </TouchableHighlight> : <></>
+                      }
+                    </View>
+                  </View>
+                </View>
+
+
+                {
+                  selectedFromVal != '' ? Airport_Name?.message?.length !== 0 ?
+                    <View style={{
+                      backgroundColor: 'white',
+                      width: '90%',
+                      alignSelf: 'center',
+                      position: 'relative',
+                      zIndex: 2,
+                      borderRadius: 10,
+                      elevation: 10
+                    }}>
+
+                      <ScrollView
+                        style={{ height: 'auto' }}
+                        showsVerticalScrollIndicator={true}
+                        nestedScrollEnabled
+                        keyboardShouldPersistTaps='handled'
+                      >
+                        {
+                          Airport_Name?.message?.map((e, i) => {
+                            return (
+                              <TouchableHighlight
+                                underlayColor={"transparent"}
+                                onPress={() => {
+                                  handleSelection(e)
+                                }}
+                                key={i}>
+                                <Text
+                                  style={{
+                                    color: 'black',
+                                    padding: 9,
+                                    fontSize: 16,
+                                    fontFamily: font.font
+                                  }}>{e?.city}-{e?.airport_name} ({e?.airport_code})</Text>
+                              </TouchableHighlight>
+                            )
+                          })
+                        }
+                      </ScrollView>
+
+                    </View> : null : null
+                }
+              </View>
+
+
+
+
+
+
+
+              <View style={{ flexDirection: 'column' }}>
+
+
+                <View style={[style.frombtn, { marginHorizontal: 20, paddingLeft: 10, width: width * 0.9 }]}>
+
+                  <FromIcon height={22} width={22} />
+                  <View style={{ paddingLeft: 15 }}>
+                    <Text style={style.title}>To</Text>
+
+                    <View
+                      style={{
+                        flexDirection: 'row',
+                        height: 35,
+                        width: '100%',
+                        alignItems: 'center',
+                      }}
+                    >
+
+                      <TextInput
+                        keyboardType={'default'}
+                        placeholder={'Select ...'}
+                        placeholderTextColor="gray"
+                        numberOfLines={1}
+                        value={selectedToVal}
+                        onChangeText={(e) => {
+                          if (e?.length >= 3) {
+                            dispatch({
+                              type: FlightAction.SET_FLIGHT_SEARCH_BY_NAME,
+                              payload: {
+                                name: e,
+                                type: 'to'
+                              }
+                            })
+
+                            setSelectedToVal(selectedToVal = e)
+                          } else {
+                            setSelectedToVal(selectedToVal = e)
+                            dispatch({
+                              type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,
+                              payload: []
+                            })
+                          }
+                        }}
+                        style={{
+                          color: 'black',
+                          fontFamily: font.font,
+                          width: width * 0.6,
+                          paddingTop: 5,
+                          paddingBottom: 0,
+                        }}
+                      />
+
+
+                      {
+                        selectedToVal !== "" ?
+                          <TouchableHighlight
+                            underlayColor={'transparent'}
+                            onPress={() => {
+                              setSelectedToVal(selectedToVal = "")
+                              dispatch({
+                                type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,
+                                payload: []
+                              })
+                            }}
+                          >
+                            <AntIcon name="closecircle" size={15} color="gray" style={{
+                              marginLeft: 10, marginRight: 10,
+                            }} />
+                          </TouchableHighlight> : <></>
+                      }
+                    </View>
+                  </View>
+                </View>
+
+
+                {
+                  selectedToVal != '' ? Airport_to_Name?.message?.length !== 0 ?
+                    <View style={{
+                      backgroundColor: 'white',
+                      width: '90%',
+                      alignSelf: 'center',
+                      position: 'relative',
+                      zIndex: 2,
+                      borderRadius: 10,
+                      elevation: 10
+                    }}>
+
+                      <ScrollView
+                        style={{ height: 'auto' }}
+                        showsVerticalScrollIndicator={true}
+                        nestedScrollEnabled
+                        keyboardShouldPersistTaps='handled'
+                      >
+                        {
+                          Airport_to_Name?.message?.filter((item) => item.city !== selectedFromVal)?.map((e, i) => {
+                            return (
+                              <TouchableHighlight
+                                underlayColor={"transparent"}
+                                onPress={() => {
+                                  handleSelectionTo(e)
+                                }}
+                                key={i}>
+                                <Text
+                                  style={{
+                                    color: 'black',
+                                    padding: 9,
+                                    fontSize: 16,
+                                    fontFamily: font.font
+                                  }}>{e?.city}-{e?.airport_name} ({e?.airport_code})</Text>
+                              </TouchableHighlight>
+                            )
+                          })
+                        }
+                      </ScrollView>
+
+                    </View> : null : null
+                }
+              </View>
+
+
+
+              {/* <AutoCompleteTextField
                 hintText="Select.."
                 defaultValue={selctedFromPlace}
-                icon={FromIcon}
                 placeHolderText="From"
-                value={selctedFromPlace}
+                value={selctedFromPlace.toString()}
                 type='from'
                 data={
                   Airport_Name?.message?.map((e, i) => {
@@ -255,32 +557,34 @@ console.log('Airport_Name',Airport_Name)
                   })
                 }
                 onSelected={(e) => {
-                  console.log('selected',e)
-                  setSelectedFromPlace(selctedFromPlace = e.value)
+                  setSelectedFromPlace(selctedFromPlace = e.city)
                 }}
-              />
+              /> */}
 
 
-              <AutoCompleteTextField
+              {/* <AutoCompleteTextField
                 hintText="Select.."
-                defaultValue={selctedToPlace}
-                icon={FromIcon}
-                placeHolderText="From"
-                value={selctedToPlace}
+                defaultValue={selctedToPlace.toString()}
+                placeHolderText="To"
+                value={selctedToPlace.toString()}
                 type='to'
                 data={
-                  classList.map((e, i) => {
+                  Airport_Name?.message?.map((e, i) => {
                     return (
-                      { display: e.value, value: e }
+                      { display: e.city, value: e }
                     )
                   })
                 }
                 onSelected={(e) => {
-                  setSelectedToPlace(selctedToPlace = e.value)
+                  setSelectedToPlace(selctedToPlace = e.city)
                 }}
-              />
+              /> */}
 
-              <View style={{ flexDirection: 'row' }}>
+
+
+
+
+              <View style={{ flexDirection: 'row',justifyContent: 'space-around' }}>
                 <TouchableHighlight onPress={() => setShowTraveller(!showTraveller)} underlayColor='transparent' style={{ marginRight: 10 }}>
                   <View style={[style.frombtn, { marginLeft: 20 }]}>
                     <Ionicons name='md-person-outline' size={22} color={color.textBlue} />
@@ -343,7 +647,7 @@ console.log('Airport_Name',Airport_Name)
 
 
               <View style={style.searchBtn}>
-                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.navigate('FlightResult')}>
+                <TouchableHighlight underlayColor={'transparent'} onPress={() => FlightSearch()}>
                   <Text style={style.searchText}>SEARCH FLIGHT</Text>
                 </TouchableHighlight>
               </View>
@@ -362,7 +666,7 @@ console.log('Airport_Name',Airport_Name)
           onConfirm={(date) => {
             setFromPicker(!fromPicker)
             setFromDate(fromDate = date)
-            console.log(fromDate)
+            // console.log(fromDate)
           }}
           onCancel={() => {
             setFromPicker(!fromPicker)
@@ -446,5 +750,5 @@ const style = StyleSheet.create({
   modalTitle: { fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.025 },
   modalCancel: { alignSelf: 'flex-end', paddingRight: 15, paddingBottom: 10 },
   dropStyle: { backgroundColor: '#EDF2F7', paddingVertical: 5, paddingLeft: 30, paddingRight: 10, borderRadius: 5, },
-  dropIcon: { fontSize: 18, color: color.colorTheme, marginLeft: 20 }
+  dropIcon: { fontSize: 18, color: color.colorTheme, marginLeft: 20 },
 })

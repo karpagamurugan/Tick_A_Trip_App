@@ -21,21 +21,31 @@ export default function AutoCompleteTextField(props) {
     const dispatch = useDispatch()
 
     const { data, hintText, placeHolderText, value, inputType, onSelected, dis , stateId , defaultValue,type } = props
-    console.log('value',value)
+    // console.log('value',value)
     var [filteredList, setFilteredList] = useState([])
-    var [selectedVal, setSelectedVal] = useState( selectedVal = value+"")
+    var [selectedVal, setSelectedVal] = useState( selectedVal = value)
+    var [selectedFromVal, setSelectedFromVal] = useState( selectedFromVal = value)
+    var [selectedToVal, setSelectedToVal] = useState( selectedToVal = value)
+console.log(type)
 
     var [showIndi, setShowIndi] = useState(false)
 
+// console.log('from val',valueFrom)
+// console.log('to value',valueTo)
+// console.log('value',value)
+
     handleSelection = (e) => {
         Keyboard.dismiss()
-        setSelectedVal(e.display);
+        console.log('type....',type)
+        if(type === 'from'){
+            setSelectedFromVal(selectedFromVal=e.display);
+        }else{
+            setSelectedToVal(selectedToVal= e.display)
+        }
+        // setSelectedVal(selectedVal=e.display);
         setFilteredList(filteredList = [])
-        onSelected(e.value);
-    }
-
-    handleValue = (e) => {
-        defaultValue(e.zipcode)
+        // onSelected(e.value);
+        // console.log('selected',e)
     }
 
 
@@ -66,21 +76,31 @@ export default function AutoCompleteTextField(props) {
                     placeholder={hintText}
                     placeholderTextColor="gray"
                     numberOfLines={1}
-                    value={selectedVal}
+                    value={type === 'from'?selectedFromVal:selectedToVal}
                     onChangeText={(e) => {                     
                             if (e?.length >= 3) {
-                                console.log('from auto completed page',e)
                                 dispatch({
                                     type:FlightAction.SET_FLIGHT_SEARCH_BY_NAME,
                                     payload:{
                                         name:e
                                     }
                                 })
-                                setSelectedVal(selectedVal = e)
-                                setFilteredList(filteredList = data.filter((e) => e.display.toString()
-                                    .toLowerCase().includes(selectedVal.toLowerCase())))
+                                if(type === 'from'){
+                                    setSelectedFromVal(selectedFromVal = e)
+
+                                }else{
+                                    setSelectedToVal(selectedToVal = e)
+                                }
+                                // setSelectedVal(selectedVal = e)
+                                setFilteredList( filteredList=data)
+                                // setFilteredList(filteredList = data.filter((e) => e.display.toString()
+                                //     .toLowerCase().includes(selectedVal.toLowerCase())))
+                                // let filterlist = data.map((val)=>val.includes(e.toString()))
+                             
                             } else {
-                                setSelectedVal(selectedVal = e)
+                                // setSelectedVal(selectedVal = e)
+                                setSelectedToVal(selectedToVal = e)
+                                setSelectedFromVal(selectedFromVal = e)
                                 setFilteredList(filteredList = [])
                             }
                     }}
@@ -116,7 +136,7 @@ export default function AutoCompleteTextField(props) {
 
            
             {
-                filteredList.length !== 0 ?
+                filteredList?.length !== 0 ?
                     <View style={{
                         backgroundColor: 'white',
                         width: '90%',
@@ -127,13 +147,14 @@ export default function AutoCompleteTextField(props) {
                         elevation: 10
                     }}>
 
-                        <ScrollView
+                        <ScrollView 
+                        style={{height:'auto'}}
                             showsVerticalScrollIndicator={true}
                             nestedScrollEnabled
-                            keyboardShouldPersistTaps="handled"
+                            keyboardShouldPersistTaps='handled'
                         >
                             {
-                                filteredList.map((e, i) => {
+                                filteredList?.map((e, i) => {
                                     return (
                                         <TouchableHighlight
                                             underlayColor={"transparent"}
@@ -148,7 +169,7 @@ export default function AutoCompleteTextField(props) {
                                                     padding: 9,
                                                     fontSize: 16,
                                                     fontFamily: font.font
-                                                }}>{e.display}</Text>
+                                                }}>{e?.value?.city}-{e?.value?.airport_name} ({e?.value?.airport_code})</Text>
                                         </TouchableHighlight>
                                     )
                                 })
