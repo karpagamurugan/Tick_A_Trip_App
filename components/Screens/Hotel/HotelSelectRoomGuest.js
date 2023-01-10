@@ -11,11 +11,7 @@ const HotelSelectRoomGuest = (props) => {
     const { row, room_no, changeAddRoom, index1, selectAddRoom, removeSelectChild } = props
     const [listchildAge, setListchildAge] = useState([]);
     const [isFocus, setIsFocus] = useState(false);
-
-    console.log('row', row)
-    console.log('room_no', room_no)
-    console.log('changeAddRoom', changeAddRoom)
-    console.log('selectAddRoom', selectAddRoom)
+    
     const AdultQty = [1, 2, 3, 4, 5, 6]
     const ChildQty = [1, 2, 3, 4, 5, 6]
     const data = [
@@ -47,19 +43,19 @@ const HotelSelectRoomGuest = (props) => {
             el.room_no === room_no ? {
                 ...el,
                 child: val,
-                childAge: temp
+                child_age: temp
             } : { ...el }
         )))
     }
     const OnChildAge = (item, ind) => {
         let tempdata = [...selectAddRoom]
         let arry = [
-            ...(tempdata[index1].childAge),
+            ...(tempdata[index1].child_age),
         ]
-        arry[ind] = (item.value)
+        arry[ind] = parseInt(item.value)
         tempdata[index1] = {
             ...tempdata[index1],
-            childAge: [...arry]
+            child_age: [...arry]
         }
         changeAddRoom(tempdata)
     }
@@ -99,9 +95,9 @@ const HotelSelectRoomGuest = (props) => {
                                 data={data}
                                 labelField="value"
                                 valueField="value"
-                                value={{ value: selectAddRoom[index1]?.childAge[index] }}
+                                value={{ value:`${selectAddRoom[index1]?.child_age[index]}` }}
                                 showsVerticalScrollIndicator={true}
-                                name="childAge"
+                                name="child_age"
                                 placeholder={`Child ${index + 1} Age`}
                                 onChange={(item) => OnChildAge(item, index)}
                                 selectedTextProps={{

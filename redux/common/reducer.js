@@ -2,7 +2,8 @@
 import actions from '../common/actions';
 
 const initialState = {
-    common_loader:false
+    common_loader: false,
+    hotel_loader: false,
 }
 
 const CommonReducer = (state = initialState, action) => {
@@ -11,6 +12,11 @@ const CommonReducer = (state = initialState, action) => {
             return {
                 ...state,
                 common_loader: action.payload
+            };
+        case actions.HOTEL_LOADER:
+            return {
+                ...state,
+                hotel_loader: action.payload
             };
         default:
             return state;

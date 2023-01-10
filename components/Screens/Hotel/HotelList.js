@@ -9,6 +9,7 @@ import font from '../../../constants/font';
 import HotelCard from './HotelCard';
 import HotelFilter from './HotelFilter';
 import HotelAppbar from '../../common/HotelAppbar';
+import { useSelector } from 'react-redux';
 
 const data = [
     { label: 'Item 1', value: '1' },
@@ -24,8 +25,9 @@ const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const HotelList = ({ navigation }) => {
+    const { getHotelSearchResult } = useSelector((state) => state.HotelReducer)
     const [openFilter, setOpenFilter] = useState(false)
-
+    // console.log('getHotelSearchResult', getHotelSearchResult)
     return (
         <View>
             <Modal
@@ -34,35 +36,15 @@ const HotelList = ({ navigation }) => {
                 animationType="fade"
             >
                 <ScrollView style={style.filterModelSec}>
-                    <HotelFilter setOpenFilter={setOpenFilter}/>
+                    <HotelFilter setOpenFilter={setOpenFilter} />
                 </ScrollView>
             </Modal>
             <ScrollView>
                 <HotelAppbar title='Hotel Detail' />
                 <View style={style.hotelDetailSec}>
                     <View style={style.HotelDetailFilterSec}>
-                        {/* <View style={style.filterFileld}>
-                            <Dropdown
-                                style={style.dropdown}
-                                placeholderStyle={style.placeholderStyle}
-                                selectedTextStyle={style.selectedTextStyle}
-                                inputSearchStyle={style.inputSearchStyle}
-                                iconStyle={style.iconStyle}
-                                data={data}
-                                search
-                                maxHeight={300}
-                                labelField="label"
-                                valueField="value"
-                                placeholder="Sory By"
-                                searchPlaceholder="Search..."
-                                value={value}
-                                onChange={item => {
-                                    setValue(item.value);
-                                }}
-                            />
-                        </View> */}
                         <View style={style.filterFileld}>
-                            <Text style={style.totalHotel}>150 Hotels</Text>
+                            <Text style={style.totalHotel}>{getHotelSearchResult.length ? getHotelSearchResult.length : 0} Hotels</Text>
                         </View>
                         <View style={style.filterFileldIcon}>
                             <TouchableHighlight onPress={() => setOpenFilter(true)} underlayColor='transparent'>
@@ -76,8 +58,8 @@ const HotelList = ({ navigation }) => {
                     </View>
                     <View style={style.hotelSearchList}>
                         {
-                            [...Array(5)].map((val, index) => (
-                                <View key={index} ><HotelCard navigation={navigation}/></View>
+                            getHotelSearchResult?.map((val, index) => (
+                                <View key={index} ><HotelCard navigation={navigation} val={val} /></View>
                             ))
                         }
                     </View>
@@ -95,10 +77,10 @@ const style = StyleSheet.create({
         backgroundColor: '#E9F3FF',
         position: 'absolute',
         width: width * 0.8,
-        alignSelf:'center',
-        top:height * 0.1,
-        padding:20,
-        height:height * 0.7,
+        alignSelf: 'center',
+        top: height * 0.1,
+        padding: 20,
+        height: height * 0.7,
     },
     hotelDetailSec: {
         paddingHorizontal: 15,
@@ -141,7 +123,7 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingVertical:10,
+        paddingVertical: 10,
     },
     dropdown: {
         margin: 16,
