@@ -22,6 +22,7 @@ import Select from "react-select";
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import FlightAction from '../../../redux/Flight/actions';
 import Autocomplete from 'react-native-autocomplete-input';
+import actions from '../../../redux/Flight/actions';
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
@@ -35,6 +36,8 @@ const Flight = ({ navigation }) => {
   var [oneTrip, setOneTrip] = useState(true);
   var [roundTrip, setRoundTrip] = useState(false);
 
+  var [noRecord,setNoRecord]=useState({from:true,to:true})
+
   var [showTraveller, setShowTraveller] = useState(false) //show traveller modal
   var [fromDate, setFromDate] = useState(new Date()); //depart date
   var [ToDate, setTodate] = useState(new Date()); //return date
@@ -43,13 +46,11 @@ const Flight = ({ navigation }) => {
   var [adult, setAdult] = useState(0) //set adult count
   var [child, setchild] = useState(0) //set child count
   var [infant, setInfant] = useState(0) //set infant count
-  var [classType, setClassType] = useState('Economy');
-  var [selctedFromPlace, setSelectedFromPlace] = useState('Select');
-  var [selctedToPlace, setSelectedToPlace] = useState('Select');
+  var [classType, setClassType] = useState('Economy'); //select class type
 
+  var [selectedFromVal, setSelectedFromVal] = useState(selectedFromVal = {city:'',code:''}) //select from Place
+  var [selectedToVal, setSelectedToVal] = useState(selectedToVal = {city:'',code:''}) //select to place
 
-  var [selectedFromVal, setSelectedFromVal] = useState(selectedFromVal = 'Select')
-  var [selectedToVal, setSelectedToVal] = useState(selectedToVal = 'Select')
 
   handleSelection = (e) => {
     Keyboard.dismiss()
@@ -57,8 +58,9 @@ const Flight = ({ navigation }) => {
       type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
       payload: []
     })
-    setSelectedFromVal(selectedFromVal = e.city);
-
+    setSelectedFromVal(selectedFromVal = {city:e.city,code:e.airport_code});
+    setNoRecord(noRecord={from:false,to:noRecord.to})
+   
   }
 
   handleSelectionTo = (e) => {
@@ -67,7 +69,9 @@ const Flight = ({ navigation }) => {
       type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,
       payload: []
     })
-    setSelectedToVal(selectedToVal = e.city);
+    setSelectedToVal(selectedToVal = {city:e.city,code:e.airport_code});
+    setNoRecord(noRecord={to:false,from:noRecord.from})
+  
   }
 
   let ChildAndInfant = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }] //child and infant count
@@ -75,38 +79,31 @@ const Flight = ({ navigation }) => {
 
   let classList = [{ value: 'Business' }, { value: 'Economy' }];
 
- const FlightSearch =()=>{
-//   {
-//     "journey_type" :"OneWay", 
-//     "airport_from_code": "BLR",
-// 	"airport_to_code": "DEL",
-// 	"departure_date": "2022-12-10",
-//     "return_date":"",
-// 	"adult_flight" :1,
-// 	"child_flight" :0,
-// 	"infant_flight" :0,
-// 	"class": "Economy",
-//     "target":"Test"
-// }
+  const FlightSearch = () => {
+  
+    const payloaddata = {
+      journey_type: (oneTrip === true) ? 'OneWay' : 'RoundTrip',
+      airport_from_code:selectedFromVal?.code,
+      airport_to_code: selectedToVal?.code,
+      departure_date: moment(fromDate).format('YYYY-MM-DD'),
+      return_date: (oneTrip === true) ?"":moment(ToDate).format('YYYY-MM-DD'),
+      adult_flight: JSON.parse(adult),
+      child_flight: JSON.parse(child),
+      infant_flight: JSON.parse(infant),
+      class: classType,
+      target: "Test"
+    }
+    console.log('data....', payloaddata)
 
-const data = {
-      "journey_type" :(oneTrip === true)?'OneWay':'RoundTrip', 
-      "airport_from_code": "BLR",
-  	"airport_to_code": "DEL",
-  	"departure_date": "2022-12-10",
-      "return_date":"",
-  	"adult_flight" :adult,
-  	"child_flight" :child,
-  	"infant_flight" :infant,
-  	"class": classType,
-      "target":"Test"
+
+    dispatch({
+      type:actions.SET_FLIGHT_SEARH,
+      payload:{
+        data:payloaddata,
+        navigation:navigation
+      }
+    })
   }
-
-
-  console.log('data....',data)
-
-// navigation.navigate('FlightResult')
- }
 
   return (
     <View style={style.MainContainer}>
@@ -317,8 +314,11 @@ const data = {
                         placeholder={'Select ...'}
                         placeholderTextColor="gray"
                         numberOfLines={1}
-                        value={selectedFromVal}
+                        value={selectedFromVal?.city}
                         onChangeText={(e) => {
+                          if(e === ''){
+                            setNoRecord(noRecord={from:true,to:noRecord.to})
+                          }
                           if (e?.length >= 3) {
                             dispatch({
                               type: FlightAction.SET_FLIGHT_SEARCH_BY_NAME,
@@ -328,12 +328,12 @@ const data = {
                               }
                             })
 
-                            setSelectedFromVal(selectedFromVal = e)
+                            setSelectedFromVal(selectedFromVal = {city:e})
 
 
 
                           } else {
-                            setSelectedFromVal(selectedFromVal = e)
+                            setSelectedFromVal(selectedFromVal = {city:e})
                             dispatch({
                               type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
                               payload: []
@@ -351,15 +351,17 @@ const data = {
 
 
                       {
-                        selectedFromVal !== "" ?
+                        selectedFromVal?.city !== "" ?
                           <TouchableHighlight
                             underlayColor={'transparent'}
                             onPress={() => {
-                              setSelectedFromVal(selectedFromVal = "")
+                              setSelectedFromVal(selectedFromVal ={city:''})
                               dispatch({
                                 type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
                                 payload: []
                               })
+                              setNoRecord(noRecord={from:true,to:noRecord.to})
+
                             }}
                           >
                             <AntIcon name="closecircle" size={15} color="gray" style={{
@@ -373,25 +375,34 @@ const data = {
 
 
                 {
-                  selectedFromVal != '' ? Airport_Name?.message?.length !== 0 ?
-                    <View style={{
+                     (Airport_Name?.message === undefined && selectedFromVal?.city !== '' && noRecord?.from !== false)?
+                    <View style={{ backgroundColor: 'white',
+                    width: '90%',
+                    alignSelf: 'center',
+                    position: 'relative',
+                    zIndex: 2,
+                    borderRadius: 5,
+                    elevation: 10,
+                    maxHeight: height * 0.35}}>
+                    <Text style={{color:'grey',textAlign:'center',paddingVertical:5,fontFamily:font.font}}>No Options found</Text>
+                    </View>: <View style={{
                       backgroundColor: 'white',
                       width: '90%',
                       alignSelf: 'center',
                       position: 'relative',
                       zIndex: 2,
                       borderRadius: 10,
-                      elevation: 10
+                      elevation: 10,
+                      maxHeight: height * 0.35
                     }}>
 
                       <ScrollView
-                        style={{ height: 'auto' }}
                         showsVerticalScrollIndicator={true}
                         nestedScrollEnabled
                         keyboardShouldPersistTaps='handled'
                       >
                         {
-                          Airport_Name?.message?.map((e, i) => {
+                          Airport_Name?.message?.filter((item) => item?.city !== selectedToVal?.city)?.map((e, i) => {
                             return (
                               <TouchableHighlight
                                 underlayColor={"transparent"}
@@ -412,7 +423,7 @@ const data = {
                         }
                       </ScrollView>
 
-                    </View> : null : null
+                    </View>
                 }
               </View>
 
@@ -445,8 +456,11 @@ const data = {
                         placeholder={'Select ...'}
                         placeholderTextColor="gray"
                         numberOfLines={1}
-                        value={selectedToVal}
+                        value={selectedToVal?.city}
                         onChangeText={(e) => {
+                          if(e === ''){
+                            setNoRecord(noRecord={from:noRecord.from,to:true})
+                          }
                           if (e?.length >= 3) {
                             dispatch({
                               type: FlightAction.SET_FLIGHT_SEARCH_BY_NAME,
@@ -456,9 +470,9 @@ const data = {
                               }
                             })
 
-                            setSelectedToVal(selectedToVal = e)
+                            setSelectedToVal(selectedToVal = {city:e})
                           } else {
-                            setSelectedToVal(selectedToVal = e)
+                            setSelectedToVal(selectedToVal = {city:e})
                             dispatch({
                               type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,
                               payload: []
@@ -476,15 +490,17 @@ const data = {
 
 
                       {
-                        selectedToVal !== "" ?
+                        selectedToVal?.city !== "" ?
                           <TouchableHighlight
                             underlayColor={'transparent'}
                             onPress={() => {
-                              setSelectedToVal(selectedToVal = "")
+                              setSelectedToVal(selectedToVal = {city:''})
                               dispatch({
                                 type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,
                                 payload: []
                               })
+                              setNoRecord(noRecord={from:noRecord.from,to:true})
+
                             }}
                           >
                             <AntIcon name="closecircle" size={15} color="gray" style={{
@@ -498,7 +514,17 @@ const data = {
 
 
                 {
-                  selectedToVal != '' ? Airport_to_Name?.message?.length !== 0 ?
+               (Airport_to_Name?.message === undefined && selectedToVal?.city !== '' && noRecord?.to !== false)?
+               <View style={{ backgroundColor: 'white',
+               width: '90%',
+               alignSelf: 'center',
+               position: 'relative',
+               zIndex: 2,
+               borderRadius: 5,
+               elevation: 10,
+               maxHeight: height * 0.35}}>
+               <Text style={{color:'grey',textAlign:'center',paddingVertical:5,fontFamily:font.font}}>No Options found</Text>
+               </View>: 
                     <View style={{
                       backgroundColor: 'white',
                       width: '90%',
@@ -506,7 +532,8 @@ const data = {
                       position: 'relative',
                       zIndex: 2,
                       borderRadius: 10,
-                      elevation: 10
+                      elevation: 10,
+                      maxHeight: height * 0.35
                     }}>
 
                       <ScrollView
@@ -516,7 +543,7 @@ const data = {
                         keyboardShouldPersistTaps='handled'
                       >
                         {
-                          Airport_to_Name?.message?.filter((item) => item.city !== selectedFromVal)?.map((e, i) => {
+                          Airport_to_Name?.message?.filter((item) => item?.city !== selectedFromVal?.city)?.map((e, i) => {
                             return (
                               <TouchableHighlight
                                 underlayColor={"transparent"}
@@ -537,7 +564,7 @@ const data = {
                         }
                       </ScrollView>
 
-                    </View> : null : null
+                    </View> 
                 }
               </View>
 
@@ -584,7 +611,7 @@ const data = {
 
 
 
-              <View style={{ flexDirection: 'row',justifyContent: 'space-around' }}>
+              <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
                 <TouchableHighlight onPress={() => setShowTraveller(!showTraveller)} underlayColor='transparent' style={{ marginRight: 10 }}>
                   <View style={[style.frombtn, { marginLeft: 20 }]}>
                     <Ionicons name='md-person-outline' size={22} color={color.textBlue} />

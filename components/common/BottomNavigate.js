@@ -19,9 +19,19 @@ import HotelList from '../Screens/Hotel/HotelList'
 import FlightBooking from '../Screens/Flight/Flightbooking'
 import HotelDetail from '../Screens/Hotel/HotelDetail'
 import HotelRoomType from '../Screens/Hotel/HotelRoomType'
+import PopularPlacesDetails from '../Home/PopularPlaceDetails'
 
 const Stack = createNativeStackNavigator();
 
+function HomeTab() {
+    return (
+        <Stack.Navigator initialRouteName='Home'>
+            <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
+            <Stack.Screen name="PopularDetails" component={PopularPlacesDetails} options={{ headerShown: false }} />
+          
+        </Stack.Navigator>
+    )
+}
 
 function ProfileTab() {
     return (
@@ -68,7 +78,7 @@ const BottomNavigate = ({ navigation }) => {
             },
             tabBarShowLabel: false
         }}>
-            <Tab.Screen name="Home" component={Home}
+            <Tab.Screen name="HomeTab" component={HomeTab}
                 options={{
                     tabBarLabel: 'Home',
                     tabBarIcon: ({ focused, color, size }) => (

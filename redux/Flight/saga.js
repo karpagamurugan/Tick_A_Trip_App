@@ -18,7 +18,7 @@ const FlightSearchSaga = function* () {
 
 const getAirportnameList = function* (data) {
     const { payload } = data
-    console.log('payload', payload)
+    // console.log('payload', payload)
 
     try {
         const result = yield call(() =>
@@ -53,7 +53,7 @@ const FlightSearch = function* (data) {
         const result = yield call(() =>
             axios.post(
                 `${API_URL}/getFlightSearch`,
-                payload, {
+                payload?.payloaddata, {
                 headers: {
                     accept: 'application/json',
                     'Content-Type': 'multipart/form-data',
@@ -61,20 +61,10 @@ const FlightSearch = function* (data) {
             }
             )
         );
-        // console.log('result data....', result.data)
 
-        // {
-        //     "journey_type" :"OneWay", 
-        //     "airport_from_code": "BLR",
-        //     "airport_to_code": "DEL",
-        //     "departure_date": "2022-12-10",
-        //     "return_date":"",
-        //     "adult_flight" :1,
-        //     "child_flight" :0,
-        //     "infant_flight" :0,
-        //     "class": "Economy",
-        //     "target":"Test"
-        // }
+
+        console.log('search result.....',result?.data)
+        // navigation.navigate('FlightResult')
 
     } catch (err) {
         console.log('err', err.message)

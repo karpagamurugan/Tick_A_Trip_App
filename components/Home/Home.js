@@ -8,14 +8,17 @@ import color from '../../constants/color';
 import PopularPlaceCard from './PopularPlaceCard';
 import NearestPlaceCard from './NearestPlaceCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import userAction from '../../redux/user/actions'
-
+import popularAction from '../../redux/PopularPlaces/actions';
+import CommonAction from '../../redux/common/actions';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const Home = ({ navigation }) => {
+  const { Popular_Places} = useSelector((state) => state.PopularPlacesReducer)
+
   const dispatch = useDispatch()
   const userLogin = async () => {
     await AsyncStorage.getItem('tickatrip-token').then(
@@ -29,6 +32,12 @@ const Home = ({ navigation }) => {
     )
   }
   userLogin()
+
+  useEffect(()=>{
+      dispatch({ type: popularAction.GET_POPULAR_PLACES })
+  },[])
+
+
   return (
     <ScrollView >
       <View style={{ width: width, paddingHorizontal: 20, }}>
@@ -54,10 +63,15 @@ const Home = ({ navigation }) => {
           </View>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
             {/* <View style={style.PopularPlaceList}> */}
-            {[...Array(5)].map((val, index) => (
-              <View style={style.PopularPlaceCard} key={index} >
-                <PopularPlaceCard />
+            {Popular_Places?.PopularPlaceList?.map((item, index) => (
+              <TouchableHighlight key={index} underlayColor='transparent' onPress={()=>{
+                dispatch({ type:popularAction.SET_POPULAR_PLACE_DETAILS , payload:{id:item?.id,navigation}})
+                dispatch({ type: CommonAction.COMMON_LOADER, payload: true })
+              }}>
+                <View style={style.PopularPlaceCard} >
+                <PopularPlaceCard item={item}/>
               </View>
+              </TouchableHighlight>
             ))}
             {/* </View> */}
           </ScrollView>

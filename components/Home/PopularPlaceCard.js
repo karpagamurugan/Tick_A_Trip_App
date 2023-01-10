@@ -1,24 +1,42 @@
 /* eslint-disable prettier/prettier */
-import React from 'react'
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native'
-import Entypo from 'react-native-vector-icons/Entypo'
-import color from '../../constants/color'
-import font from '../../constants/font'
+import React, { useEffect } from 'react';
+import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import Entypo from 'react-native-vector-icons/Entypo';
+import { useDispatch, useSelector } from 'react-redux';
+import color from '../../constants/color';
+import font from '../../constants/font';
+import actions from '../../redux/PopularPlaces/actions';
+import { API_IMG_URL } from '../../constants/constApi';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const PopularPlaceCard = () => {
+const PopularPlaceCard = ({ item }) => {
+
     return (
         <View style={style.PopularPlaceCard}>
             <View style={style.PopularPlaceCardImage}>
-                <Image style={style.PopularPlaceCardImageSingle} source={require('../../Assert/Images/pop.png')} />
-                <Text style={style.PopularPlaceCardImageRev}><Entypo style={style.PopularPlaceCardImageRevStart} name='star' />4.5 (42K)</Text>
+                <Image style={style.PopularPlaceCardImageSingle} source={{ uri: `${API_IMG_URL}/server/popularplace/${item.place_image}` }} />
+                {/* <Text style={style.PopularPlaceCardImageRev}><Entypo style={style.PopularPlaceCardImageRevStart} name='star' />4.5 (42K)</Text> */}
             </View>
             <View style={style.PopularPlaceCardCont}>
-                <Text style={style.PopularPlaceCardCity}>Thailand Package</Text>
-                <Text style={style.PopularPlaceCardStay}>3 Days 2 Nights</Text>
-                <Text style={style.PopularPlaceCardPrice}>$456.00</Text>
+                <Text style={style.PopularPlaceCardCity}>{item?.place_name}</Text>
+
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <FontAwesome5Icon name='hotel' size={height * 0.02} />
+                        <Text style={style.PopularPlaceCardStay}>{item?.entry2}</Text>
+                    </View>
+
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Entypo name='location-pin' size={height * 0.03} />
+                        <Text style={style.PopularPlaceCardStay}>{item?.entry1}</Text>
+                    </View>
+
+
+                </View>
+                {/* <Text style={style.PopularPlaceCardPrice}>$456.00</Text> */}
             </View>
         </View>
     )
@@ -31,13 +49,15 @@ const style = StyleSheet.create({
     },
     PopularPlaceCardStay: {
         color: '#898989',
-        fontSize: 12,
-        fontFamily: font.fontSemi
+        fontSize: height * 0.016,
+        fontFamily: font.fontSemi,
+        paddingLeft: 3
     },
     PopularPlaceCardCity: {
         fontFamily: font.fontBold,
         color: color.colorText,
-        marginTop: 20,
+        marginTop: 10,
+        fontSize:height*0.025
     },
     PopularPlaceCardImageRevStart: {
         color: '#FE712A',
