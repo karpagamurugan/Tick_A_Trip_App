@@ -199,7 +199,7 @@ const style = StyleSheet.create({
     list: {
         fontFamily: font.font,
         color: color.colorGrey,
-        marginBottom:5,
+        marginBottom: 5,
     },
     listIcon: {
         color: '#0050A6',
@@ -214,8 +214,40 @@ const style = StyleSheet.create({
     },
     bookingBtnTxt: {
         color: '#fff',
-        fontFamily:font.mediam,
+        fontFamily: font.mediam,
     },
+    AdultQtyList: {
+        flexDirection: 'row',
+    },
+    adultCoutTxt: {
+        marginRight: 10,
+    },
+    activeSelectGuest: {
+        backgroundColor: '#000',
+        color: '#fff',
+        borderRadius: 100,
+        fontFamily: font.fontBold,
+        fontSize: 18,
+        paddingHorizontal: 10,
+        paddingVertical:0,
+    },
+    AdultQtyListCount: {
+        color: '#000',
+        fontFamily: font.fontBold,
+        fontSize: 18,
+    },
+    dropStyleChildAge: {
+        width: width * 0.3,
+        borderColor:color.colorGrey,
+        borderWidth:1,
+        paddingHorizontal:5,
+        marginBottom:5,
+    },
+    childAgeList:{
+        display:'flex',
+        justifyContent:'space-between',
+        marginTop:5,
+    }
 })
 
 export default style
