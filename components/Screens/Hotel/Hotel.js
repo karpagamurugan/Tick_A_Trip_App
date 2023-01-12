@@ -23,13 +23,9 @@ const Hotel = ({navigation}) => {
         <HotelSearch navigation={navigation}/>
         <View style={style.HotelPopularList}>
           <Text style={{ fontFamily: font.fontSemi, letterSpacing: 0.5, fontSize: 18, marginVertical: 20, color: color.colorText, }}>Most Popular Place</Text>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {
-              [...Array(5)].map((val,index) => (
-                <View key={index} style={{marginRight:10}}><PopularPlaceCard/></View>
-              ))
-            }
-          </ScrollView>
+          <View style={style.PopularPlaceCard} >
+                <PopularPlaceCard navigation={navigation}/>
+              </View>
 
         </View>
 
