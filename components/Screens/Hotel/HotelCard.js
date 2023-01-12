@@ -1,26 +1,20 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
-import { View, Text, StyleSheet, Image, Dimensions, ImageBackground, TouchableHighlight } from 'react-native'
-import color from '../../../constants/color'
-import font from '../../../constants/font'
+import { View, Text, StyleSheet, Dimensions, ImageBackground, TouchableHighlight } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Stars from 'react-native-stars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import style from '../../common/commonStyle'
 
-const width = Dimensions.get('window').width
-const height = Dimensions.get('window').height
 
 const HotelCard = (props, navigation) => {
     const { val } = props
-
-    // console.log('val', val)
     return (
         <View style={style.hotelListCardSec}>
             <View style={styles.hotelListCard}>
                 <View style={styles.hotelListCardImage}>
-                    <ImageBackground resizeMode='cover' style={style.hotelListCardImageBg} source={{ uri: val?.thumbNailUrl }}>
+                    <ImageBackground resizeMode='cover' style={style.hotelListCardImageBg} source={ val?.thumbNailUrl !== '' ? { uri: val?.thumbNailUrl } : require('../../../Assert/Images/imageNotFound.jpg')}>
                         <View style={style.hotelListCardReview}>
                             <View>
                                 <Stars
@@ -66,7 +60,7 @@ const HotelCard = (props, navigation) => {
 }
 const styles = StyleSheet.create({
     hotelListCardImage:{
-        backgroundColor:'#000',
+        backgroundColor:'#fff',
     },
     myStarStyle: {
         color: 'yellow',

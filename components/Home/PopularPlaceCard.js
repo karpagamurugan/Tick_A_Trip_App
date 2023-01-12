@@ -17,7 +17,7 @@ const PopularPlaceCard = ({ item }) => {
     return (
         <View style={style.PopularPlaceCard}>
             <View style={style.PopularPlaceCardImage}>
-                <Image style={style.PopularPlaceCardImageSingle} source={{ uri: `${API_IMG_URL}/server/popularplace/${item.place_image}` }} />
+                <Image style={style.PopularPlaceCardImageSingle} source={{ uri: `${API_IMG_URL}/server/popularplace/${item?.place_image}` }} />
                 {/* <Text style={style.PopularPlaceCardImageRev}><Entypo style={style.PopularPlaceCardImageRevStart} name='star' />4.5 (42K)</Text> */}
             </View>
             <View style={style.PopularPlaceCardCont}>

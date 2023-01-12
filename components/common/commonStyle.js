@@ -247,7 +247,8 @@ const style = StyleSheet.create({
         display:'flex',
         justifyContent:'space-between',
         marginTop:5,
-    }
+    },
+    
 })
 
 export default style

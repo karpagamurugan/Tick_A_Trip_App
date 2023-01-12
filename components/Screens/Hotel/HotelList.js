@@ -59,7 +59,7 @@ const HotelList = ({ navigation }) => {
                     <View style={style.hotelSearchList}>
                         {
                             getHotelSearchResult?.map((val, index) => (
-                                <View key={index} ><HotelCard navigation={navigation} val={val} /></View>
+                                <View key={index} ><HotelCard totalSearchResult={getHotelSearchResult} navigation={navigation} val={val} /></View>
                             ))
                         }
                     </View>

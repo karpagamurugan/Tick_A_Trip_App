@@ -446,8 +446,7 @@ const SignUp = ({ navigation }) => {
                                         control={control}
                                         render={({ field: { onChange, value } }) => (
                                             <TextInput   {...register("issuingCountry")} name="issuingCountry"
-                                                onChangeText={value => onChange(value)}
-                                                value={value} keyboardType='default' placeholder='Enter the Issuing country*' style={style.input} />
+                                                onChangeText={value => onChange(value)} value={value} keyboardType='default' placeholder='Enter the Issuing country*' style={style.input} />
                                         )}
                                         name="issuingCountry"
                                         rules={{ required: false }}

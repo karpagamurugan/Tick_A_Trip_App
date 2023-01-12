@@ -2,7 +2,9 @@
 import actions from "./actions";
 
 const initialState = {
-    getHotelSearchResult: {}
+    getHotelSearchResult: {},
+    getHotelFilterResult: [],
+    hotelSessionId: null,
 }
 
 const HotelReducer = (state = initialState, action) => {
@@ -12,7 +14,17 @@ const HotelReducer = (state = initialState, action) => {
                 ...state,
                 getHotelSearchResult: action.payload
             }
-            default:
+        case actions.SET_HOTEL_FILTER:
+            return {
+                ...state,
+                getHotelFilterResult: action.payload
+            }
+        case actions.SET_HOTEL_SESSION_ID:
+            return {
+                ...state,
+                hotelSessionId: action.payload
+            }
+        default:
             return state;
     }
 }
