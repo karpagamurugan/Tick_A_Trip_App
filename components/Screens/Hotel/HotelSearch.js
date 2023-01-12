@@ -39,7 +39,7 @@ const HotelSearch = ({ navigation }) => {
   const [openCo, setOpenCo] = useState(false)
   var [showGuestModal, setShowGuestModal] = useState(false);
   const [selectDestination, setSelectDestination] = useState(false)
-  const [destination, setDestination] = useState({ city: 'chennai', country: 'india' })
+  const [destination, setDestination] = useState({ city: 'kodaikanal', country: 'india' })
   const [selectAddRoom, setSelectAddRoom] = useState([])
   const [adultCount, setAdultCount] = useState('')
   const [childCount, setChildCount] = useState('')
@@ -195,7 +195,6 @@ const HotelSearch = ({ navigation }) => {
                       <Text>{selectAddRoom?.length} Rooms,{adultCount || childCount ? adultCount + childCount : 0} Guests</Text>
                     </View>
                   }
-
                 </View>
               </TouchableHighlight>
             </View>
