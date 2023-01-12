@@ -76,5 +76,6 @@ const style = StyleSheet.create({
         elevation: 5,
         shadowColor: '#000',
     },
+    PopularPlaceCard:{marginRight:10}
 })
 export default NearestPlaceCard

@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 
 import React, { useState } from 'react'
-import { View, Text, Dimensions, StyleSheet, ScrollView, Modal, TouchableHighlight, Pressable, ImageBackground, TextInput, Keyboard } from 'react-native';
+import { View, Text,Image, Dimensions, StyleSheet, ScrollView, Modal, TouchableHighlight, Pressable, ImageBackground, TextInput, Keyboard } from 'react-native';
 import color from '../../../constants/color';
 import font from '../../../constants/font';
 import Appbar from '../../common/Appbar';
@@ -50,7 +50,6 @@ const Flight = ({ navigation }) => {
   var [selectedFromVal, setSelectedFromVal] = useState(selectedFromVal = {city:'',code:''}) //select from Place
   var [selectedToVal, setSelectedToVal] = useState(selectedToVal = {city:'',code:''}) //select to place
 
-
   const handleSelection = (e) => {
     Keyboard.dismiss()
     dispatch({
@@ -96,7 +95,7 @@ const Flight = ({ navigation }) => {
 
 
     dispatch({
-      type:actions.SET_FLIGHT_SEARH,
+      type:actions.SET_FLIGHT_SEARCH,
       payload:{
         data:payloaddata,
         navigation:navigation
@@ -248,9 +247,8 @@ const Flight = ({ navigation }) => {
 
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={{ height: height, marginBottom: 85 }}>
-          <View style={{ height: height * 0.3, backgroundColor: 'white', borderColor: 'red', borderWidth: 1 }}>
-            {/* here replace this view flight image */}
-          </View>
+            <Image  source={require('../../../Assert/Images/hotel-bg.png')}
+          style={{ width: width, height: height * 0.3 }} resizeMode="cover"/>
           <ImageBackground source={require('../../../Assert/Images/map.jpg')} style={style.mapbg}>
 
             <View style={{ position: 'absolute', alignSelf: 'center', top: -20 }}>

@@ -12,7 +12,11 @@ const userSaga = function* () {
     yield all([
         yield takeEvery(actions.GET_USER_LOGIN, userAthentification),
         yield takeEvery(actions.GET_USER_REGISTER, getUserRegister),
-        yield takeEvery(actions.GET_USER_PROFILE, getUserProfile)
+        yield takeEvery(actions.GET_USER_PROFILE, getUserProfile),
+        yield takeEvery(actions.GET_COMPLETED_FLIGHT_TICKETS, getCompletedFlightTickets),
+        yield takeEvery(actions.GET_CANCELLED_FLIGHT_TICKETS, getCancelledFlightTickets),
+        yield takeEvery(actions.GET_UPCOMING_FLIGHT_TICKETS, getUpcomingFlightTickets)
+
     ])
 }
 
@@ -79,6 +83,7 @@ const userAthentification = function* (data) {
         yield put({ type: actions.SET_USER_LOGIN, payload: err.data })
     }
 }
+
 const getUserProfile = function* (data) {
     try {
         const result = yield call(() =>
@@ -91,4 +96,82 @@ const getUserProfile = function* (data) {
         yield put({ type: actions.SET_USER_PROFILE, payload: err.data })
     }
 }
+
+
+const getCompletedFlightTickets = function* (data) {
+    const { payload } = data;
+
+    try {
+        const result = yield call(() =>
+            axios.get(`${API_URL}/user/mycompletedbookings`)
+        )
+
+        if(result?.data?.success === true){
+            yield put({ type: actions.GET_COMPLETED_FLIGHT_TICKETS, payload: result.data })
+            // console.log('result data....',result?.data)
+
+        }else{
+            yield put({ type: actions.GET_COMPLETED_FLIGHT_TICKETS, payload: result.data })
+
+        }
+
+        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+    } catch (err) {
+        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        // yield put({ type: actions.SET_USER_PROFILE, payload: err.data })
+        console.log('error completed....',err)
+    }
+}
+
+const getCancelledFlightTickets = function* (data) {
+    const { payload } = data;
+
+    try {
+        const result = yield call(() =>
+            axios.get(`${API_URL}/user/mybookings_cancel`)
+        )
+
+        if(result?.data?.success === true){
+            yield put({ type: actions.GET_CANCELLED_FLIGHT_TICKETS, payload: result.data })
+            // console.log('result data....',result?.data)
+
+        }else{
+            yield put({ type: actions.GET_CANCELLED_FLIGHT_TICKETS, payload: result.data })
+
+        }
+
+        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+    } catch (err) {
+        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        // yield put({ type: actions.SET_USER_PROFILE, payload: err.data })
+        console.log('error.... cancelled',err)
+    }
+}
+
+
+
+const getUpcomingFlightTickets = function* (data) {
+    const { payload } = data;
+
+    try {
+        const result = yield call(() =>
+            axios.get(`${API_URL}/user/mybookings`)
+        )
+
+        if(result?.data?.success === true){
+            yield put({ type: actions.GET_UPCOMING_FLIGHT_TICKETS, payload: result.data })
+            // console.log('result data....',result?.data)
+
+        }else{
+            yield put({ type: actions.GET_UPCOMING_FLIGHT_TICKETS, payload: result.data })
+
+        }
+
+        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+    } catch (err) {
+       
+        console.log('error upcoming....',err)
+    }
+}
+
 export default userSaga

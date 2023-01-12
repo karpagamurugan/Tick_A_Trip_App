@@ -6,6 +6,9 @@ const initialState = {
     registerUser: [],
     userProfileData: [],
     isLogin: false,
+    Completed_flight:[],
+    Cancelled_flight:[],
+    Upcoming_flight:[]
 }
 
 const userReducer = (state = initialState, action) => {
@@ -31,6 +34,21 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 isLogin: action.payload
             }
+            case actions.GET_COMPLETED_FLIGHT_TICKETS:
+                return {
+                    ...state,
+                    Completed_flight: action.payload
+                }
+                case actions.GET_CANCELLED_FLIGHT_TICKETS:
+                    return {
+                        ...state,
+                        Cancelled_flight : action.payload
+                    }
+                    case actions.GET_UPCOMING_FLIGHT_TICKETS:
+                        return {
+                            ...state,
+                            Upcoming_flight: action.payload
+                        }
         default:
             return state;
     }

@@ -61,21 +61,11 @@ const Home = ({ navigation }) => {
             <Text style={style.PopularPlaceHeadTd}>Top Packages</Text>
             <TouchableHighlight ><Text style={style.PopularPlaceHeadmore}>See More</Text></TouchableHighlight>
           </View>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-            {/* <View style={style.PopularPlaceList}> */}
-            {Popular_Places?.PopularPlaceList?.map((item, index) => (
-              <TouchableHighlight key={index} underlayColor='transparent' onPress={()=>{
-                dispatch({ type:popularAction.SET_POPULAR_PLACE_DETAILS , payload:{id:item?.id,navigation}})
-                dispatch({ type: CommonAction.COMMON_LOADER, payload: true })
-              }}>
+       
                 <View style={style.PopularPlaceCard} >
-                <PopularPlaceCard item={item}/>
+                <PopularPlaceCard navigation={navigation}/>
               </View>
-              </TouchableHighlight>
-            ))}
-            {/* </View> */}
-          </ScrollView>
-
+            
         </View>
         <View style={style.PopularPlace}>
           <View style={style.PopularPlaceHead}>
@@ -101,10 +91,10 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  PopularPlaceCard: {
-    width: width * 0.4,
-    marginRight: 20
-  },
+  // PopularPlaceCard: {
+  //   // width: width * 0.4,
+  //   marginRight: 20
+  // },
   PopularPlaceHeadmore: {
     fontFamily: font.fontSemi,
     color: '#FE712A',

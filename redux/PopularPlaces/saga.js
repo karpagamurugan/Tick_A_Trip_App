@@ -20,7 +20,7 @@ const PopularPlaceSaga = function* () {
 
 const getPopularPlaces = function* (data) {
     const { payload } = data
-    // console.log('payload', payload)
+    yield put({ type: CommonAction.COMMON_LOADER, payload: true })
 
     try {
         const result = yield call(() =>
@@ -28,8 +28,11 @@ const getPopularPlaces = function* (data) {
                 `${API_URL}/popularplace`,
             )
         );
-            yield put({ type: actions.GET_POPULAR_PLACES, payload:result?.data });
-       
+       if(result?.data?.status === true){
+        yield put({ type: actions.GET_POPULAR_PLACES, payload:result?.data });
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+       }
+
     } catch (err) {
         console.log('err', err.message)
     }

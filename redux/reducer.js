@@ -11,7 +11,7 @@ const reducer = {
     CommonReducer,
     HotelTicktReducer,
     FlightSearchReducer,
-    PopularPlacesReducer
+    PopularPlacesReducer,
     HotelReducer,
 }
 

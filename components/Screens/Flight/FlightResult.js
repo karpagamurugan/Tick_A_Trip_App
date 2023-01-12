@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 import React, { useState } from 'react';
-import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ImageBackground, Modal, Pressable, Button } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ImageBackground, Modal, Pressable, Button, ScrollView } from 'react-native';
 import Appbar from '../../common/Appbar';
 import color from '../../../constants/color';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -15,11 +15,18 @@ import FromIcon from '../../../Assert/Images/icon/take-off.svg';
 import ToIcon from '../../../Assert/Images/icon/take-off-2.svg';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Slider from '@react-native-community/slider';
+import { useDispatch, useSelector } from 'react-redux';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
 export default function FlightResult({ navigation }) {
+    const { Flight_search_result } = useSelector((state) => state.FlightSearchReducer)
+    console.log('Flight_search_result', Flight_search_result.message)
+    console.log('Flight_search_result', Flight_search_result.message?.length)
+
+    console.log('map data', Flight_search_result?.message[0]?.flight_details)
+    console.log('map data', Flight_search_result?.message[0]?.flight_details[0]?.flights)
 
     var [showFilter, setShowFilter] = useState(false); //show filter modal
     var [priceRange, setPriceRange] = useState(); //set price range for filter
@@ -65,7 +72,7 @@ export default function FlightResult({ navigation }) {
                         <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
                             <ToIcon height={19} width={19} />
                             <View style={{ paddingLeft: 10 }}>
-                                <Text  style={styles.appbarPlace}>Coimbatore</Text>
+                                <Text style={styles.appbarPlace}>Coimbatore</Text>
                                 <Text style={styles.appBarTraveller}>3 adult</Text>
                             </View>
                         </View>
@@ -179,50 +186,69 @@ export default function FlightResult({ navigation }) {
             <View style={{ backgroundColor: 'grey', height: 0.3 }} />
 
             <ImageBackground source={require('../../../Assert/Images/map.jpg')} style={{ height: height * 0.7, width: width, paddingTop: 20 }}>
-                <View style={styles.card}>
-                    <View style={{ paddingHorizontal: 10 }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                            <View style={{ height: 40, width: 40, borderRadius: 20, backgroundColor: 'red' }} />
-                            <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.025 }}>Air Asia</Text>
-                            <View style={{ alignItems: 'center' }}>
-                                <Text style={styles.Textlite}>CBE</Text>
-                                <Text style={styles.Text}>CBE</Text>
-                                <Text style={styles.Textlite}>CBE</Text>
-                            </View>
-                            <FromArrow />
-                            <View style={{ alignItems: 'center' }}>
-                                <Text style={styles.Text}>1 H 30m</Text>
-                                <FlightIcon />
-                                <Text style={styles.Text}>1 stop</Text>
-                            </View>
-                            <BackArrow />
-                            <View style={{ alignItems: 'center' }}>
-                                <Text style={styles.Textlite}>CBE</Text>
-                                <Text style={styles.Text}>CBE</Text>
-                                <Text style={styles.Textlite}>CBE</Text>
-                            </View>
-                        </View>
+                <ScrollView>
+                    <View>
+                        {
+                            Flight_search_result?.message?.map((item, index) => (
+                                <View style={styles.card} key={index}>
+                                    <View style={{ paddingHorizontal: 10 }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                            <View style={{ height: 40, width: 40, borderRadius: 20, backgroundColor: 'red' }} />
+                                            <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.025, width: width * 0.3 }}>{item?.flightName}</Text>
+                                            {
+                                                item?.flight_details?.map((data) => (
+                                                  data?.flight?.map((e)=>(
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <View style={{ alignItems: 'center' }}>
+                                                        <Text style={styles.Textlite}>CBE</Text>
+                                                        <Text style={styles.Text}>CBE</Text>
+                                                        <Text style={styles.Textlite}>CBE</Text>
+                                                    </View>
+                                                    <FromArrow />
+                                                    <View style={{ alignItems: 'center' }}>
+                                                        <Text style={styles.Text}>1 H 30m</Text>
+                                                        <FlightIcon />
+                                                        <Text key={index} style={styles.Text}>{data?.totalStops} stop</Text>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, alignItems: 'flex-end' }}>
-                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <Text style={{ fontFamily: font.font, color: color.colorText }}>Rs:</Text>
-                                <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.027, paddingLeft: 5 }}>9999</Text>
-                            </View>
-                            <View style={{ width: 1, height: height * 0.06, backgroundColor: 'grey' }} />
-                            <View style={styles.booknowBtn}>
-                                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.navigate('flightBooking')}>
-                                    <Text style={styles.booknowText}>BOOK NOW</Text>
-                                </TouchableHighlight>
-                            </View>
-                        </View>
+
+                                                    </View>
+                                                    <BackArrow />
+                                                    <View style={{ alignItems: 'center' }}>
+                                                        <Text style={styles.Textlite}>CBE</Text>
+                                                        <Text style={styles.Text}>CBE</Text>
+                                                        <Text style={styles.Textlite}>CBE</Text>
+                                                    </View>
+                                                </View>
+                                                  ))
+                                                ))
+                                            }
+
+                                        </View>
+
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, alignItems: 'flex-end' }}>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                <Text style={{ fontFamily: font.font, color: color.colorText }}>Rs:</Text>
+                                                <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.027, paddingLeft: 5 }}>{item?.totalFare}</Text>
+                                            </View>
+                                            <View style={{ width: 1, height: height * 0.06, backgroundColor: 'grey' }} />
+                                            <View style={styles.booknowBtn}>
+                                                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.navigate('flightBooking')}>
+                                                    <Text style={styles.booknowText}>BOOK NOW</Text>
+                                                </TouchableHighlight>
+                                            </View>
+                                        </View>
+                                    </View>
+
+                                    <View style={styles.listBottom}>
+                                        <Text style={[styles.listBtnText, { color: color.colorText }]}>{item?.journeytype}</Text>
+                                        <Text style={[styles.listBtnText, { color: color.textBlue }]}>View Flight Details</Text>
+                                    </View>
+                                </View>
+
+                            ))
+                        }
                     </View>
-
-                    <View style={styles.listBottom}>
-                        <Text style={[styles.listBtnText,{ color: color.colorText}]}>Business Class</Text>
-                        <Text style={[styles.listBtnText,{color: color.textBlue }]}>View Flight Details</Text>
-                    </View>
-                </View>
-
+                </ScrollView>
             </ImageBackground>
 
 
@@ -239,10 +265,10 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 15
     },
-    appbarPlaceContainer:{ backgroundColor: 'white', width: width * 0.75, height: 40, marginLeft: 10, borderRadius: 30 },
-    appbarPlace:{ fontFamily: font.font, fontSize: height * 0.018 },
-    appBarTraveller:{ fontFamily: font.font, marginTop: -6, fontSize: height * 0.016 },
-    mainContainer: { height: height,  width: width, backgroundColor: 'white'},
+    appbarPlaceContainer: { backgroundColor: 'white', width: width * 0.75, height: 40, marginLeft: 10, borderRadius: 30 },
+    appbarPlace: { fontFamily: font.font, fontSize: height * 0.018 },
+    appBarTraveller: { fontFamily: font.font, marginTop: -6, fontSize: height * 0.016 },
+    mainContainer: { height: height, width: width, backgroundColor: 'white' },
     filter: {
         alignSelf: 'flex-end',
         marginRight: 10,
@@ -252,16 +278,17 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         marginBottom: 7
     },
-    filterText:{ fontFamily: font.font, paddingLeft: 10 },
+    filterText: { fontFamily: font.font, paddingLeft: 10 },
     card: {
         backgroundColor: color.AppbarColor,
         marginHorizontal: 15,
         paddingTop: 10,
         elevation: 2,
-        borderRadius: 5
+        borderRadius: 5,
+        marginBottom: 15
     },
-    Text: {fontFamily: font.fontSemi, color: color.colorText},
-    Textlite: { fontFamily: font.font,color: 'grey', fontSize: height * 0.015},
+    Text: { fontFamily: font.fontSemi, color: color.colorText },
+    Textlite: { fontFamily: font.font, color: 'grey', fontSize: height * 0.015 },
     booknowText: {
         color: 'white',
         fontFamily: font.mediam,
@@ -270,7 +297,7 @@ const styles = StyleSheet.create({
         fontSize: height * 0.018
 
     },
-    booknowBtn: {alignItems: 'center',backgroundColor: color.textBlue, borderRadius: 30},
+    booknowBtn: { alignItems: 'center', backgroundColor: color.textBlue, borderRadius: 30 },
     priceText: {
         fontFamily: font.fontSemi,
         color: 'white',
@@ -282,9 +309,9 @@ const styles = StyleSheet.create({
         marginTop: 5,
         marginRight: 15
     },
-    priceTitle:{ fontFamily: font.fontSemi, color: 'black', fontSize: height * 0.025, paddingTop: 5, paddingLeft: 5 },
-    priceValue:{ fontFamily: font.font, color: 'black' },
-    priceContainer:{ flexDirection: 'row', paddingLeft: 5, justifyContent: 'space-between', paddingBottom: 5 },
+    priceTitle: { fontFamily: font.fontSemi, color: 'black', fontSize: height * 0.025, paddingTop: 5, paddingLeft: 5 },
+    priceValue: { fontFamily: font.font, color: 'black' },
+    priceContainer: { flexDirection: 'row', paddingLeft: 5, justifyContent: 'space-between', paddingBottom: 5 },
     filterApply: {
         alignItems: 'center',
         backgroundColor: color.colorBtn,
@@ -292,16 +319,16 @@ const styles = StyleSheet.create({
         marginVertical: 5,
         borderRadius: 5
     },
-    FilterTitle:{ fontFamily: font.fontBold, color: color.colorText },
-    modalContainer:{ flex: 1, justifyContent: 'center', marginTop: 20, marginHorizontal: 20, borderRadius: 50 },
-    modalBg:{width: '100%', flexDirection: 'column', borderRadius: 20,alignSelf: 'center'},
-    modalTitle:{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.027 },
-    listBottom:{
+    FilterTitle: { fontFamily: font.fontBold, color: color.colorText },
+    modalContainer: { flex: 1, justifyContent: 'center', marginTop: 20, marginHorizontal: 20, borderRadius: 50 },
+    modalBg: { width: '100%', flexDirection: 'column', borderRadius: 20, alignSelf: 'center' },
+    modalTitle: { fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.027 },
+    listBottom: {
         backgroundColor: 'white', flexDirection: 'row', paddingHorizontal: 10, paddingVertical: 5,
         justifyContent: 'space-between', borderBottomRightRadius: 5, marginTop: 10,
         borderBottomLeftRadius: 5
     },
-    listBtnText:{ fontFamily: font.font, fontSize: height * 0.018, }
+    listBtnText: { fontFamily: font.font, fontSize: height * 0.018, }
 
 
 })

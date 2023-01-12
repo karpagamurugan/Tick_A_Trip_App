@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect } from 'react';
-import { View, Text, StyleSheet, Image, Dimensions } from 'react-native';
+import { View, Text, StyleSheet, Image, Dimensions,TouchableHighlight,ScrollView } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useDispatch, useSelector } from 'react-redux';
 import color from '../../constants/color';
@@ -8,48 +8,73 @@ import font from '../../constants/font';
 import actions from '../../redux/PopularPlaces/actions';
 import { API_IMG_URL } from '../../constants/constApi';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import CommonAction from '../../redux/common/actions';
+import popularAction from '../../redux/PopularPlaces/actions';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const PopularPlaceCard = ({ item }) => {
-
+const PopularPlaceCard = ({navigation,place_name}) => {
+   const dispatch =useDispatch();
+    const { Popular_Places } = useSelector((state) => state.PopularPlacesReducer)
+    useEffect(() => {
+        dispatch({ type: popularAction.GET_POPULAR_PLACES })
+    }, [])
     return (
-        <View style={style.PopularPlaceCard}>
-            <View style={style.PopularPlaceCardImage}>
-                <Image style={style.PopularPlaceCardImageSingle} source={{ uri: `${API_IMG_URL}/server/popularplace/${item.place_image}` }} />
-                {/* <Text style={style.PopularPlaceCardImageRev}><Entypo style={style.PopularPlaceCardImageRevStart} name='star' />4.5 (42K)</Text> */}
-            </View>
-            <View style={style.PopularPlaceCardCont}>
-                <Text style={style.PopularPlaceCardCity}>{item?.place_name}</Text>
+        <View style={style.PopularplaceCard}>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false}>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <FontAwesome5Icon name='hotel' size={height * 0.02} />
-                        <Text style={style.PopularPlaceCardStay}>{item?.entry2}</Text>
-                    </View>
+            {
+                Popular_Places?.PopularPlaceList?.filter((i)=>i.place_name !== place_name).map((item, index) => (
+                    <TouchableHighlight style={{marginRight:10}}  key={index} underlayColor='transparent' onPress={() => {
+                        dispatch({ type: popularAction.SET_POPULAR_PLACE_DETAILS, payload: { id: item?.id, navigation } })
+                        dispatch({ type: CommonAction.COMMON_LOADER, payload: true })
+                    }}>
+                        <View>
+                            <View style={style.PopularPlaceCardImage}>
+                                <Image style={style.PopularPlaceCardImageSingle} source={{ uri: `${API_IMG_URL}/server/popularplace/${item.place_image}` }} />
+                                {/* <Text style={style.PopularPlaceCardImageRev}><Entypo style={style.PopularPlaceCardImageRevStart} name='star' />4.5 (42K)</Text> */}
+                            </View>
+                            <View style={style.PopularPlaceCardCont}>
+                                <Text style={style.PopularPlaceCardCity}>{item?.place_name}</Text>
 
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Entypo name='location-pin' size={height * 0.03} />
-                        <Text style={style.PopularPlaceCardStay}>{item?.entry1}</Text>
-                    </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <FontAwesome5Icon name='hotel' size={height * 0.015} />
+                                        <Text style={style.PopularPlaceCardStay}>{item?.entry2}</Text>
+                                    </View>
+
+                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                        <Entypo name='location-pin' size={height * 0.025} />
+                                        <Text style={style.PopularPlaceCardStay}>{item?.entry1}</Text>
+                                    </View>
 
 
-                </View>
-                {/* <Text style={style.PopularPlaceCardPrice}>$456.00</Text> */}
-            </View>
+                                </View>
+                            </View>
+                        </View>
+                    </TouchableHighlight>))
+            }
+</ScrollView>
+
+            {/* <Text style={style.PopularPlaceCardPrice}>$456.00</Text> */}
+
         </View>
     )
 }
 
 const style = StyleSheet.create({
+    // PopularplaceCard: {
+    //     width: width * 0.4,
+    //     marginRight: 20
+    //   },
     PopularPlaceCardPrice: {
         color: '#FE712A',
         fontFamily: font.fontBold,
     },
     PopularPlaceCardStay: {
         color: '#898989',
-        fontSize: height * 0.016,
+        fontSize: height * 0.014,
         fontFamily: font.fontSemi,
         paddingLeft: 3
     },
@@ -57,7 +82,7 @@ const style = StyleSheet.create({
         fontFamily: font.fontBold,
         color: color.colorText,
         marginTop: 10,
-        fontSize:height*0.025
+        fontSize: height * 0.025
     },
     PopularPlaceCardImageRevStart: {
         color: '#FE712A',

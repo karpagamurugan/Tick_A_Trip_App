@@ -11,7 +11,7 @@ export default function* rootSaga() {
         userSaga(),
         userHotelTicktSaga(),
         FlightSearchSaga(),
-        PopularPlaceSaga()
+        PopularPlaceSaga(),
         HotelSaga(),
     ])
 }

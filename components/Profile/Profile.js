@@ -42,7 +42,6 @@ export default function Profile({ navigation }) {
 
     var [image, setImage] = useState() //set selected profile image
 
-    console.log(isLogin);
     useEffect((async) => {
         dispatch({ type: commonAction.COMMON_LOADER, payload: true })
         dispatch({ type: userActions.GET_USER_PROFILE })
