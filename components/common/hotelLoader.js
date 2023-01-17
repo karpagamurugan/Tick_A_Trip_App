@@ -8,7 +8,6 @@ export default function HotelLoader() {
     const height = Dimensions.get('window').height
     const { hotel_loader } = useSelector((state) => state.CommonReducer)
 
-    console.log(hotel_loader, 'loader...')
     return (
         <Modal
             visible={hotel_loader}

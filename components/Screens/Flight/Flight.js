@@ -91,7 +91,6 @@ const Flight = ({ navigation }) => {
       class: classType,
       target: "Test"
     }
-    console.log('data....', payloaddata)
 
 
     dispatch({
@@ -690,7 +689,6 @@ const Flight = ({ navigation }) => {
           onConfirm={(date) => {
             setFromPicker(!fromPicker)
             setFromDate(fromDate = date)
-            // console.log(fromDate)
           }}
           onCancel={() => {
             setFromPicker(!fromPicker)

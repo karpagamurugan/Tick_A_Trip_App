@@ -67,7 +67,6 @@ const HotelSearch = ({ navigation }) => {
       index !== inx
     )))
   }
-  // console.log('selectAddRoom', selectAddRoom)
   const OnSearchHotel = () => {
     dispatch({ type: commonAction.HOTEL_LOADER, payload: true })
     dispatch({
@@ -82,7 +81,6 @@ const HotelSearch = ({ navigation }) => {
       navigation: navigation
     })
   }
-  // console.log('selectAddRoom', selectAddRoom)
   useEffect(() => {
     if (selectAddRoom.length !== 0) {
       let tempAdultCount = 0

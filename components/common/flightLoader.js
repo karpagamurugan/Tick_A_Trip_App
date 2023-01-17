@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useState } from "react";
 import { View , Text, ActivityIndicator,Pressable,Modal,Image} from "react-native";
 import { useSelector } from "react-redux";
@@ -6,7 +7,6 @@ export default function FlightLoader(){
 
 const {common_loader} =useSelector((state)=>state.CommonReducer)
 
-        console.log(common_loader,'loader...')
     return (
         <Modal
         visible={common_loader}

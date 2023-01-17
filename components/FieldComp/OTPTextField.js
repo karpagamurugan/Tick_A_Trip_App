@@ -10,7 +10,6 @@ export default function OTPTextField(props) {
 
     var mainValue = value;
 
-    console.log("Otp Val : ", mainValue)
 
     var [valOne, setValOne] = useState("")
     var [valTwo, setValTwo] = useState("")

@@ -27,7 +27,6 @@ const height = Dimensions.get('window').height
 const HotelList = ({ navigation }) => {
     const { getHotelSearchResult } = useSelector((state) => state.HotelReducer)
     const [openFilter, setOpenFilter] = useState(false)
-    // console.log('getHotelSearchResult', getHotelSearchResult)
     return (
         <View>
             <Modal

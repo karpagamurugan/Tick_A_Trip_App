@@ -22,11 +22,6 @@ var width = Dimensions.get('window').width;
 
 export default function FlightResult({ navigation }) {
     const { Flight_search_result } = useSelector((state) => state.FlightSearchReducer)
-    console.log('Flight_search_result', Flight_search_result.message)
-    console.log('Flight_search_result', Flight_search_result.message?.length)
-
-    console.log('map data', Flight_search_result?.message[0]?.flight_details)
-    console.log('map data', Flight_search_result?.message[0]?.flight_details[0]?.flights)
 
     var [showFilter, setShowFilter] = useState(false); //show filter modal
     var [priceRange, setPriceRange] = useState(); //set price range for filter

@@ -21,22 +21,15 @@ export default function AutoCompleteTextField(props) {
     const dispatch = useDispatch()
 
     const { data, hintText, placeHolderText, value, inputType, onSelected, dis , stateId , defaultValue,type } = props
-    // console.log('value',value)
     var [filteredList, setFilteredList] = useState([])
     var [selectedVal, setSelectedVal] = useState( selectedVal = value)
     var [selectedFromVal, setSelectedFromVal] = useState( selectedFromVal = value)
     var [selectedToVal, setSelectedToVal] = useState( selectedToVal = value)
-console.log(type)
 
     var [showIndi, setShowIndi] = useState(false)
 
-// console.log('from val',valueFrom)
-// console.log('to value',valueTo)
-// console.log('value',value)
-
-    handleSelection = (e) => {
+    const handleSelection = (e) => {
         Keyboard.dismiss()
-        console.log('type....',type)
         if(type === 'from'){
             setSelectedFromVal(selectedFromVal=e.display);
         }else{
@@ -44,8 +37,6 @@ console.log(type)
         }
         // setSelectedVal(selectedVal=e.display);
         setFilteredList(filteredList = [])
-        // onSelected(e.value);
-        // console.log('selected',e)
     }
 
 
@@ -159,7 +150,6 @@ console.log(type)
                                         <TouchableHighlight
                                             underlayColor={"transparent"}
                                             onPress={() => {
-                                                console.log(e)
                                                 handleSelection(e)
                                             }}
                                             key={i}>

@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import color from '../../../constants/color';
@@ -27,13 +28,12 @@ export default function Flight() {
         dispatch({
             type: actions.GET_COMPLETED_FLIGHT_TICKETS
         })
-    }, [])
+    })
 
     const dispatch = useDispatch();
     const { Completed_flight, Cancelled_flight, Upcoming_flight } = useSelector((state) => state.userReducer)
 
     var [selectedTab, setSelectedTab] = useState(1);
-    // console.log('Completed_flight', Upcoming_flight?.bookings?.length)
 
     let DataList = [
         { id: '1', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaYRXqU-1tpipQxZoicIgjb-wxZRUOo0wPHA&usqp=CAU" },
@@ -49,7 +49,6 @@ export default function Flight() {
         setSelectedTab(index)
     }
 
-    // console.log(selectedTab)
 
     return (
         <View style={style.mainContainer}>
@@ -291,16 +290,16 @@ const style = StyleSheet.create({
         color: '#0041F2',
         textDecorationLine: 'underline'
     },
-    tabsBar: {
-        flexDirection: 'row',
-        justifyContent: "space-around",
-        backgroundColor: '#E3E7F0',
-        margin: 12,
-        padding: 8,
-        width: "100%",
-        alignSelf: 'center',
-    },
-    tabText: { fontSize: 12.5, fontFamily: font.font, alignSelf: 'center' },
+    // tabsBar: {
+    //     flexDirection: 'row',
+    //     justifyContent: "space-around",
+    //     backgroundColor: '#E3E7F0',
+    //     margin: 12,
+    //     padding: 8,
+    //     width: "100%",
+    //     alignSelf: 'center',
+    // },
+    // tabText: { fontSize: 12.5, fontFamily: font.font, alignSelf: 'center' },
     tabBtn: {
         paddingRight: 12,
         paddingLeft: 12,

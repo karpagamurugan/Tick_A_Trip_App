@@ -55,7 +55,8 @@ const getHotelFilter = function* (data) {
                 }
             )
         );
-        console.log('result filter', result.data)
+        console.log('result filter data', result.data)
+        console.log('result filter errors', result.data.errors)
         if (result.data.status === true) {
             yield put({ type: actions.SET_HOTEL_FILTER, payload: result.data.message ? result.data.message : [] })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })

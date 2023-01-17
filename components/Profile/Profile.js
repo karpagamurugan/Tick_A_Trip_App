@@ -45,7 +45,6 @@ export default function Profile({ navigation }) {
     useEffect((async) => {
         dispatch({ type: commonAction.COMMON_LOADER, payload: true })
         dispatch({ type: userActions.GET_USER_PROFILE })
-        // AsyncStorage.getItem('tickatrip-token').then((res) => console.log('tock-pro', res))
     }, [dispatch])
 
     const LogOut = () => {
@@ -75,7 +74,6 @@ export default function Profile({ navigation }) {
             await RNFS.copyFile(res.uri, destPath)
 
             let url = 'file://' + destPath
-            console.log(url)
             setImage(image = {
                 URL: url,
                 type: res.type,
@@ -85,10 +83,8 @@ export default function Profile({ navigation }) {
         } catch (e) {
             if (DocumentPicker.isCancel(e)) {
                 setImage('')
-                console.log('No File selected')
             } else {
                 setImage('')
-                console.log(e)
                 throw e;
             }
         }

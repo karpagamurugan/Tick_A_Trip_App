@@ -8,7 +8,6 @@ export default function LazyLoader() {
     const height = Dimensions.get('window').height
     const { common_loader } = useSelector((state) => state.CommonReducer)
 
-    // console.log(common_loader, 'loader...')
     return (
         <Modal
             visible={common_loader}

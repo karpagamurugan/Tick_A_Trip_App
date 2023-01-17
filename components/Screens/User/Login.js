@@ -14,7 +14,6 @@ const Login = ({ navigation }) => {
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
 
     const onSubmit = (data) =>{
-        // console.log('data',data)
         dispatch({ type: userActions.GET_USER_LOGIN, payload: {
             email: data.userMail,
             password: data.userPassword,

@@ -19,7 +19,6 @@ const FlightSearchSaga = function* () {
 
 const getAirportnameList = function* (data) {
     const { payload } = data
-    // console.log('payload', payload)
     try {
         const result = yield call(() =>
             axios.post(
@@ -32,7 +31,6 @@ const getAirportnameList = function* (data) {
             }
             )
         );
-        console.log('result data....', result.data)
 
         if (payload?.type === 'from') {
             yield put({ type: actions.GET_FLIGHT_SEARCH_FROM_BY_NAME, payload: result?.data });

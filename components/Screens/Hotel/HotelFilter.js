@@ -47,8 +47,8 @@ const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 const HotelFilter = (props) => {
     const dispatch = useDispatch()
-    const { setOpenFilter, totalSearchResult } = props
-    const { hotelSessionId } = useSelector((state) => state.HotelReducer)
+    const { setOpenFilter } = props
+    const { hotelSessionId ,getHotelSearchResult} = useSelector((state) => state.HotelReducer)
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
     const [checkFecility, setCheckFecility] = useState(null);
     const [selectFecility, setSelectFecility] = useState([])
@@ -59,8 +59,6 @@ const HotelFilter = (props) => {
     const [advisorRating, setAdvisorRating] = useState(null)
     const [fareType, setfareType] = useState(null)
     const [propertyType, setPropertyType] = useState(null)
-
-    console.log('hotelSessionId', hotelSessionId)
     const CheckFecilityValues = [
         {
             label: 'Internet access',
@@ -89,11 +87,7 @@ const HotelFilter = (props) => {
             value: 'region',
         }
     ]
-    console.log('totalSearchResult',totalSearchResult)
     const onSubmit = (data) => {
-        // console.log('data filter', data)
-        // console.log('selectFecility', selectFecility)
-        // console.log('selectLocality', selectLocality)
         let tempAdvisorRating = []
         if (data?.advisorRating !== '') {
             for (let i = 1; i <= data?.advisorRating; i++) {
@@ -126,12 +120,11 @@ const HotelFilter = (props) => {
                 delete tempFilter.filters[key]
             }
         })
-        // console.log('tempFilter', tempFilter)
-        // dispatch({ type: commonActions.HOTEL_LOADER, payload: true })
+        dispatch({ type: commonActions.HOTEL_LOADER, payload: true })
         dispatch({
             type: hotelActions.GET_HOTEL_FILTER, payload: {
                 sessionId: hotelSessionId,
-                maxResult: totalSearchResult?.length,
+                maxResult: getHotelSearchResult?.length,
                 ...tempFilter
             }
         })
