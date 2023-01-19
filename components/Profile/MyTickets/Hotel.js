@@ -1,17 +1,37 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight } from 'react-native';
 import color from '../../../constants/color';
 import font from '../../../constants/font';
 import Appbar from '../../common/Appbar';
 import ArrowIcon from 'react-native-vector-icons/AntDesign';
-
+import actions from '../../../redux/user/actions';
+import moment from 'moment';
+import { useDispatch,useSelector } from 'react-redux';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 export default function Hotel() {
     var [selectedTab, setSelectedTab] = useState(1);
+
+    const dispatch= useDispatch();
+    useEffect(() => {
+        dispatch({
+            type: actions.GET_UPCOMING_HOTEL_TICKETS
+        })
+
+        dispatch({
+            type: actions.GET_CANCELLED_HOTEL_TICKETS
+        })
+
+        dispatch({
+            type: actions.GET_COMPLETED_HOTEL_TICKETS
+        })
+    },[])
+
+    const { Completed_hotel, Cancelled_hotel, Upcoming_hotel } = useSelector((state) => state.userReducer)
+
 
 
     let DataList = [
@@ -61,8 +81,138 @@ export default function Hotel() {
 
             <ScrollView>
                 <View style={style.listView}>
+                {
+                (selectedTab === 0) ?
+                    <ScrollView>
+                        <View style={style.listView}>
+                            {(Upcoming_hotel?.bookings?.length === 0) ?
+                                <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                    <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                    <Text style={{fontFamily:font.font,paddingVertical:5,color:'black'}}>You Don't have any bookings</Text>
+                                    <TouchableHighlight underlayColor={'transparent'} style={{alignSelf:'center',borderColor:'black',borderWidth:1}}>
+                                        <Text style={{fontFamily:font.font,paddingVertical:5,color:'black',paddingHorizontal:5}} >Go to Booking</Text>
+                                    </TouchableHighlight>
+                                </View>
+                                :
+                                Upcoming_hotel?.bookings.map((item,index)=>(
+                                    <View style={style.card} key={index}>
+                                    <View style={style.cardView}>
+                                        <View style={style.cardText}>
+                                            <Text style={style.title}>{item?.supplierConfirmationNum}</Text>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                               <View>
+                                               <View style={{flexDirection:'row'}}>
+                                                    <Text style={{ fontFamily: font.font, fontSize: height * 0.015, color: '#898989' }}>{item?.checkIn}  - {item?.checkOut}</Text>
 
-                    {
+                                                </View>
+                                                <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.017 }}>No of Days :  {item?.days}</Text>
+
+                                                </View>
+                                                <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                                    <Text style={style.cancelbtn}>Cancel</Text>
+                                                </TouchableHighlight>
+                                            </View>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                <TouchableHighlight>
+                                                    <Text style={style.viewDetail}>View Booking Details</Text>
+                                                </TouchableHighlight>
+                                                <ArrowIcon name='down' size={12} color='#0041F2' />
+                                            </View>
+                                        </View>
+                                    </View>
+                                </View>
+                                ))
+                            }
+                            </View>
+                            </ScrollView>:(selectedTab === 1)?
+                             <ScrollView>
+                             <View style={style.listView}>
+                                 {(Cancelled_hotel?.bookings?.length === 0) ?
+                                     <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                         <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                         <Text style={{fontFamily:font.font,paddingVertical:5,color:'black'}}>You Don't have any bookings</Text>
+                                         <TouchableHighlight underlayColor={'transparent'} style={{alignSelf:'center',borderColor:'black',borderWidth:1}}>
+                                             <Text style={{fontFamily:font.font,paddingVertical:5,color:'black',paddingHorizontal:5}} >Go to Booking</Text>
+                                         </TouchableHighlight>
+                                     </View>
+                                     :
+                                     Cancelled_hotel?.bookings.map((item,index)=>(
+                                         <View style={style.card} key={index}>
+                                         <View style={style.cardView}>
+                                             <View style={style.cardText}>
+                                                 <Text style={style.title}>{item?.supplierConfirmationNum}</Text>
+                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                    <View>
+                                                    <View style={{flexDirection:'row'}}>
+                                                         <Text style={{ fontFamily: font.font, fontSize: height * 0.015, color: '#898989' }}>{item?.checkIn}  - {item?.checkOut}</Text>
+     
+                                                     </View>
+                                                     <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.017 }}>No of Days :  {item?.days}</Text>
+     
+                                                     </View>
+                                                     <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                                         <Text style={style.cancelbtn}>Cancel</Text>
+                                                     </TouchableHighlight>
+                                                 </View>
+                                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                     <TouchableHighlight>
+                                                         <Text style={style.viewDetail}>View Booking Details</Text>
+                                                     </TouchableHighlight>
+                                                     <ArrowIcon name='down' size={12} color='#0041F2' />
+                                                 </View>
+                                             </View>
+                                         </View>
+                                     </View>
+                                     ))
+                                 }
+                                 </View>
+                                 </ScrollView>:
+                                 selectedTab === 2 ?
+                                 <ScrollView>
+                                 <View style={style.listView}>
+                                     {(Completed_hotel?.bookings?.length === 0) ?
+                                         <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                             <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                             <Text style={{fontFamily:font.font,paddingVertical:5,color:'black'}}>You Don't have any bookings</Text>
+                                             <TouchableHighlight underlayColor={'transparent'} style={{alignSelf:'center',borderColor:'black',borderWidth:1}}>
+                                                 <Text style={{fontFamily:font.font,paddingVertical:5,color:'black',paddingHorizontal:5}} >Go to Booking</Text>
+                                             </TouchableHighlight>
+                                         </View>
+                                         :
+                                         Completed_hotel?.bookings.map((item,index)=>(
+                                             <View style={style.card} key={index}>
+                                             <View style={style.cardView}>
+                                                 <View style={style.cardText}>
+                                                     <Text style={style.title}>{item?.supplierConfirmationNum}</Text>
+                                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                        <View>
+                                                        <View style={{flexDirection:'row'}}>
+                                                             <Text style={{ fontFamily: font.font, fontSize: height * 0.015, color: '#898989' }}>{item?.checkIn}  - {item?.checkOut}</Text>
+         
+                                                         </View>
+                                                         <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.017 }}>No of Days :  {item?.days}</Text>
+         
+                                                         </View>
+                                                         <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                                             <Text style={style.cancelbtn}>Cancel</Text>
+                                                         </TouchableHighlight>
+                                                     </View>
+                                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                         <TouchableHighlight>
+                                                             <Text style={style.viewDetail}>View Booking Details</Text>
+                                                         </TouchableHighlight>
+                                                         <ArrowIcon name='down' size={12} color='#0041F2' />
+                                                     </View>
+                                                 </View>
+                                             </View>
+                                         </View>
+                                         ))
+                                     }
+                                     </View>
+                                     </ScrollView>:<View/>
+                }
+
+                    {/* {
                         DataList?.map((item, index) => (
                             <View style={style.card} key={index}>
                                 <View style={style.cardView}>
@@ -89,7 +239,7 @@ export default function Hotel() {
                                 </View>
                             </View>
                         ))
-                    }
+                    } */}
 
 
                 </View>
@@ -129,7 +279,7 @@ const style = StyleSheet.create({
         borderRadius: 10,
         padding: 10
     },
-    cardView: { flexDirection: 'row' },
+    // cardView: { flexDirection: 'row' },
     cardText: { paddingLeft: 15 },
     title: {
         fontFamily: font.fontBold,

@@ -11,6 +11,8 @@ const FlightSearchSaga = function* () {
     yield all([
         yield takeEvery(actions.SET_FLIGHT_SEARCH_BY_NAME, getAirportnameList),
         yield takeEvery(actions.SET_FLIGHT_SEARCH, FlightSearch),
+        yield takeEvery(actions.SET_FARE_RULES, getFareRules),
+
 
     ])
 }
@@ -46,7 +48,7 @@ const getAirportnameList = function* (data) {
 const FlightSearch = function* (data) {
     const { payload } = data
     // console.log('payload', payload)
-    yield put({ type: CommonAction.COMMON_LOADER, payload: true })
+    yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
     try {
         const result = yield call(() =>
             axios.post(
@@ -64,17 +66,50 @@ const FlightSearch = function* (data) {
             console.log('search result.....', result?.data)
             yield put({ type: actions.GET_FLIGHT_SEARCH, payload: result?.data });
             payload.navigation.navigate('FlightResult')
-            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
         } else {
-            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
         }
     } catch (err) {
         console.log('err', err.message)
-        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
     }
 }
 
+
+const getFareRules = function*(data){
+    const { payload } = data
+    yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
+
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/getFlightDetail`,
+                payload, {
+                headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+            )
+        );
+
+        if(result?.data?.status === true){
+            yield put({ type: actions.GET_FARE_RULES, payload: result?.data });
+            yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
+        }else{
+            console.log('fare rulessss failed')
+            yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
+        }
+    } catch (err) {
+        console.log('err', err.message)
+        yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
+    }  
+}
 
 
 export default FlightSearchSaga

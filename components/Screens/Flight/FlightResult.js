@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 /* eslint-disable no-undef */
 import React, { useState } from 'react';
-import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ImageBackground, Modal, Pressable, Button, ScrollView } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ImageBackground, Modal, Pressable, Button, ScrollView, Image } from 'react-native';
 import Appbar from '../../common/Appbar';
 import color from '../../../constants/color';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
@@ -16,6 +16,8 @@ import ToIcon from '../../../Assert/Images/icon/take-off-2.svg';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Slider from '@react-native-community/slider';
 import { useDispatch, useSelector } from 'react-redux';
+import moment from 'moment/moment';
+import { API_IMG_URL } from "../../../constants/constApi";
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
@@ -23,6 +25,7 @@ var width = Dimensions.get('window').width;
 export default function FlightResult({ navigation }) {
     const { Flight_search_result } = useSelector((state) => state.FlightSearchReducer)
 
+    console.log('flight details', Flight_search_result?.message?.length)
     var [showFilter, setShowFilter] = useState(false); //show filter modal
     var [priceRange, setPriceRange] = useState(); //set price range for filter
     const FilterList = {
@@ -44,6 +47,17 @@ export default function FlightResult({ navigation }) {
             { value: '2 Stop' },
         ],
     }
+
+
+    function timeConvert(n) {
+        var num = n;
+        var hours = Math.floor(num / 60) > 0 ? Math.floor(num / 60) + "H " : "";
+        var rminutes =
+          n - Math.floor(num / 60) * 60 > 0
+            ? n - Math.floor(num / 60) * 60 + "M"
+            : "";
+        return hours + rminutes;
+      }
 
     return (
         <View style={styles.mainContainer}>
@@ -180,41 +194,100 @@ export default function FlightResult({ navigation }) {
 
             <View style={{ backgroundColor: 'grey', height: 0.3 }} />
 
-            <ImageBackground source={require('../../../Assert/Images/map.jpg')} style={{ height: height * 0.7, width: width, paddingTop: 20 }}>
+            <ImageBackground source={require('../../../Assert/Images/map.jpg')} style={{ height: height, width: width,paddingBottom:20 }}>
                 <ScrollView>
-                    <View>
+                    <View >
                         {
                             Flight_search_result?.message?.map((item, index) => (
                                 <View style={styles.card} key={index}>
                                     <View style={{ paddingHorizontal: 10 }}>
                                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                            <View style={{ height: 40, width: 40, borderRadius: 20, backgroundColor: 'red' }} />
-                                            <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.025, width: width * 0.3 }}>{item?.flightName}</Text>
+                                            {/* <View style={{ height: 40, width: 40, borderRadius: 20, backgroundColor: 'red' }} /> */}
+                                            <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={{
+                                                uri: API_IMG_URL + '/server/flightimage/' + item?.flightUrl
+                                            }} />
+                                            <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.021, width: width * 0.2 }}>{item?.flightName}</Text>
                                             {
-                                                item?.flight_details?.map((data) => (
-                                                  data?.flight?.map((e)=>(
+                                                item?.flight_details?.map((data, ind) => (
+                                                    //   data?.flights?.map((e)=>(
                                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                    <View style={{ alignItems: 'center' }}>
-                                                        <Text style={styles.Textlite}>CBE</Text>
-                                                        <Text style={styles.Text}>CBE</Text>
-                                                        <Text style={styles.Textlite}>CBE</Text>
-                                                    </View>
-                                                    <FromArrow />
-                                                    <View style={{ alignItems: 'center' }}>
-                                                        <Text style={styles.Text}>1 H 30m</Text>
-                                                        <FlightIcon />
-                                                        <Text key={index} style={styles.Text}>{data?.totalStops} stop</Text>
+                                                        <View style={{ alignItems: 'center' }}>
+                                                            <Text style={styles.Textlite}> {data.flights[0].departureLocation}(
+                                                                {
+                                                                    data.flights[0].flightList
+                                                                        .DepartureAirportLocationCode
+                                                                }
+                                                                )</Text>
+
+                                                            <Text style={styles.Text}>{moment(
+                                                                data.flights[0].flightList
+                                                                    .DepartureDateTime
+                                                            )
+                                                                ?.format("hh:mm:ss a")
+                                                                .substring(0, 5)}</Text>
+                                                            <Text style={styles.Textlite}>{moment(
+                                                                data.flights[0].flightList
+                                                                    .DepartureDateTime
+                                                            )
+                                                                ?.format("hh:mm:ss a")
+                                                                .substring(9, 11)
+                                                                ?.toUpperCase()}</Text>
+                                                        </View>
+                                                        <FromArrow />
+                                                        <View style={{ alignItems: 'center' }}>
+                                                            <Text style={styles.Text}> {timeConvert(
+                                          data.flights.reduce(
+                                            (total, val) =>
+                                            (total =
+                                              total +
+                                              parseFloat(
+                                                val.flightList.JourneyDuration
+                                                  ? parseFloat(
+                                                    val.flightList
+                                                      .JourneyDuration
+                                                  )
+                                                  : 0
+                                              )),
+                                            0
+                                          )
+                                        )}</Text>
+                                                            <FlightIcon />
+                                                            <Text key={index} style={styles.Text}>{data?.totalStops} stop</Text>
 
 
+                                                        </View>
+                                                        <BackArrow />
+                                                        <View style={{ alignItems: 'center' }}>
+                                                            <Text style={styles.Textlite}>{
+                                                                data.flights[
+                                                                    data.flights.length - 1
+                                                                ].arrivalLocation
+                                                            } (
+                                                                {
+                                                                    data.flights[
+                                                                        data.flights.length - 1
+                                                                    ].flightList
+                                                                        .ArrivalAirportLocationCode
+                                                                }
+                                                                )</Text>
+                                                            <Text style={styles.Text}>{moment(
+                                                                data.flights[
+                                                                    data.flights.length - 1
+                                                                ].flightList.ArrivalDateTime
+                                                            )
+                                                                ?.format("hh:mm:ss a")
+                                                                .substring(0, 5)}</Text>
+                                                            <Text style={styles.Textlite}>{moment(
+                                                                data.flights[
+                                                                    data.flights.length - 1
+                                                                ].flightList.ArrivalDateTime
+                                                            )
+                                                                ?.format("hh:mm:ss a")
+                                                                .substring(9, 11)
+                                                                ?.toUpperCase()}</Text>
+                                                        </View>
                                                     </View>
-                                                    <BackArrow />
-                                                    <View style={{ alignItems: 'center' }}>
-                                                        <Text style={styles.Textlite}>CBE</Text>
-                                                        <Text style={styles.Text}>CBE</Text>
-                                                        <Text style={styles.Textlite}>CBE</Text>
-                                                    </View>
-                                                </View>
-                                                  ))
+                                                    //   ) )
                                                 ))
                                             }
 
@@ -223,7 +296,7 @@ export default function FlightResult({ navigation }) {
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, alignItems: 'flex-end' }}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                 <Text style={{ fontFamily: font.font, color: color.colorText }}>Rs:</Text>
-                                                <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.027, paddingLeft: 5 }}>{item?.totalFare}</Text>
+                                                <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.025, paddingLeft: 5 }}>{item?.totalFare}</Text>
                                             </View>
                                             <View style={{ width: 1, height: height * 0.06, backgroundColor: 'grey' }} />
                                             <View style={styles.booknowBtn}>
@@ -236,7 +309,10 @@ export default function FlightResult({ navigation }) {
 
                                     <View style={styles.listBottom}>
                                         <Text style={[styles.listBtnText, { color: color.colorText }]}>{item?.journeytype}</Text>
+                                        <TouchableHighlight underlayColor={'transparent'} onPress={()=>navigation.navigate('FlightDetails',{item:item})}>
                                         <Text style={[styles.listBtnText, { color: color.textBlue }]}>View Flight Details</Text>
+
+                                        </TouchableHighlight>
                                     </View>
                                 </View>
 
@@ -282,14 +358,14 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 15
     },
-    Text: { fontFamily: font.fontSemi, color: color.colorText },
-    Textlite: { fontFamily: font.font, color: 'grey', fontSize: height * 0.015 },
+    Text: { fontFamily: font.fontSemi, color: color.colorText,fontSize:height*0.012 },
+    Textlite: { fontFamily: font.font, color: 'grey', fontSize: height * 0.012 },
     booknowText: {
         color: 'white',
         fontFamily: font.mediam,
         paddingVertical: 3,
         paddingHorizontal: 10,
-        fontSize: height * 0.018
+        fontSize: height * 0.014
 
     },
     booknowBtn: { alignItems: 'center', backgroundColor: color.textBlue, borderRadius: 30 },
@@ -323,7 +399,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', borderBottomRightRadius: 5, marginTop: 10,
         borderBottomLeftRadius: 5
     },
-    listBtnText: { fontFamily: font.font, fontSize: height * 0.018, }
+    listBtnText: { fontFamily: font.font, fontSize: height * 0.016, }
 
 
 })
