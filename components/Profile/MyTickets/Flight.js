@@ -33,7 +33,7 @@ export default function Flight() {
     const dispatch = useDispatch();
     const { Completed_flight, Cancelled_flight, Upcoming_flight } = useSelector((state) => state.userReducer)
 
-    var [selectedTab, setSelectedTab] = useState(1);
+    var [selectedTab, setSelectedTab] = useState(0);
 
     let DataList = [
         { id: '1', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaYRXqU-1tpipQxZoicIgjb-wxZRUOo0wPHA&usqp=CAU" },

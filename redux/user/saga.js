@@ -154,7 +154,6 @@ const getCancelledFlightTickets = function* (data) {
 
 const getUpcomingFlightTickets = function* (data) {
     const { payload } = data;
-
     try {
         const result = yield call(() =>
             axios.get(`${API_URL}/user/mybookings`)
@@ -181,6 +180,7 @@ const getUpcomingFlightTickets = function* (data) {
 
 const getCompletedHotelTickets = function* (data) {
     const { payload } = data;
+    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
 
     try {
         const result = yield call(() =>
@@ -189,23 +189,24 @@ const getCompletedHotelTickets = function* (data) {
 
         if(result?.data?.success === true){
             yield put({ type: actions.GET_COMPLETED_HOTEL_TICKETS, payload: result.data })
-            // console.log('result data....',result?.data)
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
 
         }else{
             yield put({ type: actions.GET_COMPLETED_HOTEL_TICKETS, payload: result.data })
-
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         }
 
-        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {
-        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-        // yield put({ type: actions.SET_USER_PROFILE, payload: err.data })
+  
         console.log('error completed.... hotel',err)
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
     }
 }
 
 const getCancelledHotelTickets = function* (data) {
     const { payload } = data;
+    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
 
     try {
         const result = yield call(() =>
@@ -215,16 +216,19 @@ const getCancelledHotelTickets = function* (data) {
         if(result?.data?.success === true){
             yield put({ type: actions.GET_CANCELLED_HOTEL_TICKETS, payload: result.data })
             // console.log('result data....',result?.data)
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
 
         }else{
             yield put({ type: actions.GET_CANCELLED_HOTEL_TICKETS, payload: result.data })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
 
         }
 
-        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
-        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-        // yield put({ type: actions.SET_USER_PROFILE, payload: err.data })
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+     
         console.log('error.... cancelled hotel',err)
     }
 }
@@ -233,6 +237,7 @@ const getCancelledHotelTickets = function* (data) {
 
 const getUpcomingHotelTickets = function* (data) {
     const { payload } = data;
+    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
 
     try {
         const result = yield call(() =>
@@ -241,17 +246,19 @@ const getUpcomingHotelTickets = function* (data) {
 
         if(result?.data?.success === true){
             yield put({ type: actions.GET_UPCOMING_HOTEL_TICKETS, payload: result.data })
-            // console.log('result data....',result?.data)
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
 
         }else{
             yield put({ type: actions.GET_UPCOMING_HOTEL_TICKETS, payload: result.data })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
 
         }
-
-        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
        
         console.log('error upcoming hotel....',err)
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
     }
 }
 
