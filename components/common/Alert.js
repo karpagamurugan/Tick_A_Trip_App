@@ -13,7 +13,7 @@ export default function Alert() {
         if (setAlert.status === true) {
             setTimeout(() => dispatch({ type: CommonAction.SET_ALERT, payload: { status: false, message: '' } }), 10000)
         }
-    }, [setAlert])
+    }, [setAlert,dispatch])
 
     return (
         <Modal
