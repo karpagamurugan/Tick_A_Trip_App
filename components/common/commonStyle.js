@@ -229,7 +229,7 @@ const style = StyleSheet.create({
         fontFamily: font.fontBold,
         fontSize: 18,
         paddingHorizontal: 10,
-        paddingVertical:0,
+        paddingVertical: 0,
     },
     AdultQtyListCount: {
         color: '#000',
@@ -238,17 +238,53 @@ const style = StyleSheet.create({
     },
     dropStyleChildAge: {
         width: width * 0.3,
-        borderColor:color.colorGrey,
-        borderWidth:1,
-        paddingHorizontal:5,
-        marginBottom:5,
+        borderColor: color.colorGrey,
+        borderWidth: 1,
+        paddingHorizontal: 5,
+        marginBottom: 5,
     },
-    childAgeList:{
-        display:'flex',
-        justifyContent:'space-between',
-        marginTop:5,
+    childAgeList: {
+        display: 'flex',
+        justifyContent: 'space-between',
+        marginTop: 5,
     },
-    
+    AlertBox: {
+        position: 'absolute',
+        bottom: 10,
+        backgroundColor: color.AppbarColor,
+        width: width * 0.9,
+        alignSelf: 'center',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        shadowOpacity: 0.44,
+        shadowRadius: 10.32,
+
+        elevation: 16,
+        borderRadius:10,
+        borderWidth:3,
+        borderColor:'#FFCC00',
+        // borderRightWidth:5,
+        // borderLeftWidth:5,
+        // borderRightColor:'#FFCC00',
+        // borderLeftColor:'#FFCC00',
+    },
+    AlertBoxHead:{
+        // borderBottomWidth:1,
+        // borderBottomColor:color.borderColor,
+        textAlign:'center',
+        color:color.colorBtn,
+        fontFamily:font.mediam,
+        marginBottom:3,
+    },
+    AlertBoxCon:{
+        color:color.colorText,
+        fontFamily:font.mediam,
+    },
 })
 
 export default style

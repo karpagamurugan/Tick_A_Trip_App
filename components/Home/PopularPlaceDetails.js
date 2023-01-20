@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 import React from "react";
 import { View, Text, StyleSheet, Dimensions, Image, ImageBackground, ScrollView } from 'react-native';
 import { useSelector } from "react-redux";

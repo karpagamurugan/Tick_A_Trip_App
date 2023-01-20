@@ -18,6 +18,7 @@ import Loader from './components/common/Loader';
 import Hotel from './components/Screens/Hotel/Hotel';
 import { View } from 'react-native';
 import HotelLoader from './components/common/hotelLoader';
+import Alert from './components/common/Alert';
 
 function App() {
   const Stack = createNativeStackNavigator();
@@ -32,6 +33,7 @@ function App() {
     <Provider store={store}>
       <Loader/>
       <HotelLoader/>
+      <Alert/>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Hotel'>
           <Stack.Screen name="Splash" component={Splash} />

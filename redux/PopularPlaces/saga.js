@@ -32,9 +32,10 @@ const getPopularPlaces = function* (data) {
         yield put({ type: actions.GET_POPULAR_PLACES, payload:result?.data });
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
        }
-
+       yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {
-        console.log('err', err.message)
+        yield put({ type: actions.GET_POPULAR_PLACES, payload:err.message });
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     }
 }
 

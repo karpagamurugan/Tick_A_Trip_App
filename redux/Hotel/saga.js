@@ -56,10 +56,12 @@ const getHotelFilter = function* (data) {
             )
         );
         console.log('result filter data', result.data)
-        console.log('result filter errors', result.data.errors)
+        console.log('result filter errors', result.data.message.errors)
         if (result.data.status === true) {
+            yield put({ type: actions.SET_HOTEL_SEARCH, payload: result.data.message.itineraries });
             yield put({ type: actions.SET_HOTEL_FILTER, payload: result.data.message ? result.data.message : [] })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'hasgdabsjkb' } })
         }
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
