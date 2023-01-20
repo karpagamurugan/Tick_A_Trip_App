@@ -15,8 +15,10 @@ const userSaga = function* () {
         yield takeEvery(actions.GET_USER_PROFILE, getUserProfile),
         yield takeEvery(actions.GET_COMPLETED_FLIGHT_TICKETS, getCompletedFlightTickets),
         yield takeEvery(actions.GET_CANCELLED_FLIGHT_TICKETS, getCancelledFlightTickets),
-        yield takeEvery(actions.GET_UPCOMING_FLIGHT_TICKETS, getUpcomingFlightTickets)
-
+        yield takeEvery(actions.GET_UPCOMING_FLIGHT_TICKETS, getUpcomingFlightTickets),
+        yield takeEvery(actions.GET_COMPLETED_HOTEL_TICKETS, getCompletedHotelTickets),
+        yield takeEvery(actions.GET_CANCELLED_HOTEL_TICKETS, getCancelledHotelTickets),
+        yield takeEvery(actions.GET_UPCOMING_HOTEL_TICKETS, getUpcomingHotelTickets)
     ])
 }
 
@@ -152,7 +154,6 @@ const getCancelledFlightTickets = function* (data) {
 
 const getUpcomingFlightTickets = function* (data) {
     const { payload } = data;
-
     try {
         const result = yield call(() =>
             axios.get(`${API_URL}/user/mybookings`)
@@ -173,5 +174,93 @@ const getUpcomingFlightTickets = function* (data) {
         console.log('error upcoming....',err)
     }
 }
+
+
+
+
+const getCompletedHotelTickets = function* (data) {
+    const { payload } = data;
+    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
+
+    try {
+        const result = yield call(() =>
+            axios.get(`${API_URL}/user/hotel/mycompletedbookings`)
+        )
+
+        if(result?.data?.success === true){
+            yield put({ type: actions.GET_COMPLETED_HOTEL_TICKETS, payload: result.data })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+        }else{
+            yield put({ type: actions.GET_COMPLETED_HOTEL_TICKETS, payload: result.data })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+        }
+
+    } catch (err) {
+  
+        console.log('error completed.... hotel',err)
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+    }
+}
+
+const getCancelledHotelTickets = function* (data) {
+    const { payload } = data;
+    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
+
+    try {
+        const result = yield call(() =>
+            axios.get(`${API_URL}/user/hotel/mybookings_cancel`)
+        )
+
+        if(result?.data?.success === true){
+            yield put({ type: actions.GET_CANCELLED_HOTEL_TICKETS, payload: result.data })
+            // console.log('result data....',result?.data)
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+        }else{
+            yield put({ type: actions.GET_CANCELLED_HOTEL_TICKETS, payload: result.data })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+        }
+
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+    } catch (err) {
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+     
+        console.log('error.... cancelled hotel',err)
+    }
+}
+
+
+
+const getUpcomingHotelTickets = function* (data) {
+    const { payload } = data;
+    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
+
+    try {
+        const result = yield call(() =>
+            axios.get(`${API_URL}/user/hotel/mybookings`)
+        )
+
+        if(result?.data?.success === true){
+            yield put({ type: actions.GET_UPCOMING_HOTEL_TICKETS, payload: result.data })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+        }else{
+            yield put({ type: actions.GET_UPCOMING_HOTEL_TICKETS, payload: result.data })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+        }
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+    } catch (err) {
+       
+        console.log('error upcoming hotel....',err)
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+    }
+}
+
 
 export default userSaga

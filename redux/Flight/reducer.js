@@ -4,7 +4,8 @@ import actions from './actions';
 const initialState = {
     Airport_Name:{},
     Airport_to_Name:{},
-    Flight_search_result:[]
+    Flight_search_result:[],
+    Fare_rules:[]
 }
 
 const FlightSearchReducer = (state = initialState, action) => {
@@ -23,6 +24,11 @@ const FlightSearchReducer = (state = initialState, action) => {
                     return {
                         ...state,
                         Flight_search_result:action.payload,
+                    }; 
+                    case actions.GET_FARE_RULES:
+                    return {
+                        ...state,
+                        Fare_rules:action.payload,
                     }; 
         default:
             return state;

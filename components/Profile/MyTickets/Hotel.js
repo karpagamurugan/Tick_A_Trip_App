@@ -1,18 +1,41 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
-import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight,FlatList } from 'react-native';
 import color from '../../../constants/color';
 import font from '../../../constants/font';
 import Appbar from '../../common/Appbar';
 import ArrowIcon from 'react-native-vector-icons/AntDesign';
-
+import actions from '../../../redux/user/actions';
+import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import Ionicons from 'react-native-vector-icons/Ionicons'
+import HotelTicketView from './HotelCard';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
-export default function Hotel() {
-    var [selectedTab, setSelectedTab] = useState(1);
 
+export default function Hotel({navigation}) {
+    var [selectedTab, setSelectedTab] = useState(0);
+
+    const dispatch = useDispatch();
+    useEffect(() => {
+        dispatch({
+            type: actions.GET_UPCOMING_HOTEL_TICKETS
+        })
+
+        dispatch({
+            type: actions.GET_CANCELLED_HOTEL_TICKETS
+        })
+
+        dispatch({
+            type: actions.GET_COMPLETED_HOTEL_TICKETS
+        })
+    }, [])
+
+    const { Completed_hotel, Cancelled_hotel, Upcoming_hotel } = useSelector((state) => state.userReducer)
+
+    // console.log('completed',Upcoming_hotel)
 
     let DataList = [
         { id: '1', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM1pZ3DnvfSaEHuHUB1OKCf_gbkQlvM-AUNQ&usqp=CAU" },
@@ -25,8 +48,11 @@ export default function Hotel() {
 
     // setting tab item backgroundColor
     const hadleClick = (index) => {
+
         setSelectedTab(index)
     }
+
+
 
     return (
         <View style={style.mainContainer}>
@@ -44,7 +70,7 @@ export default function Hotel() {
                 <TouchableHighlight onPress={() => hadleClick(1)}
                     activeOpacity={0.2}
                     underlayColor={"#dddddd"}
-                    style={[style.tabBtn,{backgroundColor: selectedTab === 1 ? 'white' : 'transparent',}]}>
+                    style={[style.tabBtn, { backgroundColor: selectedTab === 1 ? 'white' : 'transparent', }]}>
                     <Text style={[style.tabText, { color: selectedTab === 1 ? 'black' : 'gray' }]}>Cancelled Trip</Text>
                 </TouchableHighlight>
 
@@ -52,7 +78,7 @@ export default function Hotel() {
                 <TouchableHighlight onPress={() => hadleClick(2)}
                     activeOpacity={0.2}
                     underlayColor={"#dddddd"}
-                    style={[style.tabBtn,{backgroundColor: selectedTab === 2 ? 'white' : 'transparent',}]}>
+                    style={[style.tabBtn, { backgroundColor: selectedTab === 2 ? 'white' : 'transparent', }]}>
                     <Text style={[style.tabText, { color: selectedTab === 2 ? 'black' : 'gray' }]}>Completed Trip</Text>
                 </TouchableHighlight>
             </View>
@@ -61,36 +87,70 @@ export default function Hotel() {
 
             <ScrollView>
                 <View style={style.listView}>
-
                     {
-                        DataList?.map((item, index) => (
-                            <View style={style.card} key={index}>
-                                <View style={style.cardView}>
-                                    <Image source={{ uri: item?.url }} style={{ width: width * 0.22, borderRadius: 7 }} />
-
-                                    <View style={style.cardText}>
-                                        <Text style={style.title}>{item?.title}</Text>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                            <View>
-                                                <Text style={{ fontFamily: font.font, fontSize: height * 0.02, color: '#898989' }}>{item?.place}</Text>
-                                                <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.02 }}>{item?.date}</Text>
-                                            </View>
-                                            <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                                                <Text style={style.cancelbtn}>Cancel</Text>
+                        (selectedTab === 0) ?
+                            <ScrollView>
+                                <View style={style.listView}>
+                                    {(Upcoming_hotel?.bookings?.length === 0) ?
+                                        <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                            <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                            <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
+                                            <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
+                                                <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
                                             </TouchableHighlight>
                                         </View>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                            <TouchableHighlight>
-                                                <Text style={style.viewDetail}>View Booking Details</Text>
-                                            </TouchableHighlight>
-                                            <ArrowIcon name='down' size={12} color='#0041F2' />
-                                        </View>
-                                    </View>
+                                        :
+                                        // Upcoming_hotel?.bookings?.map((item, index) =>
+                                        //    <HotelTicketView item={item} key={index}/>
+                                        // )
+                                        <FlatList 
+                                        keyExtractor={(index) => index.toString()}
+                                        // horizontal 
+                                        data={Upcoming_hotel?.bookings}  
+                                        renderItem={({item}) =>  
+                                        <HotelTicketView item={item} navigation={navigation}/>
+                                                }  
+                                        // ItemSeparatorComponent={this.renderSeparator}  
+                                    />  
+                                    }
                                 </View>
-                            </View>
-                        ))
+                            </ScrollView> : (selectedTab === 1) ?
+                                <ScrollView>
+                                    <View style={style.listView}>
+                                        {(Cancelled_hotel?.bookings?.length === 0) ?
+                                            <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                                <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                                <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
+                                                <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
+                                                    <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
+                                                </TouchableHighlight>
+                                            </View>
+                                            :
+                                            Cancelled_hotel?.bookings?.map((item, index) => (
+                                                <HotelTicketView item={item} navigation={navigation}/>
+                                                ))
+                                        }
+                                    </View>
+                                </ScrollView> :
+                                selectedTab === 2 ?
+                                    <ScrollView>
+                                        <View style={style.listView}>
+                                            {(Completed_hotel?.bookings?.length === 0) ?
+                                                <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                                    <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                                    <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
+                                                    <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
+                                                        <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
+                                                    </TouchableHighlight>
+                                                </View>
+                                                :
+                                                Completed_hotel?.bookings?.map((item, index) => (
+                                                    <HotelTicketView item={item} navigation={navigation}/>
+                                                    ))
+                                            }
+                                        </View>
+                                    </ScrollView> : <View />
                     }
-
 
                 </View>
             </ScrollView>
@@ -120,37 +180,5 @@ const style = StyleSheet.create({
         borderRadius: 15,
         alignItems: 'center'
     },
-    card: {
-        backgroundColor: 'white',
-        elevation: 3,
-        shadowColor: 'black',
-        marginVertical: 7,
-        marginHorizontal: 20,
-        borderRadius: 10,
-        padding: 10
-    },
-    cardView: { flexDirection: 'row' },
-    cardText: { paddingLeft: 15 },
-    title: {
-        fontFamily: font.fontBold,
-        color: color.colorText,
-        width: width * 0.6,
-        fontSize: height * 0.023
-    },
-    cancelbtn: {
-        backgroundColor: 'red',
-        fontFamily: font.font,
-        borderRadius: 15,
-        paddingHorizontal: 10,
-        paddingVertical: 2,
-        color: 'white',
-        marginRight: 10,
-        fontSize: height * 0.02
-    },
-    viewDetail: {
-        fontFamily: font.font,
-        fontSize: height * 0.017,
-        color: '#0041F2',
-        textDecorationLine: 'underline'
-    },
+
 })

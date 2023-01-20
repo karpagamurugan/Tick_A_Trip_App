@@ -28,12 +28,12 @@ export default function Flight() {
         dispatch({
             type: actions.GET_COMPLETED_FLIGHT_TICKETS
         })
-    })
+    },[])
 
     const dispatch = useDispatch();
     const { Completed_flight, Cancelled_flight, Upcoming_flight } = useSelector((state) => state.userReducer)
 
-    var [selectedTab, setSelectedTab] = useState(1);
+    var [selectedTab, setSelectedTab] = useState(0);
 
     let DataList = [
         { id: '1', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaYRXqU-1tpipQxZoicIgjb-wxZRUOo0wPHA&usqp=CAU" },
@@ -91,7 +91,7 @@ export default function Flight() {
                                     <Image style={{ height: 150, width: 200, resizeMode: 'cover' }} source={require('../../../Assert/loader/flightTicketEmpty.gif')} />
                                     <Text style={{fontFamily:font.font,paddingVertical:5,color:'black'}}>You Don't have any bookings</Text>
                                     <TouchableHighlight underlayColor={'transparent'} style={{alignSelf:'center',borderColor:'black',borderWidth:1}}>
-                                        <Text style={{fontFamily:font.font,paddingVertical:5,color:'black',}} >Go to Booking</Text>
+                                        <Text style={{fontFamily:font.font,paddingVertical:5,color:'black',paddingHorizontal:5}} >Go to Booking</Text>
                                     </TouchableHighlight>
                                 </View>
                                 :
@@ -145,6 +145,16 @@ export default function Flight() {
                         <View style={style.listView}>
 
                             {
+                                (Cancelled_flight?.bookings?.length === 0) ?
+                                <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                    <Image style={{ height: 150, width: 200, resizeMode: 'cover' }} source={require('../../../Assert/loader/flightTicketEmpty.gif')} />
+                                    <Text style={{fontFamily:font.font,paddingVertical:5,color:'black'}}>You Don't have any bookings</Text>
+                                    <TouchableHighlight underlayColor={'transparent'} style={{alignSelf:'center',borderColor:'black',borderWidth:1}}>
+                                        <Text style={{fontFamily:font.font,paddingVertical:5,color:'black',paddingHorizontal:5}} >Go to Booking</Text>
+                                    </TouchableHighlight>
+                                </View>
+                                :
+
                                 Cancelled_flight?.bookings?.map((item, index) => (
                                     <View style={style.card} key={index}>
                                         <View style={style.cardView}>
@@ -192,6 +202,15 @@ export default function Flight() {
                             <View style={style.listView}>
 
                                 {
+                                     (Completed_flight?.bookings?.length === 0) ?
+                                     <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                         <Image style={{ height: 150, width: 200, resizeMode: 'cover' }} source={require('../../../Assert/loader/flightTicketEmpty.gif')} />
+                                         <Text style={{fontFamily:font.font,paddingVertical:5,color:'black'}}>You Don't have any bookings</Text>
+                                         <TouchableHighlight underlayColor={'transparent'} style={{alignSelf:'center',borderColor:'black',borderWidth:1}}>
+                                             <Text style={{fontFamily:font.font,paddingVertical:5,color:'black',paddingHorizontal:5}} >Go to Booking</Text>
+                                         </TouchableHighlight>
+                                     </View>
+                                     :
                                     Completed_flight?.bookings?.map((item, index) => (
                                         <View style={style.card} key={index}>
                                             <View style={style.cardView}>
@@ -246,16 +265,16 @@ export default function Flight() {
 const style = StyleSheet.create({
     mainContainer: { height: height, width: width, backgroundColor: 'white' },
     listView: { marginBottom: height * 0.15 },
-    tabsBar: {
-        flexDirection: 'row',
-        justifyContent: "space-around",
-        backgroundColor: '#E3E7F0',
-        margin: 12,
-        borderRadius: 25,
-        padding: 8,
-        width: "60%",
-        alignSelf: 'center',
-    },
+    // tabsBar: {
+    //     flexDirection: 'row',
+    //     justifyContent: "space-around",
+    //     backgroundColor: '#E3E7F0',
+    //     margin: 12,
+    //     borderRadius: 25,
+    //     padding: 8,
+    //     width: "60%",
+    //     alignSelf: 'center',
+    // },
     tabText: { fontSize: 12.5, fontFamily: font.font, alignSelf: 'center' },
     card: {
         backgroundColor: 'white',
@@ -290,15 +309,15 @@ const style = StyleSheet.create({
         color: '#0041F2',
         textDecorationLine: 'underline'
     },
-    // tabsBar: {
-    //     flexDirection: 'row',
-    //     justifyContent: "space-around",
-    //     backgroundColor: '#E3E7F0',
-    //     margin: 12,
-    //     padding: 8,
-    //     width: "100%",
-    //     alignSelf: 'center',
-    // },
+    tabsBar: {
+        flexDirection: 'row',
+        justifyContent: "space-around",
+        backgroundColor: '#E3E7F0',
+        margin: 12,
+        padding: 8,
+        width: "100%",
+        alignSelf: 'center',
+    },
     // tabText: { fontSize: 12.5, fontFamily: font.font, alignSelf: 'center' },
     tabBtn: {
         paddingRight: 12,

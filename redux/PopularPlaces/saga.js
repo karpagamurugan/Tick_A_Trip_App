@@ -55,8 +55,12 @@ const getPopularPlacesDetails = function* (data) {
     payload.navigation.navigate('PopularDetails')
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
        }
+       yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+
     } catch (err) {
         console.log('err', err.message)
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+
     }
 }
 
