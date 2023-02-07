@@ -46,6 +46,7 @@ function App() {
           <Stack.Screen name='bottomNavigation' component={BottomNavigate} />
         </Stack.Navigator>
       </NavigationContainer>
+      {/* <View>Dummy Text</View> */}
     </Provider>
 
   );
