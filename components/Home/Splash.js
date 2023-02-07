@@ -23,6 +23,7 @@ const Splash = ({ navigation }) => {
         }, 3000);
       })
   }
+
   
 
   useEffect(() => {

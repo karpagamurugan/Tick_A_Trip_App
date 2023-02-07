@@ -11,7 +11,11 @@ const initialState = {
     Upcoming_flight: [],
     Completed_hotel: [],
     Cancelled_hotel: [],
-    Upcoming_hotel: []
+    Upcoming_hotel: [],
+    Hotel_details:[],
+    AddTravaller_form:[],
+    AddTravaller_search_name:[],
+    AddTravaller_country_code:[],
 }
 
 const userReducer = (state = initialState, action) => {
@@ -67,6 +71,26 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 Upcoming_hotel: action.payload
             }
+            case actions.GET_HOTEL_TICKETS_DETAILS:
+                return {
+                    ...state,
+                    Hotel_details: action.payload
+                }
+                case actions.GET_ADD_TRAVELLER_FORM:
+                return {
+                    ...state,
+                    AddTravaller_form: action.payload
+                }
+                case actions.SET_ADD_TRAVELLER_SEARCH_BY_NAME:
+                return {
+                    ...state,
+                    AddTravaller_search_name: action.payload
+                }
+                case actions.GET_ADD_TRAVELLER_COUNTRY_CODE:
+                return {
+                    ...state,
+                    AddTravaller_country_code: action.payload
+                }
         default:
             return state;
     }

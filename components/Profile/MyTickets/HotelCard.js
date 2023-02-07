@@ -6,13 +6,14 @@ import Appbar from '../../common/Appbar';
 import ArrowIcon from 'react-native-vector-icons/AntDesign';
 import actions from '../../../redux/user/actions';
 import moment from 'moment';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
  export default function HotelTicketView  ( {item,navigation} ) {
     const dispatch = useDispatch();
+    
     return(
         <View style={style.card} >
         <View style={style.cardView}>
@@ -36,7 +37,13 @@ let height = Dimensions.get('window').height;
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableHighlight underlayColor='transparent' onPress={()=>{
                         
-
+                        dispatch({
+                            type: actions.SET_HOTEL_TICKETS_DETAILS, payload: {
+                            "supplierConfirmationNum":item.supplierConfirmationNum,
+                            "referenceNum": item.referenceNum
+                          }
+                          });
+                        // console.log('disItem',item) 
                         navigation.navigate('HotelTicketDetails')
                         }}>
                         <Text style={style.viewDetail}>View Booking Details</Text>
