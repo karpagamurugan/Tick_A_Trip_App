@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,memo } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable, ActivityIndicator, Animated, TextInput } from 'react-native';
 import color from '../../constants/color';
 import font from '../../constants/font';
@@ -29,7 +29,7 @@ let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 
-export default function Profile({ navigation }) {
+function Profile({ navigation }) {
     const dispatch = useDispatch()
     const { userProfileData, isLogin } = useSelector((state) => state.userReducer)
 
@@ -491,3 +491,5 @@ const styles = StyleSheet.create({
     updateBtn: { backgroundColor: 'green', borderRadius: 10, marginTop: 20, justifyContent: 'center', alignSelf: 'center' },
     updateText: { color: 'white', fontFamily: font.font, alignSelf: 'center', paddingVertical: 7, paddingHorizontal: 10 }
 })
+
+export default memo(Profile)

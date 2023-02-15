@@ -35,9 +35,9 @@ function App() {
       <HotelLoader/>
       <Alert/>
       <NavigationContainer>
-        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Hotel'>
+        <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Splash'>
           <Stack.Screen name="Splash" component={Splash} />
-          <Stack.Screen name="Home" component={Home} />
+          {/* <Stack.Screen name="Home" component={Home} /> */}
           <Stack.Screen name="Login" component={Login} />
           <Stack.Screen name="SignUp" component={SignUp} />
           <Stack.Screen name="SuccessPage" component={SuccessPage} />

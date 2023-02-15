@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react'
+import React,{memo} from 'react'
 import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from '../Home/Home'
@@ -177,4 +177,4 @@ const style = StyleSheet.create({
         marginTop: 5
     }
 })
-export default BottomNavigate
+export default memo(BottomNavigate)

@@ -12,6 +12,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import userAction from '../../redux/user/actions'
 import popularAction from '../../redux/PopularPlaces/actions';
 import CommonAction from '../../redux/common/actions';
+import FlightHome from '../../Assert/Icons/FlightHome.svg';
+import HotelHome from '../../Assert/Icons/HotelHome.svg';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -44,16 +46,20 @@ const Home = ({ navigation }) => {
         <Text style={style.bannerTd}>Explore the  World with us</Text>
         <View style={style.bannerBtns}>
           <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('HotelTab')}>
-            <View style={style.bannerBtnsGrid}>
-              <View style={style.bannerBtnsIcon}><FontAwesome5 style={style.bannerBtnIconIn} name='hotel' /></View>
+            {/* <View style={style.bannerBtnsGrid}>
+              <View style={style.bannerBtnsIcon}>
+                <FontAwesome5 style={style.bannerBtnIconIn} name='hotel' />
+                </View>
               <Text style={style.bannerBtnsTd}>Hotels</Text>
-            </View>
+            </View> */}
+            <HotelHome/>
           </TouchableHighlight>
-          <TouchableHighlight style={{ marginLeft: 20 }} underlayColor={"transparent"} onPress={() => navigation.navigate('FlightTab')}>
-            <View style={style.bannerBtnsGrid}>
+          <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('FlightTab')}>
+            {/* <View style={style.bannerBtnsGrid}>
               <View style={style.bannerBtnsIcon}><MaterialCommunityIcons style={style.bannerBtnIconIn} name='airplane' /></View>
               <Text style={style.bannerBtnsTd}>Flights</Text>
-            </View>
+            </View> */}
+            <FlightHome/>
           </TouchableHighlight>
         </View>
         <View style={style.PopularPlace}>
@@ -100,7 +106,8 @@ const style = StyleSheet.create({
     color: '#FE712A',
   },
   PopularPlace: {
-    paddingVertical: 30,
+    paddingTop: 30,
+    paddingBottom:10
   },
   PopularPlaceHeadTd: {
     fontFamily: font.fontBold,
@@ -143,7 +150,7 @@ const style = StyleSheet.create({
     fontFamily: font.fontBold,
     width: width * 0.7,
     lineHeight: 50,
-    paddingVertical: 30,
+    paddingTop: 30,
     letterSpacing: 1,
   },
   bannerBtnsGrid: {

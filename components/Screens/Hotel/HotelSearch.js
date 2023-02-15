@@ -199,7 +199,11 @@ const HotelSearch = ({ navigation }) => {
           </View>
 
           <View>
-            <TouchableHighlight underlayColor='transparent' onPress={() => OnSearchHotel()}>
+            <TouchableHighlight underlayColor='transparent' 
+            onPress={() =>{ 
+              OnSearchHotel()
+              // navigation.navigate('HotelList')
+              }}>
               <View style={style.iconBoxBtn}>
                 <EvilIcons style={style.fieldIconBtn} name='search' />
                 <Text style={style.searchText}>Search</Text>

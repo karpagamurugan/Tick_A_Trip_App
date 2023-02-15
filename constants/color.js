@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-const color = {
+const COLORS = {
     colorTheme: '#0083E9',
     colorBtn: '#0041F2',
     colorText: '#333333',
@@ -10,6 +10,13 @@ const color = {
     borderColor:'#2B64FF',
     bg:'#1B5CB7',
     darkblue:'#0D367E',
-    line:'#DBDBDB'
+    line:'#DBDBDB',
+
+
+    BtnColor:'#0083E9',
+    TextGrey:'#EDF2F7',
+    BtnColorDark:'#0041F2',
+    TextDarkGrey:'#666666',
+
 };
-export default color
+export default COLORS

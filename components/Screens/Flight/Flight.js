@@ -247,7 +247,7 @@ const Flight = ({ navigation }) => {
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={{ height: height, marginBottom: 85 }}>
             <Image  source={require('../../../Assert/Images/hotel-bg.png')}
-          style={{ width: width, height: height * 0.3 }} resizeMode="cover"/>
+          style={{ width: width, height: height * 0.23 }} resizeMode="cover"/>
           <ImageBackground source={require('../../../Assert/Images/map.jpg')} style={style.mapbg}>
 
             <View style={{ position: 'absolute', alignSelf: 'center', top: -20 }}>
@@ -724,8 +724,9 @@ const style = StyleSheet.create({
   MainContainer: { height: height, width: width, backgroundColor: 'white' },
   btn: { flexDirection: 'row', justifyContent: 'space-evenly' },
   btnView: {
-    paddingVertical: 7,
-    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal:5,
+    borderRadius: 30,
     width: width * 0.35,
     flexDirection: 'row',
     alignItems: 'center',

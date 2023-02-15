@@ -1,10 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight } from 'react-native';
-import font from '../../../constants/font';
+import FONT_FAMILY from '../../../constants/font';
 import { useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import userActions from '../../../redux/user/actions';
+import FONT from '../../../constants/font';
+import COLORS from '../../../constants/color';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -13,22 +15,23 @@ const Login = ({ navigation }) => {
     const dispatch = useDispatch();
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
 
-    const onSubmit = (data) =>{
-        dispatch({ type: userActions.GET_USER_LOGIN, payload: {
-            email: data.userMail,
-            password: data.userPassword,
-        },
-        navigation:navigation
-    });
+    const onSubmit = (data) => {
+        dispatch({
+            type: userActions.GET_USER_LOGIN, payload: {
+                email: data.userMail,
+                password: data.userPassword,
+            },
+            navigation: navigation
+        });
     }
 
     return (
         <View style={style.SplashSection}>
-            <ImageBackground source={require('../../../Assert/Images/background.png')} style={style.SplashBgImage} resizeMode="cover">
+            <ImageBackground source={require('../../../Assert/Images/background.png')}  style={style.SplashBgImage} resizeMode="cover">
                 <Image style={style.BrandLogoSplash} source={require('../../../Assert/Images/white-logo.png')} />
                 <View style={style.SocialLogin}>
-                    <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../../Assert/Images/icon/facebook.png')} /></View>
                     <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../../Assert/Images/icon/google.png')} /></View>
+                    <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../../Assert/Images/icon/facebook.png')} /></View>
                 </View>
                 <View style={style.orDash}>
                     <Text style={style.OrLine}></Text>
@@ -64,9 +67,9 @@ const Login = ({ navigation }) => {
                     </View>
 
                     <View style={style.FormGroup}>
-                    <TouchableHighlight onPress={()=>navigation.navigate('ForgetVerify')} underlayColor='transparent'>
-                    <Text style={style.FormLabelText}>Password</Text>
-                    </TouchableHighlight>
+                        <TouchableHighlight onPress={() => navigation.navigate('ForgetVerify')} underlayColor='transparent'>
+                            <Text style={style.FormLabelText}>Password</Text>
+                        </TouchableHighlight>
                         <Controller
                             control={control}
                             name="userPassword"
@@ -95,9 +98,9 @@ const Login = ({ navigation }) => {
                         <TouchableHighlight underlayColor={'transparent'}>
                             <Text style={style.forgetText}>Forgot Password</Text>
                         </TouchableHighlight>
-                        <TouchableHighlight underlayColor={'transparent'}>
+                        {/* <TouchableHighlight underlayColor={'transparent'}>
                             <Text style={style.forgetText}>SEND OTP</Text>
-                        </TouchableHighlight>
+                        </TouchableHighlight> */}
                     </View>
                     <View style={style.LoginBtnSec}>
                         <TouchableHighlight underlayColor={'transparent'} style={style.btnLogin} onPress={handleSubmit(onSubmit)}>
@@ -105,15 +108,18 @@ const Login = ({ navigation }) => {
                         </TouchableHighlight>
                     </View>
                     <View style={style.continewGuestSec}>
+                        <View style={style.signUp}>
+                        <Text style={style.btnSighnUpText}>Don't have an account? </Text>
                         <TouchableHighlight underlayColor={'transparent'} style={style.btnSighnUp} onPress={() => navigation.navigate('SignUp')}>
-                            <Text style={style.btnSighnUpText}>Sign Up</Text>
+                            <Text style={style.btnSighnUpText}> Sign Up</Text>
                         </TouchableHighlight>
+                        </View>
                         <View style={style.orDashBotton}>
                             <Text style={style.OrLine}></Text>
                             <Text style={style.orText}>Or</Text>
                             <Text style={style.OrLine}></Text>
                         </View>
-                        <TouchableHighlight underlayColor={'transparent'} style={style.btnSighnUp} onPress={()=>navigation.navigate('bottomNavigation')}>
+                        <TouchableHighlight underlayColor={'transparent'} style={style.btnSighnUp} onPress={() => navigation.navigate('bottomNavigation')}>
                             <Text style={style.btnGuestText}>CONTINUE AS A GUEST</Text>
                         </TouchableHighlight>
                     </View>
@@ -124,19 +130,23 @@ const Login = ({ navigation }) => {
 };
 
 const style = StyleSheet.create({
+    signUp:{
+        flexDirection:'row'
+    },
     errorMessage: {
         color: 'red',
         fontSize: 12,
     },
     btnSighnUpText: {
-        color: '#EDF2F7',
+        color: COLORS.TextGrey,
         fontSize: 12,
-        fontFamily: font.font,
+        fontFamily: FONT_FAMILY.light,
     },
     btnGuestText: {
-        color: '#EDF2F7',
+        color: COLORS.TextGrey,
         fontSize: 12,
         letterSpacing: 1,
+        fontFamily:FONT_FAMILY.mediam
     },
     continewGuestSec: {
         flexDirection: 'column',
@@ -148,9 +158,10 @@ const style = StyleSheet.create({
         color: '#fff',
         fontWeight: '400',
         fontSize: 15,
+        fontFamily:FONT_FAMILY.light
     },
     btnLogin: {
-        backgroundColor: '#0041F2',
+        backgroundColor: COLORS.BtnColor,
         paddingVertical: 10,
         paddingHorizontal: 60,
         borderRadius: 100,
@@ -168,7 +179,7 @@ const style = StyleSheet.create({
     SplashBgImage: {
         width: width,
         height: height,
-        display: 'flex',
+        // display: 'flex',
         alignItems: 'center'
     },
     BrandLogoSplash: {
@@ -182,7 +193,7 @@ const style = StyleSheet.create({
         flexDirection: 'row'
     },
     socialIconBox: {
-        backgroundColor: '#EDF2F7',
+        backgroundColor: COLORS.TextGrey,
         width: 40,
         height: 40,
         marginLeft: 10,
@@ -206,11 +217,12 @@ const style = StyleSheet.create({
         alignItems: 'center',
     },
     orText: {
-        color: '#EDF2F7',
+        color:COLORS.TextGrey,
         fontSize: 17,
         position: 'relative',
         marginLeft: 15,
         marginRight: 15,
+        fontFamily:FONT_FAMILY.mediam
     },
     OrLine: {
         content: '',
@@ -223,6 +235,7 @@ const style = StyleSheet.create({
         fontSize: 15,
         marginBottom: 10,
         marginTop: 10,
+        fontFamily:FONT_FAMILY.mediam
     },
     LoginForm: {
         width: width,
@@ -230,20 +243,21 @@ const style = StyleSheet.create({
     },
     LoginInput: {
         borderRadius: 5,
-        backgroundColor: '#EDF2F7',
+        backgroundColor: COLORS.TextGrey,
         paddingLeft: 15,
     },
     fogetPassword: {
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent:'flex-end',
         marginTop: 15,
         paddingLeft: 20,
         paddingRight: 20,
         marginBottom: 30,
     },
     forgetText: {
-        color: '#EDF2F7',
+        color: COLORS.TextGrey,
         fontSize: 12,
+        fontFamily: FONT_FAMILY.light,
     },
 })
 
