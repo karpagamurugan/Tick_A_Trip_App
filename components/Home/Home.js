@@ -19,8 +19,6 @@ const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const Home = ({ navigation }) => {
-  const { Popular_Places} = useSelector((state) => state.PopularPlacesReducer)
-
   const dispatch = useDispatch()
   const userLogin = async () => {
     await AsyncStorage.getItem('tickatrip-token').then(
@@ -34,11 +32,6 @@ const Home = ({ navigation }) => {
     )
   }
   userLogin()
-
-  useEffect(()=>{
-      dispatch({ type: popularAction.GET_POPULAR_PLACES })
-  },[])
-
 
   return (
     <ScrollView >

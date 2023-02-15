@@ -31,6 +31,8 @@ const getPopularPlaces = function* (data) {
        if(result?.data?.status === true){
         yield put({ type: actions.GET_POPULAR_PLACES, payload:result?.data });
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+       }else{
+        console.log(result)
        }
        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {

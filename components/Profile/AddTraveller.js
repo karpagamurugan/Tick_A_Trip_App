@@ -17,7 +17,9 @@ export default function AddTraveller({navigation}) {
         { id: '1', name: 'DurgaDevi', Email: 'durgadevi@mindmade.in', mobileno: '9876543215', passNo: '486512345984', nationality: 'Indian' },
         { id: '1', name: 'DurgaDevi', Email: 'durgadevi@mindmade.in', mobileno: '9876543215', passNo: '486512345984', nationality: 'Indian' },
     ]
-
+    const handleDebugger = useCallback(
+        debounce((e)=>console.log(e), 400)
+        , []);
     return (
         <View style={{ width: width, height: height, backgroundColor: 'white' }}>
             <Appbar title={'Traveller'} />

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react';
+import React,{useCallback} from 'react';
 import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import FONT_FAMILY from '../../../constants/font';
 import { useDispatch } from 'react-redux';
@@ -7,6 +7,7 @@ import { useForm, Controller } from 'react-hook-form';
 import userActions from '../../../redux/user/actions';
 import FONT from '../../../constants/font';
 import COLORS from '../../../constants/color';
+import {debounce} from 'lodash';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -14,7 +15,7 @@ const height = Dimensions.get('window').height
 const Login = ({ navigation }) => {
     const dispatch = useDispatch();
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
-
+  
     const onSubmit = (data) => {
         dispatch({
             type: userActions.GET_USER_LOGIN, payload: {
@@ -23,8 +24,12 @@ const Login = ({ navigation }) => {
             },
             navigation: navigation
         });
+        handleDebugger()
+       
     }
-
+    const handleDebugger = useCallback(
+        debounce((e)=>console.log(e), 400)
+        , []);
     return (
         <View style={style.SplashSection}>
             <ImageBackground source={require('../../../Assert/Images/background.png')}  style={style.SplashBgImage} resizeMode="cover">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useCallback } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, TouchableHighlight, Modal, Pressable, TextInput, Keyboard } from 'react-native';
 import color from '../../constants/color';
 import font from '../../constants/font';
@@ -14,6 +14,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import userAction from '../../redux/user/actions'
 import Snackbar from 'react-native-snackbar';
+import {debounce} from 'lodash';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
@@ -36,6 +37,11 @@ export default function AddTravellerForm() {
     var [selectedIssuing, setSelectedIssuing] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
     var [selectedNationality, setSelectedNationality] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
 
+
+    const handleDebugger = useCallback(
+        debounce((e)=>console.log(e), 400)
+        , []);
+        
     const handleSelectionCode = (e) => {
         console.log('value', e)
         Keyboard.dismiss()
@@ -46,6 +52,7 @@ export default function AddTravellerForm() {
         })
         setTravelRec(travelRec = { CountryCode: true, IssuingName: travelRec.IssuingName, Nationality: travelRec.Nationality });
         console.log(travelRec.CountryCode)
+        handleDebugger()
     }
 
     const handleSelectIssuing = (e) => {
@@ -56,6 +63,7 @@ export default function AddTravellerForm() {
             payload: []
         })
         setTravelRec(travelRec = { CountryCode: travelRec.CountryCode, IssuingName: true, Nationality: travelRec.Nationality });
+        handleDebugger()
     }
 
     const handleSelectNationality = (e) => {
@@ -66,7 +74,9 @@ export default function AddTravellerForm() {
             payload: []
         })
         setTravelRec(travelRec = { CountryCode: travelRec.CountryCode, IssuingName: travelRec.IssuingName, Nationality: true });
+        handleDebugger()
     }
+
 
     const selectTitleName = [
         { name: 'Mr', value: 'Mr' },

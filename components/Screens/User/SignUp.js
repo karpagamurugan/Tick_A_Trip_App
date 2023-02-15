@@ -11,6 +11,7 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import userAction from '../../../redux/user/actions'
+import {debounce} from 'lodash';
 
 
 
@@ -54,7 +55,9 @@ const SignUp = ({ navigation }) => {
             value: 'Female'
         }
     ]
-    
+    const handleDebugger = useCallback(
+        debounce((e)=>console.log(e), 400)
+        , []);
     const onSubmit = (data) => {
         dispatch({
             type: userAction.GET_USER_REGISTER, payload: {
@@ -83,8 +86,10 @@ const SignUp = ({ navigation }) => {
             },
             navigation:navigation
         })
+        handleDebugger()
     }
 
+  
     return (
         // <ScrollView contentInsetAdjustmentBehavior="automatic" showsVerticalScrollIndicator={false} horizontal={false} showsHorizontalScrollIndicator={false}>
         <View style={{ position: 'relative', width: width, backgroundColor: '#fff', }}>
