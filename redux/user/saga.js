@@ -62,16 +62,30 @@ const getSearchTraveller = function* (data) {
                 },
             }
             )
-            
         );
         console.log('searchTraveller', result)
-        yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_CODE, payload: result.data });
+        console.log(payload.type)
+        if (payload.type === 'country-code') {
+            yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_CODE, payload: result.data });
+
+        } else if (payload.type === 'issuing-country') {
+            yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_ISSUING, payload: result.data });
+
+        } else if (payload.type === 'nationality') {
+            yield put({ type: actions.GET_ADD_TRAVELLER_NATIONALITY, payload: result.data });
+
+        } else {
+            yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_CODE, payload: "" });
+            yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_ISSUING, payload: "" });
+            yield put({ type: actions.GET_ADD_TRAVELLER_NATIONALITY, payload: "" });
+        }
     } catch (err) {
-        console.log('err', err.message)
-        yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_CODE, payload: err.data });
+        console.log('err', errors.nametitle.message)
+        {errors.nametitle && (
+            <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.nametitle.message}</Text>
+        )}
     }
 }
-
 
 
 const getUserRegister = function* (data) {

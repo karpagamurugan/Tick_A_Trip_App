@@ -29,19 +29,43 @@ export default function AddTravellerForm() {
     const [selectType, setSelectType] = useState();
     const [open, setOpen] = useState(false);
     var [listData, setListData] = useState([]);
-    const { AddTravaller_country_code } = useSelector((state) => state.userReducer);
 
-    var [travelRec, setTravelRec] = useState({ CountryCode: true, IssuingCountry: true, Nationality: true })
-    var [selectedCountryCode, setSelectedCountryCode] = useState(selectedCountryCode = { Code: '', Issuing: '', national: '', })
+    const { AddTravaller_form, AddTravaller_country_code, AddTravaller_country_issuing, AddTravaller_nationality } = useSelector((state) => state.userReducer);
+    var [travelRec, setTravelRec] = useState({ CountryCode: false, IssuingName: false, Nationality: false })
+    var [selectedCountryCode, setSelectedCountryCode] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
+    var [selectedIssuing, setSelectedIssuing] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
+    var [selectedNationality, setSelectedNationality] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
 
     const handleSelectionCode = (e) => {
+        console.log('value', e)
         Keyboard.dismiss()
+        setSelectedCountryCode(selectedCountryCode = { CountryCode: e.dial_code + "-" + e.name, IssuingName: '', Nationality: '', });
         dispatch({
             type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
             payload: []
         })
-        setSelectedCountryCode(selectedCountryCode = { CountryCode: e.country_code, Issuing: e.name, national: e.name });
-        setTravelRec(travelRec = { CountryCode: false, IssuingCountry: travelRec.IssuingCountry, Nationality: travelRec.Nationality });
+        setTravelRec(travelRec = { CountryCode: true, IssuingName: travelRec.IssuingName, Nationality: travelRec.Nationality });
+        console.log(travelRec.CountryCode)
+    }
+
+    const handleSelectIssuing = (e) => {
+        Keyboard.dismiss()
+        setSelectedIssuing(selectedIssuing = { CountryCode: selectedIssuing.CountryCode, IssuingName: e.name, Nationality: selectedIssuing.Nationality });
+        dispatch({
+            type: userAction.GET_ADD_TRAVELLER_COUNTRY_ISSUING,
+            payload: []
+        })
+        setTravelRec(travelRec = { CountryCode: travelRec.CountryCode, IssuingName: true, Nationality: travelRec.Nationality });
+    }
+
+    const handleSelectNationality = (e) => {
+        Keyboard.dismiss()
+        setSelectedNationality(selectedNationality = { CountryCode: selectedNationality.CountryCode, IssuingName: selectedNationality.IssuingName, Nationality: e.name });
+        dispatch({
+            type: userAction.GET_ADD_TRAVELLER_NATIONALITY,
+            payload: []
+        })
+        setTravelRec(travelRec = { CountryCode: travelRec.CountryCode, IssuingName: travelRec.IssuingName, Nationality: true });
     }
 
     const selectTitleName = [
@@ -385,36 +409,7 @@ export default function AddTravellerForm() {
                                 <Text style={[styles.errormessage]}>{errors.mobileNumber.message}</Text>
                             )}
                         </View>
-                        {/* optional Phone Code no */}
-                        <View style={styles.editTextBorder}>
-                            <Text style={styles.placeHolderText}>Phone Code (optional)</Text>
-                            <Controller
-                                control={control}
-                                name="phoneCode"
-                                rules={{
-                                    required: 'Enter your Phone Code',
-                                    pattern: {
-                                        value: /^(?:0\.(?:0[0-9]|[0-9]\d?)|[0-9]\d*(?:\.\d{1,2})?)(?:e[+-]?\d+)?$/,
-                                        message: 'Enter valid Phone Code!',
-                                    }
-                                }}
-                                render={({ field: { onChange, value } }) => (
-                                    <TextInput
-                                        placeholderTextColor={"gray"}
-                                        style={styles.inputeEditor}
-                                        placeholder="Phone Code"
-                                        keyboardType="numeric"
-                                        {...register("phoneCode")}
-                                        maxLength={6}
-                                        onChangeText={value => onChange(value.toLowerCase())}
-                                        value={value}
-                                    />
-                                )}
-                            />
-                            {errors.phoneCode && (
-                                <Text style={[styles.errormessage]}>{errors.phoneCode.message}</Text>
-                            )}
-                        </View>
+
                         <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
                             {/* DOB */}
                             <View style={[styles.editTextBorder, { width: "49%" }]}>
@@ -432,177 +427,401 @@ export default function AddTravellerForm() {
                                 )}
                             </View>
                             <View style={[styles.editTextBorder, { width: "49%" }]}>
-                                <View>
-                                    {/* <Text style={styles.placeHolderText}>Country Code</Text> */}
-                                    <View style={{
-                                        width: '100%',
-                                    }}>
-                                        <View>
-                                            <TextInput
-                                                keyboardType={'default'}
-                                                placeholder={'Select ...'}
-                                                value={selectedCountryCode?.country_code}
-                                                numberOfLines={1}
-                                                onChangeText={(e) => {
-                                                    if (e === '') {
-                                                        setTravelRec(travelRec = { CountryCode: true, IssuingCountry: travelRec.IssuingCountry, Nationality: travelRec.Nationality });
-                                                    }
-                                                    if (e?.length >= 3) {
-                                                        dispatch({
-                                                            type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
-                                                            payload: {
-                                                                name: e,
-                                                                type: 'CountryCode',
-                                                            }
-                                                        })
-                                                        setSelectedCountryCode(selectedCountryCode = { country_code: e })
-                                                    } else {
-                                                        setSelectedCountryCode(selectedCountryCode = { country_code: e })
-                                                        dispatch({
-                                                            type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
-                                                            payload: []
-                                                        })
-                                                    }
-                                                }}
-                                                style={{
-                                                    fontSize: 13,
-                                                    fontWeight: '500',
-                                                    fontFamily: font.font,
-                                                    letterSpacing: 0.5,
-                                                    paddingTop: 10,
-                                                }}
-                                            />
-                                            {
-                                                selectedCountryCode?.country_code !== "" ?
-                                                    <TouchableHighlight
-                                                        underlayColor={'transparent'}
-                                                        onPress={() => {
-                                                            setSelectedCountryCode(selectedCountryCode = { country_code: '' })
-                                                            dispatch({
-                                                                type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
-                                                                payload: []
-                                                            })
-                                                            setTravelRec(travelRec = { CountryCode: true, IssuingCountry: travelRec.IssuingCountry, Nationality: travelRec.Nationality });
+                                {/* optional Phone Code no */}
+                                <Text style={styles.placeHolderText}>Phone Code (optional)</Text>
+                                <Controller
+                                    control={control}
+                                    name="phoneCode"
+                                    rules={{
+                                        required: 'Enter your Phone Code',
+                                        pattern: {
+                                            value: /^(?:0\.(?:0[0-9]|[0-9]\d?)|[0-9]\d*(?:\.\d{1,2})?)(?:e[+-]?\d+)?$/,
+                                            message: 'Enter valid Phone Code!',
+                                        }
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            placeholderTextColor={"gray"}
+                                            style={styles.inputeEditor}
+                                            placeholder="Phone Code"
+                                            keyboardType="numeric"
+                                            {...register("phoneCode")}
+                                            maxLength={6}
+                                            onChangeText={value => onChange(value.toLowerCase())}
+                                            value={value}
+                                        />
+                                    )}
+                                />
+                                {errors.phoneCode && (
+                                    <Text style={[styles.errormessage]}>{errors.phoneCode.message}</Text>
+                                )}
+                            </View>
+                        </View>
 
-                                                        }}
-                                                    >
-                                                        <AntIcon name="closecircle" size={15} color="gray" style={{
-                                                            marginLeft: 10, marginRight: 10,bottom:20,right:0,position:'absolute'
-                                                        }} />
-                                                    </TouchableHighlight> : <></>
+                        <View>
+                            <View style={[styles.editTextBorder]}>
+                                <Text style={styles.placeHolderText}>Country Code</Text>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        height: 35,
+                                        width: '100%',
+                                        alignItems: 'center',
+                                    }}
+                                >
+
+                                    <TextInput
+                                        keyboardType={'default'}
+                                        placeholder={'Select...'}
+                                        placeholderTextColor="gray"
+                                        numberOfLines={1}
+                                        value={selectedCountryCode?.CountryCode}
+                                        onChangeText={(e) => {
+                                            if (e === '') {
+                                                setTravelRec(travelRec = { CountryCode: true, IssuingName: travelRec.IssuingName, Nationality: travelRec.Nationality });
                                             }
-                                             <View style={{height: height * 0.35 }}>
-                                         {
-                                            (AddTravaller_country_code?.message === undefined && selectedCountryCode?.country_code !== '' && travelRec.CountryCode !== false) ?
-                                                <View style={{
-                                                    backgroundColor: '#fff',
-                                                    width: '100%',
-                                                    alignSelf: 'center',
-                                                    position: 'relative',
-                                                    zIndex: 999999999999,
-                                                    borderRadius: 5,
-                                                    elevation: 10,
-                                                    maxHeight: height * 0.35,
-                                                    marginVertical:20
-                                                    
-                                                }}>
-                                                    <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
-                                                </View> : <View style={{
-                                                    backgroundColor: '#fff',
-                                                    width: '100%',
-                                                    alignSelf: 'center',
-                                                    position: 'relative',
-                                                    zIndex: 9999999999999,
-                                                    borderRadius: 10,
-                                                    elevation: 5,
-                                                    maxHeight: height * 0.35
-                                                }}>
-                                                    <ScrollView
-                                                        showsVerticalScrollIndicator={true}
-                                                        nestedScrollEnabled
-                                                        keyboardShouldPersistTaps='handled'
-                                                    >
-                                                        {
-                                                            AddTravaller_country_code?.message?.map((e, i) => {
-                                                                return (
-                                                                    <TouchableHighlight
-                                                                        underlayColor={"transparent"}
-                                                                        onPress={() => {
-                                                                            handleSelectionCode(e)
-                                                                        }}
-                                                                        key={i}>
-                                                                        <Text
-                                                                            style={{
-                                                                                color: 'black',
-                                                                                paddingHorizontal: 9,
-                                                                                paddingVertical:3,
-                                                                                fontSize: 13,
-                                                                                fontFamily: font.font,
-                                                                                // backgroundColor:'#000'
-                                                                            }}>{e?.country_code}</Text>
-                                                                    </TouchableHighlight>
-                                                                )
-                                                            })
-                                                        }
-                                                    </ScrollView>
-                                                </View>
-                                         }
-                                        </View>
-                                        </View>
-                                       
-                                    </View>
+                                            if (e?.length >= 3) {
+                                                dispatch({
+                                                    type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
+                                                    payload: {
+                                                        name: e,
+                                                        type: 'country-code',
+                                                    }
+                                                })
+                                                setSelectedCountryCode(selectedCountryCode = { CountryCode: e })
+                                            } else {
+                                                setSelectedCountryCode(selectedCountryCode = { CountryCode: e })
+                                                dispatch({
+                                                    type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
+                                                    payload: []
+                                                })
+                                            }
+                                        }}
+                                        style={{
+                                            color: 'black',
+                                            fontFamily: font.font,
+                                            width: width * 0.9,
+                                            paddingTop: 8,
+                                            paddingLeft: 5,
+                                            paddingBottom: 0,
+                                        }}
+                                    />
+                                    {
+                                        selectedCountryCode?.CountryCode !== "" ?
+                                            <TouchableHighlight
+                                                underlayColor={'transparent'}
+                                                onPress={() => {
+                                                    setSelectedCountryCode(selectedCountryCode = { CountryCode: '' })
+                                                    dispatch({
+                                                        type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
+                                                        payload: []
+                                                    })
+                                                    setTravelRec(travelRec = { CountryCode: true, IssuingName: travelRec.IssuingName, Nationality: travelRec.Nationality });
+
+                                                }}
+                                            >
+                                                <AntIcon name="closecircle" size={15} color="gray" style={{
+                                                    marginLeft: 10, marginRight: 10, position: 'absolute', right: 0
+                                                }} />
+                                            </TouchableHighlight> : <></>
+                                    }
                                 </View>
                             </View>
+                            {
+                                (AddTravaller_country_code?.message === undefined && selectedCountryCode?.CountryCode !== '' && travelRec.CountryCode === false) ?
+                                    <View style={{
+                                        backgroundColor: 'white',
+                                        width: '100%',
+                                        alignSelf: 'center',
+                                        position: 'relative',
+                                        zIndex: 2,
+                                        borderRadius: 5,
+                                        elevation: 10,
+                                        maxHeight: height * 0.35
+                                    }}>
+                                        <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
+                                    </View> : <View style={{
+                                        backgroundColor: 'white',
+                                        width: '100%',
+                                        alignSelf: 'center',
+                                        position: 'relative',
+                                        zIndex: 2,
+                                        borderRadius: 10,
+                                        elevation: 10,
+                                        maxHeight: height * 0.35
+                                    }}>
+
+                                        <ScrollView
+                                            showsVerticalScrollIndicator={true}
+                                            nestedScrollEnabled
+                                            keyboardShouldPersistTaps='handled'
+                                        >
+                                            {
+                                                AddTravaller_country_code?.message?.map((e, i) => {
+                                                    return (
+                                                        <TouchableHighlight
+                                                            underlayColor={"transparent"}
+                                                            onPress={() => handleSelectionCode(e)}
+                                                            key={i}>
+                                                            <Text
+                                                                style={{
+                                                                    color: 'black',
+                                                                    paddingHorizontal: 9,
+                                                                    fontSize: 13,
+                                                                    fontFamily: font.font,
+                                                                    paddingVertical: 2,
+                                                                }}>{e?.dial_code} - {e?.name}</Text>
+                                                        </TouchableHighlight>
+                                                    )
+                                                })
+                                            }
+                                        </ScrollView>
+                                    </View>
+                            }
                         </View>
-                        <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                            <View style={[styles.editTextBorder, { width: "49%" }]}>
+
+                        <View>
+                            <View style={[styles.editTextBorder]}>
                                 <Text style={styles.placeHolderText}>Issuing Country</Text>
-                                <Dropdown
-                                    showsVerticalScrollIndicator={true}
-                                    placeholder="Select..."
-                                    selectedTextProps={{
-                                        style: {
-                                            fontSize: 13,
-                                            fontWeight: '500',
-                                            fontFamily: font.font,
-                                            letterSpacing: 0.5,
-                                            paddingTop: 10,
-                                        },
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        height: 35,
+                                        width: '100%',
+                                        alignItems: 'center',
                                     }}
-                                    style={[styles.inputeEditor, { paddingHorizontal: 5, }]}
-                                    renderRightIcon={() => (
-                                        <IoniconsIcon
-                                            name="chevron-down"
-                                            size={25}
-                                            style={{ fontSize: 18, color: color.colorTheme, }}
-                                        />)}
-                                />
-                            </View>
-                            <View style={[styles.editTextBorder, { width: "49%",}]}>
-                                {/* <Text style={styles.placeHolderText}>Nationality</Text> */}
-                                <Dropdown
-                                    showsVerticalScrollIndicator={true}
-                                    placeholder="Select..."
-                                    selectedTextProps={{
-                                        style: {
-                                            fontSize: 13,
-                                            fontWeight: '500',
+                                >
+                                    <TextInput
+                                        keyboardType={'default'}
+                                        placeholder={'Select...'}
+                                        placeholderTextColor="gray"
+                                        numberOfLines={1}
+                                        value={selectedIssuing?.IssuingName}
+                                        onChangeText={(e) => {
+                                            if (e === '') {
+                                                setTravelRec(travelRec = { IssuingName: true, CountryCode: travelRec.CountryCode, Nationality: travelRec.Nationality })
+                                            }
+                                            if (e?.length >= 1) {
+                                                dispatch({
+                                                    type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
+                                                    payload: {
+                                                        name: e,
+                                                        type: 'issuing-country',
+                                                    }
+                                                })
+                                                setSelectedIssuing(selectedIssuing = { IssuingName: e })
+                                            } else {
+                                                setSelectedIssuing(selectedIssuing = { IssuingName: e })
+                                                dispatch({
+                                                    type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
+                                                    payload: []
+                                                })
+                                            }
+                                        }}
+                                        style={{
+                                            color: 'black',
                                             fontFamily: font.font,
-                                            letterSpacing: 0.5,
-                                            paddingTop: 10,
-                                            // zIndex: 1,
-                                        },
-                                    }}
-                                    style={[styles.inputeEditor, { paddingHorizontal: 5, }]}
-                                    renderRightIcon={() => (
-                                        <IoniconsIcon
-                                            name="chevron-down"
-                                            size={25}
-                                            style={{ fontSize: 18, color: color.colorTheme, }}
-                                        />)}
-                                />
+                                            width: width * 0.9,
+                                            paddingTop: 5,
+                                            paddingBottom: 0,
+                                        }}
+                                    />
+                                    {
+                                        selectedIssuing?.IssuingName !== "" ?
+                                            <TouchableHighlight
+                                                underlayColor={'transparent'}
+                                                onPress={() => {
+                                                    setSelectedIssuing(selectedIssuing = { IssuingName: '' })
+                                                    dispatch({
+                                                        type: userAction.GET_ADD_TRAVELLER_COUNTRY_ISSUING,
+                                                        payload: []
+                                                    })
+                                                    // setTravelRec(travelRec = { selectedIssuing: true, CountryCode: travelRec.IssuingName, Nationality: travelRec.Nationality })
+                                                }}
+                                            >
+                                                <AntIcon name="closecircle" size={15} color="gray" style={{
+                                                    marginLeft: 10, marginRight: 10, position: 'absolute', right: 0
+                                                }} />
+                                            </TouchableHighlight> : <></>
+                                    }
+                                </View>
                             </View>
+                            {(AddTravaller_country_issuing?.message === undefined && selectedIssuing?.IssuingName !== '' && travelRec?.IssuingName === false) ?
+                                <View style={{
+                                    backgroundColor: 'white',
+                                    width: '100%',
+                                    alignSelf: 'center',
+                                    position: 'relative',
+                                    zIndex: 2,
+                                    borderRadius: 5,
+                                    elevation: 10,
+                                    maxHeight: height * 0.35
+                                }}>
+                                    <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
+                                </View> : <View style={{
+                                    backgroundColor: 'white',
+                                    width: '100%',
+                                    alignSelf: 'center',
+                                    position: 'relative',
+                                    zIndex: 2,
+                                    borderRadius: 10,
+                                    elevation: 10,
+                                    maxHeight: height * 0.35
+                                }}>
+
+                                    <ScrollView
+                                        showsVerticalScrollIndicator={true}
+                                        nestedScrollEnabled
+                                        keyboardShouldPersistTaps='handled'
+                                    >
+                                        {
+                                            AddTravaller_country_issuing?.message?.map((e, i) => {
+                                                return (
+                                                    <TouchableHighlight
+                                                        underlayColor={"transparent"}
+                                                        key={i}
+                                                        onPress={() => handleSelectIssuing(e)}
+                                                    >
+                                                        <Text
+                                                            style={{
+                                                                color: 'black',
+                                                                paddingHorizontal: 9,
+                                                                fontSize: 13,
+                                                                fontFamily: font.font,
+                                                                paddingVertical: 2,
+                                                            }}>{e?.name}</Text>
+                                                    </TouchableHighlight>
+                                                )
+                                            })
+                                        }
+
+                                    </ScrollView>
+                                </View>
+                            }
+
+
+
                         </View>
+
+                        <View>
+                            <View style={[styles.editTextBorder]}>
+                                <Text style={styles.placeHolderText}>Nationality</Text>
+                                <View
+                                    style={{
+                                        flexDirection: 'row',
+                                        height: 35,
+                                        width: '100%',
+                                        alignItems: 'center',
+                                    }}
+                                >
+                                    <TextInput
+                                        keyboardType={'default'}
+                                        placeholder={'Select...'}
+                                        placeholderTextColor="gray"
+                                        numberOfLines={1}
+                                        value={selectedNationality?.Nationality}
+                                        onChangeText={(e) => {
+                                            if (e === '') {
+                                                setTravelRec(travelRec = { CountryCode: travelRec.CountryCode, IssuingName: travelRec.IssuingName, Nationality: true })
+                                            }
+                                            if (e?.length >= 3) {
+                                                dispatch({
+                                                    type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
+                                                    payload: {
+                                                        name: e,
+                                                        type: 'nationality',
+                                                    }
+                                                })
+                                                setSelectedNationality(selectedNationality = { Nationality: e })
+                                            } else {
+                                                setSelectedNationality(selectedNationality = { Nationality: e })
+                                                dispatch({
+                                                    type: userAction.GET_ADD_TRAVELLER_NATIONALITY,
+                                                    payload: []
+                                                })
+                                            }
+                                        }}
+                                        style={{
+                                            color: 'black',
+                                            fontFamily: font.font,
+                                            width: width * 0.9,
+                                            paddingTop: 5,
+                                            paddingBottom: 0,
+                                        }}
+                                    />
+                                    {
+                                        selectedNationality?.Nationality !== "" ?
+                                            <TouchableHighlight
+                                                underlayColor={'transparent'}
+                                                onPress={() => {
+                                                    setSelectedNationality(selectedNationality = { Nationality: '' })
+                                                    dispatch({
+                                                        type: userAction.GET_ADD_TRAVELLER_NATIONALITY,
+                                                        payload: []
+                                                    })
+                                                    // setTravelRec(travelRec = { selectedIssuing: true, CountryCode: travelRec.IssuingName, Nationality: travelRec.Nationality })
+                                                }}
+                                            >
+                                                <AntIcon name="closecircle" size={15} color="gray" style={{
+                                                    marginLeft: 10, marginRight: 10, position: 'absolute', right: 0
+                                                }} />
+                                            </TouchableHighlight> : <></>
+                                    }
+                                </View>
+                            </View>
+                            {(AddTravaller_nationality?.message === undefined && selectedNationality?.Nationality !== '' && travelRec?.Nationality === false) ?
+                                <View style={{
+                                    backgroundColor: 'white',
+                                    width: '100%',
+                                    alignSelf: 'center',
+                                    position: 'relative',
+                                    zIndex: 2,
+                                    borderRadius: 5,
+                                    elevation: 10,
+                                    maxHeight: height * 0.35
+                                }}>
+                                    <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
+                                </View> : <View style={{
+                                    backgroundColor: 'white',
+                                    width: '100%',
+                                    alignSelf: 'center',
+                                    position: 'relative',
+                                    zIndex: 2,
+                                    borderRadius: 10,
+                                    elevation: 10,
+                                    maxHeight: height * 0.35
+                                }}>
+
+                                    <ScrollView
+                                        showsVerticalScrollIndicator={true}
+                                        nestedScrollEnabled
+                                        keyboardShouldPersistTaps='handled'
+                                    >
+                                        {
+                                            AddTravaller_nationality?.message?.map((e, i) => {
+                                                return (
+                                                    <TouchableHighlight
+                                                        underlayColor={"transparent"}
+                                                        key={i}
+                                                        onPress={() => handleSelectNationality(e)}
+                                                    >
+                                                        <Text
+                                                            style={{
+                                                                color: 'black',
+                                                                paddingHorizontal: 9,
+                                                                fontSize: 13,
+                                                                fontFamily: font.font,
+                                                                paddingVertical: 2,
+                                                            }}>{e?.name}</Text>
+                                                    </TouchableHighlight>
+                                                )
+                                            })
+                                        }
+                                    </ScrollView>
+                                </View>
+                            }
+                        </View>
+                         
                         {/* Passport Number no */}
                         <View style={styles.editTextBorder}>
                             <Text style={styles.placeHolderText}>Passport Number</Text>
