@@ -20,7 +20,8 @@ const userSaga = function* () {
         yield takeEvery(actions.GET_CANCELLED_HOTEL_TICKETS, getCancelledHotelTickets),
         yield takeEvery(actions.GET_UPCOMING_HOTEL_TICKETS, getUpcomingHotelTickets),
         yield takeEvery(actions.SET_HOTEL_TICKETS_DETAILS, getHotelDetails),
-        yield takeEvery(actions.SET_ADD_TRAVELLER_SEARCH_BY_NAME, getSearchTraveller)
+        yield takeEvery(actions.SET_ADD_TRAVELLER_SEARCH_BY_NAME, getSearchTraveller),
+        yield takeEvery(actions.GET_ADD_TRAVELLER_VALUE, getAddtoTravellerValue),
     ])
 }
 
@@ -45,6 +46,29 @@ const getHotelDetails = function* (data) {
     } catch (err) {
         console.log('err', err.message)
         yield put({ type: actions.GET_HOTEL_TICKETS_DETAILS, payload: err.data });
+    }
+}
+
+const getAddtoTravellerValue = function* (data) {
+    const { payload } = data
+    console.log('payload', payload)
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/addTraveler`,
+                payload, {
+                headers: {
+                    accept: 'application/json',
+                    // 'Content-Type': 'multipart/form-data',
+                },
+            }
+            )
+        );
+        yield put({ type: actions.GET_ADD_TRAVELLER_VALUE, payload: result.data });
+
+    } catch (err) {
+        console.log('err', err.message)
+        yield put({ type: actions.GET_ADD_TRAVELLER_VALUE, payload: err.data });
     }
 }
 
@@ -80,12 +104,13 @@ const getSearchTraveller = function* (data) {
             yield put({ type: actions.GET_ADD_TRAVELLER_NATIONALITY, payload: "" });
         }
     } catch (err) {
-        console.log('err', errors.nametitle.message)
-        {errors.nametitle && (
-            <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.nametitle.message}</Text>
+        console.log('err', err.nametitle.message)
+        {err.nametitle && (
+            <Text style={{ paddingTop: 10, color:"red"}}>{err.nametitle.message}</Text>
         )}
     }
 }
+
 
 
 const getUserRegister = function* (data) {

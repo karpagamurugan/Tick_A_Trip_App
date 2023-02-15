@@ -93,14 +93,22 @@ export default function AddTravellerForm() {
             first_name: data.firstName,
             last_name: data.lastName,
             select_type: data.selectedType,
-            gender: data.gender,
+            gender: data.selectedgender,
             email: data.email,
             dob: moment(data.dobDate).format('YYYY-MM-DD'),
             phone_code: data.phoneCode,
             phone: data.mobileNumber,
             passport_number: data.passportNumber,
             expiry_date: moment(data.passportExDate).format('YYYY-MM-DD'),
+            add_country_code: selectedCountryCode?.CountryCode,
+            add_issuing: selectedIssuing?.IssuingName,
+            add_nationality: selectedNationality?.Nationality,
         }])
+        dispatch({
+            type: userAction.GET_ADD_TRAVELLER_VALUE,
+            payload:listData[0]
+        })
+        console.log('onpress_listData', listData)
 
         if (AddTravaller_form.find((List) => List?.email === data?.email) && ((List) => List?.mobileNumber === data?.mobileNumber)) {
             Snackbar.show({
@@ -127,11 +135,14 @@ export default function AddTravellerForm() {
         // setSelectType("");
         // setDobDate(new Date());
         // setPassportExDate(new Date());
+        // setSelectedCountryCode("");
+        // setSelectedIssuing("");
+        // setSelectedNationality("");
         dispatch({
             type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
             payload: {
                 data: listData,
-                navigation: navigation
+                // navigation: navigation
             }
         })
     }
@@ -318,7 +329,7 @@ export default function AddTravellerForm() {
                                             valueField="value"
                                             data={selectGender}
                                             value={gender}
-                                            {...register("selectedgender")}
+                                            {...register('selectedgender')}
                                             onChange={(item) => {
                                                 onChange(item.value)
                                                 setGender(item.value)
@@ -475,6 +486,7 @@ export default function AddTravellerForm() {
                                         placeholder={'Select...'}
                                         placeholderTextColor="gray"
                                         numberOfLines={1}
+                                        name="add_countrycode"
                                         value={selectedCountryCode?.CountryCode}
                                         onChangeText={(e) => {
                                             if (e === '') {
@@ -596,6 +608,7 @@ export default function AddTravellerForm() {
                                         placeholder={'Select...'}
                                         placeholderTextColor="gray"
                                         numberOfLines={1}
+                                        name="add_issuing"
                                         value={selectedIssuing?.IssuingName}
                                         onChangeText={(e) => {
                                             if (e === '') {
@@ -719,6 +732,7 @@ export default function AddTravellerForm() {
                                         placeholder={'Select...'}
                                         placeholderTextColor="gray"
                                         numberOfLines={1}
+                                        name="add_nationality"
                                         value={selectedNationality?.Nationality}
                                         onChangeText={(e) => {
                                             if (e === '') {
@@ -821,7 +835,7 @@ export default function AddTravellerForm() {
                                 </View>
                             }
                         </View>
-                         
+
                         {/* Passport Number no */}
                         <View style={styles.editTextBorder}>
                             <Text style={styles.placeHolderText}>Passport Number</Text>

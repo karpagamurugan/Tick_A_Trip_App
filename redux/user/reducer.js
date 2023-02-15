@@ -18,6 +18,7 @@ const initialState = {
     AddTravaller_country_code:[],
     AddTravaller_country_issuing:[],
     AddTravaller_nationality:[],
+    AddTravaller_value:[],
 }
 
 const userReducer = (state = initialState, action) => {
@@ -102,6 +103,11 @@ const userReducer = (state = initialState, action) => {
                 return {
                     ...state,
                     AddTravaller_nationality: action.payload
+                }
+                case actions.GET_ADD_TRAVELLER_VALUE:
+                return {
+                    ...state,
+                    AddTravaller_value: action.payload
                 }
         default:
             return state;
