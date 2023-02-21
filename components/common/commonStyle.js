@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Dimensions, StyleSheet } from "react-native";
-import color from "../../constants/color";
-import font from "../../constants/font";
+import color from "../constants/color";
+import font from "../constants/font";
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -268,10 +268,6 @@ const style = StyleSheet.create({
         borderRadius:10,
         borderWidth:3,
         borderColor:'#FFCC00',
-        // borderRightWidth:5,
-        // borderLeftWidth:5,
-        // borderRightColor:'#FFCC00',
-        // borderLeftColor:'#FFCC00',
     },
     AlertBoxHead:{
         // borderBottomWidth:1,

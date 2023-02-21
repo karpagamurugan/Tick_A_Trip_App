@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
 import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { API_URL } from '../../constants/constApi';
+import { API_URL } from '../../components/constants/constApi';
 import actions from './actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import setAuthToken from '../../constants/setAuthToken';
+import setAuthToken from '../../components/constants/setAuthToken';
 import CommonAction from '../../redux/common/actions';
 
 const PopularPlaceSaga = function* () {
@@ -21,7 +21,6 @@ const PopularPlaceSaga = function* () {
 const getPopularPlaces = function* (data) {
     const { payload } = data
     yield put({ type: CommonAction.COMMON_LOADER, payload: true })
-
     try {
         const result = yield call(() =>
             axios.get(
@@ -29,14 +28,14 @@ const getPopularPlaces = function* (data) {
             )
         );
        if(result?.data?.status === true){
-        yield put({ type: actions.GET_POPULAR_PLACES, payload:result?.data });
+        yield put({ type: actions.SET_POPULAR_PLACES, payload:result?.data });
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
        }else{
         console.log(result)
        }
        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {
-        yield put({ type: actions.GET_POPULAR_PLACES, payload:err.message });
+        yield put({ type: actions.SET_POPULAR_PLACES, payload:err.message });
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     }
 }

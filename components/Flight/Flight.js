@@ -2,26 +2,26 @@
 
 import React, { useState } from 'react'
 import { View, Text,Image, Dimensions, StyleSheet, ScrollView, Modal, TouchableHighlight, Pressable, ImageBackground, TextInput, Keyboard } from 'react-native';
-import color from '../../../constants/color';
-import font from '../../../constants/font';
-import Appbar from '../../common/Appbar';
+import color from '../constants/color';
+import font from '../constants/font';
+import Appbar from '../common/Appbar';
 import Octicons from 'react-native-vector-icons/Octicons';
-import FromIcon from '../../../Assert/Images/icon/take-off.svg';
-import ToIcon from '../../../Assert/Images/icon/take-off-2.svg';
-import ChairIcon from '../../../Assert/Images/icon/office-chair.svg';
-import CalendarIcon from '../../../Assert/Images/icon/calendar.svg';
+import FromIcon from '../../Assert/Images/icon/take-off.svg';
+import ToIcon from '../../Assert/Images/icon/take-off-2.svg';
+import ChairIcon from '../../Assert/Images/icon/office-chair.svg';
+import CalendarIcon from '../../Assert/Images/icon/calendar.svg';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Dropdown } from 'react-native-element-dropdown'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import AutoCompleteTextField from '../../common/AutoComplete';
+import AutoCompleteTextField from '../common/AutoComplete';
 import { useDispatch, useSelector } from 'react-redux';
 import AntIcon from 'react-native-vector-icons/AntDesign'
-import FlightAction from '../../../redux/Flight/actions';
+import FlightAction from '../../redux/Flight/actions';
 import Autocomplete from 'react-native-autocomplete-input';
-import actions from '../../../redux/Flight/actions';
+import actions from '../../redux/Flight/actions';
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
@@ -246,9 +246,9 @@ const Flight = ({ navigation }) => {
 
       <ScrollView keyboardShouldPersistTaps="handled">
         <View style={{ height: height, marginBottom: 85 }}>
-            <Image  source={require('../../../Assert/Images/hotel-bg.png')}
+            <Image  source={require('../../Assert/Images/hotel-bg.png')}
           style={{ width: width, height: height * 0.23 }} resizeMode="cover"/>
-          <ImageBackground source={require('../../../Assert/Images/map.jpg')} style={style.mapbg}>
+          <ImageBackground source={require('../../Assert/Images/map.jpg')} style={style.mapbg}>
 
             <View style={{ position: 'absolute', alignSelf: 'center', top: -20 }}>
               <View style={style.btn}>
@@ -285,7 +285,22 @@ const Flight = ({ navigation }) => {
               </View>
 
 
-
+                  {/* <View style={{
+   borderWidth: 1,
+   borderRadius: 2,
+   borderColor: '#ddd',
+   borderBottomWidth: 0,
+   shadowColor: '#000',
+   shadowOffset: { width: 0, height: 2 },
+   shadowOpacity: 0.8,
+   shadowRadius: 2,
+   elevation: 1,
+   marginLeft: 5,
+   marginRight: 5,
+   marginTop: 10,
+}}>
+                    <Text>ncieuhiu</Text>
+                  </View> */}
 
               <View style={{ flexDirection: 'column' }}>
 
@@ -325,9 +340,6 @@ const Flight = ({ navigation }) => {
                             })
 
                             setSelectedFromVal(selectedFromVal = {city:e})
-
-
-
                           } else {
                             setSelectedFromVal(selectedFromVal = {city:e})
                             dispatch({
@@ -741,13 +753,26 @@ const style = StyleSheet.create({
     backgroundColor: '#F6F9FF',
     borderWidth: 1,
     borderRadius: 5,
-    borderColor: '#00000000',
-    shadowColor: '#F6F9FF',
-    shadowOpacity: 0.8,
-    shadowRadius: 2,
-    elevation: 1,
+    borderColor: '#00000',
+    // shadowColor: '#0050A629',
+    // shadowOpacity: 0.8,
+    // shadowRadius: 2,
+    // elevation: 1,
     marginTop: 20,
     padding: 5,
+
+    // borderWidth: 1,
+    // borderRadius: ,
+    // borderColor: '#F6F9FF',
+    // borderBottomWidth: 0,
+    // shadowColor: '#0050A629',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.8,
+    // shadowRadius: 2,
+    // elevation: 1,
+    // // marginLeft: 5,
+    // // marginRight: 5,
+    // marginTop: 20,
   },
   searchText: { color: 'white', fontFamily: font.mediam, paddingVertical: 10, },
   searchBtn: {

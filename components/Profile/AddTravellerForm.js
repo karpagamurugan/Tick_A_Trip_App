@@ -1,7 +1,7 @@
 import React, { useState,useCallback } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, TouchableHighlight, Modal, Pressable, TextInput, Keyboard } from 'react-native';
-import color from '../../constants/color';
-import font from '../../constants/font';
+import color from '../constants/color';
+import font from '../constants/font';
 import Appbar from '../common/Appbar';
 import DatePicker from 'react-native-date-picker';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'

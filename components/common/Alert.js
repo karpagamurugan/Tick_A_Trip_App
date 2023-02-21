@@ -1,9 +1,15 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, useEffect } from "react";
-import { View, Dimensions, Modal, Text } from "react-native";
+import React, { useState, useEffect, } from "react";
+import { View, Dimensions, Modal, Text,StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
-import CommonAction from "../../redux/common/actions";
-import style from "./commonStyle";
+import COLORS from "../constants/color";
+import FONT_FAMILY from "../constants/font";
+import Ant from 'react-native-vector-icons/AntDesign';
+import CommonAction from '../../redux/common/actions';
+import { Colors } from "react-native/Libraries/NewAppScreen";
+
+const width = Dimensions.get('window').width
+const height = Dimensions.get('window').height
 
 export default function Alert() {
     const dispatch = useDispatch()
@@ -11,7 +17,7 @@ export default function Alert() {
 
     useEffect(() => {
         if (setAlert.status === true) {
-            setTimeout(() => dispatch({ type: CommonAction.SET_ALERT, payload: { status: false, message: '' } }), 10000)
+            setTimeout(() => dispatch({ type: CommonAction.SET_ALERT, payload: { status: false, message: '' } }), 1000)
         }
     }, [setAlert,dispatch])
 
@@ -22,9 +28,46 @@ export default function Alert() {
             transparent={true}
         >
             <View style={style.AlertBox}>
-                <Text style={style.AlertBoxHead}>Tick a Trip says</Text>
+                {/* <Text style={style.AlertBoxHead}>Tick a Trip says</Text> */}
+                <Ant name="infocirlce" size={22} color={COLORS.BtnColor}/>
                 <Text style={style.AlertBoxCon}>{setAlert?.message}</Text>
             </View>
         </Modal>
     )
 }
+
+const style = StyleSheet.create({
+    AlertBox: {
+        position: 'absolute',
+        bottom: 10,
+        backgroundColor:'black',
+        width: width * 0.9,
+        alignSelf: 'center',
+        paddingHorizontal: 15,
+        paddingVertical: 10,
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        shadowOpacity: 0.44,
+        shadowRadius: 10.32,
+
+        elevation: 16,
+        borderRadius:10,
+        flexDirection:'row'
+        // borderWidth:3,
+        // borderColor:'#FFCC00',
+    },
+    AlertBoxHead:{
+        textAlign:'center',
+        color:COLORS.colorBtn,
+        fontFamily:FONT_FAMILY.mediam,
+        marginBottom:3,
+    },
+    AlertBoxCon:{
+        paddingLeft:10,
+        color:'white',
+        fontFamily:FONT_FAMILY.mediam,
+    },
+})

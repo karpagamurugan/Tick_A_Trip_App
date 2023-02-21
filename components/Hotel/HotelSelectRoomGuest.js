@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import { View, Text, TouchableHighlight, StyleSheet } from 'react-native'
-import style from '../../common/commonStyle'
+import style from '../common/commonStyle'
 import { Dropdown } from 'react-native-element-dropdown';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import font from '../../../constants/font';
-import color from '../../../constants/color';
+import font from '../constants/font';
+import color from '../constants/color';
 
 const HotelSelectRoomGuest = (props) => {
     const { row, room_no, changeAddRoom, index1, selectAddRoom, removeSelectChild } = props

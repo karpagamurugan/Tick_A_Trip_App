@@ -5,16 +5,18 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Stars from 'react-native-stars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
-import style from '../../common/commonStyle'
+import style from '../common/commonStyle'
 
 
-const HotelCard = (props, navigation) => {
+const HotelCard = (props) => {
     const { val } = props
+    var navigation =props?.navigation
+
     return (
         <View style={style.hotelListCardSec}>
             <View style={styles.hotelListCard}>
                 <View style={styles.hotelListCardImage}>
-                    <ImageBackground resizeMode='cover' style={style.hotelListCardImageBg} source={ val?.thumbNailUrl !== '' ? { uri: val?.thumbNailUrl } : require('../../../Assert/Images/imageNotFound.jpg')}>
+                    <ImageBackground resizeMode='cover' style={style.hotelListCardImageBg} source={ val?.thumbNailUrl !== '' ? { uri: val?.thumbNailUrl } : require('../../Assert/Images/imageNotFound.jpg')}>
                         <View style={style.hotelListCardReview}>
                             <View>
                                 <Stars

@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React,{useCallback} from 'react';
 import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight } from 'react-native';
-import FONT_FAMILY from '../../../constants/font';
+import FONT_FAMILY from '../constants/font';
 import { useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
-import userActions from '../../../redux/user/actions';
-import FONT from '../../../constants/font';
-import COLORS from '../../../constants/color';
+import userActions from '../../redux/user/actions';
+import FONT from '../constants/font';
+import COLORS from '../constants/color';
 import {debounce} from 'lodash';
 
 const width = Dimensions.get('window').width
@@ -29,14 +29,14 @@ const Login = ({ navigation }) => {
     }
     const handleDebugger = useCallback(
         debounce((e)=>console.log(e), 400)
-        , []);
+        , []); 
     return (
         <View style={style.SplashSection}>
-            <ImageBackground source={require('../../../Assert/Images/background.png')}  style={style.SplashBgImage} resizeMode="cover">
-                <Image style={style.BrandLogoSplash} source={require('../../../Assert/Images/white-logo.png')} />
+            <ImageBackground source={require('../../Assert/Images/background.png')}  style={style.SplashBgImage} resizeMode="cover">
+                <Image style={style.BrandLogoSplash} source={require('../../Assert/Images/white-logo.png')} />
                 <View style={style.SocialLogin}>
-                    <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../../Assert/Images/icon/google.png')} /></View>
-                    <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../../Assert/Images/icon/facebook.png')} /></View>
+                    <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/google.png')} /></View>
+                    <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/facebook.png')} /></View>
                 </View>
                 <View style={style.orDash}>
                     <Text style={style.OrLine}></Text>

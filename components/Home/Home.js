@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect } from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView } from 'react-native';
-import font from '../../constants/font';
+import font from '../constants/font';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import color from '../../constants/color';
+import color from '../constants/color';
 import PopularPlaceCard from './PopularPlaceCard';
 import NearestPlaceCard from './NearestPlaceCard';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -38,7 +38,7 @@ const Home = ({ navigation }) => {
       <View style={{ width: width, paddingHorizontal: 20, }}>
         <Text style={style.bannerTd}>Explore the  World with us</Text>
         <View style={style.bannerBtns}>
-          <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('HotelTab')}>
+          <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('Hotel')}>
             {/* <View style={style.bannerBtnsGrid}>
               <View style={style.bannerBtnsIcon}>
                 <FontAwesome5 style={style.bannerBtnIconIn} name='hotel' />
@@ -47,7 +47,7 @@ const Home = ({ navigation }) => {
             </View> */}
             <HotelHome/>
           </TouchableHighlight>
-          <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('FlightTab')}>
+          <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('flight')}>
             {/* <View style={style.bannerBtnsGrid}>
               <View style={style.bannerBtnsIcon}><MaterialCommunityIcons style={style.bannerBtnIconIn} name='airplane' /></View>
               <Text style={style.bannerBtnsTd}>Flights</Text>

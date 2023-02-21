@@ -5,18 +5,18 @@ import { View, Text, Dimensions, TouchableHighlight, Modal, StyleSheet, ScrollVi
 import { SelectList } from 'react-native-dropdown-select-list'
 import DatePicker from 'react-native-date-picker'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
-import color from '../../../constants/color';
-import font from '../../../constants/font';
+import color from '../constants/color';
+import font from '../constants/font';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import moment from 'moment';
 import axios from 'axios'
-import { API_URL } from '../../../constants/constApi'
+import { API_URL } from '../constants/constApi'
 import HotelSelectRoomGuest from './HotelSelectRoomGuest'
 import { useDispatch } from 'react-redux'
-import hotelActions from '../../../redux/Hotel/actions'
-import commonAction from '../../../redux/common/actions'
+import hotelActions from '../../redux/Hotel/actions'
+import commonAction from '../../redux/common/actions'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height

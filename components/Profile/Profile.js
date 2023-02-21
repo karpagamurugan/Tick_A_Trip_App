@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState,memo } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable, ActivityIndicator, Animated, TextInput } from 'react-native';
-import color from '../../constants/color';
-import font from '../../constants/font';
+import color from '../constants/color';
+import font from '../constants/font';
 import TicketIcon from '../../Assert/Images/icon/Ticket.svg';
 import LogoutIcon from '../../Assert/Images/icon/logout.svg';
 import ShareIcon from '../../Assert/Images/icon/share.svg';
@@ -15,8 +15,8 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import { useDispatch, useSelector } from 'react-redux';
 import userActions from '../../redux/user/actions'
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { PROFILE_URL } from '../../constants/constProfileApi';
-import setAuthToken from '../../constants/setAuthToken';
+import { PROFILE_URL } from '../constants/constProfileApi';
+import setAuthToken from '../constants/setAuthToken';
 import moment from 'moment';
 import CalendarIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import RNFS from 'react-native-fs';

@@ -8,8 +8,8 @@ import {
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import axois from "axios"
 import { useDispatch } from "react-redux";
-import font from "../../constants/font";
-import color from "../../constants/color";
+import font from "../constants/font";
+import color from "../constants/color";
 import FromIcon from '../../Assert/Images/icon/take-off.svg';
 import ToIcon from '../../Assert/Images/icon/take-off-2.svg';
 import FlightAction from '../../redux/Flight/actions';

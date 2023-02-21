@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
 import { View, Text, ImageBackground, StyleSheet, ScrollView, TouchableHighlight } from 'react-native'
-import style from '../../common/commonStyle'
-import HotelAppbar from '../../common/HotelAppbar'
+import style from '../common/commonStyle'
+import HotelAppbar from '../common/HotelAppbar'
 import Stars from 'react-native-stars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -31,7 +31,7 @@ const HotelDetail = ({ navigation }) => {
         <View>
             <ScrollView>
                 <HotelAppbar />
-                <ImageBackground style={style.HotelDetailBanner} source={require('../../../Assert/Images/hotel.jpg')}>
+                <ImageBackground style={style.HotelDetailBanner} source={require('../../Assert/Images/hotel.jpg')}>
                     <View style={style.OverLay} />
                     <View style={style.HotelDetailBannerCon}>
                         <View>

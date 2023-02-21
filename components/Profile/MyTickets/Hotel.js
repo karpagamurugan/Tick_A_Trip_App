@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight,FlatList } from 'react-native';
-import color from '../../../constants/color';
-import font from '../../../constants/font';
+import color from '../../constants/color';
+import font from '../../constants/font';
 import Appbar from '../../common/Appbar';
 import ArrowIcon from 'react-native-vector-icons/AntDesign';
 import actions from '../../../redux/user/actions';

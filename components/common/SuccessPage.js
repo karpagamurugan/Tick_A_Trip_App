@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
 import { View, Text, Dimensions, Image, TouchableHighlight } from 'react-native'
-import COLORS from '../../constants/color'
-import FONTS from '../../constants/font'
+import COLORS from '../constants/color'
+import FONTS from '../constants/font'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height

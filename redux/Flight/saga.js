@@ -1,10 +1,10 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios';
 import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { API_URL } from '../../constants/constApi';
+import { API_URL } from '../../components/constants/constApi';
 import actions from './actions';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import setAuthToken from '../../constants/setAuthToken';
+import setAuthToken from '../../components/constants/setAuthToken';
 import CommonAction from '../common/actions';
 
 const FlightSearchSaga = function* () {
@@ -47,7 +47,6 @@ const getAirportnameList = function* (data) {
 
 const FlightSearch = function* (data) {
     const { payload } = data
-    // console.log('payload', payload)
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
     try {
         const result = yield call(() =>
@@ -61,9 +60,7 @@ const FlightSearch = function* (data) {
             }
             )
         );
-        console.log(result?.data)
         if (result?.data?.status === true) {
-            console.log('search result.....', result?.data)
             yield put({ type: actions.GET_FLIGHT_SEARCH, payload: result?.data });
             payload.navigation.navigate('FlightResult')
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })

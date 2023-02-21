@@ -1,8 +1,8 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
 import { View, Text, ScrollView } from 'react-native'
-import style from '../../common/commonStyle'
-import HotelAppbar from '../../common/HotelAppbar'
+import style from '../common/commonStyle'
+import HotelAppbar from '../common/HotelAppbar'
 import HotelRoomTypeCard from './HotelRoomTypeCard'
 
 const HotelRoomType = ({navigation}) => {

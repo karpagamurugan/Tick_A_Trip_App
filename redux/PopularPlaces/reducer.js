@@ -9,7 +9,7 @@ const initialState = {
 
 const PopularPlacesReducer = (state = initialState, action) => {
     switch (action.type) {
-        case actions.GET_POPULAR_PLACES:
+        case actions.SET_POPULAR_PLACES:
             return {
                 ...state,
                 Popular_Places:action.payload,

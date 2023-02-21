@@ -2,8 +2,8 @@
 import React from 'react'
 import { View, Text, StyleSheet, Image, Dimensions } from 'react-native'
 import Entypo from 'react-native-vector-icons/Entypo'
-import color from '../../constants/color'
-import font from '../../constants/font'
+import color from '../constants/color'
+import font from '../constants/font'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height

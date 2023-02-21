@@ -1,14 +1,14 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react'
 import { View, Modal, Text, StyleSheet, Dimensions, ScrollView, TouchableHighlight, TextInput } from 'react-native'
-import Appbar from '../../common/Appbar'
+import Appbar from '../common/Appbar'
 import AntDesign from 'react-native-vector-icons/AntDesign'
 import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import font from '../../../constants/font';
+import font from '../constants/font';
 import HotelCard from './HotelCard';
 import HotelFilter from './HotelFilter';
-import HotelAppbar from '../../common/HotelAppbar';
+import HotelAppbar from '../common/HotelAppbar';
 import { useSelector } from 'react-redux';
 
 const data = [

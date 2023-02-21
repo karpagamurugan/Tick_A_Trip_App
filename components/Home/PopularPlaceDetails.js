@@ -3,8 +3,8 @@ import React from "react";
 import { View, Text, StyleSheet, Dimensions, Image, ImageBackground, ScrollView } from 'react-native';
 import { useSelector } from "react-redux";
 import Appbar from '../common/Appbar';
-import { API_IMG_URL } from '../../constants/constApi';
-import font from "../../constants/font";
+import { API_IMG_URL } from '../constants/constApi';
+import font from "../constants/font";
 import popularAction from '../../redux/PopularPlaces/actions';
 import PopularPlaceCard from "./PopularPlaceCard";
 
@@ -39,7 +39,7 @@ export default function PopularPlacesDetails({ navigation }) {
                                    <View style={style.PopularPlaceCardImage}>
                                    <Image style={style.PopularPlaceGallery} source={{ uri: `${API_IMG_URL}/server/popularplacegallery/${item?.gallery_image}` }}/>
                                    </View>
-                                </View>
+                                </View> 
                             ))}
 
                         </ScrollView>

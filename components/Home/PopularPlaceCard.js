@@ -3,10 +3,10 @@ import React, { useEffect, useState,useCallback } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions,TouchableHighlight,ScrollView } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useDispatch, useSelector } from 'react-redux';
-import color from '../../constants/color';
-import font from '../../constants/font';
+import color from '../constants/color';
+import font from '../constants/font';
 import actions from '../../redux/PopularPlaces/actions';
-import { API_IMG_URL } from '../../constants/constApi';
+import { API_IMG_URL } from '../constants/constApi';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import CommonAction from '../../redux/common/actions';
 import popularAction from '../../redux/PopularPlaces/actions';
@@ -27,25 +27,24 @@ const PopularPlaceCard = ({navigation}) => {
 
     const { Popular_Places } = useSelector((state) => state.PopularPlacesReducer);
 
-    useEffect(()=>{
-        setPopularPlace(popularPlace=Popular_Places)
-        console.log('run use effect2...')
-    }, [])
+    // useEffect(()=>{
+    //     setPopularPlace(popularPlace=Popular_Places)
+    // }, [])
     const handlePassData=(item)=>{
             dispatch({ type: popularAction.SET_POPULAR_PLACE_DETAILS, payload: { id: item?.id, navigation } })
             dispatch({ type: CommonAction.COMMON_LOADER, payload: true })
-            handleDebugger()
+            // handleDebugger()
     }
     const handleDebugger = useCallback(
-        debounce((e)=>console.log(e), 400)
+        debounce((e)=>console.log(e), 1000)
         , []);
     return (
         <View style={style.PopularplaceCard}>
           <ScrollView horizontal showsHorizontalScrollIndicator={false}>
 
             {
-                popularPlace?.PopularPlaceList?.map((item, index) => (
-                    <TouchableHighlight style={{marginRight:10}}  key={index} underlayColor='transparent' onPress={handlePassData(item)}>
+                Popular_Places?.PopularPlaceList?.map((item, index) => (
+                    <TouchableHighlight style={{marginRight:10}}  key={index} underlayColor='transparent' onPress={()=>handlePassData(item)}>
                         <View>
                             <View style={style.PopularPlaceCardImage}>
                                 <Image style={style.PopularPlaceCardImageSingle} source={{ uri: `${API_IMG_URL}/server/popularplace/${item.place_image}` }} />

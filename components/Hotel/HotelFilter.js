@@ -3,12 +3,12 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Dimensions, TextInput, TouchableHighlight } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import color from '../../../constants/color';
-import font from '../../../constants/font';
+import color from '../constants/color';
+import font from '../constants/font';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
-import hotelActions from '../../../redux/Hotel/actions';
-import commonActions from '../../../redux/common/actions';
+import hotelActions from '../../redux/Hotel/actions';
+import commonActions from '../../redux/common/actions';
 
 const soryByOption = [
     { label: 'Price low high', value: 'price-low-high' },

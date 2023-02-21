@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight, } from 'react-native';
-import color from '../../constants/color';
-import font from '../../constants/font';
+import color from '../constants/color';
+import font from '../constants/font';
 import Appbar from '../common/Appbar';
 
 
@@ -17,9 +17,9 @@ export default function AddTraveller({navigation}) {
         { id: '1', name: 'DurgaDevi', Email: 'durgadevi@mindmade.in', mobileno: '9876543215', passNo: '486512345984', nationality: 'Indian' },
         { id: '1', name: 'DurgaDevi', Email: 'durgadevi@mindmade.in', mobileno: '9876543215', passNo: '486512345984', nationality: 'Indian' },
     ]
-    const handleDebugger = useCallback(
-        debounce((e)=>console.log(e), 400)
-        , []);
+    // const handleDebugger = useCallback(
+    //     debounce((e)=>console.log(e), 400)
+    //     , []);
     return (
         <View style={{ width: width, height: height, backgroundColor: 'white' }}>
             <Appbar title={'Traveller'} />

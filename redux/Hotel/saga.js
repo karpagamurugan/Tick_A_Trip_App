@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios'
 import { all, call, join, put, takeEvery } from 'redux-saga/effects'
-import { API_URL } from '../../constants/constApi'
+import { API_URL } from '../../components/constants/constApi'
 import CommonAction from '../common/actions'
 import actions from './actions'
 

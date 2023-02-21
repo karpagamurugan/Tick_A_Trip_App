@@ -1,37 +1,35 @@
 /* eslint-disable prettier/prettier */
-import React, { useRef } from 'react';
+import React from 'react';
 import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight } from 'react-native';
-import font from '../../../constants/font';
+import font from '../constants/font';
 import { useDispatch } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
-import userActions from '../../../redux/user/actions';
-import OTPTextInput from 'react-native-otp-textinput'
+import userActions from '../../redux/user/actions';
+
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const VerifyOtp = ({ navigation }) => {
+const ForgetVerify = ({ navigation }) => {
     const dispatch = useDispatch();
-    let otpInput = useRef(null);
+    const { control, handleSubmit, formState: { errors, isValid } } = useForm({ mode: 'onBlur' })
 
     const OnLogin = () => {
-        dispatch({ type: userActions.GET_USER_LOGIN, payload: 'test' });
+            dispatch({type:userActions.GET_USER_LOGIN,payload:'test'});
     }
 
     return (
         <View style={style.SplashSection}>
-            <ImageBackground source={require('../../../Assert/Images/background.png')} style={style.SplashBgImage} resizeMode="cover">
-                <Image style={style.BrandLogoSplash} source={require('../../../Assert/Images/white-logo.png')} />
-
-                <View style={style.LoginForm}>
+            <ImageBackground source={require('../../Assert/Images/background.png')} style={style.SplashBgImage} resizeMode="cover">
+                <Image style={style.BrandLogoSplash} source={require('../../Assert/Images/white-logo.png')} />
+                
+                <View style={style.LoginForm}>  
                     <View style={style.FormGroup}>
-                        <Text style={style.FormLabelText}>OTP</Text>
-                        <View>
-                            <OTPTextInput ref={e => (otpInput = e)} />
-                        </View>
+                        <Text style={style.FormLabelText}>Email</Text>
+                        <TextInput keyboardType="default" style={style.LoginInput} placeholder="Enter Your Email" />
                     </View>
                     <View style={style.LoginBtnSec}>
-                        <TouchableHighlight style={style.btnLogin} onPress={() => navigation.navigate('Login')} underlayColor='transparent'>
-                            <Text style={style.btnLoginText}>Verify OTP</Text>
+                        <TouchableHighlight style={style.btnLogin} onPress={() => navigation.navigate('VerifyOtp')}>
+                            <Text style={style.btnLoginText}>Send OTP</Text>
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -72,7 +70,7 @@ const style = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 50,
+        marginTop:30,
     },
     SplashSection: {
         width: width,
@@ -81,9 +79,9 @@ const style = StyleSheet.create({
     SplashBgImage: {
         width: width,
         height: height,
-        flexDirection: 'column',
-        justifyContent: 'center',
-        alignItems: 'center'
+        flexDirection:'column',
+        justifyContent:'center',
+        alignItems:'center'
     },
     BrandLogoSplash: {
         width: '60%',
@@ -160,4 +158,4 @@ const style = StyleSheet.create({
     },
 })
 
-export default VerifyOtp;
+export default ForgetVerify;

@@ -1,16 +1,16 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
+import React, { useState,useCallback } from 'react';
 import { Button, ScrollView, Dimensions, Text, View, StyleSheet, ImageBackground, TextInput, Image, TouchableOpacity } from 'react-native';
-import font from '../../../constants/font';
+import font from '../constants/font';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { Dropdown } from 'react-native-element-dropdown'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import color from '../../../constants/color'
+import color from '../constants/color'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
-import userAction from '../../../redux/user/actions'
+import userAction from '../../redux/user/actions'
 import {debounce} from 'lodash';
 
 
@@ -93,7 +93,7 @@ const SignUp = ({ navigation }) => {
     return (
         // <ScrollView contentInsetAdjustmentBehavior="automatic" showsVerticalScrollIndicator={false} horizontal={false} showsHorizontalScrollIndicator={false}>
         <View style={{ position: 'relative', width: width, backgroundColor: '#fff', }}>
-            <ImageBackground style={style.signUpImag} source={require('../../../Assert/Images/signUp.png')} />
+            <ImageBackground style={style.signUpImag} source={require('../../Assert/Images/signUp.png')} />
             <ScrollView>
                 <View>
 
@@ -482,7 +482,7 @@ const SignUp = ({ navigation }) => {
                         }
                         <View style={{ marginTop: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20 }}>
                             <View style={{ backgroundColor: '#FFC400', padding: 10, borderRadius: 100, }}>
-                                <Image source={require('../../../Assert/Images/mic.png')} />
+                                <Image source={require('../../Assert/Images/mic.png')} />
                             </View>
                             <Text style={{ marginLeft: 10, color: color.colorText, fontSize: 14, fontWeight: '500', }}>Complete Your Profile And Enjoy 5000 As Joining Bonus</Text>
                         </View>

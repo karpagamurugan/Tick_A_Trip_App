@@ -2,22 +2,22 @@
 /* eslint-disable no-undef */
 import React, { useState } from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ImageBackground, Modal, Pressable, Button, ScrollView, Image } from 'react-native';
-import Appbar from '../../common/Appbar';
-import color from '../../../constants/color';
+import Appbar from '../common/Appbar';
+import color from '../constants/color';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Flight from '../../../Assert/Images/icon/flight-2.svg';
-import Filter from '../../../Assert/Images/icon/Icon feather-filter.svg';
-import font from '../../../constants/font';
-import BackArrow from '../../../Assert/Images/icon/arrow.svg';
-import FromArrow from '../../../Assert/Images/icon/arrow2.svg'
-import FlightIcon from '../../../Assert/Images/icon/flight-airplane-svgrepo-com.svg';
-import FromIcon from '../../../Assert/Images/icon/take-off.svg';
-import ToIcon from '../../../Assert/Images/icon/take-off-2.svg';
+import Flight from '../../Assert/Images/icon/flight-2.svg';
+import Filter from '../../Assert/Images/icon/Icon feather-filter.svg';
+import font from '../constants/font';
+import BackArrow from '../../Assert/Images/icon/arrow.svg';
+import FromArrow from '../../Assert/Images/icon/arrow2.svg'
+import FlightIcon from '../../Assert/Images/icon/flight-airplane-svgrepo-com.svg';
+import FromIcon from '../../Assert/Images/icon/take-off.svg';
+import ToIcon from '../../Assert/Images/icon/take-off-2.svg';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Slider from '@react-native-community/slider';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment/moment';
-import { API_IMG_URL } from "../../../constants/constApi";
+import { API_IMG_URL } from "../constants/constApi";
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
@@ -25,7 +25,6 @@ var width = Dimensions.get('window').width;
 export default function FlightResult({ navigation }) {
     const { Flight_search_result } = useSelector((state) => state.FlightSearchReducer)
 
-    console.log('flight details', Flight_search_result?.message?.length)
     var [showFilter, setShowFilter] = useState(false); //show filter modal
     var [priceRange, setPriceRange] = useState(); //set price range for filter
     const FilterList = {
@@ -67,13 +66,13 @@ export default function FlightResult({ navigation }) {
                 <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
                     <MaterialIcons name='keyboard-arrow-left' size={35} color={color.textBlue} />
                 </TouchableHighlight>
-                <Flight height={25} width={25} />
+                <Flight height={30} width={30} />
                 <View style={styles.appbarPlaceContainer}>
                     <View style={{ paddingHorizontal: 15, flexDirection: 'row' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <FromIcon height={15} width={15} />
                             <View style={{ paddingLeft: 10 }}>
-                                <Text style={styles.appbarPlace}>Coimbatore</Text>
+                                <Text style={styles.appbarPlace}>Coimbatoreee</Text>
                                 <Text style={styles.appBarTraveller}>3 adult</Text>
                             </View>
                         </View>
@@ -106,7 +105,7 @@ export default function FlightResult({ navigation }) {
                         right: 0,
                     }} />
                 <View style={styles.modalContainer} >
-                    <ImageBackground source={require('../../../Assert/Images/map.jpg')}
+                    <ImageBackground source={require('../../Assert/Images/map.jpg')}
                         style={styles.modalBg}>
                         <View style={{ padding: 10, borderRadius: 20 }}>
                             <Text style={styles.modalTitle}>Refine Result</Text>
@@ -137,8 +136,8 @@ export default function FlightResult({ navigation }) {
                             <View style={{ marginTop: 6, paddingLeft: 10 }}>
                                 <Text style={styles.FilterTitle}>Airlines</Text>
                                 {
-                                    FilterList?.Airlines?.map((item, index) => (
-                                        <View key={index} style={{ paddingTop: 5 }}>
+                                    FilterList?.Airlines?.map((item, i) => (
+                                        <View key={i} style={{ paddingTop: 5 }}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                 <Fontisto name='checkbox-passive' size={15} />
                                                 {/* <Fontisto name='checkbox-active' size={15} /> */}
@@ -151,8 +150,8 @@ export default function FlightResult({ navigation }) {
 
                                 <Text style={styles.FilterTitle}>Cabin</Text>
                                 {
-                                    FilterList?.Cabin?.map((item, index) => (
-                                        <View key={index} style={{ paddingTop: 5 }}>
+                                    FilterList?.Cabin?.map((item, n) => (
+                                        <View key={n} style={{ paddingTop: 5 }}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                 <Fontisto name='radio-btn-passive' size={15} />
                                                 {/* <Fontisto name='radio-btn-active' size={15} /> */}
@@ -165,8 +164,8 @@ export default function FlightResult({ navigation }) {
 
                                 <Text style={styles.FilterTitle}>Stops</Text>
                                 {
-                                    FilterList?.Stops?.map((item, index) => (
-                                        <View key={index} style={{ paddingTop: 5 }}>
+                                    FilterList?.Stops?.map((item, d) => (
+                                        <View key={d} style={{ paddingTop: 5 }}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                 <Fontisto name='checkbox-passive' size={15} />
                                                 {/* <Fontisto name='checkbox-active' size={15} /> */}
@@ -187,6 +186,9 @@ export default function FlightResult({ navigation }) {
 
 
             <View style={styles.filter}>
+                <View>
+                    <Text style={{color:'black'}}>{Flight_search_result?.message?.length}</Text>
+                </View>
                 <TouchableHighlight onPress={() => setShowFilter(!showFilter)} underlayColor='transparent'>
                     <Filter height={20} width={20} />
                 </TouchableHighlight>
@@ -194,9 +196,9 @@ export default function FlightResult({ navigation }) {
 
             <View style={{ backgroundColor: 'grey', height: 0.3 }} />
 
-            <ImageBackground source={require('../../../Assert/Images/map.jpg')} style={{ height: height, width: width,paddingBottom:20 }}>
+            <ImageBackground source={require('../../Assert/Images/map.jpg')} style={{ height: height, width: width,paddingBottom:20 }}>
                 <ScrollView>
-                    <View >
+                    <View>
                         {
                             Flight_search_result?.message?.map((item, index) => (
                                 <View style={styles.card} key={index}>
@@ -210,7 +212,7 @@ export default function FlightResult({ navigation }) {
                                             {
                                                 item?.flight_details?.map((data, ind) => (
                                                     //   data?.flights?.map((e)=>(
-                                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} key={ind}>
                                                         <View style={{ alignItems: 'center' }}>
                                                             <Text style={styles.Textlite}> {data.flights[0].departureLocation}(
                                                                 {
@@ -341,13 +343,14 @@ const styles = StyleSheet.create({
     appBarTraveller: { fontFamily: font.font, marginTop: -6, fontSize: height * 0.016 },
     mainContainer: { height: height, width: width, backgroundColor: 'white' },
     filter: {
-        alignSelf: 'flex-end',
+        // alignSelf: 'flex-end',
         marginRight: 10,
         marginTop: 10,
         backgroundColor: color.AppbarColor,
         padding: 10,
         borderRadius: 100,
-        marginBottom: 7
+        marginBottom: 7,
+        flexDirection:'row'
     },
     filterText: { fontFamily: font.font, paddingLeft: 10 },
     card: {

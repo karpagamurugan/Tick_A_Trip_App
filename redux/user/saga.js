@@ -1,12 +1,13 @@
 /* eslint-disable prettier/prettier */
 import axios from 'axios'
 import { all, call, put, takeEvery } from 'redux-saga/effects'
-import { API_URL } from '../../constants/constApi'
+import { API_URL } from '../../components/constants/constApi'
 import actions from './actions'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import setAuthToken from '../../constants/setAuthToken'
-import { PROFILE_URL } from '../../constants/constProfileApi'
+import setAuthToken from '../../components/constants/setAuthToken'
+import { PROFILE_URL } from '../../components/constants/constProfileApi'
 import CommonAction from '../../redux/common/actions';
+import axiosRetry from "axios-retry"
 
 const userSaga = function* () {
     yield all([
@@ -105,9 +106,9 @@ const getSearchTraveller = function* (data) {
         }
     } catch (err) {
         console.log('err', err.nametitle.message)
-        {err.nametitle && (
-            <Text style={{ paddingTop: 10, color:"red"}}>{err.nametitle.message}</Text>
-        )}
+        // {err.nametitle && (
+        //     <Text style={{ paddingTop: 10, color:"red"}}>{err.nametitle.message}</Text>
+        // )}
     }
 }
 
@@ -115,9 +116,9 @@ const getSearchTraveller = function* (data) {
 
 const getUserRegister = function* (data) {
     const { payload, navigation } = data
-    console.log('payload', payload)
-
+    console.log(payload)
     try {
+        console.log('iff')
         const result = yield call(() =>
             axios.post(
                 `${API_URL}/register`,
@@ -129,19 +130,38 @@ const getUserRegister = function* (data) {
             }
             )
         );
-        // console.log('result', result)
-        AsyncStorage.setItem('tickatrip-token', result.data.success.token)
-        yield put({ type: actions.SET_USER_REGISTER, payload: result.data });
-        navigation.navigate('bottomNavigation')
+        if(result?.data?.status ===  true){
+            console.log('result', result)
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Registered Successfully'}})
+            AsyncStorage.setItem('tickatrip-token', result.data.success.token)
+            yield put({ type: actions.SET_USER_REGISTER, payload: result.data });
+            navigation.navigate('bottomNavigation')
+            
+        }else{
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message}})
+        }
+        
     } catch (err) {
         console.log('err', err.message)
         yield put({ type: actions.SET_USER_REGISTER, payload: err.data });
     }
 }
+
+
 const userAthentification = function* (data) {
     yield put({ type: CommonAction.COMMON_LOADER, payload: true });
     const { payload, navigation } = data
     try {
+        // axiosRetry(axios, {
+        //     retries: 1000,
+        //     retryCondition: (error) => {
+        //       return error.response.status === 429
+        //     },
+        //   })
+        const globalConfig: RetryConfig = {
+            retry: 3,
+            retryDelay: 1000,
+          };
         const result = yield call(() =>
             axios.post(`${API_URL}/login`,
                 JSON.stringify(payload),
@@ -152,28 +172,35 @@ const userAthentification = function* (data) {
                 }
             )
         )
-        console.log('result login', result)
-        setAuthToken(result.data.status.token)
-        AsyncStorage.setItem('tickatrip-token', result.data.status.token)
-        AsyncStorage.setItem('email', result.data.status.user.email)
-        AsyncStorage.setItem('phone', result.data.status.user.phone)
-        AsyncStorage.setItem('username', result.data.status.user.username)
-        AsyncStorage.setItem('LoggedIn', 'Sucess')
-        yield put({ type: actions.SET_USER_LOGIN, payload: result.data.user })
-        yield put({ type: actions.GET_USER_PROFILE })
-        yield put({ type: CommonAction.COMMON_LOADER, payload: false });
-        // navigation.navigate('bottomNavigation')
+        if(result.data.status.token !== null ||result.data.status.token !==undefined){
+            setAuthToken(result.data.status.token)
+                    AsyncStorage.setItem('tickatrip-token', result.data.status.token)
+                    AsyncStorage.setItem('email', result.data.status.user.email)
+                    AsyncStorage.setItem('phone', result.data.status.user.phone)
+                    AsyncStorage.setItem('username', result.data.status.user.username)
+                    AsyncStorage.setItem('LoggedIn', 'Sucess')
+                    yield put({ type: actions.SET_USER_LOGIN, payload: result.data.user })
+                    yield put({ type: actions.GET_USER_PROFILE })
+                    yield put({ type: CommonAction.COMMON_LOADER, payload: false });
 
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'bottomNavigation' }]
-        })
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'bottomNavigation' }]
+                    })
+
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Login success'}})
+        }else{
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong'}})
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false });
+        }
+
     } catch (err) {
-        console.log('result err', err)
+        console.log('result errlogin', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err}})
         yield put({ type: CommonAction.COMMON_LOADER, payload: false });
-        yield put({ type: actions.SET_USER_LOGIN, payload: err.data })
     }
 }
+
 
 const getUserProfile = function* (data) {
     try {

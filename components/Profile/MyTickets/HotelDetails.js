@@ -3,8 +3,8 @@ import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView, Ima
 import Appbar from '../../common/Appbar';
 import { useDispatch, useSelector } from 'react-redux';
 import actions from '../../../redux/user/actions';
-import font from '../../../constants/font';
-import color from '../../../constants/color';
+import font from '../../constants/font';
+import color from '../../constants/color';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;

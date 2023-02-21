@@ -1,12 +1,12 @@
 import React from "react";
 import { View, Text, ScrollView, StyleSheet, Dimensions, TouchableHighlight, TextInput } from 'react-native';
-import color from "../../../constants/color";
-import font from "../../../constants/font";
-import Appbar from '../../common/Appbar';
-import FromIcon from '../../../Assert/Images/icon/take-off.svg';
-import ToIcon from '../../../Assert/Images/icon/take-off-2.svg';
+import color from "../constants/color";
+import font from "../constants/font";
+import Appbar from '../common/Appbar';
+import FromIcon from '../../Assert/Images/icon/take-off.svg';
+import ToIcon from '../../Assert/Images/icon/take-off-2.svg';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
-import Flight from '../../../Assert/Images/icon/flight-2.svg';
+import Flight from '../../Assert/Images/icon/flight-2.svg';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 
@@ -14,7 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
-export default function FlightBooking() {
+export default function FlightBooking({navigation}) {
     return (
         <View style={{ backgroundColor: 'white' }}>
             {/* appbar */}

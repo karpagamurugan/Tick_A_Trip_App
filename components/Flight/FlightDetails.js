@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { View, Text, ImageBackground, ScrollView, StyleSheet, Dimensions, Image, TouchableHighlight } from 'react-native';
-import color from '../../../constants/color';
-import font from '../../../constants/font';
-import BackArrow from '../../../Assert/Images/icon/arrow.svg';
-import FromArrow from '../../../Assert/Images/icon/arrow2.svg'
-import FlightIcon from '../../../Assert/Images/icon/flight-airplane-svgrepo-com.svg';
+import color from '../constants/color';
+import font from '../constants/font';
+import BackArrow from '../../Assert/Images/icon/arrow.svg';
+import FromArrow from '../../Assert/Images/icon/arrow2.svg'
+import FlightIcon from '../../Assert/Images/icon/flight-airplane-svgrepo-com.svg';
 import moment from 'moment/moment';
-import { API_IMG_URL } from "../../../constants/constApi";
-import Appbar from '../../common/Appbar'
+import { API_IMG_URL } from "../constants/constApi";
+import Appbar from '../common/Appbar'
 import RenderHtml from 'react-native-render-html';
 import { useDispatch, useSelector } from "react-redux";
-import actions from '../../../redux/Flight/actions';
+import actions from '../../redux/Flight/actions';
 import { WebView } from 'react-native-webview';
 
 var height = Dimensions.get('window').height;
@@ -48,7 +48,7 @@ export default function FlightDetails(props) {
     return (
         <View>
             <Appbar title={'Flight details'} />
-            <ImageBackground source={require('../../../Assert/Images/map.jpg')} style={{ height: height, width: width, paddingBottom: 20 }}>
+            <ImageBackground source={require('../../Assert/Images/map.jpg')} style={{ height: height, width: width, paddingBottom: 20 }}>
                 <View style={styles.tabsBar}>
                     <TouchableHighlight onPress={() => hadleClick(0)}
                         activeOpacity={0.2}

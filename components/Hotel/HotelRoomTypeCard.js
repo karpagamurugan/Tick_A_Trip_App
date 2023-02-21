@@ -3,7 +3,7 @@ import React from 'react'
 import { View, Text, StyleSheet, Image, Dimensions, ImageBackground, TouchableHighlight } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
-import style from '../../common/commonStyle'
+import style from '../common/commonStyle'
 import Stars from 'react-native-stars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 

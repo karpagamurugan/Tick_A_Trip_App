@@ -3,8 +3,8 @@ import React,{memo} from 'react'
 import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from '../Home/Home'
-import Hotel from '../Screens/Hotel/Hotel'
-import Flight from '../Screens/Flight/Flight'
+import Hotel from '../Hotel/Hotel'
+import Flight from '../Flight/Flight'
 import Profile from '../Profile/Profile';
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
@@ -14,13 +14,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import FlightTickets from '../Profile/MyTickets/Flight';
 import HotelTicket from '../Profile/MyTickets/Hotel'
 import AddTraveller from '../Profile/AddTraveller'
-import FlightResult from '../Screens/Flight/FlightResult'
-import HotelList from '../Screens/Hotel/HotelList'
-import FlightBooking from '../Screens/Flight/Flightbooking'
-import HotelDetail from '../Screens/Hotel/HotelDetail'
-import HotelRoomType from '../Screens/Hotel/HotelRoomType'
+import FlightResult from '../Flight/FlightResult'
+import HotelList from '../Hotel/HotelList'
+import FlightBooking from '../Flight/Flightbooking'
+import HotelDetail from '../Hotel/HotelDetail'
+import HotelRoomType from '../Hotel/HotelRoomType'
 import PopularPlacesDetails from '../Home/PopularPlaceDetails'
-import FlightDetails from '../Screens/Flight/FlightDetails'
+import FlightDetails from '../Flight/FlightDetails'
 import HotelTicketDetails from '../Profile/MyTickets/HotelDetails'
 import AddTravellerForm from '../Profile/AddTravellerForm'
 const Stack = createNativeStackNavigator();
@@ -30,7 +30,18 @@ function HomeTab() {
         <Stack.Navigator initialRouteName='Home'>
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
             <Stack.Screen name="PopularDetails" component={PopularPlacesDetails} options={{ headerShown: false }} />
-          
+           
+           <Stack.Screen name='Hotel' component={Hotel} />
+            <Stack.Screen name='HotelList' component={HotelList}/>
+            <Stack.Screen name='HotelRoomType' component={HotelRoomType}/>
+            <Stack.Screen name='HotelDetail' component={HotelDetail}/>
+
+            <Stack.Screen name="flight" component={Flight} options={{ headerShown: false }} />
+            <Stack.Screen name="FlightResult" component={FlightResult} options={{ headerShown: false }} />
+            <Stack.Screen name="flightBooking" component={FlightBooking} options={{ headerShown: false }} />
+            <Stack.Screen name="FlightDetails" component={FlightDetails} options={{ headerShown: false }} />
+
+
         </Stack.Navigator>
     )
 }
@@ -72,6 +83,13 @@ function FlightTab() {
     )
 }
 
+function SearchTab() {
+    return (
+        <Stack.Navigator initialRouteName='search'>
+            <Stack.Screen name="flight" component={Flight} options={{ headerShown: false }} />
+        </Stack.Navigator>
+    )
+}
 
 const BottomNavigate = ({ navigation }) => {
     const Tab = createBottomTabNavigator()
@@ -106,19 +124,19 @@ const BottomNavigate = ({ navigation }) => {
                     }
                 })}
             />
-            <Tab.Screen name="FlightTab" component={FlightTab}
+            <Tab.Screen name="Search" component={SearchTab}
                 options={{
                     tabBarLabel: 'Flight',
                     tabBarIcon: ({ focused, color, size }) => (
                         focused ?
                             <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                <MaterialIcons color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='flight' />
+                                <MaterialIcons color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='search' />
                                 <View>
                                     <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')} />
                                 </View>
                             </View>
                             :
-                            <MaterialIcons color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='flight' />
+                            <MaterialIcons color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='search' />
                     ),
                 }}
                 listeners={({ navigation }) => ({
@@ -127,7 +145,7 @@ const BottomNavigate = ({ navigation }) => {
                     }
                 })}
             />
-            <Tab.Screen name="HotelTab" component={HotelTab}
+            {/* <Tab.Screen name="HotelTab" component={HotelTab}
                 options={{
                     tabBarLabel: 'Hotel',
                     tabBarIcon: ({ focused, color, size }) => (
@@ -147,7 +165,7 @@ const BottomNavigate = ({ navigation }) => {
                         navigation.navigate('HotelTab')
                     }
                 })}
-            />
+            /> */}
             <Tab.Screen name="ProfileTab" component={ProfileTab}
                 options={{
                     tabBarLabel: 'Profile',
