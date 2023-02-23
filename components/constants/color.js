@@ -17,6 +17,7 @@ const COLORS = {
     TextGrey:'#EDF2F7',
     BtnColorDark:'#0041F2',
     TextDarkGrey:'#666666',
+    bgColor:'#F6F9FF'
 
 };
 export default COLORS

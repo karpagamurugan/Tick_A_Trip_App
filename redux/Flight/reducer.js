@@ -5,7 +5,8 @@ const initialState = {
     Airport_Name:{},
     Airport_to_Name:{},
     Flight_search_result:[],
-    Fare_rules:[]
+    Fare_rules:[],
+    get_Revalidate:{}
 }
 
 const FlightSearchReducer = (state = initialState, action) => {
@@ -29,6 +30,11 @@ const FlightSearchReducer = (state = initialState, action) => {
                     return {
                         ...state,
                         Fare_rules:action.payload,
+                    }; 
+                    case actions.GET_REVALIDATE:
+                    return {
+                        ...state,
+                        get_Revalidate:action.payload,
                     }; 
         default:
             return state;

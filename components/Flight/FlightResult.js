@@ -18,13 +18,17 @@ import Slider from '@react-native-community/slider';
 import { useDispatch, useSelector } from 'react-redux';
 import moment from 'moment/moment';
 import { API_IMG_URL } from "../constants/constApi";
+import COLORS from '../constants/color';
+import FONT_FAMILY from '../constants/font';
+import actions from '../../redux/Flight/actions';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
-export default function FlightResult({ navigation }) {
+export default function FlightResult({ navigation,route }) {
     const { Flight_search_result } = useSelector((state) => state.FlightSearchReducer)
 
+    const dispatch =useDispatch();
     var [showFilter, setShowFilter] = useState(false); //show filter modal
     var [priceRange, setPriceRange] = useState(); //set price range for filter
     const FilterList = {
@@ -52,11 +56,11 @@ export default function FlightResult({ navigation }) {
         var num = n;
         var hours = Math.floor(num / 60) > 0 ? Math.floor(num / 60) + "H " : "";
         var rminutes =
-          n - Math.floor(num / 60) * 60 > 0
-            ? n - Math.floor(num / 60) * 60 + "M"
-            : "";
+            n - Math.floor(num / 60) * 60 > 0
+                ? n - Math.floor(num / 60) * 60 + "M"
+                : "";
         return hours + rminutes;
-      }
+    }
 
     return (
         <View style={styles.mainContainer}>
@@ -72,16 +76,16 @@ export default function FlightResult({ navigation }) {
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <FromIcon height={15} width={15} />
                             <View style={{ paddingLeft: 10 }}>
-                                <Text style={styles.appbarPlace}>Coimbatoreee</Text>
-                                <Text style={styles.appBarTraveller}>3 adult</Text>
+                                <Text style={styles.appbarPlace}>{route?.params?.prefs?.fromCity}</Text>
+                                <Text style={styles.appBarTraveller}>{route?.params?.prefs?.adult_flight} adult, {route?.params?.prefs?.child_flight} child, {route?.params?.prefs?.infant_flight} Infant</Text>
                             </View>
                         </View>
 
                         <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
                             <ToIcon height={19} width={19} />
                             <View style={{ paddingLeft: 10 }}>
-                                <Text style={styles.appbarPlace}>Coimbatore</Text>
-                                <Text style={styles.appBarTraveller}>3 adult</Text>
+                                <Text style={styles.appbarPlace}>{route?.params?.prefs?.toCity}</Text>
+                                <Text style={styles.appBarTraveller}>{route?.params?.prefs?.class}</Text>
                             </View>
                         </View>
                     </View>
@@ -184,19 +188,21 @@ export default function FlightResult({ navigation }) {
                 </View>
             </Modal>
 
+            <View style={styles.filterView}>
+                <View/>
+                <Text style={styles.FlightText}>{Flight_search_result?.message?.length}  Flights</Text>
+                <View style={styles.filter}>
 
-            <View style={styles.filter}>
-                <View>
-                    <Text style={{color:'black'}}>{Flight_search_result?.message?.length}</Text>
+                    <TouchableHighlight onPress={() => setShowFilter(!showFilter)} underlayColor='transparent'>
+                        <Filter height={20} width={20} />
+                    </TouchableHighlight>
                 </View>
-                <TouchableHighlight onPress={() => setShowFilter(!showFilter)} underlayColor='transparent'>
-                    <Filter height={20} width={20} />
-                </TouchableHighlight>
             </View>
+
 
             <View style={{ backgroundColor: 'grey', height: 0.3 }} />
 
-            <ImageBackground source={require('../../Assert/Images/map.jpg')} style={{ height: height, width: width,paddingBottom:20 }}>
+            <ImageBackground source={require('../../Assert/Images/map.jpg')} style={{ height: height, width: width, paddingBottom: 20 }}>
                 <ScrollView>
                     <View>
                         {
@@ -205,10 +211,15 @@ export default function FlightResult({ navigation }) {
                                     <View style={{ paddingHorizontal: 10 }}>
                                         <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                             {/* <View style={{ height: 40, width: 40, borderRadius: 20, backgroundColor: 'red' }} /> */}
-                                            <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={{
-                                                uri: API_IMG_URL + '/server/flightimage/' + item?.flightUrl
-                                            }} />
-                                            <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.021, width: width * 0.2 }}>{item?.flightName}</Text>
+                                            
+                                            {
+                                                
+                                                (item?.flightUrl === null || item?.flightUrl === undefined ||item?.flightUrl === '')?<View style={{ height: 40, width: 40, borderRadius: 100,backgroundColor:'red' }}/>
+                                                :<Image style={{ height: 40, width: 40, borderRadius: 100 }} source={{
+                                                    uri: API_IMG_URL + '/server/flightimage/' + item?.flightUrl
+                                                }}/>
+                                                }
+                                            <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.021, width: width * 0.2,paddingLeft:5 }}>{item?.flightName}</Text>
                                             {
                                                 item?.flight_details?.map((data, ind) => (
                                                     //   data?.flights?.map((e)=>(
@@ -238,21 +249,21 @@ export default function FlightResult({ navigation }) {
                                                         <FromArrow />
                                                         <View style={{ alignItems: 'center' }}>
                                                             <Text style={styles.Text}> {timeConvert(
-                                          data.flights.reduce(
-                                            (total, val) =>
-                                            (total =
-                                              total +
-                                              parseFloat(
-                                                val.flightList.JourneyDuration
-                                                  ? parseFloat(
-                                                    val.flightList
-                                                      .JourneyDuration
-                                                  )
-                                                  : 0
-                                              )),
-                                            0
-                                          )
-                                        )}</Text>
+                                                                data.flights.reduce(
+                                                                    (total, val) =>
+                                                                    (total =
+                                                                        total +
+                                                                        parseFloat(
+                                                                            val.flightList.JourneyDuration
+                                                                                ? parseFloat(
+                                                                                    val.flightList
+                                                                                        .JourneyDuration
+                                                                                )
+                                                                                : 0
+                                                                        )),
+                                                                    0
+                                                                )
+                                                            )}</Text>
                                                             <FlightIcon />
                                                             <Text key={index} style={styles.Text}>{data?.totalStops} stop</Text>
 
@@ -302,7 +313,12 @@ export default function FlightResult({ navigation }) {
                                             </View>
                                             <View style={{ width: 1, height: height * 0.06, backgroundColor: 'grey' }} />
                                             <View style={styles.booknowBtn}>
-                                                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.navigate('flightBooking')}>
+                                                <TouchableHighlight underlayColor={'transparent'} onPress={() =>{
+                                                    dispatch({type:actions.SET_REVALIDATE,payload:{'fare_source_code':item?.FareSourceCode}})
+                                                    console.log(item?.FareSourceCode)
+
+                                                     navigation.navigate('flightBooking',{flightInfo:route?.params?.prefs,itemInfo: item})
+                                                     }}>
                                                     <Text style={styles.booknowText}>BOOK NOW</Text>
                                                 </TouchableHighlight>
                                             </View>
@@ -311,8 +327,8 @@ export default function FlightResult({ navigation }) {
 
                                     <View style={styles.listBottom}>
                                         <Text style={[styles.listBtnText, { color: color.colorText }]}>{item?.journeytype}</Text>
-                                        <TouchableHighlight underlayColor={'transparent'} onPress={()=>navigation.navigate('FlightDetails',{item:item})}>
-                                        <Text style={[styles.listBtnText, { color: color.textBlue }]}>View Flight Details</Text>
+                                        <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.navigate('FlightDetails', { item: item })}>
+                                            <Text style={[styles.listBtnText, { color: color.textBlue }]}>View Flight Details</Text>
 
                                         </TouchableHighlight>
                                     </View>
@@ -350,7 +366,7 @@ const styles = StyleSheet.create({
         padding: 10,
         borderRadius: 100,
         marginBottom: 7,
-        flexDirection:'row'
+        flexDirection: 'row'
     },
     filterText: { fontFamily: font.font, paddingLeft: 10 },
     card: {
@@ -361,7 +377,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         marginBottom: 15
     },
-    Text: { fontFamily: font.fontSemi, color: color.colorText,fontSize:height*0.012 },
+    Text: { fontFamily: font.fontSemi, color: color.colorText, fontSize: height * 0.012 },
     Textlite: { fontFamily: font.font, color: 'grey', fontSize: height * 0.012 },
     booknowText: {
         color: 'white',
@@ -386,10 +402,16 @@ const styles = StyleSheet.create({
     priceTitle: { fontFamily: font.fontSemi, color: 'black', fontSize: height * 0.025, paddingTop: 5, paddingLeft: 5 },
     priceValue: { fontFamily: font.font, color: 'black' },
     priceContainer: { flexDirection: 'row', paddingLeft: 5, justifyContent: 'space-between', paddingBottom: 5 },
+    filterView:{
+        flexDirection:'row',
+        justifyContent:'space-between',
+        alignItems:'center'
+
+    },
     filterApply: {
-        alignItems: 'center',
+        // alignItems: 'center',
         backgroundColor: color.colorBtn,
-        marginHorizontal: 20,
+        // marginHorizontal: 20,
         marginVertical: 5,
         borderRadius: 5
     },
@@ -402,7 +424,8 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between', borderBottomRightRadius: 5, marginTop: 10,
         borderBottomLeftRadius: 5
     },
-    listBtnText: { fontFamily: font.font, fontSize: height * 0.016, }
+    listBtnText: { fontFamily: font.font, fontSize: height * 0.016, },
+    FlightText:{color:'black',fontFamily:FONT_FAMILY.fontBold}
 
 
 })
