@@ -333,7 +333,6 @@ export default function FlightResult({ navigation,route }) {
                                         </TouchableHighlight>
                                     </View>
                                 </View>
-
                             ))
                         }
                     </View>

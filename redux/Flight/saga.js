@@ -13,9 +13,7 @@ const FlightSearchSaga = function* () {
         yield takeEvery(actions.SET_FLIGHT_SEARCH, FlightSearch),
         yield takeEvery(actions.SET_FARE_RULES, getFareRules),
         yield takeEvery(actions.SET_REVALIDATE, setRevalidate),
-
-
-
+        yield takeEvery(actions.SET_FLIGHT_BOOKING, setFlightBooking),
     ])
 }
 
@@ -121,6 +119,41 @@ const setRevalidate = function*(data){
         const result = yield call(() =>
             axios.post(
                 `${API_URL}/revalidate`,
+                payload, {
+                headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+            )
+        );
+        console.log('from saga,...',result?.data?.message)
+        if(result?.data?.status === true){
+            yield put({ type: actions.GET_REVALIDATE, payload: result?.data?.message})
+            yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
+        }else{
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Revalidation Failed'}})
+            yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
+        }
+    } catch (err) {
+        console.log('err', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err}})
+        yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
+    }  
+}
+
+
+const setFlightBooking = function*(data){
+    const { payload } = data
+    yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
+
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/booking`,
                 payload, {
                 headers: {
                     accept: 'application/json',

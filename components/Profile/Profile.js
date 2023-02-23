@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState,memo } from 'react';
+import React, { useEffect, useState, memo } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable, ActivityIndicator, Animated, TextInput } from 'react-native';
 import color from '../constants/color';
 import font from '../constants/font';
