@@ -19,6 +19,8 @@ const initialState = {
     AddTravaller_country_issuing:[],
     AddTravaller_nationality:[],
     AddTravaller_value:[],
+    AddTravaller_token:[],
+    travelers_list:[],
 }
 
 const userReducer = (state = initialState, action) => {
@@ -109,6 +111,16 @@ const userReducer = (state = initialState, action) => {
                     ...state,
                     AddTravaller_value: action.payload
                 }
+                case actions.GET_ADD_TRAVELLER_TOKEN:
+                return {
+                    ...state,
+                    AddTravaller_token: action.payload
+                }
+                case actions.SET_ADD_TRAVELLER_TOKEN:
+                    return {
+                        ...state,
+                        travelers_list: action.payload
+                    }
         default:
             return state;
     }

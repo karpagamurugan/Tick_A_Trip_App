@@ -8,6 +8,7 @@ import setAuthToken from '../../components/constants/setAuthToken'
 import { PROFILE_URL } from '../../components/constants/constProfileApi'
 import CommonAction from '../../redux/common/actions';
 import axiosRetry from "axios-retry"
+import { useDispatch } from 'react-redux'
 
 const userSaga = function* () {
     yield all([
@@ -23,6 +24,7 @@ const userSaga = function* () {
         yield takeEvery(actions.SET_HOTEL_TICKETS_DETAILS, getHotelDetails),
         yield takeEvery(actions.SET_ADD_TRAVELLER_SEARCH_BY_NAME, getSearchTraveller),
         yield takeEvery(actions.GET_ADD_TRAVELLER_VALUE, getAddtoTravellerValue),
+        yield takeEvery(actions.GET_ADD_TRAVELLER_TOKEN, getTraveller),
     ])
 }
 
@@ -45,31 +47,52 @@ const getHotelDetails = function* (data) {
         yield put({ type: actions.GET_HOTEL_TICKETS_DETAILS, payload: result.data });
 
     } catch (err) {
-        console.log('err', err.message)
+        console.log('user hotel', err.message)
         yield put({ type: actions.GET_HOTEL_TICKETS_DETAILS, payload: err.data });
     }
 }
 
+const getData = async () => {
+    const dispatch = useDispatch()
+    await AsyncStorage.getItem('tickatrip-token').then(
+        (res) => {
+            console.log('res', res)
+            dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN, payload: res })
+        }
+    )
+}
 const getAddtoTravellerValue = function* (data) {
+    // async function* getAddtoTravellerValue(data) {
     const { payload } = data
-    console.log('payload', payload)
+    // console.log('payload', payload)
     try {
         const result = yield call(() =>
             axios.post(
-                `${API_URL}/addTraveler`,
+                `${API_URL}/user/addTraveler`,
                 payload, {
                 headers: {
-                    accept: 'application/json',
-                    // 'Content-Type': 'multipart/form-data',
+                    // accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
                 },
             }
             )
         );
-        yield put({ type: actions.GET_ADD_TRAVELLER_VALUE, payload: result.data });
+        if (result?.data?.status === true) {
+            console.log('get', result?.data)
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully' } })
+            // yield put({ type: userAction.GET_ADD_TRAVELLER_TOKEN, payload: true })
+            getData()
+
+
+        } else {
+            console.log('get', result?.data?.error)
+            console.log('get', 'Sometyhing went wrtong')
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.error } })
+        }
 
     } catch (err) {
-        console.log('err', err.message)
-        yield put({ type: actions.GET_ADD_TRAVELLER_VALUE, payload: err.data });
+        console.log('getAddtoTravellerValue', err.message)
+        // yield put({ type: actions.GET_ADD_TRAVELLER_VALUE, payload: err.data });
     }
 }
 
@@ -88,7 +111,7 @@ const getSearchTraveller = function* (data) {
             }
             )
         );
-        console.log('searchTraveller', result)
+        // console.log('searchTraveller', result.data)
         console.log(payload.type)
         if (payload.type === 'country-code') {
             yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_CODE, payload: result.data });
@@ -105,13 +128,39 @@ const getSearchTraveller = function* (data) {
             yield put({ type: actions.GET_ADD_TRAVELLER_NATIONALITY, payload: "" });
         }
     } catch (err) {
-        console.log('err', err.nametitle.message)
-        // {err.nametitle && (
-        //     <Text style={{ paddingTop: 10, color:"red"}}>{err.nametitle.message}</Text>
-        // )}
+        console.log('getSearchTraveller', err.nametitle.message)
+
     }
 }
+const getTraveller = function* (data) {
+    const { payload } = data
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/user/getTravelers`,
+                {
+                    headers: {
+                        // 'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${payload}`
+                    },
+                }
+            )
+        );
 
+        if (result?.data.status === true) {
+            console.log('get', 'Add Successfully')
+            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully Successfully' } })
+            // AsyncStorage.setItem('tickatrip-token', result.data.success.token)
+            yield put({ type: actions.SET_ADD_TRAVELLER_TOKEN, payload: result.data });
+        } else {
+            console.log('get', 'Sometyhing went wrtong')
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.error } })
+        }
+    } catch (err) {
+        // console.log('getSearchTraveller', err)
+
+    }
+}
 
 
 const getUserRegister = function* (data) {
@@ -130,19 +179,19 @@ const getUserRegister = function* (data) {
             }
             )
         );
-        if(result?.data?.status ===  true){
+        if (result?.data?.status === true) {
             console.log('result', result)
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Registered Successfully'}})
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Registered Successfully' } })
             AsyncStorage.setItem('tickatrip-token', result.data.success.token)
             yield put({ type: actions.SET_USER_REGISTER, payload: result.data });
             navigation.navigate('bottomNavigation')
-            
-        }else{
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message}})
+
+        } else {
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
         }
-        
+
     } catch (err) {
-        console.log('err', err.message)
+        console.log('register', err.message)
         yield put({ type: actions.SET_USER_REGISTER, payload: err.data });
     }
 }
@@ -158,10 +207,10 @@ const userAthentification = function* (data) {
         //       return error.response.status === 429
         //     },
         //   })
-        const globalConfig: RetryConfig = {
-            retry: 3,
-            retryDelay: 1000,
-          };
+        // const globalConfig: RetryConfig = {
+        //     retry: 3,
+        //     retryDelay: 1000,
+        //   };
         const result = yield call(() =>
             axios.post(`${API_URL}/login`,
                 JSON.stringify(payload),
@@ -172,31 +221,31 @@ const userAthentification = function* (data) {
                 }
             )
         )
-        if(result.data.status.token !== null ||result.data.status.token !==undefined){
+        if (result.data.status.token !== null || result.data.status.token !== undefined) {
             setAuthToken(result.data.status.token)
-                    AsyncStorage.setItem('tickatrip-token', result.data.status.token)
-                    AsyncStorage.setItem('email', result.data.status.user.email)
-                    AsyncStorage.setItem('phone', result.data.status.user.phone)
-                    AsyncStorage.setItem('username', result.data.status.user.username)
-                    AsyncStorage.setItem('LoggedIn', 'Sucess')
-                    yield put({ type: actions.SET_USER_LOGIN, payload: result.data.user })
-                    yield put({ type: actions.GET_USER_PROFILE })
-                    yield put({ type: CommonAction.COMMON_LOADER, payload: false });
+            AsyncStorage.setItem('tickatrip-token', result.data.status.token)
+            AsyncStorage.setItem('email', result.data.status.user.email)
+            AsyncStorage.setItem('phone', result.data.status.user.phone)
+            AsyncStorage.setItem('username', result.data.status.user.username)
+            AsyncStorage.setItem('LoggedIn', 'Sucess')
+            yield put({ type: actions.SET_USER_LOGIN, payload: result.data.user })
+            yield put({ type: actions.GET_USER_PROFILE })
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false });
+            console.log("token", result.data.status.token)
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'bottomNavigation' }]
+            })
 
-                    navigation.reset({
-                        index: 0,
-                        routes: [{ name: 'bottomNavigation' }]
-                    })
-
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Login success'}})
-        }else{
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong'}})
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Login success' } })
+        } else {
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong' } })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false });
         }
 
     } catch (err) {
-        console.log('result errlogin', err)
-        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err}})
+        console.log('userAthentification', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.COMMON_LOADER, payload: false });
     }
 }

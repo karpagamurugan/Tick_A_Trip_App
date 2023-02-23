@@ -1,4 +1,4 @@
-import React, { useState,useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, TouchableHighlight, Modal, Pressable, TextInput, Keyboard } from 'react-native';
 import color from '../constants/color';
 import font from '../constants/font';
@@ -14,12 +14,12 @@ import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import userAction from '../../redux/user/actions'
 import Snackbar from 'react-native-snackbar';
-import {debounce} from 'lodash';
+import { debounce } from 'lodash';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
-export default function AddTravellerForm() {
+const AddTravellerForm = ({ innerRef }) => {
     const dispatch = useDispatch();
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
     let [dobDate, setDobDate] = useState(new Date());
@@ -36,16 +36,18 @@ export default function AddTravellerForm() {
     var [selectedCountryCode, setSelectedCountryCode] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
     var [selectedIssuing, setSelectedIssuing] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
     var [selectedNationality, setSelectedNationality] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
+    var [getSelectId, setGetSelectId] = useState({ CountryCode:'' , IssuingName: '', Nationality: '', })
 
 
     const handleDebugger = useCallback(
-        debounce((e)=>console.log(e), 400)
+        debounce((e) => console.log(e), 400)
         , []);
-        
+
     const handleSelectionCode = (e) => {
         console.log('value', e)
         Keyboard.dismiss()
         setSelectedCountryCode(selectedCountryCode = { CountryCode: e.dial_code + "-" + e.name, IssuingName: '', Nationality: '', });
+        setGetSelectId(getSelectId = { CountryCode: e.id, IssuingName: getSelectId.IssuingName, Nationality: getSelectId.Nationality, });
         dispatch({
             type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
             payload: []
@@ -58,6 +60,7 @@ export default function AddTravellerForm() {
     const handleSelectIssuing = (e) => {
         Keyboard.dismiss()
         setSelectedIssuing(selectedIssuing = { CountryCode: selectedIssuing.CountryCode, IssuingName: e.name, Nationality: selectedIssuing.Nationality });
+        setGetSelectId(getSelectId = { CountryCode:getSelectId.CountryCode, IssuingName: e.id, Nationality:getSelectId.Nationality, });
         dispatch({
             type: userAction.GET_ADD_TRAVELLER_COUNTRY_ISSUING,
             payload: []
@@ -69,6 +72,7 @@ export default function AddTravellerForm() {
     const handleSelectNationality = (e) => {
         Keyboard.dismiss()
         setSelectedNationality(selectedNationality = { CountryCode: selectedNationality.CountryCode, IssuingName: selectedNationality.IssuingName, Nationality: e.name });
+        setGetSelectId(getSelectId = { CountryCode: getSelectId.CountryCode, IssuingName: getSelectId.IssuingName, Nationality: e.id, });
         dispatch({
             type: userAction.GET_ADD_TRAVELLER_NATIONALITY,
             payload: []
@@ -98,27 +102,29 @@ export default function AddTravellerForm() {
 
     const SubmitAddBtn = (data, e) => {
         console.log('button pressed')
-        setListData(listData = [...listData, {
+        setListData(listData = {
             title: data.nametitle,
             first_name: data.firstName,
             last_name: data.lastName,
-            select_type: data.selectedType,
+            // select_type: data.selectedType,
             gender: data.selectedgender,
             email: data.email,
             dob: moment(data.dobDate).format('YYYY-MM-DD'),
-            phone_code: data.phoneCode,
+            // phone_code: data.phoneCode,
             phone: data.mobileNumber,
-            passport_number: data.passportNumber,
-            expiry_date: moment(data.passportExDate).format('YYYY-MM-DD'),
-            add_country_code: selectedCountryCode?.CountryCode,
-            add_issuing: selectedIssuing?.IssuingName,
-            add_nationality: selectedNationality?.Nationality,
-        }])
+            passport: data.passportNumber,
+            expire_date: moment(data.passportExDate).format('YYYY-MM-DD'),
+            country_code: getSelectId?.CountryCode,
+            issue_country: getSelectId?.IssuingName,
+            nationality: getSelectId?.Nationality,
+        })
         dispatch({
             type: userAction.GET_ADD_TRAVELLER_VALUE,
-            payload:listData[0]
+            payload: listData
         })
-        console.log('onpress_listData', listData)
+        // console.log('CountryCode', getSelectId?.CountryCode)
+        // console.log('IssuingName', getSelectId?.IssuingName)
+        // console.log('Nationality', getSelectId?.Nationality)
 
         if (AddTravaller_form.find((List) => List?.email === data?.email) && ((List) => List?.mobileNumber === data?.mobileNumber)) {
             Snackbar.show({
@@ -136,25 +142,27 @@ export default function AddTravellerForm() {
             })
 
             console.log('value not exist');
+
+            console.log('Travaller', AddTravaller_form);
+            console.log('Travaller', AddTravaller_form.length);
+            reset();
+            setTitle("");
+            setGender("");
+            setSelectType("");
+            setDobDate(new Date());
+            setPassportExDate(new Date());
+            setSelectedCountryCode("");
+            setSelectedIssuing("");
+            setSelectedNationality("");
         }
-        console.log('Travaller', AddTravaller_form);
-        console.log('Travaller', AddTravaller_form.length);
-        // reset();
-        // setTitle("");
-        // setGender("");
-        // setSelectType("");
-        // setDobDate(new Date());
-        // setPassportExDate(new Date());
-        // setSelectedCountryCode("");
-        // setSelectedIssuing("");
-        // setSelectedNationality("");
-        dispatch({
-            type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
-            payload: {
-                data: listData,
-                // navigation: navigation
-            }
-        })
+       
+        // dispatch({
+        //     type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
+        //     payload: {
+        //         data: listData,
+        //         // navigation: navigation
+        //     }
+        // })
     }
 
 
@@ -853,7 +861,11 @@ export default function AddTravellerForm() {
                                 control={control}
                                 name="passportNumber"
                                 rules={{
-                                    required: "Enter your Passport Number!",
+                                    required: 'Enter your Phone Code',
+                                    pattern: {
+                                        value: true,
+                                        message: 'Enter your Passport Number!',
+                                    }
                                 }}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
@@ -868,8 +880,8 @@ export default function AddTravellerForm() {
                                 )}
                             />
                             {errors.passportNumber && (
-                                <Text style={[styles.errormessage]}>{errors.passportNumber.message}</Text>
-                            )}
+                                    <Text style={[styles.errormessage]}>{errors.passportNumber.message}</Text>
+                                )}
                         </View>
                         {/*Expiry Date */}
                         <View style={[styles.editTextBorder]}>
@@ -960,8 +972,8 @@ export default function AddTravellerForm() {
 const styles = StyleSheet.create({
     subContainer: { flexDirection: 'column', alignItems: 'center' },
     editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: '#067fc030', marginTop: 20, marginBottom: 5, },
-    updateBtn: { backgroundColor: '#0d6efd', borderRadius: 5, marginTop: 20, justifyContent: 'center', width: 100 },
-    updateText: { color: '#fff', fontFamily: font.font, alignSelf: 'center', paddingVertical: 7, paddingHorizontal: 10 },
+    updateBtn: { backgroundColor: '#0d6efd', borderRadius: 5,  justifyContent: 'center', width: 130,alignSelf: 'flex-end', },
+    updateText: { color: '#fff', fontFamily: font.font, alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 10,alignItems: 'center' },
     placeHolderText: {
         color: '#067fc0',
         position: 'absolute',
@@ -980,3 +992,5 @@ const styles = StyleSheet.create({
         paddingTop: 2,
     }
 })
+
+export default AddTravellerForm;

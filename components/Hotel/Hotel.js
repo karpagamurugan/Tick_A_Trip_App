@@ -20,7 +20,7 @@ const Hotel = ({navigation}) => {
           source={require('../../Assert/Images/hotel-bg.png')}
           style={{ width: width, height: height * 0.2 }} resizeMode="cover">
         </ImageBackground>
-        <HotelSearch navigation={navigation}/>
+        <HotelSearch navigation={navigation} />
         <View style={style.HotelPopularList}>
           <Text style={{ fontFamily: font.fontSemi, letterSpacing: 0.5, fontSize: 18, marginVertical: 20, color: color.colorText, }}>Most Popular Place</Text>
           <View style={style.PopularPlaceCard} >
