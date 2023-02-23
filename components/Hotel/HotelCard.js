@@ -16,7 +16,7 @@ const HotelCard = (props) => {
         <View style={style.hotelListCardSec}>
             <View style={styles.hotelListCard}>
                 <View style={styles.hotelListCardImage}>
-                    <ImageBackground resizeMode='cover' style={style.hotelListCardImageBg} source={ val?.thumbNailUrl !== '' ? { uri: val?.thumbNailUrl } : require('../../Assert/Images/imageNotFound.jpg')}>
+                    <ImageBackground resizeMode='cover'  style={style.hotelListCardImageBg} source={ val?.thumbNailUrl !== '' ? { uri: val?.thumbNailUrl } : require('../../Assert/Images/imageNotFound.jpg')}>
                         <View style={style.hotelListCardReview}>
                             <View>
                                 <Stars
@@ -75,5 +75,11 @@ const styles = StyleSheet.create({
     myEmptyStarStyle: {
         color: 'white',
     },
+    hotelListCardImageBg:{
+        // borderTopLeftRadius:10,
+        // borderTopRightRadius:10
+        // borderRadius:20
+        height:200
+    }
 });
 export default HotelCard

@@ -6,7 +6,8 @@ import HotelAppbar from '../common/HotelAppbar'
 import Stars from 'react-native-stars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+
 
 const HotelDetail = ({ navigation }) => {
 
@@ -34,7 +35,7 @@ const HotelDetail = ({ navigation }) => {
                 <ImageBackground style={style.HotelDetailBanner} source={require('../../Assert/Images/hotel.jpg')}>
                     <View style={style.OverLay} />
                     <View style={style.HotelDetailBannerCon}>
-                        <View>
+                        <View style={{justifyContent:'flex-start',alignItems:'flex-start'}}>
                             <Text style={style.HotelDetailHotelName}>Hotel Arkadia - 301</Text>
                             <View>
                                 <Stars
@@ -69,6 +70,9 @@ const HotelDetail = ({ navigation }) => {
                         {roomFacility.map((val, index) => (
                             <Text style={style.list} key={index}><MaterialIcons style={style.listIcon} name='double-arrow' />{val}</Text>
                         ))}
+
+                    </View>
+                    <View style>
 
                     </View>
                     <View>

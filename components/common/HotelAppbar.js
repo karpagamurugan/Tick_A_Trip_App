@@ -7,7 +7,8 @@ import color from '../constants/color';
 import font from '../constants/font';
 import { useNavigation } from '@react-navigation/native';
 import Arrow from '../../Assert/Images/icon/backward-arrow-2.svg';
-import Flight from '../../Assert/Images/icon/flight.svg';
+import Hotel from '../../Assert/Icons/hotel.svg';
+import FONT_FAMILY from '../constants/font';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -22,14 +23,17 @@ export default function HotelAppbar({ title }) {
 
             <View style={styles.appbar}>
                 <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
-                    <View style={styles.iconBack}>
-                        <BackArrow height={20} width={20} />
-                    </View>
+                        <BackArrow height={18} width={18} />
                 </TouchableHighlight>
+                   <View style={{alignItems:'center'}}>
+                   <Hotel height={30} width={30}/>
+                   <Text style={{fontSize:height*0.013,color:color.BtnColorDark,fontFamily:FONT_FAMILY.font}}>Hotels</Text>
+                   </View>
                 <View style={styles.searchCity}>
                     <Text style={styles.searchIn}>Coimbatore</Text>
                     <Text style={styles.searchCount}>2 adults,2 Rooms</Text>
                 </View>
+                <View/>
             </View>
         </View>
     )
@@ -57,15 +61,21 @@ const styles = StyleSheet.create({
         paddingHorizontal:35,
         borderRadius:100,
     },
-    iconBack: { backgroundColor: 'white', borderRadius: 100, width: 45, height: 45, alignItems: 'center', justifyContent: 'center', elevation: 10 },
+    iconBack: {
+         backgroundColor: 'white',
+          borderRadius: 100,
+           width: 45, height: 45,
+            alignItems: 'center', 
+            justifyContent: 'center',
+             elevation: 3 },
     appbar: {
-        width: width * 0.9,
+        // width: width * 0.9,
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: color.AppbarColor,
-        height: height * 0.09,
-        borderTopRightRadius: 40,
-        borderBottomRightRadius: 40,
+        height: height * 0.07,
+        // borderTopRightRadius: 40,
+        // borderBottomRightRadius: 40,
         alignItems: 'center',
         paddingLeft: 20,
         paddingRight: 15,
@@ -77,6 +87,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.58,
         shadowRadius: 16.00,
 
-        elevation: 24,
+        // elevation: 24,
     },
 })

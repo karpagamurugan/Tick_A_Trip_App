@@ -55,116 +55,116 @@ const HotelSearch = ({ navigation }) => {
   //   Geocoder.init("AIzaSyAa2VY2pLrqe2F1_wD-UqlnxNp50Be53Xo");
 
   // }
-  Geolocation.getCurrentPosition(
-    (position) => {
-      const currentLongitude =
-        JSON.stringify(position.coords.longitude);
-      const currentLatitude =
-        JSON.stringify(position.coords.latitude);
+  // Geolocation.getCurrentPosition(
+  //   (position) => {
+  //     const currentLongitude =
+  //       JSON.stringify(position.coords.longitude);
+  //     const currentLatitude =
+  //       JSON.stringify(position.coords.latitude);
 
-    }, (error) => alert(error.message), {
-    enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
-  }
-  );
-  // console.log('CurrentLocation', CurrentLocation)
+  //   }, (error) => alert(error.message), {
+  //   enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
+  // }
+  // );
+  // // console.log('CurrentLocation', CurrentLocation)
 
 
-  useEffect(() => {
-    const requestLocationPermission = async () => {
-      if (Platform.OS === 'ios') {
-        getOneTimeLocation();
-        subscribeLocationLocation();
-      } else {
-        try {
-          const granted = await PermissionsAndroid.request(
-            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-            {
-              title: 'Location Access Required',
-              message: 'This App needs to Access your location',
-            },
-          );
-          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-            //To Check, If Permission is granted
-            getOneTimeLocation();
-            subscribeLocationLocation();
-            console.log('permission granted')
-          } else {
-            console.log('permission not granted')
-            setLocationStatus('Permission Denied');
-          }
-        } catch (err) {
-          console.warn(err);
-        }
-      }
-    };
-    requestLocationPermission();
-    return () => {
-      Geolocation.clearWatch(watchID);
-    };
-  }, []);
-  const getOneTimeLocation = () => {
-    setLocationStatus('Getting Location ...');
-    Geolocation.getCurrentPosition(
-      //Will give you the current location
-      (position) => {
-        setLocationStatus('You are Here');
+  // useEffect(() => {
+  //   const requestLocationPermission = async () => {
+  //     if (Platform.OS === 'ios') {
+  //       getOneTimeLocation();
+  //       subscribeLocationLocation();
+  //     } else {
+  //       try {
+  //         const granted = await PermissionsAndroid.request(
+  //           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+  //           {
+  //             title: 'Location Access Required',
+  //             message: 'This App needs to Access your location',
+  //           },
+  //         );
+  //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+  //           //To Check, If Permission is granted
+  //           getOneTimeLocation();
+  //           subscribeLocationLocation();
+  //           console.log('permission granted')
+  //         } else {
+  //           console.log('permission not granted')
+  //           setLocationStatus('Permission Denied');
+  //         }
+  //       } catch (err) {
+  //         console.warn(err);
+  //       }
+  //     }
+  //   };
+  //   requestLocationPermission();
+  //   return () => {
+  //     Geolocation.clearWatch(watchID);
+  //   };
+  // }, []);
+  // const getOneTimeLocation = () => {
+  //   setLocationStatus('Getting Location ...');
+  //   Geolocation.getCurrentPosition(
+  //     //Will give you the current location
+  //     (position) => {
+  //       setLocationStatus('You are Here');
 
-        //getting the Longitude from the location json
-        const currentLongitude = 
-          JSON.stringify(position.coords.longitude);
+  //       //getting the Longitude from the location json
+  //       const currentLongitude = 
+  //         JSON.stringify(position.coords.longitude);
 
-        //getting the Latitude from the location json
-        const currentLatitude = 
-          JSON.stringify(position.coords.latitude);
+  //       //getting the Latitude from the location json
+  //       const currentLatitude = 
+  //         JSON.stringify(position.coords.latitude);
 
-        //Setting Longitude state
-        setCurrentLongitude(currentLongitude);
+  //       //Setting Longitude state
+  //       setCurrentLongitude(currentLongitude);
         
-        //Setting Longitude state
-        setCurrentLatitude(currentLatitude);
-      },
-      (error) => {
-        setLocationStatus(error.message);
-      },
-      {
-        enableHighAccuracy: false,
-        timeout: 30000,
-        maximumAge: 1000
-      },
-    );
-  };
+  //       //Setting Longitude state
+  //       setCurrentLatitude(currentLatitude);
+  //     },
+  //     (error) => {
+  //       setLocationStatus(error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: false,
+  //       timeout: 30000,
+  //       maximumAge: 1000
+  //     },
+  //   );
+  // };
 
-  const subscribeLocationLocation = () => {
-    watchID = Geolocation.watchPosition(
-      (position) => {
-        //Will give you the location on location change
+  // const subscribeLocationLocation = () => {
+  //  let watchID = Geolocation.watchPosition(
+  //     (position) => {
+  //       //Will give you the location on location change
         
-        setLocationStatus('You are Here');
-        console.log(position);
+  //       setLocationStatus('You are Here');
+  //       console.log('position',position);
 
-        //getting the Longitude from the location json        
-        const currentLongitude =
-          JSON.stringify(position.coords.longitude);
+  //       //getting the Longitude from the location json        
+  //       const currentLongitude =
+  //         JSON.stringify(position.coords.longitude);
 
-        //getting the Latitude from the location json
-        const currentLatitude = 
-          JSON.stringify(position.coords.latitude);
+  //       //getting the Latitude from the location json
+  //       const currentLatitude = 
+  //         JSON.stringify(position.coords.latitude);
 
-        //Setting Longitude state
-        setCurrentLongitude(currentLongitude);
+  //       //Setting Longitude state
+  //       setCurrentLongitude(currentLongitude);
 
-        //Setting Latitude state
-        setCurrentLatitude(currentLatitude);
-      },
-      (error) => {
-        setLocationStatus(error.message);
-      },
-      {
-        enableHighAccuracy: false,
-        maximumAge: 1000
-      },
-    );
-  };
+  //       //Setting Latitude state
+  //       setCurrentLatitude(currentLatitude);
+  //     },
+  //     (error) => {
+  //       setLocationStatus(error.message);
+  //     },
+  //     {
+  //       enableHighAccuracy: false,
+  //       maximumAge: 1000
+  //     },
+  //   );
+  // };
 
   useEffect(() => {
     var d = new Date();
@@ -195,6 +195,8 @@ const HotelSearch = ({ navigation }) => {
         checkout: moment(coDate).format('YYYY-MM-DD'),
         city_name: destination.city,
         country_name: destination.country,
+        // city_name: 'Delhi',
+        // country_name: 'United States of America',
         requiredCurrency: 'INR',
         occupancy: selectAddRoom,
       },
@@ -230,26 +232,26 @@ const HotelSearch = ({ navigation }) => {
                 {selectDestination !== true ?
                   <Text style={style.inputFieldText}>{destination ? destination.city : 'Search your destination'}</Text>
                   :
-                  // <SelectList
-                  //   setSelected={(val) => setSelected(val)}
-                  //   data={data}
-                  //   save="value"
-                  // />
-                  <TextInput
-                    keyboardType={'default'}
-                    placeholder={'Select...'}
-                    placeholderTextColor="gray"
-                    numberOfLines={1}
-
-                    name="add_nationality"
-                    style={{
-                      color: 'black',
-                      fontFamily: font.font,
-                      width: width * 0.9,
-                      paddingTop: 5,
-                      paddingBottom: 0,
-                    }}
+                  <SelectList
+                    setSelected={(val) => setSelected(val)}
+                    data={data}
+                    save="value"
                   />
+                  // <TextInput
+                  //   keyboardType={'default'}
+                  //   placeholder={'Select...'}
+                  //   placeholderTextColor="gray"
+                  //   numberOfLines={1}
+
+                  //   name="add_nationality"
+                  //   style={{
+                  //     color: 'black',
+                  //     fontFamily: font.font,
+                  //     width: width * 0.9,
+                  //     paddingTop: 5,
+                  //     paddingBottom: 0,
+                  //   }}
+                  // />
                 }
               </TouchableHighlight>
             </View>

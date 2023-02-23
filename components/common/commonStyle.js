@@ -34,6 +34,9 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         justifyContent: 'space-between',
+        // borderRadius:20
+        // borderTopLeftRadius:10,
+        // borderTopRightRadius:10
     },
     hotelListCardReview: {
         flexDirection: 'row',
@@ -116,7 +119,7 @@ const style = StyleSheet.create({
         },
         shadowOpacity: 0.58,
         shadowRadius: 16.00,
-        elevation: 24,
+        elevation: 15,
     },
     RoomTitle: {
         fontFamily: font.fontBold,
@@ -131,7 +134,7 @@ const style = StyleSheet.create({
         paddingBottom: height * 0.20,
     },
     HotelDetailBannerCon: {
-        height: height * 0.2,
+        height: height * 0.25,
         flexDirection: 'row',
         alignItems: 'flex-end',
         justifyContent: 'space-between',
@@ -141,7 +144,7 @@ const style = StyleSheet.create({
     HotelDetailHotelName: {
         fontFamily: font.mediam,
         color: '#fff',
-        fontSize: 15,
+        fontSize: height*0.02,
     },
     HotelDetailBanner: {
         position: 'relative',
@@ -158,7 +161,7 @@ const style = StyleSheet.create({
     HotelDetailHotelPrice: {
         color: '#fff',
         fontFamily: font.fontBold,
-        fontSize: 30,
+        fontSize: height*0.025,
     },
     HotelDetailHotelPriceTxt: {
         fontFamily: font.font,

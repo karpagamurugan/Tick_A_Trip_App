@@ -82,7 +82,11 @@ const style = StyleSheet.create({
         height: height * 0.7,
     },
     hotelDetailSec: {
-        paddingHorizontal: 15,
+        paddingHorizontal: 10,
+        // backgroundColor:'white',
+        // height:height
+        // height:height*0.5,
+        backgroundColor:'white'
     },
     searchPlaceIcon: {
         color: '#FCC40A',
@@ -116,7 +120,7 @@ const style = StyleSheet.create({
         shadowOpacity: 0.58,
         shadowRadius: 16.00,
 
-        elevation: 24,
+        // elevation: 24,
     },
     HotelDetailFilterSec: {
         flexDirection: 'row',
