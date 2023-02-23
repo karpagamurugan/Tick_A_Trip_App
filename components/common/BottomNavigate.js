@@ -31,17 +31,15 @@ function HomeTab() {
             <Stack.Screen name="Home" component={Home} options={{ headerShown: false }} />
             <Stack.Screen name="PopularDetails" component={PopularPlacesDetails} options={{ headerShown: false }} />
            
-           <Stack.Screen name='Hotel' component={Hotel} />
-            <Stack.Screen name='HotelList' component={HotelList}/>
-            <Stack.Screen name='HotelRoomType' component={HotelRoomType}/>
-            <Stack.Screen name='HotelDetail' component={HotelDetail}/>
+           <Stack.Screen name='Hotel' component={Hotel} options={{ headerShown: false }}/>
+            <Stack.Screen name='HotelList' component={HotelList} options={{ headerShown: false }}/>
+            <Stack.Screen name='HotelRoomType' component={HotelRoomType} options={{ headerShown: false }}/>
+            <Stack.Screen name='HotelDetail' component={HotelDetail}options={{ headerShown: false }}/>
 
             <Stack.Screen name="flight" component={Flight} options={{ headerShown: false }} />
             <Stack.Screen name="FlightResult" component={FlightResult} options={{ headerShown: false }} />
             <Stack.Screen name="flightBooking" component={FlightBooking} options={{ headerShown: false }} />
             <Stack.Screen name="FlightDetails" component={FlightDetails} options={{ headerShown: false }} />
-
-
         </Stack.Navigator>
     )
 }
