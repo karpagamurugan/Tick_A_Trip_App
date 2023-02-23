@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
-import { View, Text, Dimensions, TouchableHighlight, Modal, StyleSheet, ScrollView } from 'react-native'
+import { View, Text, Dimensions, TouchableHighlight, Modal, StyleSheet, ScrollView, TextInput, TouchableOpacity, PermissionsAndroid } from 'react-native'
 // import style from '../../common/commonStyle'
 import { SelectList } from 'react-native-dropdown-select-list'
 import DatePicker from 'react-native-date-picker'
@@ -17,6 +17,8 @@ import HotelSelectRoomGuest from './HotelSelectRoomGuest'
 import { useDispatch } from 'react-redux'
 import hotelActions from '../../redux/Hotel/actions'
 import commonAction from '../../redux/common/actions'
+import Geocoder from 'react-native-geocoding';
+import Geolocation from '@react-native-community/geolocation';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -32,6 +34,7 @@ const data = [
 const HotelSearch = ({ navigation }) => {
   const dispatch = useDispatch()
 
+
   const [selected, setSelected] = useState("");
   const [ciDate, setCidate] = useState(new Date())
   const [open, setOpen] = useState(false)
@@ -43,14 +46,131 @@ const HotelSearch = ({ navigation }) => {
   const [selectAddRoom, setSelectAddRoom] = useState([])
   const [adultCount, setAdultCount] = useState('')
   const [childCount, setChildCount] = useState('')
+  const [currentLongitude, setCurrentLongitude] = useState('...');
+  const [currentLatitude, setCurrentLatitude ] = useState('...');
+  const [ locationStatus, setLocationStatus ] = useState('');
 
+
+  // const CurrentLocation = () => {
+  //   Geocoder.init("AIzaSyAa2VY2pLrqe2F1_wD-UqlnxNp50Be53Xo");
+
+  // }
+  Geolocation.getCurrentPosition(
+    (position) => {
+      const currentLongitude =
+        JSON.stringify(position.coords.longitude);
+      const currentLatitude =
+        JSON.stringify(position.coords.latitude);
+
+    }, (error) => alert(error.message), {
+    enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
+  }
+  );
+  // console.log('CurrentLocation', CurrentLocation)
+
+
+  useEffect(() => {
+    const requestLocationPermission = async () => {
+      if (Platform.OS === 'ios') {
+        getOneTimeLocation();
+        subscribeLocationLocation();
+      } else {
+        try {
+          const granted = await PermissionsAndroid.request(
+            PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+            {
+              title: 'Location Access Required',
+              message: 'This App needs to Access your location',
+            },
+          );
+          if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            //To Check, If Permission is granted
+            getOneTimeLocation();
+            subscribeLocationLocation();
+            console.log('permission granted')
+          } else {
+            console.log('permission not granted')
+            setLocationStatus('Permission Denied');
+          }
+        } catch (err) {
+          console.warn(err);
+        }
+      }
+    };
+    requestLocationPermission();
+    return () => {
+      Geolocation.clearWatch(watchID);
+    };
+  }, []);
+  const getOneTimeLocation = () => {
+    setLocationStatus('Getting Location ...');
+    Geolocation.getCurrentPosition(
+      //Will give you the current location
+      (position) => {
+        setLocationStatus('You are Here');
+
+        //getting the Longitude from the location json
+        const currentLongitude = 
+          JSON.stringify(position.coords.longitude);
+
+        //getting the Latitude from the location json
+        const currentLatitude = 
+          JSON.stringify(position.coords.latitude);
+
+        //Setting Longitude state
+        setCurrentLongitude(currentLongitude);
+        
+        //Setting Longitude state
+        setCurrentLatitude(currentLatitude);
+      },
+      (error) => {
+        setLocationStatus(error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        timeout: 30000,
+        maximumAge: 1000
+      },
+    );
+  };
+
+  const subscribeLocationLocation = () => {
+    watchID = Geolocation.watchPosition(
+      (position) => {
+        //Will give you the location on location change
+        
+        setLocationStatus('You are Here');
+        console.log(position);
+
+        //getting the Longitude from the location json        
+        const currentLongitude =
+          JSON.stringify(position.coords.longitude);
+
+        //getting the Latitude from the location json
+        const currentLatitude = 
+          JSON.stringify(position.coords.latitude);
+
+        //Setting Longitude state
+        setCurrentLongitude(currentLongitude);
+
+        //Setting Latitude state
+        setCurrentLatitude(currentLatitude);
+      },
+      (error) => {
+        setLocationStatus(error.message);
+      },
+      {
+        enableHighAccuracy: false,
+        maximumAge: 1000
+      },
+    );
+  };
 
   useEffect(() => {
     var d = new Date();
     d.setDate(d.getDate() + 1)
     setCodate(d)
   }, [])
-
   const AddRoom = () => {
     let temp = []
     let tempGuest = selectAddRoom ? selectAddRoom : []
@@ -110,10 +230,25 @@ const HotelSearch = ({ navigation }) => {
                 {selectDestination !== true ?
                   <Text style={style.inputFieldText}>{destination ? destination.city : 'Search your destination'}</Text>
                   :
-                  <SelectList
-                    setSelected={(val) => setSelected(val)}
-                    data={data}
-                    save="value"
+                  // <SelectList
+                  //   setSelected={(val) => setSelected(val)}
+                  //   data={data}
+                  //   save="value"
+                  // />
+                  <TextInput
+                    keyboardType={'default'}
+                    placeholder={'Select...'}
+                    placeholderTextColor="gray"
+                    numberOfLines={1}
+
+                    name="add_nationality"
+                    style={{
+                      color: 'black',
+                      fontFamily: font.font,
+                      width: width * 0.9,
+                      paddingTop: 5,
+                      paddingBottom: 0,
+                    }}
                   />
                 }
               </TouchableHighlight>
@@ -174,6 +309,7 @@ const HotelSearch = ({ navigation }) => {
                   </View>
                 </View>
               </View>
+
             </View>
           </View>
 
@@ -199,10 +335,10 @@ const HotelSearch = ({ navigation }) => {
           </View>
 
           <View>
-            <TouchableHighlight underlayColor='transparent' 
-            onPress={() =>{ 
-              OnSearchHotel()
-              // navigation.navigate('HotelList')
+            <TouchableHighlight underlayColor='transparent'
+              onPress={() => {
+                OnSearchHotel()
+                // navigation.navigate('HotelList')
               }}>
               <View style={style.iconBoxBtn}>
                 <EvilIcons style={style.fieldIconBtn} name='search' />
@@ -211,6 +347,20 @@ const HotelSearch = ({ navigation }) => {
             </TouchableHighlight>
           </View>
 
+          {/* <TouchableOpacity onPress={() => CurrentLocation}>
+            <Text>GetCurrentLocation</Text>
+          </TouchableOpacity> */}
+           <Text style={style.boldText}>
+            {locationStatus}
+          </Text>
+          <Text
+            style={{
+              justifyContent: 'center',
+              alignItems: 'center',
+              marginTop: 16,
+            }}>
+            Longitude: {currentLongitude}
+          </Text>
         </View>
       </ScrollView>
 
