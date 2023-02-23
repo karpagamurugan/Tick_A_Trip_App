@@ -95,6 +95,7 @@ const BottomNavigate = ({ navigation }) => {
     const Tab = createBottomTabNavigator()
     return (
         <Tab.Navigator screenOptions={{
+            tabBarHideOnKeyboard:false,
             headerShown: false,
             tabBarStyle: {
                 backgroundColor: '#E9F3FF',

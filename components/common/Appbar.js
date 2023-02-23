@@ -24,13 +24,13 @@ export default function Appbar({ title }) {
                 (title === 'Search Flight') ?
                     <View style={styles.appbar}>
                         <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
-                            <View style={[styles.iconBack, { width: 35, height: 35, marginRight: -30 }]}>
+                            <View style={[styles.iconBack, { width: 35, height: 35, marginRight: 0 }]}>
                                 <Arrow height={18} width={18} />
                             </View>
                         </TouchableHighlight>
-                        <Flight height={32} width={32} />
-                        <Text style={{ fontFamily: font.fontSemi, color: color.textBlue, fontSize: height * 0.027, marginLeft: -30 }}>{title}</Text>
-                        <View style={{ width: 10 }} />
+                        <Flight height={40} width={40} />
+                        <Text style={{ fontFamily: font.fontSemi, color: color.textBlue, fontSize: height * 0.023, marginLeft: 0 }}>{title}</Text>
+                        <View style={{ width: width*0.17 }} />
                     </View>
                     :
                     <View style={styles.appbar}>
@@ -49,13 +49,13 @@ export default function Appbar({ title }) {
 
 
 const styles = StyleSheet.create({
-    iconBack: { backgroundColor: 'white', borderRadius: 100, width: 45, height: 45, alignItems: 'center', justifyContent: 'center', elevation: 10 },
+    iconBack: { backgroundColor: 'white', borderRadius: 100, width: 45, height: 45, alignItems: 'center', justifyContent: 'center', elevation: 3 },
     appbar: {
         width: width * 0.9,
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: color.AppbarColor,
-        height: height * 0.09,
+        height: height * 0.07,
         borderTopRightRadius: 40,
         borderBottomRightRadius: 40,
         alignItems: 'center',
@@ -69,6 +69,6 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.58,
         shadowRadius: 16.00,
 
-        elevation: 24,
+        // elevation: 24,
     },
 })

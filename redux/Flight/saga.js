@@ -12,6 +12,8 @@ const FlightSearchSaga = function* () {
         yield takeEvery(actions.SET_FLIGHT_SEARCH_BY_NAME, getAirportnameList),
         yield takeEvery(actions.SET_FLIGHT_SEARCH, FlightSearch),
         yield takeEvery(actions.SET_FARE_RULES, getFareRules),
+        yield takeEvery(actions.SET_REVALIDATE, setRevalidate),
+
 
 
     ])
@@ -47,7 +49,7 @@ const getAirportnameList = function* (data) {
 
 const FlightSearch = function* (data) {
     const { payload } = data
-    yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
+    // yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
     try {
         const result = yield call(() =>
             axios.post(
@@ -60,10 +62,13 @@ const FlightSearch = function* (data) {
             }
             )
         );
+        console.log(result?.data?.status)
+
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_FLIGHT_SEARCH, payload: result?.data });
-            payload.navigation.navigate('FlightResult')
+            payload.navigation.navigate('FlightResult',{prefs:payload?.prefs})
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+            console.log(result?.data?.status)
 
         } else {
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
@@ -108,5 +113,38 @@ const getFareRules = function*(data){
     }  
 }
 
+const setRevalidate = function*(data){
+    const { payload } = data
+    yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
+
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/revalidate`,
+                payload, {
+                headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+            )
+        );
+        console.log('from saga,...',result?.data?.message)
+        if(result?.data?.status === true){
+            yield put({ type: actions.GET_REVALIDATE, payload: result?.data?.message})
+            yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
+        }else{
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Revalidation Failed'}})
+            yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
+        }
+    } catch (err) {
+        console.log('err', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err}})
+        yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
+    }  
+}
 
 export default FlightSearchSaga
