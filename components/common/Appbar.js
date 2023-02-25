@@ -39,7 +39,7 @@ export default function Appbar({ title }) {
                                 <BackArrow height={20} width={20} />
                             </View>
                         </TouchableHighlight>
-                        <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.03 }}>{title}</Text>
+                        <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.026 }}>{title}</Text>
                         <View style={{ width: 10 }} />
                     </View>
             }
@@ -49,7 +49,7 @@ export default function Appbar({ title }) {
 
 
 const styles = StyleSheet.create({
-    iconBack: { backgroundColor: 'white', borderRadius: 100, width: 45, height: 45, alignItems: 'center', justifyContent: 'center', elevation: 3 },
+    iconBack: { backgroundColor: 'white', borderRadius: 100, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', elevation: 3 },
     appbar: {
         width: width * 0.9,
         flexDirection: 'row',

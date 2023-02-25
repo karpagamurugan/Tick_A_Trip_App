@@ -451,11 +451,6 @@ console.log('payloaddata',payloaddata)
               </View>
 
 
-
-
-
-
-
               <View style={{ flexDirection: 'column' }}>
 
 

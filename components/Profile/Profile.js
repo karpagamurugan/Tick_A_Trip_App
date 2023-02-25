@@ -42,23 +42,6 @@ function Profile({ navigation }) {
 
     var [image, setImage] = useState() //set selected profile image
 
-    useEffect((async) => {
-        dispatch({ type: commonAction.COMMON_LOADER, payload: true })
-        dispatch({ type: userActions.GET_USER_PROFILE })
-    }, [dispatch])
-
-    const LogOut = () => {
-        AsyncStorage.removeItem('tickatrip-token')
-        // AsyncStorage.removeItem('tickatrip-token')
-        AsyncStorage.removeItem('email')
-        AsyncStorage.removeItem('phone')
-        AsyncStorage.removeItem('username')
-        navigation.navigate('Login')
-        dispatch({ type: userActions.SET_USER_PROFILE, payload: null })
-        setAuthToken(null)
-    }
-
-
     async function filePicker() {
         var res = null
         try {
@@ -91,6 +74,24 @@ function Profile({ navigation }) {
     } //file pickers function...
 
 
+    useEffect((async) => {
+        dispatch({ type: commonAction.COMMON_LOADER, payload: true })
+        dispatch({ type: userActions.GET_USER_PROFILE })
+    }, [dispatch])
+
+    const LogOut = () => {
+        AsyncStorage.removeItem('tickatrip-token')
+        // AsyncStorage.removeItem('tickatrip-token')
+        AsyncStorage.removeItem('email')
+        AsyncStorage.removeItem('phone')
+        AsyncStorage.removeItem('username')
+        navigation.navigate('Login')
+        dispatch({ type: userActions.SET_USER_PROFILE, payload: null })
+        setAuthToken(null)
+    }
+
+
+   
     return (
         <View style={styles.mainContainer}>
 
@@ -271,9 +272,13 @@ function Profile({ navigation }) {
                 </TouchableHighlight>
                 <Text style={isLogin ? styles.profileAppText : styles.guestprofileAppText}>Profile</Text>
                 {isLogin &&
-                    <TouchableHighlight underlayColor='transparent' style={styles.iconBack} onPress={() => setOpenModel(true)}>
+                    <TouchableHighlight underlayColor='transparent' style={styles.iconBack}
+                     onPress={() =>{ 
+                        navigation.navigate('updateProfile')
+                        // setOpenModel(true)
+                        }}>
                         <View>
-                            <EditIcon height={22} width={22} />
+                            <EditIcon height={20} width={20} />
                         </View>
                     </TouchableHighlight>
                 }
@@ -430,13 +435,13 @@ const styles = StyleSheet.create({
     guestprofileAppText: { fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035, width: width * 0.5, },
     profileAppText: { fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.035 },
     mainContainer: { height: height, width: width, backgroundColor: 'white', },
-    iconBack: { backgroundColor: 'white', borderRadius: 100, width: 45, height: 45, alignItems: 'center', justifyContent: 'center', elevation: 10 },
+    iconBack: { backgroundColor: 'white', borderRadius: 100, width: 40, height: 40, alignItems: 'center', justifyContent: 'center', elevation: 10 },
     appbar: {
         width: width * 0.9,
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: color.AppbarColor,
-        height: height * 0.09,
+        height: height * 0.07,
         borderTopRightRadius: 40,
         borderBottomRightRadius: 40,
         alignItems: 'center',

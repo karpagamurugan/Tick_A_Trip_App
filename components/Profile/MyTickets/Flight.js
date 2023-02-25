@@ -35,15 +35,7 @@ export default function Flight() {
 
     var [selectedTab, setSelectedTab] = useState(0);
 
-    let DataList = [
-        { id: '1', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQaYRXqU-1tpipQxZoicIgjb-wxZRUOo0wPHA&usqp=CAU" },
-        { id: '2', title: 'Air Asia', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8ZPS893k69xL-ZIJ6Ke8oClDpwfo5aS8f5w&usqp=CAU' },
-        { id: '3', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRh3OR7_YQuvpGVlxZIHRPAO5wfkCpz1WCppQ&usqp=CAU' },
-        { id: '4', title: 'Air Asia', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTo_ShUmE0GjAvuNQWQyLz0OHyuFj-1y_MMXA6o202XPmzJ5np0Gn500crzKeyQhqqKnH8&usqp=CAU' },
-        { id: '5', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQw7cS6Loa2JeG-dx5PVfEgxNC3QaRZugod_Q&usqp=CAU' }
-    ]
-
-
+  
     // setting tab item backgroundColor
     const hadleClick = (index) => {
         setSelectedTab(index)
@@ -231,9 +223,9 @@ export default function Flight() {
                                                             <Text style={{ fontFamily: font.font, fontSize: height * 0.02, color: '#898989' }}>Boarding : {moment(item?.ArrivalDateTime).format('hh:mm a')}</Text>
 
                                                         </View>
-                                                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                                        {/* <TouchableHighlight onPress={() => null} underlayColor='transparent'>
                                                             <Text style={style.cancelbtn}>Cancel</Text>
-                                                        </TouchableHighlight>
+                                                        </TouchableHighlight> */}
                                                     </View>
                                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                                         <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.02 }}>{moment(item?.DepartureDateTime).format('DD/MM/YYYY')}</Text>

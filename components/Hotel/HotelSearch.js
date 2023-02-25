@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
-import { View, Text, Dimensions, TouchableHighlight, Modal, StyleSheet, ScrollView, TextInput, TouchableOpacity, PermissionsAndroid } from 'react-native'
+import { View, Text, Dimensions, TouchableHighlight, Modal, StyleSheet, ScrollView, TextInput, TouchableOpacity, PermissionsAndroid, Keyboard } from 'react-native'
 // import style from '../../common/commonStyle'
 import { SelectList } from 'react-native-dropdown-select-list'
 import DatePicker from 'react-native-date-picker'
@@ -14,11 +14,12 @@ import moment from 'moment';
 import axios from 'axios'
 import { API_URL } from '../constants/constApi'
 import HotelSelectRoomGuest from './HotelSelectRoomGuest'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import hotelActions from '../../redux/Hotel/actions'
 import commonAction from '../../redux/common/actions'
 import Geocoder from 'react-native-geocoding';
 import Geolocation from '@react-native-community/geolocation';
+import AntIcon from 'react-native-vector-icons/AntDesign'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -33,7 +34,9 @@ const data = [
 ]
 const HotelSearch = ({ navigation }) => {
   const dispatch = useDispatch()
+  const { Searchbyname } = useSelector((state) => state.HotelReducer)
 
+  
 
   const [selected, setSelected] = useState("");
   const [ciDate, setCidate] = useState(new Date())
@@ -42,31 +45,52 @@ const HotelSearch = ({ navigation }) => {
   const [openCo, setOpenCo] = useState(false)
   var [showGuestModal, setShowGuestModal] = useState(false);
   const [selectDestination, setSelectDestination] = useState(false)
-  const [destination, setDestination] = useState({ city: 'coimbatore', country: 'india' })
+  // const [destination, setDestination] = useState({ city: 'coimbatore', country: 'india' })
   const [selectAddRoom, setSelectAddRoom] = useState([])
   const [adultCount, setAdultCount] = useState('')
   const [childCount, setChildCount] = useState('')
   const [currentLongitude, setCurrentLongitude] = useState('...');
-  const [currentLatitude, setCurrentLatitude ] = useState('...');
-  const [ locationStatus, setLocationStatus ] = useState('');
-
+  const [currentLatitude, setCurrentLatitude] = useState('...');
+  const [locationStatus, setLocationStatus] = useState('');
+  var [desination, setDesination] = useState({ city: '', country: '' }) //select from Place
+  var [noRecord, setNoRecord] = useState({ des: true })
 
   // const CurrentLocation = () => {
   //   Geocoder.init("AIzaSyAa2VY2pLrqe2F1_wD-UqlnxNp50Be53Xo");
 
   // }
-  // Geolocation.getCurrentPosition(
-  //   (position) => {
-  //     const currentLongitude =
-  //       JSON.stringify(position.coords.longitude);
-  //     const currentLatitude =
-  //       JSON.stringify(position.coords.latitude);
+  // useEffect(()=>{
+  //   Geolocation.getCurrentPosition(
+  //     (position) => {
+  //       const currentLongitude =
+  //         JSON.stringify(position.coords.longitude);
+  //       const currentLatitude =
+  //         JSON.stringify(position.coords.latitude);
+  //         console.log('CurrentLocation', currentLatitude)
+  //         console.log('CurrentLocation', currentLongitude)
+  //         apiReverseLocation(currentLatitude,currentLongitude)
 
-  //   }, (error) => alert(error.message), {
-  //   enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
-  // }
-  // );
-  // // console.log('CurrentLocation', CurrentLocation)
+  //     }, (error) => alert(error.message), {
+  //     enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
+  //   }
+  //   );
+  // },[])
+
+  //   const apiReverseLocation = (lat, lon) => {
+  //     const key = 'AIzaSyAXMAB9YA1Uol4BR1aWZ1r1KoCw5W7AzbE';
+  //     const api = `https://us1.locationiq.com/v1/reverse.php?key=${key}&lat=${lat}&lon=${lon}&format=json`;
+  //     const request = axios.get(api);
+  //     request
+  //       .then(res => {
+  //         console.log(res,'res....')
+
+  //       })
+  //       .catch(err => {
+  //         console.log(err)
+
+  //       });
+  //   };
+  // console.log('CurrentLocation', CurrentLocation)
 
 
   // useEffect(() => {
@@ -119,7 +143,7 @@ const HotelSearch = ({ navigation }) => {
 
   //       //Setting Longitude state
   //       setCurrentLongitude(currentLongitude);
-        
+
   //       //Setting Longitude state
   //       setCurrentLatitude(currentLatitude);
   //     },
@@ -138,7 +162,7 @@ const HotelSearch = ({ navigation }) => {
   //  let watchID = Geolocation.watchPosition(
   //     (position) => {
   //       //Will give you the location on location change
-        
+
   //       setLocationStatus('You are Here');
   //       console.log('position',position);
 
@@ -170,13 +194,14 @@ const HotelSearch = ({ navigation }) => {
     var d = new Date();
     d.setDate(d.getDate() + 1)
     setCodate(d)
+    AddRoom()
   }, [])
   const AddRoom = () => {
     let temp = []
     let tempGuest = selectAddRoom ? selectAddRoom : []
     temp = [...tempGuest, {
       room_no: tempGuest.length + 1,
-      adult: 0,
+      adult: 2,
       child: 0,
       child_age: []
     }]
@@ -193,8 +218,8 @@ const HotelSearch = ({ navigation }) => {
       type: hotelActions.GET_HOTEL_SEARCH, payload: {
         checkin: moment(ciDate).format('YYYY-MM-DD'),
         checkout: moment(coDate).format('YYYY-MM-DD'),
-        city_name: destination.city,
-        country_name: destination.country,
+        city_name: desination.city,
+        country_name: desination.country,
         // city_name: 'Delhi',
         // country_name: 'United States of America',
         requiredCurrency: 'INR',
@@ -218,44 +243,167 @@ const HotelSearch = ({ navigation }) => {
     }
   }, [selectAddRoom])
 
+
+  const handleSelection = (e) => {
+    Keyboard.dismiss()
+    dispatch({
+      type: hotelActions.SET_SELECT_NAME,
+      payload: []
+    })
+    setDesination(desination = { city: e.city_name, country: e.country_name });
+    setNoRecord(noRecord = { des: false })
+
+  }
+
+
   return (
     <View style={style.hotelSearch}>
-      <ScrollView style={style.hotelSearchTop}>
+      <View style={style.hotelSearchTop}>
         <View>
-          <View style={style.hotelSearchFieldGroup}>
+         <View style={{marginBottom:20}}>
+         <View style={style.hotelSearchFieldGroup}>
             <View style={style.hotelSearchFieldGroupIcon}>
               <Ionicons style={style.fieldIcon} name='location' />
             </View>
             <View style={style.hotelSearchFieldGroupInput}>
               <Text style={style.Searchlabel}>DESTINATION OR HOTEL NAME</Text>
-              <TouchableHighlight style={style.inputField} onPress={() => setSelectDestination(true)} underlayColor='transparent'>
-                {selectDestination !== true ?
-                  <Text style={style.inputFieldText}>{destination ? destination.city : 'Search your destination'}</Text>
-                  :
-                  <SelectList
-                    setSelected={(val) => setSelected(val)}
-                    data={data}
-                    save="value"
-                  />
-                  // <TextInput
-                  //   keyboardType={'default'}
-                  //   placeholder={'Select...'}
-                  //   placeholderTextColor="gray"
-                  //   numberOfLines={1}
 
-                  //   name="add_nationality"
-                  //   style={{
-                  //     color: 'black',
-                  //     fontFamily: font.font,
-                  //     width: width * 0.9,
-                  //     paddingTop: 5,
-                  //     paddingBottom: 0,
-                  //   }}
-                  // />
-                }
-              </TouchableHighlight>
+              <View>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    // height: 35,
+                    width: '100%',
+                    alignItems: 'center',
+                  }}
+                >
+
+                  <TextInput
+                    keyboardType={'default'}
+                    placeholder={'Select ...'}
+                    placeholderTextColor="gray"
+                    numberOfLines={1}
+                    value={desination?.city}
+                    onChangeText={(e) => {
+                      if (e === '') {
+                        setNoRecord(noRecord = { des: true })
+                      }
+                      if (e?.length >= 3) {
+                        dispatch({
+                          type: hotelActions.GET_SELECT_NAME,
+                          payload: {
+                            name: e,
+                          }
+                        })
+
+                        setDesination(desination = { city: e })
+                      } else {
+                        setDesination(desination = { city: e })
+                        dispatch({
+                          type: hotelActions.SET_SELECT_NAME,
+                          payload: []
+                        })
+                      }
+                    }}
+                    style={{
+                      color: 'black',
+                      fontFamily: font.font,
+                      width: width * 0.6,
+                      paddingTop: -15,
+                      paddingBottom: 0,
+                    }}
+                  />
+
+
+                  {
+                    desination?.name !== "" ?
+                      <TouchableHighlight
+                        underlayColor={'transparent'}
+                        onPress={() => {
+                          setDesination(desination = { city: '' })
+                          dispatch({
+                            type: hotelActions.SET_SELECT_NAME,
+                            payload: []
+                          })
+                          setNoRecord(noRecord = { des: true })
+
+                        }}
+                      >
+                        <AntIcon name="closecircle" size={15} color="gray" style={{
+                          marginLeft: 10, marginRight: 10,
+                        }} />
+                      </TouchableHighlight> : <></>
+                  }
+                </View>
+
+              </View>
+
             </View>
+
           </View>
+          {
+            (Searchbyname === undefined && desination?.city !== '' && noRecord?.des !== false) ?
+              <View style={{
+                backgroundColor: 'white',
+                width: '100%',
+                alignSelf: 'center',
+                position: 'relative',
+                zIndex: 2,
+                borderRadius: 5,
+                elevation: 10,
+                maxHeight: height * 0.35
+              }}>
+                <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
+              </View> : <View style={{
+                backgroundColor: 'white',
+                width: '90%',
+                alignSelf: 'center',
+                position: 'relative',
+                zIndex: 2,
+                borderRadius: 10,
+                elevation: 10,
+                maxHeight: height * 0.35
+              }}>
+
+                <ScrollView
+                  showsVerticalScrollIndicator={true}
+                  nestedScrollEnabled
+                  keyboardShouldPersistTaps='handled'
+                >
+                  {
+                    Searchbyname?.filter((item) => item?.city_name !== desination?.city)?.map((e, i) => {
+                      return (
+                        <TouchableHighlight
+                          underlayColor={"transparent"}
+                          onPress={() => {
+                            handleSelection(e)
+                          }}
+                          key={i}>
+                         { (e?.hotel_name ==undefined)?
+                         <Text
+                            style={{
+                              color: 'black',
+                              padding: 9,
+                              fontSize: 16,
+                              fontFamily: font.font
+                            }}>{e?.city_name} , {e?.country_name} (City)</Text>
+                          :
+                          <Text
+                          style={{
+                            color: 'black',
+                            padding: 9,
+                            fontSize: 16,
+                            fontFamily: font.font
+                          }}>{e?.hotel_name} , {e?.city_name} , {e?.country_name} (Hotel)</Text>}
+                        </TouchableHighlight>
+                      )
+                    })
+                  }
+                </ScrollView>
+
+              </View>
+          }
+         </View>
 
           <View>
             <View style={style.grid}>
@@ -352,7 +500,7 @@ const HotelSearch = ({ navigation }) => {
           {/* <TouchableOpacity onPress={() => CurrentLocation}>
             <Text>GetCurrentLocation</Text>
           </TouchableOpacity> */}
-           <Text style={style.boldText}>
+          <Text style={style.boldText}>
             {locationStatus}
           </Text>
           <Text
@@ -364,7 +512,7 @@ const HotelSearch = ({ navigation }) => {
             Longitude: {currentLongitude}
           </Text>
         </View>
-      </ScrollView>
+      </View>
 
       <Modal
         visible={showGuestModal}
@@ -531,7 +679,7 @@ const style = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 6,
     marginHorizontal: 5,
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   grid: {
     flexDirection: 'row',
@@ -549,7 +697,7 @@ const style = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: color.AppbarColor,
     alignItems: 'center',
-    marginBottom: 20,
+    // marginBottom: 20,
     paddingVertical: 15,
     borderRadius: 10,
     marginHorizontal: 0,

@@ -23,6 +23,7 @@
     "lodash": "^4.17.21",
     "moment": "^2.29.4",
     "react": "18.1.0",
+    "react-geocode": "^0.2.3",
     "react-hook-form": "^7.40.0",
     "react-native": "0.70.6",
     "react-native-autocomplete-input": "^5.2.0",

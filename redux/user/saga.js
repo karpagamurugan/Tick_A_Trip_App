@@ -231,7 +231,6 @@ const userAthentification = function* (data) {
             yield put({ type: actions.SET_USER_LOGIN, payload: result.data.user })
             yield put({ type: actions.GET_USER_PROFILE })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false });
-            console.log("token", result.data.status.token)
             navigation.reset({
                 index: 0,
                 routes: [{ name: 'bottomNavigation' }]
@@ -274,11 +273,11 @@ const getCompletedFlightTickets = function* (data) {
         )
 
         if (result?.data?.success === true) {
-            yield put({ type: actions.GET_COMPLETED_FLIGHT_TICKETS, payload: result.data })
+            yield put({ type: actions.SET_COMPLETED_FLIGHT_TICKETS, payload: result.data })
             // console.log('result data....',result?.data)
 
         } else {
-            yield put({ type: actions.GET_COMPLETED_FLIGHT_TICKETS, payload: result.data })
+            yield put({ type: actions.SET_COMPLETED_FLIGHT_TICKETS, payload: result.data })
 
         }
 
@@ -299,11 +298,11 @@ const getCancelledFlightTickets = function* (data) {
         )
 
         if (result?.data?.success === true) {
-            yield put({ type: actions.GET_CANCELLED_FLIGHT_TICKETS, payload: result.data })
+            yield put({ type: actions.SET_CANCELLED_FLIGHT_TICKETS, payload: result.data })
             // console.log('result data....',result?.data)
 
         } else {
-            yield put({ type: actions.GET_CANCELLED_FLIGHT_TICKETS, payload: result.data })
+            yield put({ type: actions.SET_CANCELLED_FLIGHT_TICKETS, payload: result.data })
 
         }
 
@@ -325,11 +324,11 @@ const getUpcomingFlightTickets = function* (data) {
         )
 
         if (result?.data?.success === true) {
-            yield put({ type: actions.GET_UPCOMING_FLIGHT_TICKETS, payload: result.data })
+            yield put({ type: actions.SET_UPCOMING_FLIGHT_TICKETS, payload: result.data })
             // console.log('result data....',result?.data)
 
         } else {
-            yield put({ type: actions.GET_UPCOMING_FLIGHT_TICKETS, payload: result.data })
+            yield put({ type: actions.SET_UPCOMING_FLIGHT_TICKETS, payload: result.data })
 
         }
 

@@ -23,6 +23,7 @@ import PopularPlacesDetails from '../Home/PopularPlaceDetails'
 import FlightDetails from '../Flight/FlightDetails'
 import HotelTicketDetails from '../Profile/MyTickets/HotelDetails'
 import AddTravellerForm from '../Profile/AddTravellerForm'
+import UpdateProfile from '../Profile/UpdateProfile'
 const Stack = createNativeStackNavigator();
 
 function HomeTab() {
@@ -53,6 +54,8 @@ function ProfileTab() {
             <Stack.Screen name="addTraveller" component={AddTraveller} options={{ headerShown: false }} />
             <Stack.Screen name="addtravellerform" component={AddTravellerForm} options={{ headerShown: false }} />
             <Stack.Screen name="HotelTicketDetails" component={HotelTicketDetails} options={{ headerShown: false }} />
+
+            <Stack.Screen name="updateProfile" component={UpdateProfile} options={{ headerShown: false }} />
 
         </Stack.Navigator>
     )

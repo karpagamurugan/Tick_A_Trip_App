@@ -5,6 +5,7 @@ const initialState = {
     getHotelSearchResult: {},
     getHotelFilterResult: [],
     hotelSessionId: null,
+    Searchbyname:[],
 }
 
 const HotelReducer = (state = initialState, action) => {
@@ -24,6 +25,11 @@ const HotelReducer = (state = initialState, action) => {
                 ...state,
                 hotelSessionId: action.payload
             }
+            case actions.SET_SELECT_NAME:
+                return {
+                    ...state,
+                    Searchbyname: action.payload
+                }
         default:
             return state;
     }

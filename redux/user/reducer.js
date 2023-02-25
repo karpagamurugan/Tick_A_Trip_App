@@ -46,17 +46,17 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 isLogin: action.payload
             }
-        case actions.GET_COMPLETED_FLIGHT_TICKETS:
+        case actions.SET_COMPLETED_FLIGHT_TICKETS:
             return {
                 ...state,
                 Completed_flight: action.payload
             }
-        case actions.GET_CANCELLED_FLIGHT_TICKETS:
+        case actions.SET_CANCELLED_FLIGHT_TICKETS:
             return {
                 ...state,
                 Cancelled_flight: action.payload
             }
-        case actions.GET_UPCOMING_FLIGHT_TICKETS:
+        case actions.SET_UPCOMING_FLIGHT_TICKETS:
             return {
                 ...state,
                 Upcoming_flight: action.payload

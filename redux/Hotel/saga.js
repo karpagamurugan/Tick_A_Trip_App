@@ -8,7 +8,8 @@ import actions from './actions'
 const HotelSaga = function* () {
     yield all([
         yield takeEvery(actions.GET_HOTEL_SEARCH, getHotelSearch),
-        yield takeEvery(actions.GET_HOTEL_FILTER, getHotelFilter)
+        yield takeEvery(actions.GET_HOTEL_FILTER, getHotelFilter),
+        yield takeEvery(actions.GET_SELECT_NAME, getHotelNameSearch)
     ])
 }
 
@@ -32,6 +33,9 @@ const getHotelSearch = function* (data) {
             yield put({ type: actions.SET_HOTEL_SESSION_ID, payload: result.data.message.sessionId });;
             navigation.navigate('HotelList')
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+        }else{
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
         }
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
@@ -68,6 +72,33 @@ const getHotelFilter = function* (data) {
         console.log('err', err)
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         yield put({ type: actions.SET_HOTEL_FILTER, payload: err.data });
+    }
+}
+
+const getHotelNameSearch = function* (data) {
+    const { payload, navigation } = data
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/getHotelCitieSearch`,
+                payload,
+                {
+                    headers: {
+                        accept: 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            )
+        );
+        if (result.data.status === true) {
+            yield put({ type: actions.SET_SELECT_NAME, payload: result.data.message });
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+        }
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+    } catch (err) {
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+        console.log('err', err.message.map((val) => val))
+        yield put({ type: actions.SET_SELECT_NAME, payload: err.data });
     }
 }
 
