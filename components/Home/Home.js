@@ -36,6 +36,7 @@ const Home = ({ navigation }) => {
   return (
     <ScrollView >
       <View style={{ width: width, paddingHorizontal: 20, }}>
+        
         <Text style={style.bannerTd}>Explore the  World with us</Text>
         <View style={style.bannerBtns}>
           <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('Hotel')}>

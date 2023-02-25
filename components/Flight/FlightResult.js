@@ -132,7 +132,6 @@ export default function FlightResult({ navigation,route }) {
                             <View style={styles.priceContainer}>
                                 <Text style={styles.priceValue}>0</Text>
                                 <Text style={styles.priceValue}>100000</Text>
-
                             </View>
 
                             <View style={{ height: 0.5, backgroundColor: 'grey' }} />

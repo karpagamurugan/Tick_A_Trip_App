@@ -30,13 +30,14 @@ const HotelList = ({ navigation }) => {
     return (
         <View>
             <Modal
+                
                 visible={openFilter}
                 transparent={true}
                 animationType="fade"
             >
-                <ScrollView style={style.filterModelSec}>
-                    <HotelFilter setOpenFilter={setOpenFilter} />
-                </ScrollView>
+                <View>
+                    <HotelFilter navigation={navigation} setOpenFilter={setOpenFilter} />
+                </View>
             </Modal>
             <ScrollView>
                 <HotelAppbar title='Hotel Detail' />
@@ -72,21 +73,13 @@ const HotelList = ({ navigation }) => {
 
 export default HotelList
 const style = StyleSheet.create({
-    filterModelSec: {
-        backgroundColor: '#E9F3FF',
-        position: 'absolute',
-        width: width * 0.8,
-        alignSelf: 'center',
-        top: height * 0.1,
-        padding: 20,
-        height: height * 0.7,
-    },
+
     hotelDetailSec: {
         paddingHorizontal: 10,
         // backgroundColor:'white',
         // height:height
         // height:height*0.5,
-        backgroundColor:'white'
+        backgroundColor: 'white'
     },
     searchPlaceIcon: {
         color: '#FCC40A',
