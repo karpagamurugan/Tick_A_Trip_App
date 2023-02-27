@@ -6,11 +6,16 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Stars from 'react-native-stars';
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import style from '../common/commonStyle'
+import { useDispatch, useSelector } from 'react-redux';
+import hotelActions from '../../redux/Hotel/actions';
 
 
 const HotelCard = (props) => {
     const { val } = props
+    const { hotelSessionId } = useSelector((state) => state.HotelReducer)
+
     var navigation =props?.navigation
+    const dispatch =useDispatch()
 
     return (
         <View style={style.hotelListCardSec}>
@@ -50,7 +55,19 @@ const HotelCard = (props) => {
                         <Text style={style.ListHotelName}>{val?.hotelName}</Text>
                         <Text style={style.ListHotelPrice}>{val?.currency} {val?.total} <Text style={style.taxTect}>inclusing tax</Text></Text>
                         {/* <Text style={style.ListHotelDescription}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel molestie nisl. Duis ac mi leo.</Text> */}
-                        <TouchableHighlight style={style.ListHotelBtn} onPress={() => navigation.navigate('HotelRoomType')}>
+                        <TouchableHighlight style={style.ListHotelBtn}
+                         onPress={() =>{
+                            dispatch({
+                                type:hotelActions.GET_HOTEL_ROOM_TYPE,
+                                payload:{
+                                    hotelId:val?.hotelId,
+                                    productId:val?.productId,
+                                    sessionId:hotelSessionId,
+                                    tokenId:val?.tokenId
+                                },
+                                navigation:navigation
+                            })
+                             }}>
                             <Text style={style.ListHotelBtnText}>BOOK NOW</Text>
                         </TouchableHighlight>
                     </View>

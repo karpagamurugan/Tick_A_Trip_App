@@ -125,13 +125,14 @@ const style = StyleSheet.create({
         fontFamily: font.fontBold,
         letterSpacing: 0.8,
         alignSelf: 'center',
-        fontSize: 20,
+        fontSize: height*0.025,
         color: color.colorText,
         paddingTop: 20,
         textTransform: 'capitalize',
     },
     RoomTypesSec: {
         paddingBottom: height * 0.20,
+        backgroundColor:'white',height:height
     },
     HotelDetailBannerCon: {
         height: height * 0.25,

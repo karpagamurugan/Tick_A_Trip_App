@@ -9,7 +9,8 @@ const HotelSaga = function* () {
     yield all([
         yield takeEvery(actions.GET_HOTEL_SEARCH, getHotelSearch),
         yield takeEvery(actions.GET_HOTEL_FILTER, getHotelFilter),
-        yield takeEvery(actions.GET_SELECT_NAME, getHotelNameSearch)
+        yield takeEvery(actions.GET_SELECT_NAME, getHotelNameSearch),
+        yield takeEvery(actions.GET_HOTEL_ROOM_TYPE, getHotelRoomType)
     ])
 }
 
@@ -102,5 +103,40 @@ const getHotelNameSearch = function* (data) {
     }
 }
 
+
+const getHotelRoomType = function* (data) {
+    const { payload,navigation } = data
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/roomRates`,
+                payload,
+                {
+                    headers: {
+                        accept: 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+            )
+        );
+        console.log(result.data)
+        if (result.data.status === true) {
+            yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: result.data.message });
+            navigation.navigate('HotelRoomType')
+            console.log('if....',result?.data)
+
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+        }else{
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+        }
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+    } catch (err) {
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+        console.log('err', err.message.map((val) => val))
+        yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: err.data });
+    }
+}
 
 export default HotelSaga;

@@ -6,6 +6,7 @@ const initialState = {
     getHotelFilterResult: [],
     hotelSessionId: null,
     Searchbyname:[],
+    HotelRoomType:[],
 }
 
 const HotelReducer = (state = initialState, action) => {
@@ -30,6 +31,11 @@ const HotelReducer = (state = initialState, action) => {
                     ...state,
                     Searchbyname: action.payload
                 }
+                case actions.SET_HOTEL_ROOM_TYPE:
+                    return {
+                        ...state,
+                        HotelRoomType: action.payload
+                    }
         default:
             return state;
     }
