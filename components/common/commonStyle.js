@@ -144,7 +144,7 @@ const style = StyleSheet.create({
     HotelDetailHotelName: {
         fontFamily: font.mediam,
         color: '#fff',
-        fontSize: height*0.02,
+        fontSize: height*0.022,
     },
     HotelDetailBanner: {
         position: 'relative',
@@ -162,16 +162,17 @@ const style = StyleSheet.create({
         color: '#fff',
         fontFamily: font.fontBold,
         fontSize: height*0.025,
+        lineHeight:30,
     },
     HotelDetailHotelPriceTxt: {
         fontFamily: font.font,
-        fontSize: 13,
-        color: '#fff',
+        fontSize: 12,
+        color: '#FFFFFF',
     },
     HotelDetailHotelTax: {
         color: '#fff',
         fontFamily: font.font,
-        fontSize: 13,
+        fontSize: 10,
     },
     HotelTitle: {
         fontFamily: font.mediam,
@@ -189,7 +190,7 @@ const style = StyleSheet.create({
     },
     TitleMain: {
         fontFamily: font.fontSemi,
-        fontSize: 17,
+        fontSize: 20,
         color: color.colorText,
         letterSpacing: 0.5,
         marginTop: 15,
@@ -202,10 +203,12 @@ const style = StyleSheet.create({
     list: {
         fontFamily: font.font,
         color: color.colorGrey,
-        marginBottom: 5,
+        color:"#8492A7",
     },
     listIcon: {
-        color: '#0050A6',
+        color: '#002896',
+        fontSize: 25,
+        paddingRight: 15,
     },
     bookingBtn: {
         backgroundColor: color.colorBtn,

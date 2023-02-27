@@ -15,7 +15,6 @@ import Wifi from '../../Assert/Icons/wifi.svg';
 import Bar from '../../Assert/Icons/glass-and-bottle-of-wine.svg';
 import Gym from '../../Assert/Icons/Clocks_1_.svg';
 import More from '../../Assert/Icons/more.svg';
-import AntDesign from 'react-native-vector-icons/AntDesign'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -38,7 +37,7 @@ const HotelDetail = ({ navigation }) => {
     }
 
     const onTextLayout = useCallback(e => {
-        setTextReadMore(e.nativeEvent.lines.length >= 4)
+        setTextReadMore(e.nativeEvent.lines.length >= 3.5)
     }, []);
     const roomFacility = [
         'Parking',
@@ -69,7 +68,7 @@ const HotelDetail = ({ navigation }) => {
                     <View style={style.HotelDetailBannerCon}>
                         <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
                             <Text style={style.HotelDetailHotelName}>Hotel Arkadia - 301</Text>
-                            <View>
+                            <View style={{ flexDirection: "row", alignItems: 'center', }}>
                                 <Stars
                                     default={0}
                                     count={5}
@@ -81,10 +80,17 @@ const HotelDetail = ({ navigation }) => {
                                     emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
                                     halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle]} />}
                                 />
+                                <Text style={{ color: '#BBBBBB', paddingLeft: 5,fontFamily: font.mediam, }}>reviews</Text>
                             </View>
                         </View>
                         <View>
-                            <Text style={style.HotelDetailHotelPrice}>5,500<Text style={style.HotelDetailHotelPriceTxt}>Rs</Text></Text>
+                            <View style={{ flexDirection: "row", alignItems: 'center', }}>
+                                <Text style={style.HotelDetailHotelPrice}>5,500</Text>
+                                <View style={{ paddingHorizontal: 5 }}>
+                                    <Text style={styles.HotelPriceList}>Rs</Text>
+                                    <Text style={styles.HotelPriceList}>Per Day</Text>
+                                </View>
+                            </View>
                             <Text style={style.HotelDetailHotelTax}>including tax 6,220</Text>
                         </View>
                     </View>
@@ -95,27 +101,29 @@ const HotelDetail = ({ navigation }) => {
                 <View style={{ paddingHorizontal: 15 }}>
                     <View>
                         <Text style={style.TitleMain}>About the Hotel</Text>
-                        <Text
-                            onTextLayout={onTextLayout}
-                            numberOfLines={textShown ? undefined : 4}
-                            style={style.parrah}
-                        >
-                            Lorem ipsum dolor sit amet, consectetur adipiscing
-                            elit. Integer vel molestie nisl. Duis ac mi leo. Mauris at convallis
-                            erat. Aliquam interdum semper luctus. Sed viv Duis ac mi leo. Mauris at convallis
-                            erat. Aliquam interdum semper luctus. Sed vivSed viv Duis ac mi leo. Mauris at convallis
-                            erat. Aliquam interdum semper luctus. Sed vivSed viv Duis ac mi leo. Mauris at convallis
-                            erat. Aliquam interdum semper luctus.</Text>
-                        {
+                        <View>
+                            <Text
+                                onTextLayout={onTextLayout}
+                                numberOfLines={textShown ? undefined : 4.7}
+                                style={style.parrah}
+                            >
+                                Lorem ipsum dolor sit amet, consectetur adipiscing
+                                elit. Integer vel molestie nisl. Duis ac mi leo. Mauris at convallis
+                                erat. Aliquam interdum semper luctus. Sed viv Duis ac mi leo. Mauris at convallis
+                                erat. Aliquam interdum semper luctus. Sed vivSed viv Duis ac mi leo. Mauris at convallis
+                                erat. Aliquam interdum semper luctus. Sed vivSed viv Duis ac mi leo. Mauris at convallis
+                                erat. Aliquam interdum semper luctus.</Text>
+                            {
 
-                            textReadMore ?
-                                <Text
-                                    style={{ fontFamily: font.mediam, }}
-                                    onPress={() => textNumberOfLine()}
-                                >
-                                    {textShown ? 'Read less...' : 'Read more...'}
-                                </Text> : null
-                        }
+                                textReadMore ?
+                                    <Text
+                                        style={{ fontFamily: font.mediam, color: '#0041F2', fontSize: 15, }}
+                                        onPress={() => textNumberOfLine()}
+                                    >
+                                        {textShown ? 'Read less...' : 'Read More...'}
+                                    </Text> : null
+                            }
+                        </View>
                     </View>
                     <View style={{ marginBottom: 20, }}>
                         <Text style={style.TitleMain}>Aminities</Text>
@@ -185,30 +193,37 @@ const HotelDetail = ({ navigation }) => {
                         >
                             <View style={{
                                 backgroundColor: "#000000c2", height: height, width: width,
-                                alignItems: "center", justifyContent: 'center'
+                                alignItems: "flex-end", justifyContent: 'flex-end'
                             }}>
                                 <View style={{
-                                    backgroundColor: "#E9F3FF", height: height * 0.7,
-                                    width: "90%", borderRadius: 10, padding: 20,
+                                    backgroundColor: "#fff",
+                                    height: height * 0.5, width: "100%", borderRadius: 50,
                                 }}>
-                                    <Text style={style.TitleMain}>Aminities</Text>
-                                    <ScrollView style={{ height: height }}>
-                                        {roomFacility.map((val, index) => (
-                                            <View style={{ padding: 10 }}>
-                                                <Text style={style.list} key={index}><MaterialIcons style={style.listIcon} name='double-arrow' /> {val}</Text>
-                                            </View>
-                                        ))}
-                                    </ScrollView>
-                                    <Pressable style={{
-                                        backgroundColor: "#E9F3FF",
-                                        padding: 10,
-                                        position: 'absolute',
-                                        top: -50, right: 0,
-                                        borderRadius: 100,
-                                    }}
-                                        onPress={() => setMoreVisible(!moreVisible)}>
-                                        <AntDesign style={{ color: '#000', fontSize: 25 }} name='close' />
-                                    </Pressable>
+                                    <View style={[styles.aminitiesBackground]}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center', paddingHorizontal: 30, }}>
+                                            <FontAwesome style={[style.listIcon]} name='circle' />
+                                            <Text style={[styles.aminitiesTitle]}> Aminities</Text>
+                                        </View>
+                                        <Pressable style={[styles.closeIcons]}
+                                            onPress={() => setMoreVisible(!moreVisible)}>
+                                            <Ionicons style={{ color: '#2B64FF', fontSize: 30, paddingRight: 20 }} name='close' />
+                                        </Pressable>
+                                    </View>
+                                    <View style={{ paddingHorizontal: 30, }}>
+                                        <ScrollView style={{ height: height * 0.35, }}>
+                                            {roomFacility.map((val, index) => (
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                                    <FontAwesome style={[style.listIcon]} name='circle' />
+                                                    <Text style={[style.list,
+                                                    {
+                                                        fontSize: 19, flex: 1, paddingLeft: 10,
+                                                        borderBottomWidth: 1, borderBottomColor: "#eee", paddingVertical: 10
+                                                    }]}
+                                                        key={index}>{val} </Text>
+                                                </View>
+                                            ))}
+                                        </ScrollView>
+                                    </View>
                                 </View>
                             </View>
                         </Modal>
@@ -218,7 +233,7 @@ const HotelDetail = ({ navigation }) => {
                     </View>
                     <View>
                         <TouchableHighlight style={style.bookingBtn}>
-                            <Text style={style.bookingBtnTxt}>Continue</Text>
+                            <Text style={style.bookingBtnTxt}>Book Now</Text>
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -238,5 +253,30 @@ const styles = StyleSheet.create({
     myEmptyStarStyle: {
         color: '#FCC40A',
     },
+    HotelPriceList: {
+        fontFamily: font.font,
+        fontSize: 9,
+        color: '#fff',
+        lineHeight: 13,
+        fontWeight: "500",
+    },
+    closeIcons: {
+        padding: 10,
+        color: "#0050A6",
+    },
+    aminitiesTitle: {
+        fontSize: 25,
+        color: "#002896",
+        paddingVertical: 8,
+        fontFamily: font.mediam,
+    },
+    aminitiesBackground: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: "#E9F3FF",
+        justifyContent: "space-between",
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+    }
 });
 export default HotelDetail

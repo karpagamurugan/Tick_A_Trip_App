@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import actions from '../../../redux/user/actions';
 import font from '../../constants/font';
 import color from '../../constants/color';
+import moment from 'moment'
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -41,86 +42,117 @@ export default function HotelTicketDetails({ item, navigation }) {
                 </TouchableHighlight>
             </View>
 
-            <ScrollView>
+            <ScrollView style={{height:height}}>
                 <View>
                     {
                         (selectedTab === 0) ?
                             <ScrollView>
                                 <View>
                                     <View style={{ alignSelf: 'center', marginTop: 30, alignItems: "center", }}>
-                                        <View style={style.borderLine}>
+                                        {/* <View style={style.borderLine}>
                                             <Text style={{ paddingBottom: 8, letterSpacing: 2, fontSize: 12, fontWeight: "700" }}>RESERVATION CONFIRMATION</Text>
+                                        </View> */}
+                                        <View style={{ flexDirection: "row", alignItems: "center", }}>
+                                            <Text style={{ fontSize: 15, color: "#003AA8", fontFamily: font.mediam, }}>Your Supplier Confirmation No :</Text>
+                                            <Text style={{ fontFamily: font.mediam, }}> {Hotel_details?.message?.supplierConfirmationNum}</Text>
                                         </View>
-                                        <Text style={{ paddingTop: 8, fontSize: 15, fontWeight: "700", }}>Your Supplier Confirmation No : {Hotel_details?.message?.supplierConfirmationNum}</Text>
                                         <Image style={{ height: 180, width: 350, resizeMode: 'cover', marginTop: 15, borderRadius: 5 }} source={{ uri: Hotel_details?.message?.image }} />
                                     </View>
 
-                                    <View style={{ marginHorizontal: 10, marginTop: 20, }}>
-                                        <View style={{ flexDirection: "column" }}>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Booking Status</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.status}</Text>
+                                    <Text style={[style.bookingDetailStyl]}>BOOKING DETAILS</Text>
+                                    <View style={{ paddingHorizontal: 20 }}>
+                                        <Text style={style.centerLine}></Text>
+                                    </View>
+                                    <View style={{ marginHorizontal: 20, }}>
+                                        <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
+                                            <View>
+                                                <View style={{ paddingBottom: 10 }}>
+                                                    <Text style={style.bookingTitle}>Booking Status</Text>
+                                                    <Text style={[style.bookingListContent,
+                                                    { color: "#65C14F", fontFamily: font.fontBold, fontSize: 20 }]}
+                                                    >{Hotel_details?.message?.status}</Text>
+                                                </View>
+                                                <View style={{ paddingBottom: 10 }}>
+                                                    <Text style={style.bookingTitle}>Check Out</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.checkOut}</Text>
+                                                </View>
                                             </View>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Booking Time </Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.bookingDateTime}</Text>
+                                            <View>
+                                                <View style={{ paddingBottom: 10 }}>
+                                                    <Text style={style.bookingTitle}>Booking Time </Text>
+                                                    <Text style={style.bookingListContent}>{moment(Hotel_details?.message?.roomBookDetails?.bookingDateTime).format('mm:ss A')}</Text>
+                                                </View>
+                                                <View style={{ paddingBottom: 10 }}>
+                                                    <Text style={style.bookingTitle}>Check In</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.checkIn}</Text>
+                                                </View>
                                             </View>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Check In</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.checkIn}</Text>
+                                        </View>
+                                        <View>
+                                            <Text style={[style.bookingDetailStyl, { paddingTop: 30 }]}>HOTEL DETAILS</Text>
+                                            <View style={{ paddingHorizontal: 20 }}>
+                                                <Text style={style.centerLine}></Text>
                                             </View>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Check Out</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.checkOut}</Text>
-                                            </View>
-
-                                            <Text style={style.centerLine}></Text>
-
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Booking Days</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.days}</Text>
-                                            </View>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Net Price</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.currency} {Hotel_details?.message?.roomBookDetails?.NetPrice}</Text>
-                                            </View>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Fare Type</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.fareType}</Text>
-                                            </View>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Customer Email</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.customerEmail}</Text>
-                                            </View>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Customer Phone</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.customerPhone}</Text>
-                                            </View>
-
-                                            <Text style={style.centerLine}></Text>
-
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
+                                            <View style={{ paddingBottom: 10 }}>
                                                 <Text style={style.bookingTitle}>Hotel Name</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.hotelName}</Text>
+                                                <Text style={[style.bookingListContent, { color: "#00065E", fontFamily: font.fontBold, fontSize: 19 }]}>{Hotel_details?.message?.roomBookDetails?.hotelName}</Text>
                                             </View>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
+                                            <View style={{ paddingBottom: 10 }}>
                                                 <Text style={[style.bookingTitle,]}>Hotel Address</Text>
                                                 <Text style={[style.bookingListContent,]}>{Hotel_details?.message?.roomBookDetails?.address}</Text>
                                             </View>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>City</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.city}</Text>
+                                            <View style={{ flexDirection: "row", paddingBottom: 10 }}>
+                                                <View style={{ width: "60%" }}>
+                                                    <Text style={style.bookingTitle}>City</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.city}</Text>
+                                                </View>
+                                                <View>
+                                                    <Text style={style.bookingTitle}>Country</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.country}</Text>
+                                                </View>
                                             </View>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Country</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.country}</Text>
+                                        </View>
+                                        <View style={{ paddingTop: 30 }}>
+                                            <Text style={[style.bookingDetailStyl]}>BILLING DETAILS</Text>
+                                            <View style={{ paddingHorizontal: 20 }}>
+                                                <Text style={style.centerLine}></Text>
                                             </View>
-                                            <Text style={style.centerLine}></Text>
-                                            <View style={{ flexDirection: "row", justifyContent: "space-between", }}>
-                                                <Text style={style.bookingTitle}>Cancellation Policy</Text>
-                                                <Text style={[style.bookingListContent,]}>{Hotel_details?.message?.roomBookDetails?.cancellationPolicy}</Text>
+                                            <View style={[style.paddBottom10]}>
+                                                <Text style={style.bookingTitle}>Booking Days</Text>
+                                                <Text style={style.bookingListContent}>
+                                                    {Hotel_details?.message?.roomBookDetails?.days}
+                                                </Text>
                                             </View>
-
+                                            <View style={[style.paddBottom10]}>
+                                                <Text style={style.bookingTitle}>Net Price</Text>
+                                                <Text style={style.bookingListContent}>
+                                                    {Hotel_details?.message?.roomBookDetails?.currency}
+                                                    {Hotel_details?.message?.roomBookDetails?.NetPrice}
+                                                </Text>
+                                            </View>
+                                            {(Hotel_details?.message?.roomBookDetails?.fareType===''||Hotel_details?.message?.roomBookDetails?.fareType===undefined||Hotel_details?.message?.roomBookDetails?.fareType===null)?<View/>:
+                                                <View style={[style.paddBottom10]}>
+                                                <Text style={style.bookingTitle}>Fair Type</Text>
+                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.fareType}</Text>
+                                            </View>
+                                            }
+                                           {(Hotel_details?.message?.roomBookDetails?.customerEmail===''||Hotel_details?.message?.roomBookDetails?.customerEmail===undefined||Hotel_details?.message?.roomBookDetails?.customerEmail===null)?<View />:
+                                             <View style={[style.paddBottom10]}>
+                                             <Text style={style.bookingTitle}>Customer Email</Text>
+                                             <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.customerEmail}</Text>
+                                         </View>
+                                           }
+                                            {(Hotel_details?.message?.roomBookDetails?.customerPhone===''||Hotel_details?.message?.roomBookDetails?.customerPhone===undefined||Hotel_details?.message?.roomBookDetails?.customerPhone===null)?<View />:
+                                                <View style={[style.paddBottom10]}>
+                                                <Text style={style.bookingTitle}>Customer Phone</Text>
+                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.customerPhone}</Text>
+                                            </View>
+                                            }
+                                        </View>
+                                        <Text style={style.centerLine}></Text>
+                                        <View style={{paddingBottom:20}}>
+                                            <Text style={style.bookingTitle}>Cancellation Policy</Text>
+                                            <Text style={[style.bookingListContent,{fontSize:14}]}>{Hotel_details?.message?.roomBookDetails?.cancellationPolicy}</Text>
                                         </View>
                                     </View>
                                 </View>
@@ -179,22 +211,22 @@ const style = StyleSheet.create({
     centerLine: {
         width: "100%",
         height: 1,
-        backgroundColor: "#e0e0e0",
-        marginVertical: 15,
+        backgroundColor: "#E9F3FF",
+        marginVertical: 10,
     },
     bookingTitle: {
-        fontSize: 16,
-        fontWeight: "500",
-        color: "#5e5e5e",
-        paddingBottom: 10,
-        flex: 1,
-        paddingLeft:10,
-    },
-    bookingListContent: {
         fontSize: 15,
         fontWeight: "500",
-        color: "#a1a1a1",
+        color: "#003AA8",
+        paddingBottom: 6,
         flex: 1,
+        fontFamily: font.font,
+    },
+    bookingListContent: {
+        fontSize: 18,
+        color: "#222222",
+        flex: 1,
+        fontFamily: font.mediam,
     },
     RoomText: {
         fontSize: 22,
@@ -229,8 +261,14 @@ const style = StyleSheet.create({
         borderColor: "#f6c220",
         width: "70%",
         borderRadius: 10,
-
-
+    },
+    bookingDetailStyl: {
+        color: "#003AA8",
+        fontSize: 20,
+        textAlign: "center",
+        fontFamily: font.fontBold,
+    },
+    paddBottom10: {
+        paddingBottom: 10
     }
-
 })
