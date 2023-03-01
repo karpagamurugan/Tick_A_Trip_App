@@ -105,7 +105,8 @@ const getHotelNameSearch = function* (data) {
 
 
 const getHotelRoomType = function* (data) {
-    const { payload,navigation } = data
+    yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
+    const { payload,navigation,detail } = data
     try {
         const result = yield call(() =>
             axios.post(
@@ -119,12 +120,9 @@ const getHotelRoomType = function* (data) {
                 }
             )
         );
-        console.log(result.data)
         if (result.data.status === true) {
             yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: result.data.message });
-            navigation.navigate('HotelRoomType')
-            console.log('if....',result?.data)
-
+            navigation.navigate('HotelRoomType',{detail:detail})
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         }else{
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })

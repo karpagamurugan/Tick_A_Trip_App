@@ -65,7 +65,8 @@ const HotelCard = (props) => {
                                     sessionId:hotelSessionId,
                                     tokenId:val?.tokenId
                                 },
-                                navigation:navigation
+                                navigation:navigation,
+                                detail:val
                             })
                              }}>
                             <Text style={style.ListHotelBtnText}>BOOK NOW</Text>

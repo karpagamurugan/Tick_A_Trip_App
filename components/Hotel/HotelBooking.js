@@ -1,55 +1,94 @@
-import React from "react";
-import {View,Text,StyleSheet,Dimensions,TouchableHighlight,ScrollView} from 'react-native'
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, Dimensions, TouchableHighlight, ScrollView, TextInput, Image } from 'react-native'
 import Appbar from "../common/Appbar";
 import HotelAppbar from "../common/HotelAppbar";
 import COLORS from "../constants/color";
-import FONT_FAMILY from "../constants/font";
+import FONTS from "../constants/font";
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import moment from "moment";
+import FromIcon from '../../Assert/Images/icon/take-off.svg';
+import ToIcon from '../../Assert/Images/icon/take-off-2.svg';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import Flight from '../../Assert/Images/icon/flight-2.svg';
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import { useDispatch, useSelector } from "react-redux";
+import { useForm, Controller } from "react-hook-form";
+import Fontisto from 'react-native-vector-icons/Fontisto'
+import userActions from '../../redux/user/actions'
+import RazorpayCheckout from "react-native-razorpay";
+
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
-function HotelBooking(){
-    return(
-        <View>
+function HotelBooking({ route, navigation }) {
+    // const {details} =props;
+        const dispatch =useDispatch()
+    const [HotelDetail, setHotelDetail] = useState(route?.params?.detail)
+    const [RoomType, setRoomType] = useState(route?.params?.value)
+    var [policyBox, setPolicyBox] = useState(false);
+    const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
+   
+    const { userProfileData } = useSelector((state) => state.userReducer)
+
+    // console.log('details', HotelDetail)
+    // console.log('RoomType', RoomType)
+
+        const onSubmit =(data)=>{
+            console.log(data)
+        }
+        // console.log('userProfileData',userProfileData)
+        useEffect((async) => {
+            // dispatch({ type: commonAction.COMMON_LOADER, payload: true })
+            dispatch({ type: userActions.GET_USER_PROFILE })
+        }, [dispatch])
+        // useEffect(()=>{
+        //     let defaultFirstName = {FirstName:userProfileData?.first_name}
+        // reset({...defaultFirstName})
+        // let defaultLastName = {LastName:userProfileData?.last_name}
+        // reset({...defaultLastName})
+        // let defaultEmail = {Email:userProfileData?.email}
+        // reset({...defaultEmail})
+        // let defaultPhone = {Phone:userProfileData?.phone}
+        // reset({...defaultPhone})
+        // },[])
+    return (
+        <View style={{ height: height * 0.92, backgroundColor: 'transparent' }}>
             {/* <Appbar title={'Hotel Booking'}/> */}
-            <HotelAppbar title={'Hotel Booking'}/>
+            <HotelAppbar title={'Hotel Booking'} />
+
+
             <ScrollView>
-                {/* <View style={{ height: height }}> */}
-                <View >
-                    {/* <View style={styles.details}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', marginTop: 10 }}>
-                            <View>
-                                <Text style={styles.title}>Depart On</Text>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <SimpleLineIcons name="calendar" color={COLORS.colorBtn} size={20} />
-                                    <Text style={styles.text}>{route?.params?.flightInfo?.departure_date}</Text>
+                {/* <View style={{ height: height * 0.25, backgroundColor: COLORS.BtnColor, marginTop: 10 }} /> */}
+                <Image source={{ uri: HotelDetail?.thumbNailUrl }} style={{ height: height * 0.27, marginTop: 15 }} />
+                <View style={{ marginTop:10,flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 }}>
+                    <View>
+                        <Text style={[styles.HotelName,{color:'black'}]}>{HotelDetail?.hotelName}</Text>
+                        <Text style={styles.HotelName}>{HotelDetail?.hotelRating} Reviews</Text>
+                    </View>
+                    <View>
+                        <View style={{ backgroundColor: COLORS.lightGrey }}>
+                            <View style={{ flexDirection: "row", alignItems: 'center', }}>
+                                <Text style={styles.HotelDetailHotelPrice}>{RoomType?.netPrice}</Text>
+                                <View style={{ paddingHorizontal: 5 }}>
+                                    <Text style={styles.HotelPriceList}>Rs</Text>
+                                    <Text style={styles.HotelPriceList}>Per Day</Text>
                                 </View>
                             </View>
-                            {
-                                (route?.params?.flightInfo?.return_date === null ||route?.params?.flightInfo?.return_date ===undefined||route?.params?.flightInfo?.return_date ==='')?
-                                <View/>:
-                                <View>
-                                <Text style={styles.title}>Return</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                    <Text style={styles.text}>{route?.params?.flightInfo?.return_date}</Text>
-                                </View>
-                            </View>
-                            }
-                          
+                            <Text style={styles.HotelDetailHotelTax}>including tax 6,220</Text>
+
                         </View>
+                    </View>
+                </View>
+                <Text style={{width:width*0.9,marginHorizontal:20,fontSize:height*0.017,color:COLORS.BtnColor,fontFamily:FONTS.font}}>{HotelDetail?.address}</Text>
 
-                      
-                    </View> */}
 
-                   <View style={{backgroundColor:'#F7F7F7'}}>
-                   <View style={{flexDirection:'row',justifyContent:'space-evenly',paddingVertical:25}}>
+                <View >
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingVertical: 25 }}>
                         <View>
                             <Text style={styles.title}>Depart On</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                {/* <SimpleLineIcons name="calendar" color={COLORS.colorBtn} size={20} /> */}
-                                {/* <Text style={styles.text}>{moment(get_Revalidate?.DepartureDateTime).format('DD-MM-YYYY')}</Text> */}
+                                <SimpleLineIcons name="calendar" color={COLORS.colorBtn} size={20} />
+                                <Text style={styles.text}>2023-2-28</Text>
                                 {/* <AntDesign name="down" style={{paddingLeft:5}}/> */}
                             </View>
                         </View>
@@ -57,42 +96,35 @@ function HotelBooking(){
                             <Text style={styles.title}>Return</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <SimpleLineIcons name="calendar" color={COLORS.colorBtn} size={20} />
-                                {/* <Text style={styles.text}>{moment(get_Revalidate?.ArrivalDateTime).format('DD-MM-YYYY')}</Text> */}
+                                <Text style={styles.text}>2023-2-28</Text>
                             </View>
                         </View>
                     </View>
 
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly',paddingBottom:25}}>
-                            <View>
-                                <Text style={styles.title}>Adult</Text>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                    <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                    <Text style={styles.text}>{route?.params?.flightInfo?.adult_flight} Adult</Text>
-                                </View>
-                            </View>
-                            <View>
-                                <Text style={styles.title}>Kids</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                    <Text style={styles.text}>{route?.params?.flightInfo?.child_flight} Kids</Text>
-                                </View>
-                            </View>
-                            <View>
-                                <Text style={styles.title}>Infant</Text>
-                                <View style={{ flexDirection: 'row' }}>
-                                    <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                    <Text style={styles.text}>{route?.params?.flightInfo?.infant_flight} Infant</Text>
-                                </View>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 25 }}>
+                        <View>
+                            <Text style={styles.title}>Adult</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
+                                <Text style={styles.text}>2 Rooms</Text>
                             </View>
                         </View>
-                   </View>
+                        <View>
+                            <Text style={styles.title}>Kids</Text>
+                            <View style={{ flexDirection: 'row' }}>
+                                <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
+                                <Text style={styles.text}>1 Kids</Text>
+                            </View>
+                        </View>
 
-                   
+                    </View>
+                </View>
 
+                <View style={{ backgroundColor: 'white' }}>
 
                     <View style={styles.couponCode}>
-                        <View style={{ flexDirection: 'row', justifyContent: "space-between",alignItems:'center' }}>
+                        <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
                             <TextInput
                                 // style={{ height: 35 }}
                                 placeholder='Add a coupon Code'
@@ -107,70 +139,120 @@ function HotelBooking(){
                     <View style={styles.bg}>
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Base Fare</Text>
-                            {/* <Text style={styles.priceTag}> Rs: <Text style={styles.price}>{get_Revalidate?.BaseFareAmount}/-</Text></Text> */}
+                            <Text style={styles.priceTag}> Rs: <Text style={styles.price}>{RoomType?.netPrice}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
-                        <View style={styles.amountContainer}>
-                            <Text style={styles.amountName}>Taxes</Text>
-                            {/* <Text style={styles.priceTag}> Rs : <Text style={styles.price}>{get_Revalidate?.TotalTaxAmount}/-</Text></Text> */}
-                        </View>
-                        <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
-
+                        
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Discounts & {'\n'}Adjustments</Text>
                             <Text style={styles.priceTag}> Rs : <Text style={styles.price}>0,00/-</Text></Text>
                         </View>
-                        <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
-
-                        <View style={styles.amountContainer}>
-                            <Text style={styles.amountName}>Other charges</Text>
-                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>0000/-</Text></Text>
-                        </View>
-                        <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
+                        <View style={{ backgroundColor: 'white', height: 1, opacity: 0.2, marginVertical: 7 }} />
 
 
                         <View style={styles.total}>
                             <Text style={styles.totalText}>Total</Text>
-                            <Text style={{color:'white',fontFamily:FONTS.fontBold}}>:</Text>
-                            {/* <Text style={styles.priceTag}> Rs  <Text style={[styles.price,{fontSize:height*0.03}]}>{get_Revalidate?.TotalFareAmount}</Text></Text> */}
+                            <Text style={{ color: 'white', fontFamily: FONTS.fontBold }}>:</Text>
+                            <Text style={styles.priceTag}> Rs  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{RoomType?.netPrice}</Text></Text>
 
                         </View>
                     </View>
-                </View>
 
-                <View style={{marginHorizontal:25}}>
-                <View style={styles.editTextBorder}>
-                            <Text style={styles.placeHolderText}>Name</Text>
+
+                    <View style={{ marginHorizontal: 20, marginTop: 10 }}>
+
+                        <Text style={{ fontFamily: FONTS.font, color: COLORS.BtnColorDark }}>Fill Billing Details</Text>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <View style={styles.editTextBorder}>
+                                <Controller
+                                    control={control}
+                                    name="Title"
+                                    rules={{
+                                        required: {
+                                            value: true,
+                                            message: "Title"
+                                        }
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            placeholderTextColor={"gray"}
+                                            // style={styles.inputeEditor}
+                                            name='Title'
+                                            placeholder="Title"
+                                            keyboardType='default'
+                                            {...register("Title")}
+                                            value={value}
+                                            style={{ marginHorizontal: 5 }}
+                                            onChangeText={value => onChange(value.toLowerCase())}
+                                        />
+                                    )}
+                                />
+                                {errors.Title && (
+                                    <Text style={[styles.errormessage]}>{errors.Title.message}</Text>
+                                )}
+                            </View>
+                            <View style={[styles.editTextBorder, { width: width * 0.75 }]}>
+                                <Controller
+                                    control={control}
+                                    name="FirstName"
+                                    rules={{
+                                        required: {
+                                            value: true,
+                                            message: "First Name"
+                                        }
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            placeholderTextColor={"gray"}
+                                            // style={styles.inputeEditor}
+                                            name='FirstName'
+                                            placeholder="First Name"
+                                            keyboardType='default'
+                                            {...register("FirstName")}
+                                            value={value}
+                                            style={{ marginLeft: 10 }}
+                                            onChangeText={value => onChange(value.toLowerCase())}
+                                        />
+                                    )}
+                                />
+                                {errors.FirstName && (
+                                    <Text style={[styles.errormessage]}>{errors.FirstName.message}</Text>
+                                )}
+                            </View>
+
+                        </View>
+
+                        <View style={styles.editTextBorder}>
                             <Controller
                                 control={control}
-                                name="Name"
+                                name="LastName"
                                 rules={{
                                     required: {
                                         value: true,
-                                        message: "Enter Your Name"
+                                        message: "Enter Your LastName"
                                     }
                                 }}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         placeholderTextColor={"gray"}
                                         // style={styles.inputeEditor}
-                                        name='Name'
-                                        placeholder="Name"
+                                        name='LastName'
+                                        placeholder="Last Name"
                                         keyboardType='default'
-                                        {...register("Name")}
+                                        {...register("LastName")}
                                         value={value}
+                                        style={{ marginLeft: 10 }}
                                         onChangeText={value => onChange(value.toLowerCase())}
                                     />
                                 )}
                             />
-                            {errors.Name && (
-                                <Text style={[styles.errormessage]}>{errors.Name.message}</Text>
+                            {errors.LastName && (
+                                <Text style={[styles.errormessage]}>{errors.LastName.message}</Text>
                             )}
                         </View>
 
                         <View style={styles.editTextBorder}>
-                            <Text style={styles.placeHolderText}>Email</Text>
                             <Controller
                                 control={control}
                                 name="Email"
@@ -189,6 +271,7 @@ function HotelBooking(){
                                         keyboardType='default'
                                         {...register("Email")}
                                         value={value}
+                                        style={{ marginLeft: 10 }}
                                         onChangeText={value => onChange(value.toLowerCase())}
                                     />
                                 )}
@@ -197,8 +280,8 @@ function HotelBooking(){
                                 <Text style={[styles.errormessage]}>{errors.Email.message}</Text>
                             )}
                         </View>
+
                         <View style={styles.editTextBorder}>
-                            <Text style={styles.placeHolderText}>Phone Number</Text>
                             <Controller
                                 control={control}
                                 name="Phone"
@@ -217,6 +300,7 @@ function HotelBooking(){
                                         keyboardType='default'
                                         {...register("Phone")}
                                         value={value}
+                                        style={{ marginLeft: 10 }}
                                         onChangeText={value => onChange(value.toLowerCase())}
                                     />
                                 )}
@@ -225,52 +309,102 @@ function HotelBooking(){
                                 <Text style={[styles.errormessage]}>{errors.Phone.message}</Text>
                             )}
                         </View>
+
+                        <View style={styles.editTextBorder}>
+                            <Controller
+                                control={control}
+                                name="GST"
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput
+                                        placeholderTextColor={"gray"}
+                                        // style={styles.inputeEditor}
+                                        name='GST'
+                                        placeholder="GST No (Optional)"
+                                        keyboardType='default'
+                                        {...register("GST")}
+                                        value={value}
+                                        style={{ marginLeft: 10, }}
+                                        onChangeText={value => onChange(value.toLowerCase())}
+                                    />
+                                )}
+                            />
+                        </View>
+                    </View>
+
+
+                    <View>
+                        <View style={{ flexDirection: 'row', marginHorizontal: 20, justifyContent: 'space-between', marginTop: 5, alignItems: 'center' }}>
+                            <TouchableHighlight onPress={() => setPolicyBox(!policyBox)} underlayColor='transparent'>
+                                <View>
+                                    {policyBox === true ?
+                                        <Fontisto
+                                            name='checkbox-active'
+                                            size={15}
+                                            style={{ color: COLORS.BtnColorDark }}
+                                        />
+                                        :
+                                        <Fontisto
+                                            name='checkbox-passive'
+                                            size={15}
+                                            style={{ color: COLORS.BtnColorDark }}
+                                        />
+                                    }
+                                </View>
+                            </TouchableHighlight>
+                            <Text style={styles.terms}>
+                                By completing this booking you agree to the booking terms and privacy policy.*
+                            </Text>
+                        </View>
+                        {/* 
+                        <View style={{marginTop:5,flexDirection:'row',marginHorizontal:20,justifyContent:'space-between'}}>
+                            <Text>Box</Text>
+                                    <Text style={styles.terms}>
+                                    Send me travel offers, deals, and news by email & message 
+                                     </Text>
+                        </View> */}
+
+                    </View>
+
                 </View>
-
-
-
             </ScrollView>
 
             <View style={styles.ConfirmBtn}>
-                <TouchableHighlight underlayColor={'transparent'} onPress={()=>{}}>
+                <TouchableHighlight underlayColor={'transparent'}
+                //  onPress={handleSubmit(onSubmit)}
+                onPress={()=>{
+                    var options = {
+                        description: 'Credits towards consultation',
+                        image: 'https://i.imgur.com/3g7nmJC.jpg',
+                        currency: 'INR',
+                        key: '<YOUR_KEY_ID>',
+                        amount: '5000',
+                        name: 'Acme Corp',
+                        order_id: 'order_DslnoIgkIDL8Zt',//Replace this with an order_id created using Orders API.
+                        prefill: {
+                          email: 'gaurav.kumar@example.com',
+                          contact: '9191919191',
+                          name: 'Gaurav Kumar'
+                        },
+                        theme: {color: '#53a20e'}
+                      }
+                      RazorpayCheckout.open(options).then((data) => {
+                        // handle success
+                        alert(`Success: ${data.razorpay_payment_id}`);
+                      }).catch((error) => {
+                        // handle failure
+                        alert(`Error: ${error.code} | ${error.description}`);
+                      });
+                }}>
                     <Text style={styles.confirmBook}>Confirm & Book</Text>
                 </TouchableHighlight>
-            </View>        </View>
+            </View>
+
+        </View>
     )
 }
 export default HotelBooking
 
 const styles = StyleSheet.create({
-    appbar: {
-        flexDirection: 'row',
-        backgroundColor: COLORS.AppbarColor,
-        height: height * 0.07,
-        alignItems: 'center',
-        paddingLeft: 10,
-        paddingRight: 15
-    },
-    appbarPlaceContainer: { backgroundColor: 'white', width: width * 0.75, height: 40, marginLeft: 10, borderRadius: 30 },
-    appbarPlace: { fontFamily: FONT_FAMILY.font, fontSize: height * 0.018 },
-    appBarTraveller: { fontFamily: FONT_FAMILY.font, marginTop: -6, fontSize: height * 0.016 },
-    title: { fontFamily: FONT_FAMILY.font, color: 'grey', fontSize: height * 0.0162 },
-    text: { fontFamily: FONT_FAMILY.fontBold, paddingLeft: 10, color: COLORS.colorText, fontSize: height * 0.017},
-    details: { flexDirection: 'column', backgroundColor: COLORS.lightGrey, paddingBottom: 15, paddingTop: 5 },
-    couponCode: {
-        borderRadius: 7, borderWidth: 0.9, borderColor: COLORS.borderColor, paddingVertical: 0, paddingHorizontal: 7,
-        marginHorizontal: 15, marginTop: 10, backgroundColor: COLORS.AppbarColor, elevation: 1
-    },
-    applyCoupon: { fontFamily: FONT_FAMILY.fontBold, color: COLORS.textBlue },
-    bg: { backgroundColor: COLORS.bg, padding: 20, margin: 10, borderRadius: 7, elevation: 5, shadowColor: COLORS.bg },
-    amountContainer: { flexDirection: 'row', justifyContent: 'space-between' },
-    amountName: { fontFamily: FONT_FAMILY.light, color: 'white', fontSize: height * 0.022 },
-    price: { fontFamily: FONT_FAMILY.mediam, color: 'white', fontSize: height * 0.026 },
-    priceTag: { fontFamily: FONT_FAMILY.font, color: 'white',fontSize:height*0.017 },
-    total: {
-        flexDirection: 'row', justifyContent: 'space-between', backgroundColor: COLORS.darkblue,
-        paddingHorizontal: 15, paddingVertical: 3, borderRadius: 22, alignItems: 'center'
-    },
-    totalText: { fontFamily: FONT_FAMILY.fontBold, color: 'white',fontSize:height*0.022 },
-
     ConfirmBtn: {
         alignItems: 'center',
         backgroundColor: COLORS.borderColor,
@@ -278,19 +412,55 @@ const styles = StyleSheet.create({
         marginBottom: 10,
         // marginTop: 20,
         borderRadius: 30,
-        paddingVertical:10
-      },
-      confirmBook:{fontFamily:FONT_FAMILY.mediam,color:'white',fontSize:height*0.027},
-      editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: '#067fc030', marginTop: 20, marginBottom: 5, },
-      placeHolderText: {
-        color: '#067fc0',
-        position: 'absolute',
-        fontSize: 12,
-        paddingLeft: 5,
-        paddingRight: 5,
-        top: -11,
-        left: 10,
-        backgroundColor: '#ffffff',
-        fontFamily: FONT_FAMILY.font
+        paddingVertical: 10
     },
+    confirmBook: { fontFamily: FONTS.mediam, color: 'white', fontSize: height * 0.027 },
+    HotelDetailHotelPrice: {
+        color: 'black',
+        fontFamily: FONTS.fontBold,
+        fontSize: height * 0.025,
+    },
+    HotelDetailHotelTax: {
+        color: '#818181',
+        fontFamily: FONTS.font,
+        fontSize: height * 0.013,
+    },
+    HotelPriceList: {
+        fontFamily: FONTS.font,
+        fontSize: 9,
+        color: '#818181',
+        lineHeight: 13,
+        fontWeight: "500",
+    },
+    text: { fontFamily: FONTS.fontBold, paddingLeft: 10, color: COLORS.colorText, fontSize: height * 0.017 },
+    couponCode: {
+        borderRadius: 7, borderWidth: 0.9, borderColor: COLORS.borderColor, paddingVertical: 0, paddingHorizontal: 7,
+        marginHorizontal: 15, marginTop: 10, backgroundColor: COLORS.AppbarColor, elevation: 1
+    },
+    applyCoupon: { fontFamily: FONTS.fontBold, color: COLORS.textBlue },
+    bg: { backgroundColor: COLORS.bg, padding: 20, margin: 10, borderRadius: 7, elevation: 5, shadowColor: COLORS.bg },
+    amountContainer: { flexDirection: 'row', justifyContent: 'space-between' },
+    amountName: { fontFamily: FONTS.light, color: 'white', fontSize: height * 0.022 },
+    price: { fontFamily: FONTS.mediam, color: 'white', fontSize: height * 0.026 },
+    priceTag: { fontFamily: FONTS.font, color: 'white', fontSize: height * 0.017 },
+    total: {
+        flexDirection: 'row', justifyContent: 'space-between',
+        paddingHorizontal: 15, paddingVertical: 3, borderRadius: 22, alignItems: 'center'
+    },
+    totalText: { fontFamily: FONTS.fontBold, color: 'white', fontSize: height * 0.022 },
+    editTextBorder: { borderWidth: 0.7, height: 45, borderRadius: 7, borderColor: COLORS.borderColor, marginTop: 20, marginBottom: 5, backgroundColor: COLORS.AppbarColor },
+    terms: {
+        fontFamily: FONTS.font,
+        color: 'black',
+        fontSize: height * 0.015,
+        width: width * 0.8,
+        marginVertical: 10
+    },
+    HotelName:{fontFamily:FONTS.font,width:width*0.5},
+    errormessage: {
+        color: "red",
+        fontSize: 10,
+        fontWeight: "500",
+        paddingTop: 2,
+    }
 })

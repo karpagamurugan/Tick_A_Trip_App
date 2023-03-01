@@ -13,7 +13,7 @@ const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const HotelRoomTypeCard = ( props) => {
-    const {val}=props
+    const {val,detail}=props
     return (
         // <View style={style.hotelListCardSec}>
         //     <View style={styles.hotelListCard}>
@@ -105,7 +105,7 @@ const HotelRoomTypeCard = ( props) => {
                 <TouchableHighlight 
                 underlayColor={'transparent'} 
                 onPress={()=>{
-                    props.navigation.navigate('HotelBooking')
+                    props.navigation.navigate('HotelBooking',{value:val,detail:detail})
                 }}
                 style={{borderRadius:30,paddingVertical:10,backgroundColor:'#EEEFEF',width:width*0.6,alignSelf:'center'}}
                 >
