@@ -10,13 +10,14 @@ import actions from '../../../redux/user/actions';
 import moment from 'moment';
 import FlightIcon from '../../../Assert/Images/icon/flight-airplane-svgrepo-com.svg';
 import FlightDetails from './FlightDetails';
-
+import { CommonActions } from '@react-navigation/native';
+import FlightAction from '../../../redux/common/actions'
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 export default function Flight({ navigation }) {
-console.log('Flight_navigation',navigation)
+    // console.log('Flight_navigation', navigation)
     useEffect(() => {
         dispatch({
             type: actions.GET_UPCOMING_FLIGHT_TICKETS
@@ -118,7 +119,7 @@ console.log('Flight_navigation',navigation)
 
                                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                         <TouchableHighlight
-                                                        
+
                                                         >
                                                             <Text style={style.viewDetail}>View Ticket</Text>
                                                         </TouchableHighlight>
@@ -235,8 +236,20 @@ console.log('Flight_navigation',navigation)
 
                                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                                 <TouchableHighlight
-                                                                underlayColor='transparent'
-                                                                onPress={()=>console.log('Flight Booking Item',item)}>
+                                                                    underlayColor='transparent'
+                                                                    onPress={() => {
+
+                                                                        dispatch({
+                                                                            type: actions.SET_FLIGHT_TICKETS_DETAILS, payload: {
+                                                                                "userId": item.id,
+                                                                                navigation: navigation
+                                                                            },
+                                                                        });
+                                                                        dispatch({ type: FlightAction.FLIGHT_LOADER, payload: true })
+
+                                                                        console.log('disItem', item.id)
+                                                                        // navigation.navigate('FlightTicketDetails')
+                                                                    }}>
                                                                     <Text style={style.viewDetail}>View Ticket</Text>
                                                                 </TouchableHighlight>
                                                                 <ArrowIcon name='down' size={12} color='#0041F2' />

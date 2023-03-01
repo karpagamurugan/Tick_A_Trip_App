@@ -25,7 +25,7 @@ import HotelTicketDetails from '../Profile/MyTickets/HotelDetails'
 import AddTravellerForm from '../Profile/AddTravellerForm'
 import UpdateProfile from '../Profile/UpdateProfile'
 import HotelBooking from '../Hotel/HotelBooking'
-import Flightdetail from '../Profile/MyTickets/FlightDetails'
+import FlightTicketDetails from '../Profile/MyTickets/FlightDetails'
 const Stack = createNativeStackNavigator();
 
 function HomeTab() {
@@ -53,12 +53,11 @@ function ProfileTab() {
         <Stack.Navigator initialRouteName='Profile'>
             <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
             <Stack.Screen name="FlightTicket" component={FlightTickets} options={{ headerShown: false }} />
-            <Stack.Screen name="Flightdetail" component={Flightdetail} options={{ headerShown: false }} />
+            <Stack.Screen name="FlightTicketDetails" component={FlightTicketDetails} options={{ headerShown: false }} />
             <Stack.Screen name="HotelTicket" component={HotelTicket} options={{ headerShown: false }} />
             <Stack.Screen name="addTraveller" component={AddTraveller} options={{ headerShown: false }} />
             <Stack.Screen name="addtravellerform" component={AddTravellerForm} options={{ headerShown: false }} />
             <Stack.Screen name="HotelTicketDetails" component={HotelTicketDetails} options={{ headerShown: false }} />
-
             <Stack.Screen name="updateProfile" component={UpdateProfile} options={{ headerShown: false }} />
 
         </Stack.Navigator>

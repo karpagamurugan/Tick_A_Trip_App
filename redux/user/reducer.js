@@ -12,15 +12,16 @@ const initialState = {
     Completed_hotel: [],
     Cancelled_hotel: [],
     Upcoming_hotel: [],
-    Hotel_details:[],
-    AddTravaller_form:[],
-    AddTravaller_search_name:[],
-    AddTravaller_country_code:[],
-    AddTravaller_country_issuing:[],
-    AddTravaller_nationality:[],
-    AddTravaller_value:[],
-    AddTravaller_token:[],
-    travelers_list:[],
+    Hotel_details: [],
+    AddTravaller_form: [],
+    AddTravaller_search_name: [],
+    AddTravaller_country_code: [],
+    AddTravaller_country_issuing: [],
+    AddTravaller_nationality: [],
+    AddTravaller_value: [],
+    AddTravaller_token: [],
+    travelers_list: [],
+    flight_tickets_details:{},
 }
 
 const userReducer = (state = initialState, action) => {
@@ -76,51 +77,56 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 Upcoming_hotel: action.payload
             }
-            case actions.GET_HOTEL_TICKETS_DETAILS:
-                return {
-                    ...state,
-                    Hotel_details: action.payload
-                }
-                case actions.GET_ADD_TRAVELLER_FORM:
-                return {
-                    ...state,
-                    AddTravaller_form: action.payload
-                }
-                case actions.SET_ADD_TRAVELLER_SEARCH_BY_NAME:
-                return {
-                    ...state,
-                    AddTravaller_search_name: action.payload
-                }
-                case actions.GET_ADD_TRAVELLER_COUNTRY_CODE:
-                return {
-                    ...state,
-                    AddTravaller_country_code: action.payload
-                }
-                case actions.GET_ADD_TRAVELLER_COUNTRY_ISSUING:
-                return {
-                    ...state,
-                    AddTravaller_country_issuing: action.payload
-                }
-                case actions.GET_ADD_TRAVELLER_NATIONALITY:
-                return {
-                    ...state,
-                    AddTravaller_nationality: action.payload
-                }
-                case actions.GET_ADD_TRAVELLER_VALUE:
-                return {
-                    ...state,
-                    AddTravaller_value: action.payload
-                }
-                case actions.GET_ADD_TRAVELLER_TOKEN:
-                return {
-                    ...state,
-                    AddTravaller_token: action.payload
-                }
-                case actions.SET_ADD_TRAVELLER_TOKEN:
-                    return {
-                        ...state,
-                        travelers_list: action.payload
-                    }
+        case actions.GET_HOTEL_TICKETS_DETAILS:
+            return {
+                ...state,
+                Hotel_details: action.payload
+            }
+        case actions.GET_ADD_TRAVELLER_FORM:
+            return {
+                ...state,
+                AddTravaller_form: action.payload
+            }
+        case actions.SET_ADD_TRAVELLER_SEARCH_BY_NAME:
+            return {
+                ...state,
+                AddTravaller_search_name: action.payload
+            }
+        case actions.GET_ADD_TRAVELLER_COUNTRY_CODE:
+            return {
+                ...state,
+                AddTravaller_country_code: action.payload
+            }
+        case actions.GET_ADD_TRAVELLER_COUNTRY_ISSUING:
+            return {
+                ...state,
+                AddTravaller_country_issuing: action.payload
+            }
+        case actions.GET_ADD_TRAVELLER_NATIONALITY:
+            return {
+                ...state,
+                AddTravaller_nationality: action.payload
+            }
+        case actions.GET_ADD_TRAVELLER_VALUE:
+            return {
+                ...state,
+                AddTravaller_value: action.payload
+            }
+        case actions.GET_ADD_TRAVELLER_TOKEN:
+            return {
+                ...state,
+                AddTravaller_token: action.payload
+            }
+        case actions.SET_ADD_TRAVELLER_TOKEN:
+            return {
+                ...state,
+                travelers_list: action.payload
+            }
+        case actions.GET_FLIGHT_TICKETS_DETAILS:
+            return {
+                ...state,
+                flight_tickets_details: action.payload
+            }
         default:
             return state;
     }
