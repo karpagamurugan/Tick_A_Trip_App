@@ -16,6 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import userActions from '../../redux/user/actions'
 import RazorpayCheckout from "react-native-razorpay";
+import {RAZOR_KEY,RAZOR_KEY_SECRET,CURRENCY,TIMEOUT} from '../../components/constants/constApi';
 
 
 let height = Dimensions.get('window').height;
@@ -27,7 +28,7 @@ function HotelBooking({ route, navigation }) {
     const [RoomType, setRoomType] = useState(route?.params?.value)
     var [policyBox, setPolicyBox] = useState(false);
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
-   
+
     const { userProfileData } = useSelector((state) => state.userReducer)
 
     // console.log('details', HotelDetail)
@@ -36,21 +37,34 @@ function HotelBooking({ route, navigation }) {
         const onSubmit =(data)=>{
             console.log(data)
         }
+
+       
         // console.log('userProfileData',userProfileData)
         useEffect((async) => {
             // dispatch({ type: commonAction.COMMON_LOADER, payload: true })
             dispatch({ type: userActions.GET_USER_PROFILE })
         }, [dispatch])
-        // useEffect(()=>{
-        //     let defaultFirstName = {FirstName:userProfileData?.first_name}
-        // reset({...defaultFirstName})
-        // let defaultLastName = {LastName:userProfileData?.last_name}
-        // reset({...defaultLastName})
-        // let defaultEmail = {Email:userProfileData?.email}
-        // reset({...defaultEmail})
-        // let defaultPhone = {Phone:userProfileData?.phone}
-        // reset({...defaultPhone})
-        // },[])
+
+
+        useEffect(()=>{
+            let defaultFirstName = {FirstName:userProfileData?.first_name}
+        reset({...defaultFirstName})
+        let defaultLastName = {LastName:userProfileData?.last_name}
+        reset({...defaultLastName})
+        let defaultEmail = {Email:userProfileData?.email}
+        reset({...defaultEmail})
+        let defaultPhone = {Phone:userProfileData?.phone}
+        reset({...defaultPhone})
+        },[])
+
+        function generateUUID(digits) {
+            let str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXZ';
+            let uuid = [];
+            for (let i = 0; i < digits; i++) {
+                uuid.push(str[Math.floor(Math.random() * str.length)]);
+            }
+            return uuid.join('');
+        }
     return (
         <View style={{ height: height * 0.92, backgroundColor: 'transparent' }}>
             {/* <Appbar title={'Hotel Booking'}/> */}
@@ -367,34 +381,96 @@ function HotelBooking({ route, navigation }) {
 
                 </View>
             </ScrollView>
+           
 
             <View style={styles.ConfirmBtn}>
                 <TouchableHighlight underlayColor={'transparent'}
+                        // onPress={()=>{
+                        //    console.log('TickATrip_'+generateUUID(8))                           
+
+                        // }}
                 //  onPress={handleSubmit(onSubmit)}
                 onPress={()=>{
-                    var options = {
-                        description: 'Credits towards consultation',
-                        image: 'https://i.imgur.com/3g7nmJC.jpg',
-                        currency: 'INR',
-                        key: '<YOUR_KEY_ID>',
-                        amount: '5000',
-                        name: 'Acme Corp',
-                        order_id: 'order_DslnoIgkIDL8Zt',//Replace this with an order_id created using Orders API.
-                        prefill: {
-                          email: 'gaurav.kumar@example.com',
-                          contact: '9191919191',
-                          name: 'Gaurav Kumar'
-                        },
-                        theme: {color: '#53a20e'}
-                      }
-                      RazorpayCheckout.open(options).then((data) => {
-                        // handle success
-                        alert(`Success: ${data.razorpay_payment_id}`);
-                      }).catch((error) => {
-                        // handle failure
-                        alert(`Error: ${error.code} | ${error.description}`);
-                      });
-                }}>
+                 console.log('TickATrip_'+generateUUID(8))                           
+                    // var options = {
+                    //     key: RAZOR_KEY,
+                    //     key_secret: RAZOR_KEY_SECRET,
+                    //     amount: parseFloat(parseFloat(RoomType?.netPrice) * 100),
+                    //     currency: CURRENCY,
+                    //     name: userProfileData?.first_name,
+                    //     description: "Payment Tick A Trip",
+                    //     timeout: TIMEOUT,
+                    //     order_id:'TickATrip_'+generateUUID(8),
+                    //          prefill: {
+                    //       email: userProfileData?.email,
+                    //       contact: userProfileData?.phone,
+                    //       name: userProfileData?.first_name
+                    //     },
+                    //     // handler: function (response) {
+                    //     //   if (response.razorpay_payment_id) {
+                    //     //     console.log(response.razorpay_payment_id);
+                    //     //     console.log(response.razorpay_order_id);
+                    //     //     console.log(response.razorpay_signature);
+                    //     //     console.log(response.razorpay_status);
+                    //     //     // bookingData['paymentTransactionId'] = response.razorpay_payment_id;
+                    //     //     // bookingData['TotalFare'] = parseFloat(fareMethod?.TotalFareAmount ? fareMethod?.TotalFareAmount : 0);
+                    //     //     // dispatch({ type: flightActions.SET_FLIGHT_LOADER, payload: true });
+                    //     //     // dispatch({
+                    //     //     //   type: flightActions.GET_BOOKIG_TRAVELLER_DATA,
+                    //     //     //   history: history,
+                    //     //     //   payload: bookingData
+                    //     //     // });
+                    //     //   }
+                    //     // },
+                    //     // prefill: {
+                    //     //   name: paymenterDetails.bphone,
+                    //     //   email: paymenterDetails.bemail,
+                    //     //   conatct: paymenterDetails.bphone,
+                    //     // },
+                    //     notes: {
+                    //       address: "",
+                    //     },
+                    //     theme: {
+                    //       color: "#0543e9",
+                    //     },
+                    //   };
+                    //     RazorpayCheckout.open(options).then((data) => {
+                    //         console.log('data...',data)
+                    //         // handle success
+                    //         alert(`Success: ${data.razorpay_payment_id}`);
+                    //       }).catch((error) => {
+                    //         // handle failure
+                    //         alert(`Error: ${error.code} | ${error.description}`);
+                    //       });
+                    
+                    // var headers = {
+                    //     'Content-Type': 'application/json',
+                    //     'Authorization': 'Basic ${base64Encode(utf8.encode('${RAZOR_KEY}:${RAZOR_KEY_SECRET}'))}'
+                    //   };
+                    //  axios.post('https://api.razorpay.com/v1/orders').then((res)=>{
+                    //     console.log('res',res)
+                    //  })
+                    //   {
+                    //     "amount":parseFloat(parseFloat(RoomType?.netPrice) * 100),
+                    //     "currency": CURRENCY,
+                    //     "receipt": "Receipt",
+                    //     "notes": {
+                    //       "notes_key_1": "From TickATrip",
+                    //       // "notes_key_2": "Order for $cakeName"
+                    //     }
+                    //   }
+                
+                    //   http.StreamedResponse response = await request.send();
+                
+                    //   if (response.statusCode == 200) {
+                    //     var res = jsonDecode(await response.stream.bytesToString());
+                    //     print(res);
+                    //     _handleFinalPayment(res['amount'].toString() , res['id']);
+                    //     Navigator.pop(context);
+                    //   }
+                
+                }}
+                >
                     <Text style={styles.confirmBook}>Confirm & Book</Text>
                 </TouchableHighlight>
             </View>

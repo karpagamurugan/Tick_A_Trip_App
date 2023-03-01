@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React from 'react'
+import React,{memo} from 'react'
 import { View, Text, StyleSheet, Image, Dimensions, ImageBackground, TouchableHighlight } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
@@ -14,6 +14,7 @@ const height = Dimensions.get('window').height
 
 const HotelRoomTypeCard = ( props) => {
     const {val,detail}=props
+  
     return (
         // <View style={style.hotelListCardSec}>
         //     <View style={styles.hotelListCard}>
@@ -56,16 +57,16 @@ const HotelRoomTypeCard = ( props) => {
         <View style={styles.mainContainer}>
             <View style={{backgroundColor:'white'}}>
                 <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingHorizontal:20}}>
-                <Text style={styles.Name}>Select Room</Text>
+                <Text style={styles.Name}>{detail?.hotelName}</Text>
                 <View style={styles.RoomTypeStart}>
                          <Stars
-                            default={0}
+                            default={detail?.hotelRating}
                             count={5}
                             half={true}
                             disabled={true}
                             starSize={50}
                             spacing={5}
-                            fullStar={<FontAwesome name={'star'} style={[style.myStarStyle]} />}
+                            fullStar={<FontAwesome name={'star'} style={[styles.myStarStyle]} />}
                             emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
                             halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle]} />}
                         />
@@ -159,7 +160,7 @@ bookNow:{
         marginBottom:5,
     },
     myStarStyle: {
-        color: 'yellow',
+        color: '#F3BB00',
         backgroundColor: 'transparent',
         textShadowColor: '#fff',
         textShadowOffset: { width: 100, height: 100 },
@@ -170,4 +171,4 @@ bookNow:{
         color: '#000',
     },
 });
-export default HotelRoomTypeCard
+export default memo(HotelRoomTypeCard)

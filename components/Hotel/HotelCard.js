@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         backgroundColor:'#fff',
     },
     myStarStyle: {
-        color: 'yellow',
+        color: '#F3BB00',
         backgroundColor: 'transparent',
         textShadowColor: '#fff',
         textShadowOffset: { width: 100, height: 100 },

@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState,memo} from 'react'
 import { View, Text, ImageBackground, Dimensions, StyleSheet, ScrollView, TouchableHighlight, Pressable, Modal } from 'react-native'
 import style from '../common/commonStyle'
 import HotelAppbar from '../common/HotelAppbar'
@@ -279,4 +279,4 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
     }
 });
-export default HotelDetail
+export default memo(HotelDetail)

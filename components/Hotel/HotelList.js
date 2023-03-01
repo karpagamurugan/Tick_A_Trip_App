@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react'
+import React, { useState,memo } from 'react'
 import { View, Modal, Text, StyleSheet, Dimensions, ScrollView, TouchableHighlight, TextInput } from 'react-native'
 import Appbar from '../common/Appbar'
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -71,7 +71,7 @@ const HotelList = ({ navigation }) => {
     )
 }
 
-export default HotelList
+export default memo(HotelList)
 const style = StyleSheet.create({
 
     hotelDetailSec: {

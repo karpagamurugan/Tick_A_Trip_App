@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState } from 'react';
+import React, { useState,memo } from 'react';
 import { View, Text, TouchableHighlight, StyleSheet } from 'react-native'
 import style from '../common/commonStyle'
 import { Dropdown } from 'react-native-element-dropdown';
@@ -126,4 +126,4 @@ const HotelSelectRoomGuest = (props) => {
     )
 }
 
-export default HotelSelectRoomGuest
+export default memo(HotelSelectRoomGuest)
