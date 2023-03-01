@@ -9,13 +9,14 @@ import { useDispatch, useSelector } from 'react-redux';
 import actions from '../../../redux/user/actions';
 import moment from 'moment';
 import FlightIcon from '../../../Assert/Images/icon/flight-airplane-svgrepo-com.svg';
+import FlightDetails from './FlightDetails';
 
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
-export default function Flight() {
-
+export default function Flight({ navigation }) {
+console.log('Flight_navigation',navigation)
     useEffect(() => {
         dispatch({
             type: actions.GET_UPCOMING_FLIGHT_TICKETS
@@ -28,14 +29,14 @@ export default function Flight() {
         dispatch({
             type: actions.GET_COMPLETED_FLIGHT_TICKETS
         })
-    },[])
+    }, [])
 
     const dispatch = useDispatch();
     const { Completed_flight, Cancelled_flight, Upcoming_flight } = useSelector((state) => state.userReducer)
 
     var [selectedTab, setSelectedTab] = useState(0);
 
-  
+
     // setting tab item backgroundColor
     const hadleClick = (index) => {
         setSelectedTab(index)
@@ -81,9 +82,9 @@ export default function Flight() {
                             {(Upcoming_flight?.bookings?.length === 0) ?
                                 <View style={{ alignSelf: 'center', marginTop: 50 }}>
                                     <Image style={{ height: 150, width: 200, resizeMode: 'cover' }} source={require('../../../Assert/loader/flightTicketEmpty.gif')} />
-                                    <Text style={{fontFamily:font.font,paddingVertical:5,color:'black'}}>You Don't have any bookings</Text>
-                                    <TouchableHighlight underlayColor={'transparent'} style={{alignSelf:'center',borderColor:'black',borderWidth:1}}>
-                                        <Text style={{fontFamily:font.font,paddingVertical:5,color:'black',paddingHorizontal:5}} >Go to Booking</Text>
+                                    <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
+                                    <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
+                                        <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
                                     </TouchableHighlight>
                                 </View>
                                 :
@@ -116,7 +117,9 @@ export default function Flight() {
                                                     <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.02 }}>{moment(item?.DepartureDateTime).format('DD/MM/YYYY')}</Text>
 
                                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                        <TouchableHighlight>
+                                                        <TouchableHighlight
+                                                        
+                                                        >
                                                             <Text style={style.viewDetail}>View Ticket</Text>
                                                         </TouchableHighlight>
                                                         <ArrowIcon name='down' size={12} color='#0041F2' />
@@ -138,72 +141,16 @@ export default function Flight() {
 
                             {
                                 (Cancelled_flight?.bookings?.length === 0) ?
-                                <View style={{ alignSelf: 'center', marginTop: 50 }}>
-                                    <Image style={{ height: 150, width: 200, resizeMode: 'cover' }} source={require('../../../Assert/loader/flightTicketEmpty.gif')} />
-                                    <Text style={{fontFamily:font.font,paddingVertical:5,color:'black'}}>You Don't have any bookings</Text>
-                                    <TouchableHighlight underlayColor={'transparent'} style={{alignSelf:'center',borderColor:'black',borderWidth:1}}>
-                                        <Text style={{fontFamily:font.font,paddingVertical:5,color:'black',paddingHorizontal:5}} >Go to Booking</Text>
-                                    </TouchableHighlight>
-                                </View>
-                                :
-
-                                Cancelled_flight?.bookings?.map((item, index) => (
-                                    <View style={style.card} key={index}>
-                                        <View style={style.cardView}>
-                                            {/* <Image source={{ uri: item?.url }} style={{ width: width * 0.22, borderRadius: 7 }} /> */}
-                                            <View style={{ paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center' }}>
-                                                <Text style={{ fontFamily: font.font }}>{item?.DepartureAirportLocationCode}</Text>
-                                                <View style={{ width: 1, backgroundColor: 'grey', height: height * 0.02, marginVertical: 3 }} />
-                                                <FlightIcon height={30} width={30} />
-                                                <View style={{ width: 1, backgroundColor: 'grey', height: height * 0.02, marginVertical: 3 }} />
-
-                                                <Text style={{ fontFamily: font.font }}>{item?.ArrivalAirportLocationCode}</Text>
-                                            </View>
-                                            <View style={style.cardText}>
-                                                <Text style={style.title}>PNR : {item?.AirlinePNR}</Text>
-                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                                    <View>
-                                                        <Text style={{ fontFamily: font.font, fontSize: height * 0.02, color: '#898989' }}>Depature : {moment(item?.DepartureDateTime).format('hh:mm a')}</Text>
-                                                        <Text style={{ fontFamily: font.font, fontSize: height * 0.02, color: '#898989' }}>Boarding : {moment(item?.ArrivalDateTime).format('hh:mm a')}</Text>
-
-                                                    </View>
-                                                    {/* <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                                                        <Text style={style.cancelbtn}>Cancel</Text>
-                                                    </TouchableHighlight> */}
-                                                </View>
-                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                                    <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.02 }}>{moment(item?.DepartureDateTime).format('DD/MM/YYYY')}</Text>
-
-                                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                        <TouchableHighlight>
-                                                            <Text style={style.viewDetail}>View Ticket</Text>
-                                                        </TouchableHighlight>
-                                                        <ArrowIcon name='down' size={12} color='#0041F2' />
-                                                    </View>
-
-                                                </View>
-                                            </View>
-                                        </View>
+                                    <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                        <Image style={{ height: 150, width: 200, resizeMode: 'cover' }} source={require('../../../Assert/loader/flightTicketEmpty.gif')} />
+                                        <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
+                                        <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
+                                            <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
+                                        </TouchableHighlight>
                                     </View>
-                                ))
-                            }
+                                    :
 
-                        </View>
-                    </ScrollView> : (selectedTab === 2) ?
-                        <ScrollView>
-                            <View style={style.listView}>
-
-                                {
-                                     (Completed_flight?.bookings?.length === 0) ?
-                                     <View style={{ alignSelf: 'center', marginTop: 50 }}>
-                                         <Image style={{ height: 150, width: 200, resizeMode: 'cover' }} source={require('../../../Assert/loader/flightTicketEmpty.gif')} />
-                                         <Text style={{fontFamily:font.font,paddingVertical:5,color:'black'}}>You Don't have any bookings</Text>
-                                         <TouchableHighlight underlayColor={'transparent'} style={{alignSelf:'center',borderColor:'black',borderWidth:1}}>
-                                             <Text style={{fontFamily:font.font,paddingVertical:5,color:'black',paddingHorizontal:5}} >Go to Booking</Text>
-                                         </TouchableHighlight>
-                                     </View>
-                                     :
-                                    Completed_flight?.bookings?.map((item, index) => (
+                                    Cancelled_flight?.bookings?.map((item, index) => (
                                         <View style={style.card} key={index}>
                                             <View style={style.cardView}>
                                                 {/* <Image source={{ uri: item?.url }} style={{ width: width * 0.22, borderRadius: 7 }} /> */}
@@ -224,14 +171,14 @@ export default function Flight() {
 
                                                         </View>
                                                         {/* <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                                                            <Text style={style.cancelbtn}>Cancel</Text>
-                                                        </TouchableHighlight> */}
+                                                        <Text style={style.cancelbtn}>Cancel</Text>
+                                                    </TouchableHighlight> */}
                                                     </View>
                                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                                         <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.02 }}>{moment(item?.DepartureDateTime).format('DD/MM/YYYY')}</Text>
 
                                                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                            <TouchableHighlight>
+                                                            <TouchableHighlight onPress={() => navigation.navigate('FlightDetails')}>
                                                                 <Text style={style.viewDetail}>View Ticket</Text>
                                                             </TouchableHighlight>
                                                             <ArrowIcon name='down' size={12} color='#0041F2' />
@@ -242,6 +189,64 @@ export default function Flight() {
                                             </View>
                                         </View>
                                     ))
+                            }
+
+                        </View>
+                    </ScrollView> : (selectedTab === 2) ?
+                        <ScrollView>
+                            <View style={style.listView}>
+
+                                {
+                                    (Completed_flight?.bookings?.length === 0) ?
+                                        <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                            <Image style={{ height: 150, width: 200, resizeMode: 'cover' }} source={require('../../../Assert/loader/flightTicketEmpty.gif')} />
+                                            <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
+                                            <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
+                                                <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
+                                            </TouchableHighlight>
+                                        </View>
+                                        :
+                                        Completed_flight?.bookings?.map((item, index) => (
+                                            <View style={style.card} key={index}>
+                                                <View style={style.cardView}>
+                                                    {/* <Image source={{ uri: item?.url }} style={{ width: width * 0.22, borderRadius: 7 }} /> */}
+                                                    <View style={{ paddingHorizontal: 15, justifyContent: 'center', alignItems: 'center' }}>
+                                                        <Text style={{ fontFamily: font.font }}>{item?.DepartureAirportLocationCode}</Text>
+                                                        <View style={{ width: 1, backgroundColor: 'grey', height: height * 0.02, marginVertical: 3 }} />
+                                                        <FlightIcon height={30} width={30} />
+                                                        <View style={{ width: 1, backgroundColor: 'grey', height: height * 0.02, marginVertical: 3 }} />
+
+                                                        <Text style={{ fontFamily: font.font }}>{item?.ArrivalAirportLocationCode}</Text>
+                                                    </View>
+                                                    <View style={style.cardText}>
+                                                        <Text style={style.title}>PNR : {item?.AirlinePNR}</Text>
+                                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                            <View>
+                                                                <Text style={{ fontFamily: font.font, fontSize: height * 0.02, color: '#898989' }}>Depature : {moment(item?.DepartureDateTime).format('hh:mm a')}</Text>
+                                                                <Text style={{ fontFamily: font.font, fontSize: height * 0.02, color: '#898989' }}>Boarding : {moment(item?.ArrivalDateTime).format('hh:mm a')}</Text>
+
+                                                            </View>
+                                                            {/* <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                                            <Text style={style.cancelbtn}>Cancel</Text>
+                                                        </TouchableHighlight> */}
+                                                        </View>
+                                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                                            <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.02 }}>{moment(item?.DepartureDateTime).format('DD/MM/YYYY')}</Text>
+
+                                                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                                <TouchableHighlight
+                                                                underlayColor='transparent'
+                                                                onPress={()=>console.log('Flight Booking Item',item)}>
+                                                                    <Text style={style.viewDetail}>View Ticket</Text>
+                                                                </TouchableHighlight>
+                                                                <ArrowIcon name='down' size={12} color='#0041F2' />
+                                                            </View>
+
+                                                        </View>
+                                                    </View>
+                                                </View>
+                                            </View>
+                                        ))
                                 }
 
 
