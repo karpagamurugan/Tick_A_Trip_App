@@ -243,12 +243,9 @@ console.log('payloaddata',payloaddata)
                     />)}
                 />
               </View>
-
-              <View style={style.doneBtn}>
-                <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowTraveller(!showTraveller)}>
+                <TouchableHighlight style={style.doneBtn} underlayColor={'transparent'} onPress={() => setShowTraveller(!showTraveller)}>
                   <Text style={style.doneText}>DONE</Text>
                 </TouchableHighlight>
-              </View>
             </View>
           </View>
         </View>
@@ -693,8 +690,8 @@ console.log('payloaddata',payloaddata)
 
 
 
-              <View style={style.searchBtn}>
-                <TouchableHighlight underlayColor={'transparent'}
+              <View >
+                <TouchableHighlight style={style.searchBtn} underlayColor={'transparent'}
                   onPress={() => {
                     if (selectedFromVal?.code === undefined || selectedFromVal?.code === '' || selectedFromVal?.code == null && selectedToVal?.code === undefined || selectedToVal?.code === '' || selectedToVal?.code == null) {
                       dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Select a Place for search' } })

@@ -58,7 +58,7 @@ export default function AddTraveller({ navigation }) {
                     <Text style={styles.AddTraveller}>Add Traveller</Text>
                 </TouchableHighlight>
             </View>
-            <ScrollView style={{}}>
+            <ScrollView>
                 <View>
                     {
                         travelers_list?.travelers?.map((item, index) => (
