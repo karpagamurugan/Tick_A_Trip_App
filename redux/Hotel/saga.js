@@ -10,7 +10,8 @@ const HotelSaga = function* () {
         yield takeEvery(actions.GET_HOTEL_SEARCH, getHotelSearch),
         yield takeEvery(actions.GET_HOTEL_FILTER, getHotelFilter),
         yield takeEvery(actions.GET_SELECT_NAME, getHotelNameSearch),
-        yield takeEvery(actions.GET_HOTEL_ROOM_TYPE, getHotelRoomType)
+        yield takeEvery(actions.GET_HOTEL_ROOM_TYPE, getHotelRoomType),
+        yield takeEvery(actions.SET_HOTEL_BOOKING, setHotelBooking)
     ])
 }
 
@@ -133,6 +134,49 @@ const getHotelRoomType = function* (data) {
     } catch (err) {
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         console.log('err', err.message.map((val) => val))
+        yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: err.data });
+    }
+}
+
+
+const setHotelBooking = function* (data) {
+    yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
+    const { payload } = data
+    console.log(payload,'payload...')
+    var form_data = new FormData();
+
+    for (var key in payload) {
+        form_data.append(key, payload[key]);
+    }
+    try {
+        console.log('try......')
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/hotelbooking`,
+                JSON.stringify(payload),
+                {
+                    headers: {
+                        // accept: 'application/json',
+                        'Content-Type':'application/json',
+                    },
+                }
+            )
+        );
+        console.log('result...',result?.data)
+        if (result.data.status === true) {
+            console.log('hotel booking....',result?.data?.status)
+            // yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: result.data.message });
+            // navigation.navigate('HotelRoomType',{detail:detail})
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+        }else{
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+        }
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+    } catch (err) {
+        console.log('catch......',err)
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: err.data });
     }
 }

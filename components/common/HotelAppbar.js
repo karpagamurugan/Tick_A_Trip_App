@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import Arrow from '../../Assert/Images/icon/backward-arrow-2.svg';
 import Hotel from '../../Assert/Icons/hotel.svg';
 import FONT_FAMILY from '../constants/font';
+import { useSelector } from 'react-redux';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -17,6 +18,7 @@ let height = Dimensions.get('window').height;
 export default function HotelAppbar({ title }) {
 
     const navigation = useNavigation();
+    const { RoomGuestPlace } = useSelector((state) => state.HotelReducer)
 
     return (
         <View>
@@ -30,8 +32,8 @@ export default function HotelAppbar({ title }) {
                    <Text style={{fontSize:height*0.013,color:color.BtnColorDark,fontFamily:FONT_FAMILY.font}}>Hotels</Text>
                    </View>
                 <View style={styles.searchCity}>
-                    <Text style={styles.searchIn}>Coimbatore</Text>
-                    <Text style={styles.searchCount}>2 adults,2 Rooms</Text>
+                    <Text style={styles.searchIn}>{RoomGuestPlace?.Place}</Text>
+                    <Text style={styles.searchCount}>{RoomGuestPlace?.room} , { RoomGuestPlace?.Guest}</Text>
                 </View>
                 <View/>
             </View>

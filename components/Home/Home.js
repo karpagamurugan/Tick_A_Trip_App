@@ -20,6 +20,12 @@ const height = Dimensions.get('window').height
 
 const Home = ({ navigation }) => {
   const dispatch = useDispatch()
+
+  var LISTdATA=[{'type':'adult',name:'durga'},
+  {'type':'adult',name:'devi'},
+  {'type':'child',name:'Hotel'},
+  {'type':'infant',name:'flight'}]
+
   const userLogin = async () => {
     await AsyncStorage.getItem('tickatrip-token').then(
       (res) => {
@@ -33,10 +39,16 @@ const Home = ({ navigation }) => {
   }
   userLogin()
 
+  
   return (
     <ScrollView >
       <View style={{ width: width, paddingHorizontal: 20, }}>
-        
+      {/* {
+                    LISTdATA?.filter((d)=>d?.type === 'adult')?.slice(0,1)?.map((item)=>(
+                        <Text style={{color:'black'}}>{item?.name}</Text>
+                    ))
+                } */}
+
         <Text style={style.bannerTd}>Explore the  World with us</Text>
         <View style={style.bannerBtns}>
           <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('Hotel')}>

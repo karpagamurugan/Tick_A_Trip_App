@@ -7,6 +7,14 @@ const initialState = {
     hotelSessionId: null,
     Searchbyname:[],
     HotelRoomType:[],
+    RoomGuestPlace:{
+        room:'',
+        Guest:'',
+        Place:'',
+        depatureDate:'',
+        arrivalDate:'',
+        RoomList:[]
+    }
 }
 
 const HotelReducer = (state = initialState, action) => {
@@ -36,6 +44,18 @@ const HotelReducer = (state = initialState, action) => {
                         ...state,
                         HotelRoomType: action.payload
                     }
+                    case actions.SET_ROOM_GUEST_PLACE:
+                        return {
+                            ...state,
+                            RoomGuestPlace: {
+                                room:action.payload.room,
+                                Guest:action.payload.Guest,
+                                Place:action.payload.Place,
+                                depatureDate:action.payload.depatureDate,
+                                arrivalDate:action.payload.arrivalDate,
+                                RoomList:action.payload.RoomList
+                            }
+                        }
         default:
             return state;
     }

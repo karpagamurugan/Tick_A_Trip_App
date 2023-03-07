@@ -212,7 +212,20 @@ const HotelSearch = ({ navigation }) => {
       index !== inx
     )))
   }
+
+
+  
   const OnSearchHotel = () => {
+    dispatch({type:hotelActions.SET_ROOM_GUEST_PLACE,
+    payload:{
+      room:selectAddRoom?.length + ' Rooms',
+      Guest:adultCount || childCount ? adultCount + childCount +' Guests' : 0 +' Guests',
+      Place:desination?.city,
+      depatureDate:ciDate,
+      arrivalDate:coDate,
+      RoomList:selectAddRoom
+    }})
+   
     dispatch({ type: commonAction.HOTEL_LOADER, payload: true })
     dispatch({
       type: hotelActions.GET_HOTEL_SEARCH, payload: {
@@ -225,7 +238,7 @@ const HotelSearch = ({ navigation }) => {
         requiredCurrency: 'INR',
         occupancy: selectAddRoom,
       },
-      navigation: navigation
+      navigation: navigation,
     })
   }
   useEffect(() => {

@@ -56,7 +56,7 @@ const SignUp = ({ navigation }) => {
         }
     ]
     const handleDebugger = useCallback(
-        debounce((e)=>console.log(e), 400)
+        debounce((e)=>console.log(e), 1000)
         , []);
     const onSubmit = (data) => {
         dispatch({

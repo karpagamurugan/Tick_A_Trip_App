@@ -17,27 +17,136 @@ import Fontisto from 'react-native-vector-icons/Fontisto'
 import userActions from '../../redux/user/actions'
 import RazorpayCheckout from "react-native-razorpay";
 import {RAZOR_KEY,RAZOR_KEY_SECRET,CURRENCY,TIMEOUT} from '../../components/constants/constApi';
+import axios from "axios";
+import { Dropdown } from "react-native-element-dropdown";
+import IoniconsIcon from 'react-native-vector-icons/Ionicons'
+import CommonAction from '../../redux/common/actions';
+import hotelActions from "../../redux/Hotel/actions";
 
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
+
+
 function HotelBooking({ route, navigation }) {
-    // const {details} =props;
-        const dispatch =useDispatch()
+    const dispatch =useDispatch()
     const [HotelDetail, setHotelDetail] = useState(route?.params?.detail)
     const [RoomType, setRoomType] = useState(route?.params?.value)
     var [policyBox, setPolicyBox] = useState(false);
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
 
-    const { userProfileData } = useSelector((state) => state.userReducer)
+    const { userProfileData, } = useSelector((state) => state.userReducer)
+    const { RoomGuestPlace,hotelSessionId } = useSelector((state) => state.HotelReducer)
 
-    // console.log('details', HotelDetail)
-    // console.log('RoomType', RoomType)
+
+    const [title, setTitle] = useState();
 
         const onSubmit =(data)=>{
-            console.log(data)
+            if(policyBox !== true){
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Accept the Privacy Policy' } })
+            }else{
+                // console.log('HotelDetail',HotelDetail)
+                // console.log('RoomType',RoomType)
+                // console.log('RoomType',RoomType?.productId)
+                //   console.log('adadijhfiudeh',data)
+                // console.log(data)
+                PaymentGateWay()
+            }
         }
+        const PaymentGateWay =()=>{
 
+            var options = {
+                key: RAZOR_KEY,
+                key_secret: RAZOR_KEY_SECRET,
+                amount: parseFloat(parseFloat(RoomType?.netPrice) * 100),
+                currency: CURRENCY,
+                name: userProfileData?.first_name,
+                description: "Payment Tick A Trip",
+                timeout: TIMEOUT,
+                // order_id:'TickATrip_'+generateUUID(8),
+                     prefill: {
+                  email: userProfileData?.email,
+                  contact: userProfileData?.phone,
+                  name: userProfileData?.first_name
+                },
+                // handler: function (response) {
+                //   if (response.razorpay_payment_id) {
+                //     console.log(response.razorpay_payment_id);
+                //     console.log(response.razorpay_order_id);
+                //     console.log(response.razorpay_signature);
+                //     console.log(response.razorpay_status);
+                //     // bookingData['paymentTransactionId'] = response.razorpay_payment_id;
+                //     // bookingData['TotalFare'] = parseFloat(fareMethod?.TotalFareAmount ? fareMethod?.TotalFareAmount : 0);
+                //     // dispatch({ type: flightActions.SET_FLIGHT_LOADER, payload: true });
+                //     // dispatch({
+                //     //   type: flightActions.GET_BOOKIG_TRAVELLER_DATA,
+                //     //   history: history,
+                //     //   payload: bookingData
+                //     // });
+                //   }
+                // },
+                // prefill: {
+                //   name: paymenterDetails.bphone,
+                //   email: paymenterDetails.bemail,
+                //   conatct: paymenterDetails.bphone,
+                // },
+                notes: {
+                  address: "",
+                },
+                theme: {
+                  color: "#0543e9",
+                },
+              };
+                RazorpayCheckout.open(options).then((data) => {
+                    // console.log('data...',data)
+                    // handle success
+                    // alert(`Success: ${data.razorpay_payment_id}`);
+                    var dataList= {
+                        sessionId:hotelSessionId,
+                        productId:RoomType?.productId,
+                        tokenId:HotelDetail?.tokenId,
+                        rateBasisId: RoomType?.rateBasisId,
+                        clientRef:"TDB85454",
+                        customerEmail:userProfileData?.email,
+                        customerPhone:userProfileData?.phone,
+                        bookingNote:"Remark",
+                        transactionId:data.razorpay_payment_id,
+                        paxDetails:RoomGuestPlace.RoomList
+                        // paxDetails:[
+                        // {
+                        //   "room_no":1,
+                        //   "adult":{
+                        //     "title":["Mr","Mr"],
+                        //     "firstName":["test1","test2"],
+                        //     "lastName":["last1","last2"]
+                        // }
+                        // },{
+                        //   "room_no":2,
+                        //   "adult":{
+                        //     "title":["Mr","Mr"],
+                        //     "firstName":["test1","test2"],
+                        //     "lastName":["last1","last2"]
+                        // },
+                        //   "child":{
+                        //     "title":["Mr"],
+                        //     "firstName":["child_f_1"],
+                        //     "lastName":["child_l_1"]
+                        //   }
+                        // }
+                        // ]
+                      }
+                      console.log(data)
+                      dispatch({type:hotelActions.SET_HOTEL_BOOKING,payload:dataList})
+
+                  }).catch((error) => {
+                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
+
+                    // handle failure
+                    // alert(`Error: ${error.code} | ${error.description}`);
+                  });
+            
+          
+        }
        
         // console.log('userProfileData',userProfileData)
         useEffect((async) => {
@@ -45,17 +154,14 @@ function HotelBooking({ route, navigation }) {
             dispatch({ type: userActions.GET_USER_PROFILE })
         }, [dispatch])
 
-
         useEffect(()=>{
             let defaultFirstName = {FirstName:userProfileData?.first_name}
-        reset({...defaultFirstName})
-        let defaultLastName = {LastName:userProfileData?.last_name}
-        reset({...defaultLastName})
-        let defaultEmail = {Email:userProfileData?.email}
-        reset({...defaultEmail})
-        let defaultPhone = {Phone:userProfileData?.phone}
-        reset({...defaultPhone})
+            let defaultLastName = {LastName:userProfileData?.last_name}
+            let defaultEmail = {Email:userProfileData?.email}
+            let defaultPhone = {Phone:userProfileData?.phone}
+            reset({...defaultLastName,...defaultFirstName,...defaultEmail,...defaultPhone})
         },[])
+       
 
         function generateUUID(digits) {
             let str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXZ';
@@ -65,19 +171,53 @@ function HotelBooking({ route, navigation }) {
             }
             return uuid.join('');
         }
+
+
+        const getOrderId=()=>{
+ 
+                     axios.post('https://api.razorpay.com/v1/orders',{
+                        "amount":'5000',
+                        "currency": CURRENCY,
+                        "receipt": "Receipt",
+                        "notes": {
+                          "notes_key_1": "From TickATrip",
+                          // "notes_key_2": "Order for $cakeName"
+                        }
+                      },
+                      {
+                        headers :{
+                    'Content-Type': 'application/json',
+                    'Authorization': `Basic ${RAZOR_KEY}:${RAZOR_KEY_SECRET}}`
+                  }}
+                  ).then((res)=>{
+                        console.log('res',res)
+                     })
+        }
+
+
+      
+
+
+        const selectTitle = [
+            { name: 'Title', value: 'Title' },
+            { name: 'Mr', value: 'Mr' },
+            { name: 'Miss', value: 'Miss' },
+            { name: 'Mrs', value: 'Mrs' },
+            { name: 'Lord', value: 'Lord' },
+            { name: 'Lady', value: 'Lady' },
+        ]
     return (
         <View style={{ height: height * 0.92, backgroundColor: 'transparent' }}>
             {/* <Appbar title={'Hotel Booking'}/> */}
             <HotelAppbar title={'Hotel Booking'} />
-
-
+             
             <ScrollView>
                 {/* <View style={{ height: height * 0.25, backgroundColor: COLORS.BtnColor, marginTop: 10 }} /> */}
                 <Image source={{ uri: HotelDetail?.thumbNailUrl }} style={{ height: height * 0.27, marginTop: 15 }} />
                 <View style={{ marginTop:10,flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 }}>
                     <View>
                         <Text style={[styles.HotelName,{color:'black'}]}>{HotelDetail?.hotelName}</Text>
-                        <Text style={styles.HotelName}>{HotelDetail?.hotelRating} Reviews</Text>
+                        <Text style={[styles.HotelName,{color:COLORS.starFill}]}>{HotelDetail?.hotelRating} <AntDesign name="star" color={COLORS.starFill}/> <Text style={[styles.HotelName,{color:'grey'}]}> reviews</Text></Text>
                     </View>
                     <View>
                         <View style={{ backgroundColor: COLORS.lightGrey }}>
@@ -97,20 +237,20 @@ function HotelBooking({ route, navigation }) {
 
 
                 <View >
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingVertical: 25 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingVertical: 20}}>
                         <View>
-                            <Text style={styles.title}>Depart On</Text>
+                            <Text style={styles.titleStyle}>Depart On</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <SimpleLineIcons name="calendar" color={COLORS.colorBtn} size={20} />
-                                <Text style={styles.text}>2023-2-28</Text>
+                                <Text style={styles.text}>{moment(RoomGuestPlace?.depatureDate).format('YYYY-MM-DD')}</Text>
                                 {/* <AntDesign name="down" style={{paddingLeft:5}}/> */}
                             </View>
                         </View>
                         <View>
-                            <Text style={styles.title}>Return</Text>
+                            <Text style={styles.titleStyle}>Return</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <SimpleLineIcons name="calendar" color={COLORS.colorBtn} size={20} />
-                                <Text style={styles.text}>2023-2-28</Text>
+                                <Text style={styles.text}>{moment(RoomGuestPlace?.arrivalDate).format('YYYY-MM-DD')}</Text>
                             </View>
                         </View>
                     </View>
@@ -118,17 +258,17 @@ function HotelBooking({ route, navigation }) {
 
                     <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 25 }}>
                         <View>
-                            <Text style={styles.title}>Adult</Text>
+                            <Text style={styles.titleStyle}>Rooms</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                <Text style={styles.text}>2 Rooms</Text>
+                                <Text style={styles.text}>{RoomGuestPlace?.room}</Text>
                             </View>
                         </View>
                         <View>
-                            <Text style={styles.title}>Kids</Text>
+                            <Text style={styles.titleStyle}>Guest</Text>
                             <View style={{ flexDirection: 'row' }}>
                                 <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                <Text style={styles.text}>1 Kids</Text>
+                                <Text style={styles.text}>{RoomGuestPlace?.Guest}</Text>
                             </View>
                         </View>
 
@@ -178,35 +318,61 @@ function HotelBooking({ route, navigation }) {
 
                         <Text style={{ fontFamily: FONTS.font, color: COLORS.BtnColorDark }}>Fill Billing Details</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                            <View style={styles.editTextBorder}>
-                                <Controller
-                                    control={control}
-                                    name="Title"
-                                    rules={{
-                                        required: {
-                                            value: true,
-                                            message: "Title"
+                           
+<View style={styles.editTextBorder}>
+                            <Controller
+                                control={control}
+                                name="Title"
+                                rules={{
+                                    required: {
+                                        value: true,
+                                        message: 'Select Your Title',
+                                    }
+                                }}
+                                render={({ field: { onChange, value } }) => (
+                                    <Dropdown
+                                        showsVerticalScrollIndicator={true}
+                                        placeholder="Title"
+                                        data={selectTitle}
+                                        labelField="name"
+                                        valueField="value"
+                                        value={title}
+                                        name="Title"
+                                        {...register("Title")}
+                                        onChange={(item) => {
+                                            onChange(item.value)
+                                            setTitle(item.value)
                                         }
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            placeholderTextColor={"gray"}
-                                            // style={styles.inputeEditor}
-                                            name='Title'
-                                            placeholder="Title"
-                                            keyboardType='default'
-                                            {...register("Title")}
-                                            value={value}
-                                            style={{ marginHorizontal: 5 }}
-                                            onChangeText={value => onChange(value.toLowerCase())}
-                                        />
-                                    )}
-                                />
-                                {errors.Title && (
-                                    <Text style={[styles.errormessage]}>{errors.Title.message}</Text>
+                                        }
+                                        
+                                        selectedTextProps={{
+                                            style: {
+                                                // fontSize: 13,
+                                                fontWeight: '500',
+                                                fontFamily: FONTS.font,
+                                                letterSpacing: 0.5,
+                                                paddingTop: 10,
+                                                paddingHorizontal:4,
+                                                // width:width*0.1
+                                                color:'black'
+                                            },
+                                        }}
+                                        style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
+                                        renderRightIcon={() => (
+                                            <IoniconsIcon
+                                                name="chevron-down"
+                                                size={25}
+                                                style={{ fontSize: 18, color: COLORS.colorTheme, }}
+                                            />)}
+                                    />
                                 )}
-                            </View>
-                            <View style={[styles.editTextBorder, { width: width * 0.75 }]}>
+                            />
+                            {errors.Title && (
+                                <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.Title.message}</Text>
+                            )}
+                        </View>
+                        
+                            <View style={[styles.editTextBorder, { width: width * 0.70 }]}>
                                 <Controller
                                     control={control}
                                     name="FirstName"
@@ -390,86 +556,10 @@ function HotelBooking({ route, navigation }) {
 
                         // }}
                 //  onPress={handleSubmit(onSubmit)}
-                onPress={()=>{
-                 console.log('TickATrip_'+generateUUID(8))                           
-                    // var options = {
-                    //     key: RAZOR_KEY,
-                    //     key_secret: RAZOR_KEY_SECRET,
-                    //     amount: parseFloat(parseFloat(RoomType?.netPrice) * 100),
-                    //     currency: CURRENCY,
-                    //     name: userProfileData?.first_name,
-                    //     description: "Payment Tick A Trip",
-                    //     timeout: TIMEOUT,
-                    //     order_id:'TickATrip_'+generateUUID(8),
-                    //          prefill: {
-                    //       email: userProfileData?.email,
-                    //       contact: userProfileData?.phone,
-                    //       name: userProfileData?.first_name
-                    //     },
-                    //     // handler: function (response) {
-                    //     //   if (response.razorpay_payment_id) {
-                    //     //     console.log(response.razorpay_payment_id);
-                    //     //     console.log(response.razorpay_order_id);
-                    //     //     console.log(response.razorpay_signature);
-                    //     //     console.log(response.razorpay_status);
-                    //     //     // bookingData['paymentTransactionId'] = response.razorpay_payment_id;
-                    //     //     // bookingData['TotalFare'] = parseFloat(fareMethod?.TotalFareAmount ? fareMethod?.TotalFareAmount : 0);
-                    //     //     // dispatch({ type: flightActions.SET_FLIGHT_LOADER, payload: true });
-                    //     //     // dispatch({
-                    //     //     //   type: flightActions.GET_BOOKIG_TRAVELLER_DATA,
-                    //     //     //   history: history,
-                    //     //     //   payload: bookingData
-                    //     //     // });
-                    //     //   }
-                    //     // },
-                    //     // prefill: {
-                    //     //   name: paymenterDetails.bphone,
-                    //     //   email: paymenterDetails.bemail,
-                    //     //   conatct: paymenterDetails.bphone,
-                    //     // },
-                    //     notes: {
-                    //       address: "",
-                    //     },
-                    //     theme: {
-                    //       color: "#0543e9",
-                    //     },
-                    //   };
-                    //     RazorpayCheckout.open(options).then((data) => {
-                    //         console.log('data...',data)
-                    //         // handle success
-                    //         alert(`Success: ${data.razorpay_payment_id}`);
-                    //       }).catch((error) => {
-                    //         // handle failure
-                    //         alert(`Error: ${error.code} | ${error.description}`);
-                    //       });
-                    
-                    // var headers = {
-                    //     'Content-Type': 'application/json',
-                    //     'Authorization': 'Basic ${base64Encode(utf8.encode('${RAZOR_KEY}:${RAZOR_KEY_SECRET}'))}'
-                    //   };
-                    //  axios.post('https://api.razorpay.com/v1/orders').then((res)=>{
-                    //     console.log('res',res)
-                    //  })
-                    //   {
-                    //     "amount":parseFloat(parseFloat(RoomType?.netPrice) * 100),
-                    //     "currency": CURRENCY,
-                    //     "receipt": "Receipt",
-                    //     "notes": {
-                    //       "notes_key_1": "From TickATrip",
-                    //       // "notes_key_2": "Order for $cakeName"
-                    //     }
-                    //   }
-                
-                    //   http.StreamedResponse response = await request.send();
-                
-                    //   if (response.statusCode == 200) {
-                    //     var res = jsonDecode(await response.stream.bytesToString());
-                    //     print(res);
-                    //     _handleFinalPayment(res['amount'].toString() , res['id']);
-                    //     Navigator.pop(context);
-                    //   }
-                
-                }}
+                onPress={handleSubmit(onSubmit)}
+                //  console.log('TickATrip_'+generateUUID(8))    
+                // getOrderId()                       
+                  
                 >
                     <Text style={styles.confirmBook}>Confirm & Book</Text>
                 </TouchableHighlight>
@@ -538,5 +628,9 @@ const styles = StyleSheet.create({
         fontSize: 10,
         fontWeight: "500",
         paddingTop: 2,
+    },
+    titleStyle:{
+        fontFamily:FONTS.font,
+        color:COLORS.TextDarkGrey
     }
 })

@@ -123,7 +123,8 @@ const styles = StyleSheet.create({
         alignContent:'center',
         alignItems:'center',
         color:COLORS.textBlue,
-        fontSize:height*0.023
+        fontSize:height*0.023,
+        width:width*0.6
 
     },
 mainContainer:{

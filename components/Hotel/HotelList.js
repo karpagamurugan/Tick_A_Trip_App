@@ -24,7 +24,9 @@ const data = [
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const HotelList = ({ navigation }) => {
+const HotelList = ( {navigation,route}) => {
+    // const {Room,Guest,navigation} =props
+
     const { getHotelSearchResult } = useSelector((state) => state.HotelReducer)
     const [openFilter, setOpenFilter] = useState(false)
     return (
@@ -40,7 +42,7 @@ const HotelList = ({ navigation }) => {
                 </View>
             </Modal>
             <ScrollView>
-                <HotelAppbar title='Hotel Detail' />
+                <HotelAppbar title='Hotel Detail'/>
                 <View style={style.hotelDetailSec}>
                     <View style={style.HotelDetailFilterSec}>
                         <View style={style.filterFileld}>
