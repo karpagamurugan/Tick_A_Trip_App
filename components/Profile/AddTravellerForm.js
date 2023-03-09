@@ -101,7 +101,7 @@ const AddTravellerForm = ({ innerRef }) => {
     ]
 
     const SubmitAddBtn = (data, e) => {
-        console.log('button pressed')
+        console.log('button pressed',data)
         setListData(listData = {
             title: data.nametitle,
             first_name: data.firstName,
@@ -122,9 +122,7 @@ const AddTravellerForm = ({ innerRef }) => {
             type: userAction.GET_ADD_TRAVELLER_VALUE,
             payload: listData
         })
-        // console.log('CountryCode', getSelectId?.CountryCode)
-        // console.log('IssuingName', getSelectId?.IssuingName)
-        // console.log('Nationality', getSelectId?.Nationality)
+
 
         if (AddTravaller_form.find((List) => List?.email === data?.email) && ((List) => List?.mobileNumber === data?.mobileNumber)) {
             Snackbar.show({

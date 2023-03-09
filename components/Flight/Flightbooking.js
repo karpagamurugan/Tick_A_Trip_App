@@ -21,6 +21,8 @@ import DatePicker from 'react-native-date-picker';
 import EditIcon from '../../Assert/Images/icon/Edit_Icon.svg';
 import DeleteIcon from '../../Assert/Images/icon/Delete_Icon.svg';
 import ProfileIcon from '../../Assert/Images/Profile.svg';
+import ContactInfo from "./ContactInfo";
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
@@ -28,17 +30,14 @@ let width = Dimensions.get('window').width;
 export default function FlightBooking({ navigation, route }) {
     const dispatch = useDispatch()
     const { get_Revalidate } = useSelector((state) => state.FlightSearchReducer)
-    const { userProfileData, AddTravaller_country_code, AddTravaller_nationality, travelers_list } = useSelector((state) => state.userReducer)
+    const { AddTravaller_nationality, travelers_list } = useSelector((state) => state.userReducer)
     var [travelRec, setTravelRec] = useState({ CountryCode: false, Nationality: false })
-    var [selectedCountryCode, setSelectedCountryCode] = useState({ CountryCode: '', Nationality: '', })
     var [selectedNationality, setSelectedNationality] = useState({ CountryCode: '', Nationality: '', })
     var [getSelectId, setGetSelectId] = useState({ CountryCode: '' })
-    var [iconDownUp, setIconsDownUp] = useState(true);
     var [addIconDownUp, setAddIconsDownUp] = useState(true);
     var [checkBoxOne, setCheckBoxOne] = useState(false);
     var [checkBoxTwo, setCheckBoxTwo] = useState(false);
     var [travellerEdit, setTravellerEdit] = useState(true);
-
     var [adult, setAdult] = useState(route?.params?.flightInfo?.adult_flight?.toString()) //set adult count
     var [child, setchild] = useState(route?.params?.flightInfo?.child_flight?.toString()) //set child count
     var [infant, setInfant] = useState(route?.params?.flightInfo?.infant_flight?.toString()) //set infant count
@@ -48,28 +47,31 @@ export default function FlightBooking({ navigation, route }) {
     let [dobDate, setDobDate] = useState(new Date());
     const [selectType, setSelectType] = useState();
     const [title, setTitle] = useState();
+    const [travelFirstName, setTravelFirstName] = useState();
+    const [travelLastName, setTravelLastName] = useState();
+    var [selectedUser, setSelectedUser] =useState() 
 
-    console.log('flight route', route?.params?.flightInfo?.adult_flight)
 
-    console.log('adult', adult)
+    useEffect(() => {
+        const travel = async () => {
+            await AsyncStorage.getItem('tickatrip-token').then(
+                (res) => {
+                    // console.log('Use Travel', res)
+
+                    if (res !== null) {
+                        dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN, payload: res })
+                    } else {
+                        dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN, payload: res })
+                    }
+                }
+            )
+        }
+        travel();
+    }, []);
 
     const handleDebugger = useCallback(
         debounce((e) => console.log(e), 400)
         , []);
-
-    const handleSelectionCode = (e) => {
-        console.log('value', e)
-        Keyboard.dismiss()
-        setSelectedCountryCode(selectedCountryCode = { CountryCode: e.dial_code + "-" + e.name });
-        setGetSelectId(getSelectId = { CountryCode: e.id });
-        dispatch({
-            type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
-            payload: []
-        })
-        setTravelRec(travelRec = { CountryCode: true });
-        console.log(travelRec.CountryCode)
-        handleDebugger()
-    }
 
     const handleSelectNationality = (e) => {
         Keyboard.dismiss()
@@ -82,25 +84,58 @@ export default function FlightBooking({ navigation, route }) {
         setTravelRec(travelRec = { CountryCode: travelRec.CountryCode, IssuingName: travelRec.IssuingName, Nationality: true });
         handleDebugger()
     }
-    console.log('travelers_list', travelers_list.travelers[0])
 
-    useEffect(() => {
-
-        dispatch({ type: userActions.GET_USER_PROFILE })
-        let defaultName = { Name: userProfileData?.name }
-        let defaultEmail = { Email: userProfileData?.email }
-        let defaultPhone = { Phone: userProfileData?.phone }
-        reset({ ...defaultName, ...defaultEmail, ...defaultPhone, })
-    }, [])
+    // console.log('travelers_list', travelers_list?.travelers)
 
     const EditTravelDetails = (item) => {
-        console.log('lzsjodksghu', item.last_name)
+        setSelectedUser(item)
         setTravellerEdit(!travellerEdit)
         dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN })
-        let addSelectedType = { selectedType: item.type }
-        let addTravelName = { firstName: item.first_name }
-        let addTravelTitle = { firstName: item.first_name }
-        reset({ ...addSelectedType, ...addTravelName, ...addTravelTitle })
+
+        let addTravelFirstName = { firstName: item.first_name }
+        let addTravelLastName = { lastName: item.last_name }
+        setTravelFirstName(item.first_name)
+        setTravelLastName(item.last_name)
+        setSelectedNationality({ Nationality: item.nationality.name })
+        setTravelRec({ Nationality: true })
+        setDobDate(new Date(item.dob))
+        setTitle(item.title)
+        setSelectType(item.type)
+        if (item.gender.toLowerCase() === 'm') {
+            setGender('Male')
+        } else if (item.gender.toLowerCase() === 'f') {
+            setGender('Female')
+        } else {
+            setGender(item.gender)
+        }
+        reset({ ...addTravelFirstName, ...addTravelLastName, })
+
+    }
+    const updateBtn = () => {
+        let item = travelers_list?.travelers
+        var data = {
+            traveler_id: "",
+            title: title,
+            first_name: travelFirstName,
+            last_name: travelLastName,
+            gender: gender,
+            email: "",
+            phone: "",
+            dob: "",
+            passport: "",
+            nationality: selectedNationality,
+            issue_country: "",
+            expire_date: "",
+        };
+
+        console.log("kldfjhgdfughdfkjuhidf", selectedUser)
+
+        // dispatch({
+        //     type: userAction.SET_FLIGHT_UPDATE_TRAVELLER,
+        //     payload: {
+        //         nationality: selectedNationality.Nationality
+        //     }
+        // })
     }
 
     const selectAdult = [
@@ -230,13 +265,6 @@ export default function FlightBooking({ navigation, route }) {
                                                     color: '#101010',
                                                 },
                                             }}
-                                            style={styles.text}
-                                        //   renderRightIcon={() => (
-                                        //     <MaterialIcon
-                                        //       name="chevron-down-circle-outline"
-                                        //       size={25}
-                                        //       style={styles.dropIcon}
-                                        //     />)}
                                         />
                                     </View>
 
@@ -356,233 +384,7 @@ export default function FlightBooking({ navigation, route }) {
                     </View>
                 </View>
 
-                <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Text style={[styles.formTitle]}>Fill Contact Details *</Text>
-                        <TouchableOpacity onPress={() => setIconsDownUp(!iconDownUp)}>
-                            <AntDesign name={iconDownUp ? 'upcircleo' : 'downcircleo'} style={{ color: '#2B64FF', fontSize: height * 0.022, paddingRight: 15 }} />
-                        </TouchableOpacity>
-                    </View>
-                    {(iconDownUp === true) ?
-                        <View>
-                            <View style={styles.editTextBorder}>
-                                <Controller
-                                    control={control}
-                                    name="Name"
-                                    rules={{
-                                        required: {
-                                            value: true,
-                                            message: "Enter Your Name"
-                                        }
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            placeholderTextColor={"gray"}
-                                            name='Name'
-                                            placeholder="Name"
-                                            keyboardType='default'
-                                            {...register("Name")}
-                                            value={value}
-                                            onChangeText={value => onChange(value.toLowerCase())}
-                                        />
-                                    )}
-                                />
-                                {errors.Name && (
-                                    <Text style={[styles.errormessage]}>{errors.Name.message}</Text>
-                                )}
-                            </View>
-                            <View style={styles.editTextBorder}>
-                                <Controller
-                                    control={control}
-                                    name="Email"
-                                    rules={{
-                                        required: {
-                                            value: true,
-                                            message: "Enter Your Email"
-                                        }
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            placeholderTextColor={"gray"}
-                                            name='Email'
-                                            placeholder="Email"
-                                            keyboardType='default'
-                                            {...register("Email")}
-                                            value={value}
-                                            onChangeText={value => onChange(value.toLowerCase())}
-                                        />
-                                    )}
-                                />
-                                {errors.Email && (
-                                    <Text style={[styles.errormessage]}>{errors.Email.message}</Text>
-                                )}
-                            </View>
-                            <View style={styles.editTextBorder}>
-                                <Controller
-                                    control={control}
-                                    name="Phone"
-                                    rules={{
-                                        required: {
-                                            value: true,
-                                            message: "Enter Your Phone"
-                                        }
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            placeholderTextColor={"gray"}
-                                            name='Phone'
-                                            placeholder="Phone"
-                                            keyboardType='default'
-                                            {...register("Phone")}
-                                            value={value}
-                                            onChangeText={value => onChange(value.toLowerCase())}
-                                        />
-                                    )}
-                                />
-                                {errors.Phone && (
-                                    <Text style={[styles.errormessage]}>{errors.Phone.message}</Text>
-                                )}
-                            </View>
-                            <View style={styles.editTextBorder}>
-                                <Controller
-                                    control={control}
-                                    name="GST"
-
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            placeholderTextColor={"gray"}
-                                            name='GST'
-                                            placeholder="GST Nonstop (Optional)"
-                                            keyboardType='default'
-                                            {...register("GST")}
-                                            value={value}
-                                            onChangeText={value => onChange(value.toLowerCase())}
-                                        />
-                                    )}
-                                />
-                            </View>
-                            <View>
-                                <View style={[styles.editTextBorder]}>
-                                    <View
-                                        style={{
-                                            flexDirection: 'row',
-                                            height: 35,
-                                            width: '100%',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-
-                                        <TextInput
-                                            keyboardType={'default'}
-                                            placeholder={'Select...'}
-                                            placeholderTextColor="gray"
-                                            numberOfLines={1}
-                                            name="add_countrycode"
-                                            value={selectedCountryCode?.CountryCode}
-                                            onChangeText={(e) => {
-                                                if (e === '') {
-                                                    setTravelRec(travelRec = { CountryCode: true });
-                                                }
-                                                if (e?.length >= 3) {
-                                                    dispatch({
-                                                        type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
-                                                        payload: {
-                                                            name: e,
-                                                            type: 'country-code',
-                                                        }
-                                                    })
-                                                    setSelectedCountryCode(selectedCountryCode = { CountryCode: e })
-                                                } else {
-                                                    setSelectedCountryCode(selectedCountryCode = { CountryCode: e })
-                                                    dispatch({
-                                                        type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
-                                                        payload: []
-                                                    })
-                                                }
-                                            }}
-                                            style={{
-                                                color: 'black',
-                                                width: width * 0.9,
-                                                paddingTop: 8,
-                                                paddingLeft: 5,
-                                                paddingBottom: 0,
-                                            }}
-                                        />
-                                        {
-                                            selectedCountryCode?.CountryCode !== "" ?
-                                                <TouchableHighlight
-                                                    underlayColor={'transparent'}
-                                                    onPress={() => {
-                                                        setSelectedCountryCode(selectedCountryCode = { CountryCode: '' })
-                                                        dispatch({
-                                                            type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
-                                                            payload: []
-                                                        })
-                                                        setTravelRec(travelRec = { CountryCode: false });
-
-                                                    }}
-                                                >
-                                                    <AntDesign name="closecircle" size={18} color="gray" style={{
-                                                        marginLeft: 10, marginRight: 10, position: 'absolute', right: 20, top: -4
-                                                    }} />
-                                                </TouchableHighlight> : <></>
-                                        }
-                                    </View>
-                                </View>
-                                {
-                                    (AddTravaller_country_code?.message === undefined && selectedCountryCode?.CountryCode !== '' && travelRec.CountryCode === false) ?
-                                        <View style={{
-                                            backgroundColor: 'white',
-                                            width: '100%',
-                                            alignSelf: 'center',
-                                            position: 'relative',
-                                            zIndex: 2,
-                                            borderRadius: 5,
-                                            elevation: 10,
-                                            maxHeight: height * 0.35
-                                        }}>
-                                            <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, }}>No Options found</Text>
-                                        </View> : <View style={{
-                                            backgroundColor: 'white',
-                                            width: '100%',
-                                            alignSelf: 'center',
-                                            position: 'relative',
-                                            zIndex: 2,
-                                            borderRadius: 10,
-                                            elevation: 10,
-                                            maxHeight: height * 0.35
-                                        }}>
-
-                                            <ScrollView
-                                                showsVerticalScrollIndicator={true}
-                                                nestedScrollEnabled
-                                                keyboardShouldPersistTaps='handled'
-                                            >
-                                                {
-                                                    AddTravaller_country_code?.message?.map((e, i) => {
-                                                        return (
-                                                            <TouchableHighlight
-                                                                underlayColor={"transparent"}
-                                                                onPress={() => handleSelectionCode(e)}
-                                                                key={i}>
-                                                                <Text
-                                                                    style={{
-                                                                        color: 'black',
-                                                                        paddingHorizontal: 9,
-                                                                        fontSize: 13,
-                                                                        paddingVertical: 2,
-                                                                    }}>{e?.dial_code} - {e?.name}</Text>
-                                                            </TouchableHighlight>
-                                                        )
-                                                    })
-                                                }
-                                            </ScrollView>
-                                        </View>
-                                }
-                            </View>
-                        </View> : <></>
-                    }
-                </View>
+                <ContactInfo />
 
                 <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -607,9 +409,9 @@ export default function FlightBooking({ navigation, route }) {
                                         <Dropdown
                                             showsVerticalScrollIndicator={true}
                                             placeholder="Type"
-                                            labelField="value"
+                                            labelField="name"
                                             valueField="value"
-                                            name="Adult"
+                                            name="selectedType"
                                             data={selectAdult}
                                             value={selectType}
                                             {...register('selectedType')}
@@ -622,7 +424,7 @@ export default function FlightBooking({ navigation, route }) {
                                                     fontSize: 13,
                                                     fontWeight: '500',
                                                     letterSpacing: 0.5,
-                                                    paddingTop: 5,
+                                                    padding: 0,
                                                 },
                                             }}
                                             style={[styles.inputeEditor, { paddingHorizontal: 5, }]}
@@ -754,8 +556,9 @@ export default function FlightBooking({ navigation, route }) {
                                         <Dropdown
                                             showsVerticalScrollIndicator={true}
                                             placeholder="Gender"
-                                            labelField="value"
+                                            labelField="name"
                                             valueField="value"
+                                            name="selectedgender"
                                             data={selectGender}
                                             value={gender}
                                             {...register('selectedgender')}
@@ -917,13 +720,15 @@ export default function FlightBooking({ navigation, route }) {
                             <View style={{ marginVertical: 20, width: '90%', alignSelf: 'center' }}>
                                 {(travellerEdit === true) ?
                                     <TouchableOpacity
-                                        onPress={() => EditTravelDetails()}
                                         style={[styles.clickBtn]}>
                                         <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
                                     </TouchableOpacity> :
-                                    <TouchableOpacity style={[styles.clickBtn]}>
+                                    <TouchableHighlight
+                                        onPress={() => updateBtn()}
+                                        // onPress={()=>console.log('pressed')}
+                                        style={[styles.clickBtn]}>
                                         <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Update</Text>
-                                    </TouchableOpacity>
+                                    </TouchableHighlight>
                                 }
                             </View>
                         </View> : <></>
@@ -1038,6 +843,7 @@ export default function FlightBooking({ navigation, route }) {
                                 onChange(dobDate = DOB)
                                 setOpen(!open);
                                 setDobDate(dobDate = DOB);
+                                console.log('fdskmfk', DOB)
                             }}
                             onCancel={() => {
                                 setOpen(!open);

@@ -26,6 +26,7 @@ const userSaga = function* () {
         yield takeEvery(actions.GET_ADD_TRAVELLER_VALUE, getAddtoTravellerValue),
         yield takeEvery(actions.GET_ADD_TRAVELLER_TOKEN, getTraveller),
         yield takeEvery(actions.SET_FLIGHT_TICKETS_DETAILS, flightTicketsDetails),
+        yield takeEvery(actions.SET_FLIGHT_UPDATE_TRAVELLER, updateTraveler),
     ])
 }
 
@@ -160,6 +161,36 @@ const getTraveller = function* (data) {
     } catch (err) {
         // console.log('getSearchTraveller', err)
 
+    }
+}
+const updateTraveler = function* (data) {
+    const { payload } = data
+    console.log("update Payload",payload)
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/user/updateTraveler`,
+                payload, {
+                headers: {
+                    // accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+            )
+        );
+        if (result?.data.status === true) {
+            console.log('get', 'Add Successfully')
+            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully Successfully' } })
+            // AsyncStorage.setItem('tickatrip-token', result.data.success.token)
+            yield put({ type: actions.SET_FLIGHT_UPDATE_TRAVELLER, payload: result.data });
+        } else {
+            console.log('get', 'Sometyhing went wrtong')
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.error } })
+        }
+     
+    } catch (err) {
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: actions.SET_FLIGHT_UPDATE_TRAVELLER, payload: err.data })
     }
 }
 const getUserRegister = function* (data) {
@@ -334,13 +365,13 @@ const flightTicketsDetails = function* (data) {
         const result = yield call(() =>
             axios.get(`${API_URL}/user/flight/mybookings/detail/${payload.userId}`)
         )
-        console.log('flightuserId',result.data)
+        console.log('flightuserId', result.data)
         if (result?.data?.bookings !== undefined) {
             console.log('flight details result data....', result?.data?.bookings)
             yield put({ type: actions.GET_FLIGHT_TICKETS_DETAILS, payload: result?.data?.bookings })
             // console.log('flight details result data....', result?.data)
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-            payload.navigation.navigate('FlightTicketDetails') 
+            payload.navigation.navigate('FlightTicketDetails')
 
         } else {
             yield put({ type: actions.GET_FLIGHT_TICKETS_DETAILS, payload: result?.data?.bookings })
