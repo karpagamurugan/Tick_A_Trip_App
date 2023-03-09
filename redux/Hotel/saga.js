@@ -142,12 +142,8 @@ const getHotelRoomType = function* (data) {
 const setHotelBooking = function* (data) {
     yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
     const { payload } = data
-    console.log(payload,'payload...')
-    var form_data = new FormData();
-
-    for (var key in payload) {
-        form_data.append(key, payload[key]);
-    }
+    console.log(JSON.stringify(payload))
+   
     try {
         console.log('try......')
         const result = yield call(() =>
@@ -156,7 +152,6 @@ const setHotelBooking = function* (data) {
                 JSON.stringify(payload),
                 {
                     headers: {
-                        // accept: 'application/json',
                         'Content-Type':'application/json',
                     },
                 }
@@ -167,7 +162,9 @@ const setHotelBooking = function* (data) {
             console.log('hotel booking....',result?.data?.status)
             // yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: result.data.message });
             // navigation.navigate('HotelRoomType',{detail:detail})
+            console.log('Booking...', result.data)
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
         }else{
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })

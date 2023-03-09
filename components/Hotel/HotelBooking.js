@@ -98,54 +98,47 @@ function HotelBooking({ route, navigation }) {
                 },
               };
                 RazorpayCheckout.open(options).then((data) => {
-                    // console.log('data...',data)
-                    // handle success
-                    // alert(`Success: ${data.razorpay_payment_id}`);
+                    // console.log('RoomGuestPlace.RoomList',RoomGuestPlace.RoomList)
+                    // console.log('RoomType',RoomType)
+                    console.log('HotelDetail',parseFloat(parseFloat(RoomType?.netPrice) * 100))
                     var dataList= {
                         sessionId:hotelSessionId,
-                        productId:RoomType?.productId,
-                        tokenId:HotelDetail?.tokenId,
-                        rateBasisId: RoomType?.rateBasisId,
-                        clientRef:"TDB85454",
-                        customerEmail:userProfileData?.email,
-                        customerPhone:userProfileData?.phone,
-                        bookingNote:"Remark",
-                        transactionId:data.razorpay_payment_id,
-                        paxDetails:RoomGuestPlace.RoomList
-                        // paxDetails:[
-                        // {
-                        //   "room_no":1,
-                        //   "adult":{
-                        //     "title":["Mr","Mr"],
-                        //     "firstName":["test1","test2"],
-                        //     "lastName":["last1","last2"]
-                        // }
-                        // },{
-                        //   "room_no":2,
-                        //   "adult":{
-                        //     "title":["Mr","Mr"],
-                        //     "firstName":["test1","test2"],
-                        //     "lastName":["last1","last2"]
-                        // },
-                        //   "child":{
-                        //     "title":["Mr"],
-                        //     "firstName":["child_f_1"],
-                        //     "lastName":["child_l_1"]
-                        //   }
-                        // }
-                        // ]
-                      }
-                      console.log(data)
+                    productId:RoomType?.productId,
+                    tokenId:HotelDetail?.tokenId,
+                    hotelId:HotelDetail?.hotelId,
+                    rateBasisId: RoomType?.rateBasisId,
+                    clientRef:RoomType?.productId,
+                    customerName:userProfileData?.first_name,
+                    customerEmail:userProfileData?.email,
+                    customerPhone:userProfileData?.phone,
+                    customerGst:"",
+                    transactionId:data.razorpay_payment_id,
+                    paymentStatus:"true",
+                    bookingNote:"Remark",
+                    paxDetails:[
+                        {
+                            room_no:1,
+                            adult:{
+                                "title":["Mr","Mr"],
+                                "firstName":[userProfileData?.first_name,userProfileData?.first_name],
+                                "lastName":["MindMade","MindMade"]},
+                                "child":{"title":[],"firstName":[],"lastName":[]}
+                            }],
+                                hotelName:HotelDetail?.hotelName,
+                                hotelCity:HotelDetail?.city,
+                                hotelCountry:HotelDetail?.country,
+                                hotelAddress:HotelDetail?.address,
+                                TotalFare:parseFloat(parseFloat(RoomType?.netPrice) * 100),
+                                  }
+                    //   console.log('datamdoiudfki.....',dataList)
+                 console.log(JSON.stringify(dataList))
                       dispatch({type:hotelActions.SET_HOTEL_BOOKING,payload:dataList})
 
                   }).catch((error) => {
                     dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-
-                    // handle failure
-                    // alert(`Error: ${error.code} | ${error.description}`);
+                        console.log('error',error)
                   });
             
-          
         }
        
         // console.log('userProfileData',userProfileData)
@@ -559,7 +552,6 @@ function HotelBooking({ route, navigation }) {
                 onPress={handleSubmit(onSubmit)}
                 //  console.log('TickATrip_'+generateUUID(8))    
                 // getOrderId()                       
-                  
                 >
                     <Text style={styles.confirmBook}>Confirm & Book</Text>
                 </TouchableHighlight>

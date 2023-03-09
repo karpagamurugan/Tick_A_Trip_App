@@ -513,7 +513,7 @@ const HotelSearch = ({ navigation }) => {
           {/* <TouchableOpacity onPress={() => CurrentLocation}>
             <Text>GetCurrentLocation</Text>
           </TouchableOpacity> */}
-          <Text style={style.boldText}>
+          {/* <Text style={style.boldText}>
             {locationStatus}
           </Text>
           <Text
@@ -523,7 +523,7 @@ const HotelSearch = ({ navigation }) => {
               marginTop: 16,
             }}>
             Longitude: {currentLongitude}
-          </Text>
+          </Text> */}
         </View>
       </View>
 
