@@ -10,7 +10,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import hotelActions from '../../redux/Hotel/actions';
 import commonActions from '../../redux/common/actions';
 import Slider from '@react-native-community/slider';
-import AntDesign from 'react-native-vector-icons/AntDesign'
+import AntDesign from 'react-native-vector-icons/AntDesign';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
 
 const soryByOption = [
     { label: 'Price low high', value: 'price-low-high' },
@@ -65,6 +66,8 @@ const HotelFilter = (props) => {
     var [priceRange, setPriceRange] = useState();
     var [startRating, setStartRating] = useState();
     var [advisorRating, setAdvisorRating] = useState();
+    const [multiSliderValue, setMultiSliderValue] = useState([0, 10000]);
+    multiSliderValuesChange = values => setMultiSliderValue(values);
     const CheckFecilityValues = [
         {
             label: 'Internet access',
@@ -144,74 +147,49 @@ const HotelFilter = (props) => {
             </Pressable>
             <ScrollView style={style.filterModelSec}>
 
-                {/* <Controller
-        control={control}
-        name="min"
-        rules={{
-            required: {
-                value: true,
-                message: 'Enter min price!',
-            },
-        }}
-        render={({ field: { onChange, value } }) => (
-            <TextInput {...register("min")}
-                name="min" onChangeText={value => onChange(value)} value={value} style={style.filterFieldInput} placeholder='Enter min price' />
-        )}
-    />
-    {errors.min && (
-        <Text style={style.errorMessage}>{errors.min.message}</Text>
-    )} */}
-                <View style={style.filterField}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Text style={style.filterFieldLabel}>Max Price</Text>
-                        <Text style={style.priceRange}>Rs: {priceRange}</Text>
-                    </View>
-                    {/* <Slider
-
-                        style={{ paddingVertical: 5, width: width, height: 20 }}
-                        minimumValue={0}
-                        maximumValue={100000}
-                        minimumTrackTintColor={color.colorBtn}
-                        thumbTintColor={color.colorBtn}
-                        onValueChange={(val) => {
-                            setPriceRange(priceRange = val)
-                            // console.log("price Value",val)
-                        }}
-                    /> */}
-
-{/* <RangeSlider
-    minValue={0}
-    maxValue={100}
-    tintColor={'#da0f22'}
-    handleBorderWidth={1}
-    handleBorderColor="#454d55"
-    selectedMinimum={20}
-    selectedMaximum={40}
-    style={{ flex: 1, height: 70, padding: 10, backgroundColor: '#ddd' }}
-    onChange={ (data)=>{ console.log(data);} }
-  /> */}
-                </View>
-
-                {/* <View style={style.filterField}>
-                    <Text style={style.filterFieldLabel}>Max</Text>
-                    <Controller
-                        control={control}
-                        name="max"
-                        rules={{
-                            required: {
-                                value: true,
-                                message: 'Enter max price!',
-                            },
-                        }}
-                        render={({ field: { onChange, value } }) => (
-                            <TextInput {...register("max")}
-                                onChangeText={value => onChange(value)} value={value} name="max" style={style.filterFieldInput} placeholder='Enter max price' />
-                        )}
-                    />
-                    {errors.max && (
-                        <Text style={style.errorMessage}>{errors.max.message}</Text>
+                <Controller
+                    control={control}
+                    name="min"
+                    rules={{
+                        required: {
+                            value: true,
+                            message: 'Enter min price!',
+                        },
+                    }}
+                    render={({ field: { onChange, value } }) => (
+                        <TextInput {...register("min")}
+                            name="min" onChangeText={value => onChange(value)} value={value} style={style.filterFieldInput} placeholder='Enter min price' />
                     )}
-                </View> */}
+                />
+                {errors.min && (
+                    <Text style={style.errorMessage}>{errors.min.message}</Text>
+                )}
+                <View style={style.filterField}>
+                    <Text style={style.filterFieldLabel}>Max Price</Text>
+                    <View style={{ paddingHorizontal: 18 }}>
+                        <MultiSlider
+                            values={[multiSliderValue[0], multiSliderValue[1]]}
+                            sliderLength={300}
+                            onValuesChange={multiSliderValuesChange}
+                            min={0}
+                            max={10000}
+                            step={100}
+                            allowOverlap
+                            snapped
+                            selectedStyle={{
+                                backgroundColor: '#0041F2',
+                              }}
+                              unselectedStyle={{
+                                backgroundColor: '#d0d7de',
+                              }}
+                              color={'#009385'}
+                        />
+                        <View style={style.sliderOne}>
+                            <Text style={style.priceRange}>{multiSliderValue[0]} </Text>
+                            <Text style={style.priceRange}>{multiSliderValue[1]}</Text>
+                        </View>
+                    </View>
+                </View>
 
                 <View style={style.filterField}>
                     <Text style={style.filterFieldLabel}>Sory By</Text>
@@ -231,7 +209,7 @@ const HotelFilter = (props) => {
                                 selectedTextStyle={style.selectedTextStyle}
                                 inputSearchStyle={style.inputSearchStyle}
                                 iconStyle={style.iconStyle}
-                                containerStyle={{fontFamily:font.mediam}}
+                                containerStyle={{ fontFamily: font.mediam }}
                                 data={soryByOption}
                                 {...register("soryBy")}
                                 name="soryBy"
@@ -441,39 +419,39 @@ const HotelFilter = (props) => {
 
                     />
                 </View>
-                <View style={{flexDirection:"row", justifyContent:"space-between",paddingTop:10}}>
-                <View style={style.filterField}>
-                    <Text style={style.filterFieldLabel}>Facility</Text>
-                    <View style={style.checkBoxGrop}>
-                        {
-                            CheckFecilityValues.map((val, index) => (
-                                <View style={style.checkBox} key={index}>
-                                    <TouchableHighlight underlayColor='transparent' onPress={() => {
-                                        if (!selectFecility.includes(val.value)) {
-                                            setCheckFecility(!val.value)
-                                            setSelectFecility([...selectFecility, val.value])
-                                        } else {
-                                            setCheckFecility(null)
-                                            setSelectFecility(selectFecility.filter((item) => item !== val.value))
-                                        }
-                                    }}>
-                                        <View style={style.checkBox}>
-                                            {selectFecility.includes(val.value) ?
-                                                < Ionicons style={style.checkInputIcon} name='checkbox-sharp' />
-                                                :
-                                                <Ionicons style={style.checkInputIcon} name='checkbox-outline' />
+                <View style={{ flexDirection: "row", justifyContent: "space-between", paddingTop: 10 }}>
+                    <View style={style.filterField}>
+                        <Text style={style.filterFieldLabel}>Facility</Text>
+                        <View style={style.checkBoxGrop}>
+                            {
+                                CheckFecilityValues.map((val, index) => (
+                                    <View style={style.checkBox} key={index}>
+                                        <TouchableHighlight underlayColor='transparent' onPress={() => {
+                                            if (!selectFecility.includes(val.value)) {
+                                                setCheckFecility(!val.value)
+                                                setSelectFecility([...selectFecility, val.value])
+                                            } else {
+                                                setCheckFecility(null)
+                                                setSelectFecility(selectFecility.filter((item) => item !== val.value))
                                             }
-                                            <Text style={style.checkInputLabel}>{val.label}</Text>
-                                        </View>
-                                    </TouchableHighlight>
+                                        }}>
+                                            <View style={style.checkBox}>
+                                                {selectFecility.includes(val.value) ?
+                                                    < Ionicons style={style.checkInputIcon} name='checkbox-sharp' />
+                                                    :
+                                                    <Ionicons style={style.checkInputIcon} name='checkbox-outline' />
+                                                }
+                                                <Text style={style.checkInputLabel}>{val.label}</Text>
+                                            </View>
+                                        </TouchableHighlight>
 
-                                </View>
-                            ))
-                        }
+                                    </View>
+                                ))
+                            }
 
+                        </View>
                     </View>
-                </View>
-                        {/* <View style={style.filterField}>
+                    {/* <View style={style.filterField}>
                             <Text style={style.filterFieldLabel}>Locality</Text>
                             <View style={style.checkBoxGrop}>
                                 {CheckLocalityValues.map((val, index) => (
@@ -504,10 +482,10 @@ const HotelFilter = (props) => {
                 </View>
                 <View style={style.filterBtnGroup}>
                     <TouchableHighlight style={style.filtersubBtn} onPress={(() => setOpenFilter(false))}>
-                        <Text style={{ color: '#fff',fontFamily: font.mediam, }}>Close</Text>
+                        <Text style={{ color: '#fff', fontFamily: font.mediam, }}>Close</Text>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={handleSubmit(onSubmit)} style={style.filtersubBtn}>
-                        <Text style={{ color: '#fff',fontFamily: font.mediam, }}>Apply</Text>
+                        <Text style={{ color: '#fff', fontFamily: font.mediam, }}>Apply</Text>
                     </TouchableHighlight>
                 </View>
             </ScrollView>
@@ -613,13 +591,17 @@ const style = StyleSheet.create({
         height: height * 0.7,
         borderRadius: 10,
     },
-    selectedTextStyle:{
+    selectedTextStyle: {
         fontFamily: font.mediam,
     },
-    inputSearchStyle:{
+    inputSearchStyle: {
         fontFamily: font.mediam,
-    }
+    },
+    sliderOne: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
 
+    }
 
 })
 export default HotelFilter
