@@ -33,7 +33,6 @@ const HotelDetail = ({ navigation }) => {
 
     const textNumberOfLine = () => {
         setTextShown(!textShown)
-        console.log('textShown', textShown)
     }
 
     const onTextLayout = useCallback(e => {

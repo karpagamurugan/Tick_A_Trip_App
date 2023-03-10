@@ -22,6 +22,7 @@ import { Dropdown } from "react-native-element-dropdown";
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import CommonAction from '../../redux/common/actions';
 import hotelActions from "../../redux/Hotel/actions";
+import style from "../common/commonStyle";
 
 
 let height = Dimensions.get('window').height;
@@ -98,9 +99,7 @@ function HotelBooking({ route, navigation }) {
                 },
               };
                 RazorpayCheckout.open(options).then((data) => {
-                    // console.log('RoomGuestPlace.RoomList',RoomGuestPlace.RoomList)
-                    // console.log('RoomType',RoomType)
-                    console.log('HotelDetail',parseFloat(parseFloat(RoomType?.netPrice) * 100))
+                  
                     var dataList= {
                         sessionId:hotelSessionId,
                     productId:RoomType?.productId,
@@ -130,9 +129,8 @@ function HotelBooking({ route, navigation }) {
                                 hotelAddress:HotelDetail?.address,
                                 TotalFare:parseFloat(parseFloat(RoomType?.netPrice) * 100),
                                   }
-                    //   console.log('datamdoiudfki.....',dataList)
-                 console.log(JSON.stringify(dataList))
-                      dispatch({type:hotelActions.SET_HOTEL_BOOKING,payload:dataList})
+                      dispatch({type:hotelActions.SET_HOTEL_BOOKING,payload:dataList,navigation:navigation})
+
 
                   }).catch((error) => {
                     dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
@@ -216,21 +214,24 @@ function HotelBooking({ route, navigation }) {
                         <View style={{ backgroundColor: COLORS.lightGrey }}>
                             <View style={{ flexDirection: "row", alignItems: 'center', }}>
                                 <Text style={styles.HotelDetailHotelPrice}>{RoomType?.netPrice}</Text>
-                                <View style={{ paddingHorizontal: 5 }}>
+                                {/* <View style={{ paddingHorizontal: 5 }}>
                                     <Text style={styles.HotelPriceList}>Rs</Text>
                                     <Text style={styles.HotelPriceList}>Per Day</Text>
-                                </View>
+                                </View> */}
                             </View>
-                            <Text style={styles.HotelDetailHotelTax}>including tax 6,220</Text>
+                            <Text style={styles.HotelDetailHotelTax}>including tax {RoomType?.netPrice}</Text>
 
                         </View>
                     </View>
                 </View>
-                <Text style={{width:width*0.9,marginHorizontal:20,fontSize:height*0.017,color:COLORS.BtnColor,fontFamily:FONTS.font}}>{HotelDetail?.address}</Text>
+               <View style={{flexDirection:'row',marginLeft:10,marginTop:10}}>
+               <IoniconsIcon style={style.searchPlaceIcon} name='location-outline' size={18} color={COLORS.colorTheme}/>
+                <Text style={{width:width*0.9,marginLeft:5,ontSize:height*0.017,color:COLORS.BtnColor,fontFamily:FONTS.font}}>{HotelDetail?.address}</Text>
 
+               </View>
 
                 <View >
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingVertical: 20}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 20,paddingTop:10}}>
                         <View>
                             <Text style={styles.titleStyle}>Depart On</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>

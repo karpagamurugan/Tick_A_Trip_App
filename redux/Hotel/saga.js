@@ -144,7 +144,8 @@ const getHotelRoomType = function* (data) {
 
 const setHotelBooking = function* (data) {
     yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
-    const { payload } = data   
+    const { payload,navigation } = data   
+    console.log(navigation,'nav....')
     try {
         const result = yield call(() =>
             axios.post(
@@ -157,18 +158,18 @@ const setHotelBooking = function* (data) {
                 }
             )
         );
-        if (result.data.status === true) {
-            yield put({ type: actions.GET_HOTEL_BOOKING, payload: result.data.log });
-            // navigation.navigate('HotelRoomType',{detail:detail})
+        console.log('ghhhehfiuikh',result?.data)
+        if (result?.data?.status === true) {
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
+            // yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
             yield put({ type: actions.GET_HOTEL_BOOKING_DETAIL, payload:  {
                 supplierConfirmationNum:result.data?.log?.supplierConfirmationNum,
                 referenceNum: result?.data?.log?.referenceNum
               } });
-
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result.data.message } })
-            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
-
+              navigation.navigate('BookingConfirm')
+        
         }else{
+            console.log('resulr....',result)
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
 
@@ -182,13 +183,13 @@ const setHotelBooking = function* (data) {
 
 
 const getHotelBookingDetail = function* (data) {
-    yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
+    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
     const { payload} = data
     try {
         const result = yield call(() =>
             axios.post(
                 `${API_URL}/hotelbooking_details`,
-                payload,
+                JSON.stringify(payload),
                 {
                     headers: {
                         accept: 'application/json',
@@ -197,6 +198,7 @@ const getHotelBookingDetail = function* (data) {
                 }
             )
         );
+        console.log('sxirkdtouykoi6u',result?.data)
         if (result.data.status === true) {
             yield put({ type: actions.SET_HOTEL_BOOKING_DETAIL, payload: result.data.message });
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
@@ -223,8 +225,8 @@ const handleHotelFilter = function* (data) {
                 payload,
                 {
                     headers: {
-                        accept: 'application/json',
-                        'Content-Type': 'multipart/form-data',
+                        // accept: 'application/json',
+                        'Content-Type': 'application/json',
                     },
                 }
             )

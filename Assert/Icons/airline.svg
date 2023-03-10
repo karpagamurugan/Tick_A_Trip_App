@@ -1,0 +1,40 @@
+<svg id="airline" xmlns="http://www.w3.org/2000/svg" width="81" height="42" viewBox="0 0 81 42">
+  <path id="Fill_217" data-name="Fill 217" d="M0,.5H3V0H0Z" transform="translate(24 39)" fill="#285263"/>
+  <path id="Fill_218" data-name="Fill 218" d="M0,9H1V0H0Z" transform="translate(25 30)" fill="#285263"/>
+  <path id="Fill_219" data-name="Fill 219" d="M0,4H2V0H0Z" transform="translate(27 37)" fill="#285263"/>
+  <path id="Fill_220" data-name="Fill 220" d="M0,4H2V0H0Z" transform="translate(22 37)" fill="#285263"/>
+  <path id="Fill_221" data-name="Fill 221" d="M0,1H2V0H0Z" transform="translate(36 40)" fill="#285263"/>
+  <path id="Fill_222" data-name="Fill 222" d="M0,4H1V0H0Z" transform="translate(36.5 36)" fill="#285263"/>
+  <path id="Fill_223" data-name="Fill 223" d="M0,3H1V0H0Z" transform="translate(38 39)" fill="#285263"/>
+  <path id="Fill_224" data-name="Fill 224" d="M0,3H1V0H0Z" transform="translate(35 39)" fill="#285263"/>
+  <path id="Fill_225" data-name="Fill 225" d="M0,1H2V0H0Z" transform="translate(44 40)" fill="#285263"/>
+  <path id="Fill_226" data-name="Fill 226" d="M0,4H1V0H0Z" transform="translate(44.5 36)" fill="#285263"/>
+  <path id="Fill_227" data-name="Fill 227" d="M0,3H1V0H0Z" transform="translate(46 39)" fill="#285263"/>
+  <path id="Fill_228" data-name="Fill 228" d="M0,3H1V0H0Z" transform="translate(43 39)" fill="#285263"/>
+  <path id="Fill_229" data-name="Fill 229" d="M0,3H2V0H0Z" transform="translate(14 29)" fill="#c4c4c4"/>
+  <path id="Fill_230" data-name="Fill 230" d="M8,4.5A4.272,4.272,0,0,1,4,9,4.272,4.272,0,0,1,0,4.5,4.272,4.272,0,0,1,4,0,4.272,4.272,0,0,1,8,4.5" transform="translate(11 30)" fill="#c4c4c4"/>
+  <path id="Fill_231" data-name="Fill 231" d="M6,3A3,3,0,1,1,3,0,3,3,0,0,1,6,3" transform="translate(12 32)" fill="#285263"/>
+  <path id="Fill_232" data-name="Fill 232" d="M31.452,1.942S17.336,1.645.868,0A.774.774,0,0,0,0,.751a.762.762,0,0,0,.648.74L33,7,31.452,1.942" transform="translate(0 25)" fill="#86bcfe"/>
+  <path id="Fill_233" data-name="Fill 233" d="M11,.636,10.64,2,.153.3A.165.165,0,0,1,0,.15.18.18,0,0,1,.208,0L11,.636" transform="translate(22 18)" fill="#86bcfe"/>
+  <path id="Fill_234" data-name="Fill 234" d="M3,0V18L0,16.813,2.168.651A.808.808,0,0,1,3,0" transform="translate(38)" fill="#86bcfe"/>
+  <path id="Fill_235" data-name="Fill 235" d="M2,16.813,0,18V0A.641.641,0,0,1,.554.65L2,16.813" transform="translate(41)" fill="#5c94e2"/>
+  <path id="Fill_236" data-name="Fill 236" d="M10,2.5A2.278,2.278,0,0,1,8.047,5H1.953A2.278,2.278,0,0,1,0,2.5,2.278,2.278,0,0,1,1.953,0H8.047A2.278,2.278,0,0,1,10,2.5" transform="translate(29 27)" fill="#e9e9e9"/>
+  <path id="Fill_237" data-name="Fill 237" d="M9,0H4A4,4,0,0,0,4,8H9V0" transform="translate(32 29)" fill="#e9e9e9"/>
+  <path id="Fill_238" data-name="Fill 238" d="M0,.5H2V0H0Z" transform="translate(55 39)" fill="#285263"/>
+  <path id="Fill_239" data-name="Fill 239" d="M0,9H.5V0H0Z" transform="translate(56 30)" fill="#285263"/>
+  <path id="Fill_240" data-name="Fill 240" d="M0,4H2V0H0Z" transform="translate(53 37)" fill="#285263"/>
+  <path id="Fill_241" data-name="Fill 241" d="M0,4H2V0H0Z" transform="translate(57 37)" fill="#285263"/>
+  <path id="Fill_242" data-name="Fill 242" d="M0,3H3V0H0Z" transform="translate(65 29)" fill="#c4c4c4"/>
+  <path id="Fill_243" data-name="Fill 243" d="M0,4.5A4.272,4.272,0,0,0,4,9,4.273,4.273,0,0,0,8,4.5,4.273,4.273,0,0,0,4,0,4.272,4.272,0,0,0,0,4.5" transform="translate(62 30)" fill="#c4c4c4"/>
+  <path id="Fill_244" data-name="Fill 244" d="M0,3A3,3,0,1,0,3,0,3,3,0,0,0,0,3" transform="translate(63 32)" fill="#285263"/>
+  <path id="Fill_245" data-name="Fill 245" d="M1.5,1.942S15.188,1.645,31.158,0A.759.759,0,0,1,32,.751a.755.755,0,0,1-.628.74L0,7,1.5,1.942" transform="translate(49 25)" fill="#86bcfe"/>
+  <path id="Fill_246" data-name="Fill 246" d="M0,.636.327,2,9.86.3A.158.158,0,0,0,10,.15.167.167,0,0,0,9.811,0L0,.636" transform="translate(49 18)" fill="#86bcfe"/>
+  <path id="Fill_247" data-name="Fill 247" d="M0,2.5A2.278,2.278,0,0,0,1.951,5h6.1A2.279,2.279,0,0,0,10,2.5,2.279,2.279,0,0,0,8.047,0h-6.1A2.278,2.278,0,0,0,0,2.5" transform="translate(42 27)" fill="#e9e9e9"/>
+  <path id="Fill_248" data-name="Fill 248" d="M0,0H5A4,4,0,0,1,5,8H0V0" transform="translate(41 29)" fill="#e9e9e9"/>
+  <path id="Fill_249" data-name="Fill 249" d="M9,0V20C4.031,20,0,15.011,0,9.671S4.031,0,9,0" transform="translate(32 15)" fill="#f4f5f3"/>
+  <path id="Fill_250" data-name="Fill 250" d="M9,9.671C9,15.011,4.972,20,0,20V0C4.972,0,9,4.331,9,9.671" transform="translate(41 15)" fill="#e9e9e9"/>
+  <path id="Fill_251" data-name="Fill 251" d="M0,2H5V0H.524L0,2" transform="translate(35 22)" fill="#285263"/>
+  <path id="Fill_253" data-name="Fill 253" d="M5,2H0V0H4.476L5,2" transform="translate(42 22)" fill="#285263"/>
+  <path id="Fill_254" data-name="Fill 254" d="M7,5H0V0H5.9L7,5ZM1,1V4H6L5.476,1Z" transform="translate(41 20)" fill="#e8eae4"/>
+  <path id="Fill_255" data-name="Fill 255" d="M9,3.5C9,5.433,6.984,7,4.5,7S0,5.433,0,3.5,2.016,0,4.5,0,9,1.567,9,3.5" transform="translate(37 25)" fill="#fff"/>
+</svg>

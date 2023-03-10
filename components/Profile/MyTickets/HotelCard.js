@@ -11,7 +11,7 @@ import { useDispatch, useSelector } from 'react-redux';
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
- export default function HotelTicketView  ( {item,navigation} ) {
+ export default function HotelTicketView  ( {item,navigation,type} ) {
     const dispatch = useDispatch();
     
     return(
@@ -30,9 +30,12 @@ let height = Dimensions.get('window').height;
                         <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.017 }}>No of Days :  {item?.days}</Text>
 
                     </View>
-                    <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                    {
+                       (type === 'upcoming')? 
+                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
                         <Text style={style.cancelbtn}>Cancel</Text>
-                    </TouchableHighlight>
+                    </TouchableHighlight>:<View/>
+                    }
                 </View>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     <TouchableHighlight underlayColor='transparent' onPress={()=>{

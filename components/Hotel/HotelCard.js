@@ -8,11 +8,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import style from '../common/commonStyle'
 import { useDispatch, useSelector } from 'react-redux';
 import hotelActions from '../../redux/Hotel/actions';
+import moment from 'moment';
 
 
 const HotelCard = (props) => {
     const { val } = props
-    const { hotelSessionId } = useSelector((state) => state.HotelReducer)
+    const { hotelSessionId ,RoomGuestPlace} = useSelector((state) => state.HotelReducer)
 
     var navigation =props?.navigation
     const dispatch =useDispatch()
@@ -31,12 +32,12 @@ const HotelCard = (props) => {
                                     disabled={true}
                                     starSize={50}
                                     spacing={5}
-                                    fullStar={<FontAwesome name={'star'} style={[style.myStarStyle]} />}
+                                    fullStar={<FontAwesome name={'star'} style={[styles.myStarStyle]} />}
                                     emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
                                     halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle]} />}
                                 />
                             </View>
-                            <Text style={style.hotelListCardReviewBlog}>109 Trip Blogs</Text>
+                            {/* <Text style={style.hotelListCardReviewBlog}>109 Trip Blogs</Text> */}
                         </View>
                     </ImageBackground>
                 </View>
@@ -53,8 +54,10 @@ const HotelCard = (props) => {
                     </View>
                     <View style={style.hotelDesCont}>
                         <Text style={style.ListHotelName}>{val?.hotelName}</Text>
-                        <Text style={style.ListHotelPrice}>{val?.currency} {val?.total} <Text style={style.taxTect}>inclusing tax</Text></Text>
-                        {/* <Text style={style.ListHotelDescription}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel molestie nisl. Duis ac mi leo.</Text> */}
+                        <Text style={style.ListHotelPrice}>{val?.currency} {val?.total} <Text style={style.taxTect}></Text></Text>
+                        <Text style={style.ListHotelDescription}>{(parseInt(moment.duration(moment(RoomGuestPlace?.arrivalDate, "YYYY-MM-DD").diff(moment(RoomGuestPlace?.depatureDate, "YYYY-MM-DD"))).asDays()) === 1)?
+                        parseInt(moment.duration(moment(RoomGuestPlace?.arrivalDate, "YYYY-MM-DD").diff(moment(RoomGuestPlace?.depatureDate, "YYYY-MM-DD"))).asDays()):
+                        parseInt(moment.duration(moment(RoomGuestPlace?.arrivalDate, "YYYY-MM-DD").diff(moment(RoomGuestPlace?.depatureDate, "YYYY-MM-DD"))).asDays())+1} night { RoomGuestPlace?.Guest} All inclusive price {val?.currency} {val?.total}</Text>
                         <TouchableHighlight style={style.ListHotelBtn}
                          onPress={() =>{
                             dispatch({

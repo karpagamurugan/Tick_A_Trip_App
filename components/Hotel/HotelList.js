@@ -27,7 +27,7 @@ const height = Dimensions.get('window').height
 const HotelList = ( {navigation,route}) => {
     // const {Room,Guest,navigation} =props
 
-    const { getHotelSearchResult } = useSelector((state) => state.HotelReducer)
+    const { getHotelSearchResult,RoomGuestPlace } = useSelector((state) => state.HotelReducer)
     const [openFilter, setOpenFilter] = useState(false)
     return (
         <View>
@@ -56,7 +56,7 @@ const HotelList = ( {navigation,route}) => {
                     </View>
                     <View style={style.searchPlace}>
                         <Ionicons style={style.searchPlaceIcon} name='location-outline' />
-                        <Text style={style.searchPlaceText}>RS Puram, Coimbatore</Text>
+                        <Text style={style.searchPlaceText}>{RoomGuestPlace?.Place}</Text>
                     </View>
                     <View style={style.hotelSearchList}>
                         {

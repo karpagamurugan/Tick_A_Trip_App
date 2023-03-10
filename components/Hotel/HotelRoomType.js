@@ -8,7 +8,6 @@ import HotelRoomTypeCard from './HotelRoomTypeCard'
 
 const HotelRoomType = ({navigation,route}) => {
     // const {detail}=props
-    console.log(route)
 
     const { HotelRoomType } = useSelector((state) => state.HotelReducer)
 

@@ -108,7 +108,7 @@ export default function Hotel({navigation}) {
                                         // horizontal 
                                         data={Upcoming_hotel?.bookings}  
                                         renderItem={({item}) =>  
-                                        <HotelTicketView item={item} navigation={navigation}/>
+                                        <HotelTicketView item={item} navigation={navigation} type={'upcoming'}/>
                                                 }  
                                         // ItemSeparatorComponent={this.renderSeparator}  
                                     />  
@@ -127,7 +127,7 @@ export default function Hotel({navigation}) {
                                             </View>
                                             :
                                             Cancelled_hotel?.bookings?.map((item, index) => (
-                                                <HotelTicketView item={item} navigation={navigation}/>
+                                                <HotelTicketView item={item} navigation={navigation} type={'cancelled'}/>
                                                 ))
                                         }
                                     </View>
@@ -145,7 +145,7 @@ export default function Hotel({navigation}) {
                                                 </View>
                                                 :
                                                 Completed_hotel?.bookings?.map((item, index) => (
-                                                    <HotelTicketView item={item} navigation={navigation}/>
+                                                    <HotelTicketView item={item} navigation={navigation} type={'completed'}/>
                                                     ))
                                             }
                                         </View>
