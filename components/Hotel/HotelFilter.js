@@ -166,7 +166,7 @@ const HotelFilter = (props) => {
                         <Text style={style.filterFieldLabel}>Max Price</Text>
                         <Text style={style.priceRange}>Rs: {priceRange}</Text>
                     </View>
-                    <Slider
+                    {/* <Slider
 
                         style={{ paddingVertical: 5, width: width, height: 20 }}
                         minimumValue={0}
@@ -177,8 +177,19 @@ const HotelFilter = (props) => {
                             setPriceRange(priceRange = val)
                             // console.log("price Value",val)
                         }}
+                    /> */}
 
-                    />
+{/* <RangeSlider
+    minValue={0}
+    maxValue={100}
+    tintColor={'#da0f22'}
+    handleBorderWidth={1}
+    handleBorderColor="#454d55"
+    selectedMinimum={20}
+    selectedMaximum={40}
+    style={{ flex: 1, height: 70, padding: 10, backgroundColor: '#ddd' }}
+    onChange={ (data)=>{ console.log(data);} }
+  /> */}
                 </View>
 
                 {/* <View style={style.filterField}>
@@ -314,7 +325,7 @@ const HotelFilter = (props) => {
                     />
                 </View> */}
 
-                <View style={style.filterField}>
+                {/* <View style={style.filterField}>
                     <Text style={style.filterFieldLabel}>Fare Type</Text>
                     <Controller
                         control={control}
@@ -351,7 +362,7 @@ const HotelFilter = (props) => {
                             />
                         )}
                     />
-                </View>
+                </View> */}
 
                 <View style={style.filterField}>
                     <Text style={style.filterFieldLabel}>Property Type</Text>
@@ -462,34 +473,34 @@ const HotelFilter = (props) => {
 
                     </View>
                 </View>
-                <View style={style.filterField}>
-                    <Text style={style.filterFieldLabel}>Locality</Text>
-                    <View style={style.checkBoxGrop}>
-                        {CheckLocalityValues.map((val, index) => (
-                            <View style={style.checkBox} key={index}>
-                                <TouchableHighlight underlayColor='transparent' onPress={() => {
-                                    if (!selectLocality.includes(val.value)) {
-                                        setSelectLocality([...selectLocality, val.value])
-                                        setCheckLocality(val.value)
-                                    } else {
-                                        setSelectLocality(selectLocality.filter((item) => item !== val.value))
-                                        setCheckLocality(null)
-                                    }
-                                }}>
-                                    <View style={style.checkBox}>
-                                        {selectLocality.includes(val.value) ?
-                                            < Ionicons style={style.checkInputIcon} name='checkbox-sharp' />
-                                            :
-                                            <Ionicons style={style.checkInputIcon} name='checkbox-outline' />
-                                        }
-                                        <Text style={style.checkInputLabel}>{val.label}</Text>
-                                    </View>
+                        {/* <View style={style.filterField}>
+                            <Text style={style.filterFieldLabel}>Locality</Text>
+                            <View style={style.checkBoxGrop}>
+                                {CheckLocalityValues.map((val, index) => (
+                                    <View style={style.checkBox} key={index}>
+                                        <TouchableHighlight underlayColor='transparent' onPress={() => {
+                                            if (!selectLocality.includes(val.value)) {
+                                                setSelectLocality([...selectLocality, val.value])
+                                                setCheckLocality(val.value)
+                                            } else {
+                                                setSelectLocality(selectLocality.filter((item) => item !== val.value))
+                                                setCheckLocality(null)
+                                            }
+                                        }}>
+                                            <View style={style.checkBox}>
+                                                {selectLocality.includes(val.value) ?
+                                                    < Ionicons style={style.checkInputIcon} name='checkbox-sharp' />
+                                                    :
+                                                    <Ionicons style={style.checkInputIcon} name='checkbox-outline' />
+                                                }
+                                                <Text style={style.checkInputLabel}>{val.label}</Text>
+                                            </View>
 
-                                </TouchableHighlight>
+                                        </TouchableHighlight>
+                                    </View>
+                                ))}
                             </View>
-                        ))}
-                    </View>
-                </View>
+                        </View> */}
                 </View>
                 <View style={style.filterBtnGroup}>
                     <TouchableHighlight style={style.filtersubBtn} onPress={(() => setOpenFilter(false))}>

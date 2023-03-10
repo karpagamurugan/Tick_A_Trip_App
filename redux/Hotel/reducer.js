@@ -14,7 +14,10 @@ const initialState = {
         depatureDate:'',
         arrivalDate:'',
         RoomList:[]
-    }
+    },
+    BookingInfo:{},
+    HotelFilter:{},
+    
 }
 
 const HotelReducer = (state = initialState, action) => {
@@ -56,6 +59,16 @@ const HotelReducer = (state = initialState, action) => {
                                 RoomList:action.payload.RoomList
                             }
                         }
+                            case actions.SET_HOTEL_BOOKING_DETAIL:
+                                return {
+                                    ...state,
+                                    BookingInfo: action.payload
+                                }
+                                case actions.SET_HOTEL_FILTER:
+                                    return {
+                                        ...state,
+                                        HotelFilter: action.payload
+                                    }
         default:
             return state;
     }
