@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
 import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight } from 'react-native';
-import font from '../constants/font';
+import FONTS from '../constants/font';
 import { useDispatch } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
 import userActions from '../../redux/user/actions';
@@ -42,7 +42,7 @@ const style = StyleSheet.create({
     btnSighnUpText: {
         color: '#EDF2F7',
         fontSize: 12,
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
     },
     btnGuestText: {
         color: '#EDF2F7',

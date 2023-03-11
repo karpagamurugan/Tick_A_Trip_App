@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, TouchableHighlight, Modal, Pressable, TextInput, Keyboard } from 'react-native';
-import color from '../constants/color';
-import font from '../constants/font';
+import COLORS from '../constants/color';
+import FONTS from '../constants/font';
 import Appbar from '../common/Appbar';
 import DatePicker from 'react-native-date-picker';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -199,7 +199,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                             style: {
                                                 fontSize: 13,
                                                 fontWeight: '500',
-                                                fontFamily: font.font,
+                                                fontFamily: FONTS.font,
                                                 letterSpacing: 0.5,
                                                 paddingTop: 10,
                                             },
@@ -209,7 +209,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                             <IoniconsIcon
                                                 name="chevron-down"
                                                 size={25}
-                                                style={{ fontSize: 18, color: color.colorTheme, }}
+                                                style={{ fontSize: 18, color: COLORS.colorTheme, }}
                                             />)}
                                     />
                                 )}
@@ -307,7 +307,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                                 style: {
                                                     fontSize: 13,
                                                     fontWeight: '500',
-                                                    fontFamily: font.font,
+                                                    fontFamily: FONTS.font,
                                                     letterSpacing: 0.5,
                                                     paddingTop: 10,
                                                 },
@@ -317,7 +317,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                                 <IoniconsIcon
                                                     name="chevron-down"
                                                     size={25}
-                                                    style={{ fontSize: 18, color: color.colorTheme, }}
+                                                    style={{ fontSize: 18, color: COLORS.colorTheme, }}
                                                 />)}
                                         />
                                     )}
@@ -354,7 +354,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                                 style: {
                                                     fontSize: 13,
                                                     fontWeight: '500',
-                                                    fontFamily: font.font,
+                                                    fontFamily: FONTS.font,
                                                     letterSpacing: 0.5,
                                                     paddingTop: 10,
                                                 },
@@ -364,7 +364,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                                 <IoniconsIcon
                                                     name="chevron-down"
                                                     size={25}
-                                                    style={{ fontSize: 18, color: color.colorTheme, }}
+                                                    style={{ fontSize: 18, color: COLORS.colorTheme, }}
                                                 />)}
                                         />
                                     )}
@@ -443,7 +443,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                 <Text style={styles.placeHolderText}>Date of Birth</Text>
                                 <TouchableHighlight underlayColor={'transparent'} onPress={() => setOpen(!open)} style={{ paddingRight: 5 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text style={{ fontFamily: font.font, color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
+                                        <Text style={{ fontFamily: FONTS.font, color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
                                             {moment(dobDate).format('DD/MM/YYYY').toString()}
                                         </Text>
                                         <MaterialIcons Icon name="calendar-month-outline" size={25} color="gray" />
@@ -527,7 +527,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                         }}
                                         style={{
                                             color: 'black',
-                                            fontFamily: font.font,
+                                            fontFamily: FONTS.font,
                                             width: width * 0.9,
                                             paddingTop: 8,
                                             paddingLeft: 5,
@@ -567,7 +567,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                         elevation: 10,
                                         maxHeight: height * 0.35
                                     }}>
-                                        <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
+                                        <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: FONTS.font }}>No Options found</Text>
                                     </View> : <View style={{
                                         backgroundColor: 'white',
                                         width: '100%',
@@ -596,7 +596,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                                                     color: 'black',
                                                                     paddingHorizontal: 9,
                                                                     fontSize: 13,
-                                                                    fontFamily: font.font,
+                                                                    fontFamily: FONTS.font,
                                                                     paddingVertical: 2,
                                                                 }}>{e?.dial_code} - {e?.name}</Text>
                                                         </TouchableHighlight>
@@ -649,7 +649,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                         }}
                                         style={{
                                             color: 'black',
-                                            fontFamily: font.font,
+                                            fontFamily: FONTS.font,
                                             width: width * 0.9,
                                             paddingTop: 5,
                                             paddingBottom: 0,
@@ -686,7 +686,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                     elevation: 10,
                                     maxHeight: height * 0.35
                                 }}>
-                                    <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
+                                    <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: FONTS.font }}>No Options found</Text>
                                 </View> : <View style={{
                                     backgroundColor: 'white',
                                     width: '100%',
@@ -716,7 +716,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                                                 color: 'black',
                                                                 paddingHorizontal: 9,
                                                                 fontSize: 13,
-                                                                fontFamily: font.font,
+                                                                fontFamily: FONTS.font,
                                                                 paddingVertical: 2,
                                                             }}>{e?.name}</Text>
                                                     </TouchableHighlight>
@@ -773,7 +773,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                         }}
                                         style={{
                                             color: 'black',
-                                            fontFamily: font.font,
+                                            fontFamily: FONTS.font,
                                             width: width * 0.9,
                                             paddingTop: 5,
                                             paddingBottom: 0,
@@ -810,7 +810,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                     elevation: 10,
                                     maxHeight: height * 0.35
                                 }}>
-                                    <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
+                                    <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: FONTS.font }}>No Options found</Text>
                                 </View> : <View style={{
                                     backgroundColor: 'white',
                                     width: '100%',
@@ -840,7 +840,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                                                 color: 'black',
                                                                 paddingHorizontal: 9,
                                                                 fontSize: 13,
-                                                                fontFamily: font.font,
+                                                                fontFamily: FONTS.font,
                                                                 paddingVertical: 2,
                                                             }}>{e?.name}</Text>
                                                     </TouchableHighlight>
@@ -886,7 +886,7 @@ const AddTravellerForm = ({ innerRef }) => {
                             <Text style={styles.placeHolderText}>Expiry Date</Text>
                             <TouchableHighlight onPress={() => setpassportExDateOpen(!passportExDateopen)} style={{ paddingRight: 5 }} underlayColor='transparent'>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Text style={{ fontFamily: font.font, color: 'gray', paddingVertical: 10, paddingLeft: 7 }}>
+                                    <Text style={{ fontFamily: FONTS.font, color: 'gray', paddingVertical: 10, paddingLeft: 7 }}>
                                         {moment(passportExDate).format('DD/MM/YYYY').toString()}
                                     </Text>
                                     <MaterialIcons Icon name="calendar-month-outline" size={25} color="gray" />
@@ -971,7 +971,7 @@ const styles = StyleSheet.create({
     subContainer: { flexDirection: 'column', alignItems: 'center' },
     editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: '#067fc030', marginTop: 20, marginBottom: 5, },
     updateBtn: { backgroundColor: '#0d6efd', borderRadius: 5,  justifyContent: 'center', width: 130,alignSelf: 'flex-end', },
-    updateText: { color: '#fff', fontFamily: font.font, alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 10,alignItems: 'center' },
+    updateText: { color: '#fff', fontFamily: FONTS.font, alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 10,alignItems: 'center' },
     placeHolderText: {
         color: '#067fc0',
         position: 'absolute',
@@ -981,7 +981,7 @@ const styles = StyleSheet.create({
         top: -11,
         left: 10,
         backgroundColor: '#ffffff',
-        fontFamily: font.font
+        fontFamily: FONTS.font
     },
     errormessage: {
         color: "red",

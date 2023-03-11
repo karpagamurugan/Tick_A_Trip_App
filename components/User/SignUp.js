@@ -1,12 +1,12 @@
 /* eslint-disable prettier/prettier */
 import React, { useState,useCallback } from 'react';
 import { Button, ScrollView, Dimensions, Text, View, StyleSheet, ImageBackground, TextInput, Image, TouchableOpacity } from 'react-native';
-import font from '../constants/font';
+import FONTS from '../constants/font';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import { Dropdown } from 'react-native-element-dropdown'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import color from '../constants/color'
+import COLORS from '../constants/color'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
@@ -129,7 +129,7 @@ const SignUp = ({ navigation }) => {
                                             style: {
                                                 fontSize: 13,
                                                 fontWeight: '500',
-                                                fontFamily: font.font,
+                                                fontFamily: FONTS.font,
                                                 letterSpacing: 0.5,
                                                 padding: 0,
                                             },
@@ -139,7 +139,7 @@ const SignUp = ({ navigation }) => {
                                             <MaterialIcon
                                                 name="chevron-down-circle-outline"
                                                 size={25}
-                                                style={{ fontSize: 18, color: color.colorTheme, }}
+                                                style={{ fontSize: 18, color: COLORS.colorTheme, }}
                                             />)}
                                     />
                                 )}
@@ -178,7 +178,7 @@ const SignUp = ({ navigation }) => {
                                             style: {
                                                 fontSize: 13,
                                                 fontWeight: '500',
-                                                fontFamily: font.font,
+                                                fontFamily: FONTS.font,
                                                 letterSpacing: 0.5,
                                             },
                                         }}
@@ -187,7 +187,7 @@ const SignUp = ({ navigation }) => {
                                             <MaterialIcon
                                                 name="chevron-down-circle-outline"
                                                 size={25}
-                                                style={{ fontSize: 18, color: color.colorTheme, }}
+                                                style={{ fontSize: 18, color: COLORS.colorTheme, }}
                                             />)}
                                     />
                                 )}
@@ -412,7 +412,7 @@ const SignUp = ({ navigation }) => {
                                     <MaterialIcon
                                         name="chevron-down-circle-outline"
                                         size={25}
-                                        style={{ fontSize: 18, color: color.colorTheme, }}
+                                        style={{ fontSize: 18, color: COLORS.colorTheme, }}
                                     />
                                 </View>
                             </TouchableOpacity>
@@ -484,7 +484,7 @@ const SignUp = ({ navigation }) => {
                             <View style={{ backgroundColor: '#FFC400', padding: 10, borderRadius: 100, }}>
                                 <Image source={require('../../Assert/Images/mic.png')} />
                             </View>
-                            <Text style={{ marginLeft: 10, color: color.colorText, fontSize: 14, fontWeight: '500', }}>Complete Your Profile And Enjoy 5000 As Joining Bonus</Text>
+                            <Text style={{ marginLeft: 10, color: COLORS.colorText, fontSize: 14, fontWeight: '500', }}>Complete Your Profile And Enjoy 5000 As Joining Bonus</Text>
                         </View>
                         <View style={{ marginVertical: 30 }}>
                             <View style={{ flexDirection: 'column' }}>
@@ -494,7 +494,7 @@ const SignUp = ({ navigation }) => {
                                             <Fontisto
                                                 name='checkbox-active'
                                                 size={15}
-                                                style={{ color: color.colorBtn }}
+                                                style={{ color: COLORS.colorBtn }}
                                             />
                                             :
                                             <Fontisto
@@ -514,7 +514,7 @@ const SignUp = ({ navigation }) => {
                                             <Fontisto
                                                 name='checkbox-active'
                                                 size={15}
-                                                style={{ color: color.colorBtn }}
+                                                style={{ color: COLORS.colorBtn }}
                                             />
                                             :
                                             <Fontisto
@@ -622,7 +622,7 @@ const style = StyleSheet.create({
     },
     label: {
         color: '#425466',
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         fontSize: 14,
         fontWeight: '600',
         letterSpacing: 0.5,
@@ -633,7 +633,7 @@ const style = StyleSheet.create({
         paddingTop: 50,
         color: '#0083E9',
         fontSize: 22,
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         marginBottom: 30,
     },
     signUpImag: {

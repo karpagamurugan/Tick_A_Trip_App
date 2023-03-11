@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight } from 'react-native';
-import color from '../../../constants/color';
-import font from '../../../constants/font';
+import COLORS from '../../../constants/color';
+import FONTS from '../../../constants/font';
 import Appbar from '../../../common/Appbar';
 import ArrowIcon from 'react-native-vector-icons/AntDesign';
-import actions from '../../../../redux/user/actions';
+import userAction from '../../../../redux/user/actions';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -24,10 +24,10 @@ let height = Dimensions.get('window').height;
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                     <View>
                         <View style={{ flexDirection: 'row' }}>
-                            <Text style={{ fontFamily: font.font, fontSize: height * 0.015, color: '#898989' }}>{item?.checkIn}  - {item?.checkOut}</Text>
+                            <Text style={{ fontFamily: FONTS.font, fontSize: height * 0.015, color: '#898989' }}>{item?.checkIn}  - {item?.checkOut}</Text>
 
                         </View>
-                        <Text style={{ fontFamily: font.font, color: '#FE712A', fontSize: height * 0.017 }}>No of Days :  {item?.days}</Text>
+                        <Text style={{ fontFamily: FONTS.font, color: '#FE712A', fontSize: height * 0.017 }}>No of Days :  {item?.days}</Text>
 
                     </View>
                     {
@@ -41,12 +41,11 @@ let height = Dimensions.get('window').height;
                     <TouchableHighlight underlayColor='transparent' onPress={()=>{
                         
                         dispatch({
-                            type: actions.SET_HOTEL_TICKETS_DETAILS, payload: {
+                            type: userAction.SET_HOTEL_TICKETS_DETAILS, payload: {
                             "supplierConfirmationNum":item.supplierConfirmationNum,
                             "referenceNum": item.referenceNum
                           }
                           });
-                        // console.log('disItem',item) 
                         navigation.navigate('HotelTicketDetails')
                         }}>
                         <Text style={style.viewDetail}>View Booking Details</Text>
@@ -71,7 +70,7 @@ const style = StyleSheet.create({
         width: "100%",
         alignSelf: 'center',
     },
-    tabText: { fontSize: 12.5, fontFamily: font.font, alignSelf: 'center' },
+    tabText: { fontSize: 12.5, fontFamily: FONTS.font, alignSelf: 'center' },
     tabBtn: {
         paddingRight: 12,
         paddingLeft: 12,
@@ -89,17 +88,15 @@ const style = StyleSheet.create({
         borderRadius: 10,
         padding: 10
     },
-    // cardView: { flexDirection: 'row' },
     cardText: { paddingLeft: 15 },
     title: {
-        fontFamily: font.fontBold,
-        color: color.colorText,
-        // width: width * 0.6,
+        fontFamily: FONTS.fontBold,
+        color: COLORS.colorText,
         fontSize: height * 0.020
     },
     cancelbtn: {
         backgroundColor: 'red',
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         borderRadius: 15,
         paddingHorizontal: 10,
         paddingVertical: 2,
@@ -108,7 +105,7 @@ const style = StyleSheet.create({
         fontSize: height * 0.02
     },
     viewDetail: {
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         fontSize: height * 0.017,
         color: '#0041F2',
         textDecorationLine: 'underline'

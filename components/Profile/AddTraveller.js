@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView, } from 'react-native';
-import color from '../constants/color';
-import font from '../constants/font';
+import COLORS from '../constants/color';
+import FONTS from '../constants/font';
 import Appbar from '../common/Appbar';
 import { useDispatch, useSelector } from 'react-redux';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -18,8 +18,6 @@ export default function AddTraveller({ navigation }) {
         const travel = async () => {
             await AsyncStorage.getItem('tickatrip-token').then(
                 (res) => {
-                    // console.log('Use Travel', res)
-
                     if (res !== null) {
                         setUseToken(res)
                         dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN, payload: res })
@@ -32,7 +30,6 @@ export default function AddTraveller({ navigation }) {
         travel();
     }, []);
 
-    // console.log('travelers_list', travelers_list)
     useEffect(() => {
         dispatch({
             type: userAction.SET_ADD_TRAVELLER_TOKEN, payload: true
@@ -40,16 +37,6 @@ export default function AddTraveller({ navigation }) {
     }, []);
 
 
-    // let DataList = [
-    //     { id: '1', name: 'DurgaDevi', Email: 'durgadevi@mindmade.in', mobileno: '9876543215', passNo: '486512345984', nationality: 'Indian' },
-    //     { id: '1', name: 'DurgaDevi', Email: 'durgadevi@mindmade.in', mobileno: '9876543215', passNo: '486512345984', nationality: 'Indian' },
-    //     { id: '1', name: 'DurgaDevi', Email: 'durgadevi@mindmade.in', mobileno: '9876543215', passNo: '486512345984', nationality: 'Indian' },
-    //     { id: '1', name: 'DurgaDevi', Email: 'durgadevi@mindmade.in', mobileno: '9876543215', passNo: '486512345984', nationality: 'Indian' },
-    //     { id: '1', name: 'DurgaDevi', Email: 'durgadevi@mindmade.in', mobileno: '9876543215', passNo: '486512345984', nationality: 'Indian' },
-    // ]
-    // const handleDebugger = useCallback(
-    //     debounce((e)=>console.log(e), 400)
-    //     , []);
     return (
         <View style={{ width: width, height:height*0.9, backgroundColor: 'white' }}>
             <Appbar title={'Traveller'} />
@@ -89,9 +76,9 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     AddTraveller: {
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         color: 'white',
-        backgroundColor: color.colorBtn,
+        backgroundColor: COLORS.colorBtn,
         paddingVertical: 3,
         paddingHorizontal: 7,
         borderRadius: 5,

@@ -1,9 +1,10 @@
 import React,{useState} from "react";
 import {View,Text,TouchableHighlight,ScrollView,StyleSheet,Dimensions,Image,TextInput} from 'react-native';
-import FONT_FAMILY from "../constants/font";
+import FONTS from "../constants/font";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import moment from "moment";
 import CalendarIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import Appbar from "../common/Appbar";
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -48,16 +49,17 @@ function UpdateProfile(){
 
 
     return(
-             <View style={{ flex: 1, justifyContent: 'center' }} >
-                    <TouchableHighlight underlayColor={'transparent'} style={styles.cancelBtn} onPress={() =>
+             <View style={styles.mainContainer}>
+                    {/* <TouchableHighlight underlayColor={'transparent'} style={styles.cancelBtn} onPress={() =>
                         setOpenModel(!openModel)
                     }>
                         <MaterialIcons name='cancel' size={23} color='red' />
-                    </TouchableHighlight>
+                    </TouchableHighlight> */}
+                    <Appbar title={'Edit Profile'}/>
                     <View style={styles.modalMainContainer}>
                         <ScrollView>
                             <View>
-                                <Text style={styles.modalTitle}>Profile Edit</Text>
+                                {/* <Text style={styles.modalTitle}>Profile Edit</Text> */}
 
                                 <View style={styles.modalSubContainer}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -142,7 +144,7 @@ function UpdateProfile(){
                                     <View style={styles.editTextBorder}>
                                         <Text style={styles.placeHolderText}>Date-Of-Birth</Text>
                                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <Text style={{ fontFamily: FONT_FAMILY.font, color: 'black', paddingVertical: 10, paddingLeft: 7 }}>{moment(dob).format('YYYY-MM-DD')}</Text>
+                                            <Text style={{ fontFamily: FONTS.font, color: 'black', paddingVertical: 10, paddingLeft: 7 }}>{moment(dob).format('YYYY-MM-DD')}</Text>
                                             <TouchableHighlight onPress={() => setShowPicker(!showPicker)} underlayColor='transparent' style={{ paddingRight: 5 }}>
                                                 <CalendarIcon name="calendar" size={25} color="gray" />
                                             </TouchableHighlight>
@@ -199,8 +201,9 @@ function UpdateProfile(){
 }
 
 const styles = StyleSheet.create({
+    mainContainer: { height: height, width: width, backgroundColor: 'white', },
     editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: 'gray', marginTop: 20, },
-    inputeEditor: { paddingLeft: 10, fontFamily: FONT_FAMILY.font, color: "#000000", width: width * 0.5 },
+    inputeEditor: { paddingLeft: 10, fontFamily: FONTS.font, color: "#000000", width: width * 0.5 },
     placeHolderText: {
         color: 'gray',
         position: 'absolute',
@@ -210,31 +213,27 @@ const styles = StyleSheet.create({
         top: -11,
         left: 10,
         backgroundColor: '#ffffff',
-        fontFamily: FONT_FAMILY.font
+        fontFamily: FONTS.font
     },
-    cancelBtn: { alignSelf: 'flex-end', paddingRight: 30, paddingBottom: 5 },
     modalMainContainer: {
-        // width: '85%',
         borderRadius: 10,
         backgroundColor: 'white',
         flexDirection: 'column',
-        // height: '70%',
         alignItems: 'center',
         alignSelf: 'center',
-        // paddingBottom: 30
     },
     modalTitle: {
-        fontFamily: FONT_FAMILY.fontBold,
+        fontFamily: FONTS.fontBold,
         alignSelf: 'center',
         paddingTop: 20,
         color: 'black',
         fontSize: height * 0.025
     },
-    modalSubContainer: { backgroundColor: 'white', width: width * 0.8, paddingHorizontal: 10 },
+    modalSubContainer: { backgroundColor: 'white', width: width, paddingHorizontal: 20 },
     chooseProfile: { color: 'white', backgroundColor: 'green', paddingVertical: 2, paddingHorizontal: 5, borderRadius: 15, fontSize: height * 0.02 },
     profile: { height: 50, width: 50, borderColor: '#2BAB38', borderWidth: 1, borderRadius: 100 },
     updateBtn: { backgroundColor: 'green', borderRadius: 10, marginTop: 20, justifyContent: 'center', alignSelf: 'center' },
-    updateText: { color: 'white', fontFamily: FONT_FAMILY.font, alignSelf: 'center', paddingVertical: 7, paddingHorizontal: 10 }
+    updateText: { color: 'white', fontFamily: FONTS.font, alignSelf: 'center', paddingVertical: 7, paddingHorizontal: 10 }
 })
 
 export default UpdateProfile

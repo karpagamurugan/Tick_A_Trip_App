@@ -28,6 +28,7 @@ import HotelBooking from '../Hotel/HotelBooking'
 import FlightTicketDetails from '../Profile/MyTickets/FlightTicket/FlightDetails'
 import ContactInfo from '../Flight/ContactInfo'
 import BookingConfirm from '../Hotel/BookingConfirm'
+import Search from '../GlobalSearch/Search'
 const Stack = createNativeStackNavigator();
 
 function HomeTab() {
@@ -94,7 +95,7 @@ function FlightTab() {
 function SearchTab() {
     return (
         <Stack.Navigator initialRouteName='search'>
-            <Stack.Screen name="flight" component={Flight} options={{ headerShown: false }} />
+            <Stack.Screen name="search" component={Search} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }
@@ -150,7 +151,7 @@ const BottomNavigate = ({ navigation }) => {
                 }}
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {
-                        navigation.navigate('FlightTab')
+                        navigation.navigate('search')
                     }
                 })}
             />

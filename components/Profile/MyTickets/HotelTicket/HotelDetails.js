@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView, Image, FlatList } from 'react-native';
 import Appbar from '../../../common/Appbar';
 import { useDispatch, useSelector } from 'react-redux';
-import actions from '../../../../redux/user/actions';
-import font from '../../../constants/font';
-import color from '../../../constants/color';
+import FONTS from '../../../constants/font';
+import COLORS from '../../../constants/color';
 import moment from 'moment'
 
 let width = Dimensions.get('window').width;
@@ -16,7 +15,6 @@ export default function HotelTicketDetails({ item, navigation }) {
 
     const { Hotel_details } = useSelector((state) => state.userReducer);
     const dispatch = useDispatch();
-    // console.log("hotel details",Hotel_details)
 
     const hadleClick = (index) => {
 
@@ -49,12 +47,10 @@ export default function HotelTicketDetails({ item, navigation }) {
                             <ScrollView>
                                 <View>
                                     <View style={{ alignSelf: 'center', marginTop: 30, alignItems: "center", }}>
-                                        {/* <View style={style.borderLine}>
-                                            <Text style={{ paddingBottom: 8, letterSpacing: 2, fontSize: 12, fontWeight: "700" }}>RESERVATION CONFIRMATION</Text>
-                                        </View> */}
+                                      
                                         <View style={{ flexDirection: "row", alignItems: "center", }}>
-                                            <Text style={{ fontSize: 15, color: "#003AA8", fontFamily: font.mediam, }}>Your Supplier Confirmation No :</Text>
-                                            <Text style={{ fontFamily: font.mediam, }}> {Hotel_details?.message?.supplierConfirmationNum}</Text>
+                                            <Text style={{ fontSize: 15, color: "#003AA8", fontFamily: FONTS.mediam, }}>Your Supplier Confirmation No :</Text>
+                                            <Text style={{ fontFamily: FONTS.mediam, }}> {Hotel_details?.message?.supplierConfirmationNum}</Text>
                                         </View>
                                         <Image style={{ height: 180, width: 350, resizeMode: 'cover', marginTop: 15, borderRadius: 5 }} source={{ uri: Hotel_details?.message?.image }} />
                                     </View>
@@ -69,7 +65,7 @@ export default function HotelTicketDetails({ item, navigation }) {
                                                 <View style={{ paddingBottom: 10 }}>
                                                     <Text style={style.bookingTitle}>Booking Status</Text>
                                                     <Text style={[style.bookingListContent,
-                                                    { color: "#65C14F", fontFamily: font.fontBold, fontSize: 20 }]}
+                                                    { color: "#65C14F", fontFamily: FONTS.fontBold, fontSize: 20 }]}
                                                     >{Hotel_details?.message?.status}</Text>
                                                 </View>
                                                 <View style={{ paddingBottom: 10 }}>
@@ -95,7 +91,7 @@ export default function HotelTicketDetails({ item, navigation }) {
                                             </View>
                                             <View style={{ paddingBottom: 10 }}>
                                                 <Text style={style.bookingTitle}>Hotel Name</Text>
-                                                <Text style={[style.bookingListContent, { color: "#00065E", fontFamily: font.fontBold, fontSize: 19 }]}>{Hotel_details?.message?.roomBookDetails?.hotelName}</Text>
+                                                <Text style={[style.bookingListContent, { color: "#00065E", fontFamily: FONTS.fontBold, fontSize: 19 }]}>{Hotel_details?.message?.roomBookDetails?.hotelName}</Text>
                                             </View>
                                             <View style={{ paddingBottom: 10 }}>
                                                 <Text style={[style.bookingTitle,]}>Hotel Address</Text>
@@ -193,7 +189,7 @@ const style = StyleSheet.create({
         width: "100%",
         alignSelf: 'center',
     },
-    tabText: { fontSize: 12.5, fontFamily: font.font, alignSelf: 'center' },
+    tabText: { fontSize: 12.5, fontFamily: FONTS.font, alignSelf: 'center' },
     tabBtn: {
         paddingRight: 12,
         paddingLeft: 12,
@@ -202,12 +198,7 @@ const style = StyleSheet.create({
         borderRadius: 15,
         alignItems: 'center'
     },
-    borderLine: {
-        borderBottomWidth: 3,
-        borderColor: "#37383d",
-        width: 280,
-        alignItems: "center",
-    },
+   
     centerLine: {
         width: "100%",
         height: 1,
@@ -220,13 +211,13 @@ const style = StyleSheet.create({
         color: "#003AA8",
         paddingBottom: 6,
         flex: 1,
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
     },
     bookingListContent: {
         fontSize: 18,
         color: "#222222",
         flex: 1,
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
     },
     RoomText: {
         fontSize: 22,
@@ -266,7 +257,7 @@ const style = StyleSheet.create({
         color: "#003AA8",
         fontSize: 20,
         textAlign: "center",
-        fontFamily: font.fontBold,
+        fontFamily: FONTS.fontBold,
     },
     paddBottom10: {
         paddingBottom: 10

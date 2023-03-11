@@ -1,11 +1,11 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight,FlatList } from 'react-native';
-import color from '../../../constants/color';
-import font from '../../../constants/font';
+import COLORS from '../../../constants/color';
+import FONTS from '../../../constants/font';
 import Appbar from '../../../common/Appbar';
 import ArrowIcon from 'react-native-vector-icons/AntDesign';
-import actions from '../../../../redux/user/actions';
+import userAction from '../../../../redux/user/actions';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons'
@@ -21,30 +21,19 @@ export default function Hotel({navigation}) {
     const dispatch = useDispatch();
     useEffect(() => {
         dispatch({
-            type: actions.GET_UPCOMING_HOTEL_TICKETS
+            type: userAction.GET_UPCOMING_HOTEL_TICKETS
         })
 
         dispatch({
-            type: actions.GET_CANCELLED_HOTEL_TICKETS
+            type: userAction.GET_CANCELLED_HOTEL_TICKETS
         })
 
         dispatch({
-            type: actions.GET_COMPLETED_HOTEL_TICKETS
+            type: userAction.GET_COMPLETED_HOTEL_TICKETS
         })
     }, [])
 
     const { Completed_hotel, Cancelled_hotel, Upcoming_hotel } = useSelector((state) => state.userReducer)
-
-    // console.log('completed',Upcoming_hotel)
-
-    let DataList = [
-        { id: '1', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQM1pZ3DnvfSaEHuHUB1OKCf_gbkQlvM-AUNQ&usqp=CAU" },
-        { id: '2', title: 'Air Asia', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTPDQqFgErfPNOw3jtU3GmCroBKOoO1XNqAAw&usqp=CAU' },
-        { id: '3', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTimgFyJTQ2c4JolnAYPa6x3kQQGKo5oRqqGQ&usqp=CAU' },
-        { id: '4', title: 'Air Asia', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQW57pI-v6ZLj1zeP29UVR0_E6y568VX_jTuw&usqp=CAU' },
-        { id: '5', title: 'Arena Beach Hotel', name: 'DurgaDevi', date: '11/12/2022 Monday', place: 'cbe', url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTj7QlOTboF9eI4QfNXoSgCyxG9Mn50CjDm9A&usqp=CAU' }
-    ]
-
 
     // setting tab item backgroundColor
     const hadleClick = (index) => {
@@ -93,25 +82,27 @@ export default function Hotel({navigation}) {
                                 <View style={style.listView}>
                                     {(Upcoming_hotel?.bookings?.length === 0) ?
                                         <View style={{ alignSelf: 'center', marginTop: 50 }}>
-                                            <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
-                                            <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
+                                            <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                            <Text style={style.EmptyText}>You Don't have any bookings</Text>
                                             <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
-                                                <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
+                                                <Text style={style.bookingText} >Go to Booking</Text>
                                             </TouchableHighlight>
                                         </View>
                                         :
-                                        // Upcoming_hotel?.bookings?.map((item, index) =>
-                                        //    <HotelTicketView item={item} key={index}/>
-                                        // )
-                                        <FlatList 
-                                        keyExtractor={(index) => index.toString()}
-                                        // horizontal 
-                                        data={Upcoming_hotel?.bookings}  
-                                        renderItem={({item}) =>  
-                                        <HotelTicketView item={item} navigation={navigation} type={'upcoming'}/>
-                                                }  
-                                        // ItemSeparatorComponent={this.renderSeparator}  
-                                    />  
+                                        
+                                    //     <FlatList 
+                                    //     keyExtractor={(index) => index.toString()}
+                                    //     // horizontal 
+                                    //     data={Upcoming_hotel?.bookings}  
+                                    //     renderItem={({item}) =>  
+                                    //     <HotelTicketView item={item} navigation={navigation} type={'upcoming'}/>
+                                    //             }         
+                                    // />  
+
+
+                                    Upcoming_hotel?.bookings?.map((item, index) => (
+                                        <HotelTicketView key={index} item={item} navigation={navigation} type={'upcoming'}/>
+                                        ))
                                     }
                                 </View>
                             </ScrollView> : (selectedTab === 1) ?
@@ -119,15 +110,15 @@ export default function Hotel({navigation}) {
                                     <View style={style.listView}>
                                         {(Cancelled_hotel?.bookings?.length === 0) ?
                                             <View style={{ alignSelf: 'center', marginTop: 50 }}>
-                                                <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
-                                                <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
+                                                <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                                <Text style={style.EmptyText}>You Don't have any bookings</Text>
                                                 <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
-                                                    <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
+                                                    <Text style={style.bookingText} >Go to Booking</Text>
                                                 </TouchableHighlight>
                                             </View>
                                             :
                                             Cancelled_hotel?.bookings?.map((item, index) => (
-                                                <HotelTicketView item={item} navigation={navigation} type={'cancelled'}/>
+                                                <HotelTicketView key={index} item={item} navigation={navigation} type={'cancelled'}/>
                                                 ))
                                         }
                                     </View>
@@ -137,15 +128,15 @@ export default function Hotel({navigation}) {
                                         <View style={style.listView}>
                                             {(Completed_hotel?.bookings?.length === 0) ?
                                                 <View style={{ alignSelf: 'center', marginTop: 50 }}>
-                                                    <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
-                                                    <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
+                                                    <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                                    <Text style={style.EmptyText}>You Don't have any bookings</Text>
                                                     <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
-                                                        <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
+                                                        <Text style={style.bookingText} >Go to Booking</Text>
                                                     </TouchableHighlight>
                                                 </View>
                                                 :
                                                 Completed_hotel?.bookings?.map((item, index) => (
-                                                    <HotelTicketView item={item} navigation={navigation} type={'completed'}/>
+                                                    <HotelTicketView key={index} item={item} navigation={navigation} type={'completed'}/>
                                                     ))
                                             }
                                         </View>
@@ -171,7 +162,7 @@ const style = StyleSheet.create({
         width: "100%",
         alignSelf: 'center',
     },
-    tabText: { fontSize: 12.5, fontFamily: font.font, alignSelf: 'center' },
+    tabText: { fontSize: 12.5, fontFamily: FONTS.font, alignSelf: 'center' },
     tabBtn: {
         paddingRight: 12,
         paddingLeft: 12,
@@ -180,5 +171,8 @@ const style = StyleSheet.create({
         borderRadius: 15,
         alignItems: 'center'
     },
+    EmptyImg:{ height: 150, width: 250, resizeMode: 'cover' },
+    EmptyText:{ fontFamily: FONTS.font, paddingVertical: 5, color: 'black' },
+    bookingText:{ fontFamily: FONTS.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }
 
 })
