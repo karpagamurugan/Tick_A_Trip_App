@@ -33,8 +33,6 @@ function Profile({ navigation }) {
     const dispatch = useDispatch()
     const { userProfileData, isLogin } = useSelector((state) => state.userReducer)
 
-    console.log('Profile userProfileData',userProfileData)
-
     var [showPicker, setShowPicker] = useState(false) //show date picker for dob
     var [dob, setDob] = useState(new Date()); //set DOB in profile update
 

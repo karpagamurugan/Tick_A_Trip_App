@@ -1,15 +1,15 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight,FlatList } from 'react-native';
-import color from '../../constants/color';
-import font from '../../constants/font';
-import Appbar from '../../common/Appbar';
+import color from '../../../constants/color';
+import font from '../../../constants/font';
+import Appbar from '../../../common/Appbar';
 import ArrowIcon from 'react-native-vector-icons/AntDesign';
-import actions from '../../../redux/user/actions';
+import actions from '../../../../redux/user/actions';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import HotelTicketView from './HotelCard';
+import HotelTicketView from '../HotelTicket/HotelCard';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -93,7 +93,7 @@ export default function Hotel({navigation}) {
                                 <View style={style.listView}>
                                     {(Upcoming_hotel?.bookings?.length === 0) ?
                                         <View style={{ alignSelf: 'center', marginTop: 50 }}>
-                                            <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                            <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
                                             <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
                                             <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
                                                 <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
@@ -119,7 +119,7 @@ export default function Hotel({navigation}) {
                                     <View style={style.listView}>
                                         {(Cancelled_hotel?.bookings?.length === 0) ?
                                             <View style={{ alignSelf: 'center', marginTop: 50 }}>
-                                                <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                                <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
                                                 <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
                                                 <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
                                                     <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>
@@ -137,7 +137,7 @@ export default function Hotel({navigation}) {
                                         <View style={style.listView}>
                                             {(Completed_hotel?.bookings?.length === 0) ?
                                                 <View style={{ alignSelf: 'center', marginTop: 50 }}>
-                                                    <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                                    <Image style={{ height: 150, width: 250, resizeMode: 'cover' }} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
                                                     <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black' }}>You Don't have any bookings</Text>
                                                     <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
                                                         <Text style={{ fontFamily: font.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }} >Go to Booking</Text>

@@ -12,6 +12,7 @@ import commonActions from '../../redux/common/actions';
 import Slider from '@react-native-community/slider';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import Fontisto from 'react-native-vector-icons/Fontisto';
 
 const soryByOption = [
     { label: 'Price low high', value: 'price-low-high' },
@@ -46,8 +47,16 @@ const propertyTypeOption = [
     { label: 'RESORTS', value: 'RESORTS' },
     { label: 'APARTMENTS', value: 'APARTMENTS' },
 ]
+
+const RatingList =[
+    {label:'Less than 3',value:'Less than 3'},
+    {label:'3',value:'3'},
+    {label:'4',value:'4'},
+    {label:'5',value:'5'},
+]
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
+
 const HotelFilter = (props) => {
 
     const dispatch = useDispatch()
@@ -56,6 +65,7 @@ const HotelFilter = (props) => {
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
     const [checkFecility, setCheckFecility] = useState(null);
     const [selectFecility, setSelectFecility] = useState([])
+    const [selectRating, setSelectRating] = useState([])
     const [checkLocality, setCheckLocality] = useState(null)
     const [selectLocality, setSelectLocality] = useState([])
     const [shortBy, setShortBy] = useState(null)
@@ -112,10 +122,10 @@ const HotelFilter = (props) => {
         let tempFilter = {
             filters: {
                 price: {
-                    min: parseInt(data?.min),
-                    max: parseInt(data?.max),
+                    min: multiSliderValue[0],
+                    max: multiSliderValue[1],
                 },
-                // rating: tempRating.length ? tempRating : '',
+                rating:selectRating?.length !==0?selectRating:'',
                 // tripadvisorRating: tempAdvisorRating.length ? tempAdvisorRating : '',
                 faretype: data?.fareType ? data?.fareType : '',
                 propertyType: data?.propertyType ? data?.propertyType : '',
@@ -129,11 +139,19 @@ const HotelFilter = (props) => {
                 delete tempFilter.filters[key]
             }
         })
+
+        console.log({
+            sessionId: hotelSessionId,
+            // maxResult: getHotelSearchResult?.length,
+            maxResult: 10000,
+            ...tempFilter
+        })
         dispatch({ type: commonActions.HOTEL_LOADER, payload: true })
         dispatch({
             type: hotelActions.GET_HOTEL_FILTER, payload: {
                 sessionId: hotelSessionId,
-                maxResult: getHotelSearchResult?.length,
+                // maxResult: getHotelSearchResult?.length,
+                maxResult: 10000,
                 ...tempFilter
             }
         })
@@ -147,7 +165,7 @@ const HotelFilter = (props) => {
             </Pressable>
             <ScrollView style={style.filterModelSec}>
 
-                <Controller
+                {/* <Controller
                     control={control}
                     name="min"
                     rules={{
@@ -160,30 +178,34 @@ const HotelFilter = (props) => {
                         <TextInput {...register("min")}
                             name="min" onChangeText={value => onChange(value)} value={value} style={style.filterFieldInput} placeholder='Enter min price' />
                     )}
-                />
+                /> */}
                 {errors.min && (
                     <Text style={style.errorMessage}>{errors.min.message}</Text>
                 )}
                 <View style={style.filterField}>
-                    <Text style={style.filterFieldLabel}>Max Price</Text>
-                    <View style={{ paddingHorizontal: 18 }}>
+                    <Text style={style.filterFieldLabel}>Select Price Range</Text>
+                    <View style={{ paddingHorizontal: 0 }}>
+                        <View style={{alignItems:'center'}}>
                         <MultiSlider
                             values={[multiSliderValue[0], multiSliderValue[1]]}
-                            sliderLength={300}
+                            sliderLength={width*0.75}
                             onValuesChange={multiSliderValuesChange}
                             min={0}
-                            max={10000}
+                            max={100000}
                             step={100}
                             allowOverlap
                             snapped
+                            customMarkerLeft={{color:{bg:'red',color:'red'}}}
                             selectedStyle={{
-                                backgroundColor: '#0041F2',
+                                backgroundColor: '#0041F2',    
                               }}
                               unselectedStyle={{
                                 backgroundColor: '#d0d7de',
                               }}
                               color={'#009385'}
                         />
+                        </View>
+                       
                         <View style={style.sliderOne}>
                             <Text style={style.priceRange}>{multiSliderValue[0]} </Text>
                             <Text style={style.priceRange}>{multiSliderValue[1]}</Text>
@@ -356,7 +378,6 @@ const HotelFilter = (props) => {
                         render={({ field: { onChange, value } }) => (
                             <Dropdown
                                 style={style.dropdown}
-
                                 placeholderStyle={style.placeholderStyle}
                                 selectedTextStyle={style.selectedTextStyle}
                                 inputSearchStyle={style.inputSearchStyle}
@@ -379,7 +400,7 @@ const HotelFilter = (props) => {
                     />
                 </View>
 
-                <View style={style.filterField}>
+                {/* <View style={style.filterField}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={style.filterFieldLabel}>Rating</Text>
                         <Text style={style.priceRange}>{startRating}</Text>
@@ -398,15 +419,82 @@ const HotelFilter = (props) => {
                         }}
 
                     />
+                </View> */}
+
+
+
+<View style={{ flexDirection: "row", justifyContent: "space-between", paddingTop: 10 }}>
+                    <View style={style.filterField}>
+                        <Text style={style.filterFieldLabel}>Rating</Text>
+                        <View style={[style.checkBoxGrop,{flexDirection:'row'}]}>
+                            {
+                                RatingList.map((val, index) => (
+                                    <View style={[style.checkBox,{paddingHorizontal:7}]} key={index}>
+                                        <TouchableHighlight underlayColor='transparent' onPress={() => {
+                                            if (!selectRating.includes(val.value)) {
+                                                setSelectRating([...selectRating, val.value])
+                                            } else {
+                                                setSelectRating(selectRating.filter((item) => item !== val.value))
+                                            }
+                                        }}>
+                                            <View style={style.checkBox}>
+                                                {selectRating.includes(val.value) ?
+                                                    // < Fontisto style={style.checkInputIcon} name='checkbox-active' />
+                                                    <View style={[style.custmCheckBox,{backgroundColor:color.colorBtn}]}>
+                                                        <Ionicons name='checkmark' color={'white'}/>
+                                                        </View>
+                                                    :
+                                                    // <Fontisto style={style.checkInputIcon} name='checkbox-passive' />
+                                                    <View style={[style.custmCheckBox,{backgroundColor:'white'}]}/>
+                                                }
+                                                <Text style={[style.checkInputLabel,{paddingLeft:7}]}>{val.label}</Text>
+                                            </View>
+                                        </TouchableHighlight>
+
+                                    </View>
+                                ))
+                            }
+
+                        </View>
+                    </View>
+                    {/* <View style={style.filterField}>
+                            <Text style={style.filterFieldLabel}>Locality</Text>
+                            <View style={style.checkBoxGrop}>
+                                {CheckLocalityValues.map((val, index) => (
+                                    <View style={style.checkBox} key={index}>
+                                        <TouchableHighlight underlayColor='transparent' onPress={() => {
+                                            if (!selectLocality.includes(val.value)) {
+                                                setSelectLocality([...selectLocality, val.value])
+                                                setCheckLocality(val.value)
+                                            } else {
+                                                setSelectLocality(selectLocality.filter((item) => item !== val.value))
+                                                setCheckLocality(null)
+                                            }
+                                        }}>
+                                            <View style={style.checkBox}>
+                                                {selectLocality.includes(val.value) ?
+                                                    < Ionicons style={style.checkInputIcon} name='checkbox-sharp' />
+                                                    :
+                                                    <Ionicons style={style.checkInputIcon} name='checkbox-outline' />
+                                                }
+                                                <Text style={style.checkInputLabel}>{val.label}</Text>
+                                            </View>
+
+                                        </TouchableHighlight>
+                                    </View>
+                                ))}
+                            </View>
+                        </View> */}
                 </View>
+
+
                 <View style={style.filterField}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={style.filterFieldLabel}>Trip Advisor Rating</Text>
                         <Text style={style.priceRange}>{advisorRating}</Text>
                     </View>
                     <Slider
-
-                        style={{ paddingVertical: 5, width: width, height: 20 }}
+                        style={{ paddingVertical: 5, width: width*0.85, height: 20 }}
                         minimumValue={0}
                         maximumValue={6}
                         step={0.5}
@@ -437,9 +525,14 @@ const HotelFilter = (props) => {
                                         }}>
                                             <View style={style.checkBox}>
                                                 {selectFecility.includes(val.value) ?
-                                                    < Ionicons style={style.checkInputIcon} name='checkbox-sharp' />
+                                                    // < Fontisto style={style.checkInputIcon} name='checkbox-active' />
+                                                    <View style={[style.custmCheckBox,{backgroundColor:color.colorBtn}]}>
+                                                    <Ionicons name='checkmark' color={'white'}/>
+                                                    </View>
                                                     :
-                                                    <Ionicons style={style.checkInputIcon} name='checkbox-outline' />
+                                                    // <Fontisto style={style.checkInputIcon} name='checkbox-passive' />
+                                                    <View style={[style.custmCheckBox,{backgroundColor:'white'}]}/>
+
                                                 }
                                                 <Text style={style.checkInputLabel}>{val.label}</Text>
                                             </View>
@@ -482,7 +575,7 @@ const HotelFilter = (props) => {
                 </View>
                 <View style={style.filterBtnGroup}>
                     <TouchableHighlight style={style.filtersubBtn} onPress={(() => setOpenFilter(false))}>
-                        <Text style={{ color: '#fff', fontFamily: font.mediam, }}>Close</Text>
+                        <Text style={{ color: '#fff', fontFamily: font.mediam, }}>Clear Filter</Text>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={handleSubmit(onSubmit)} style={style.filtersubBtn}>
                         <Text style={{ color: '#fff', fontFamily: font.mediam, }}>Apply</Text>
@@ -507,14 +600,16 @@ const style = StyleSheet.create({
         borderRadius: 100,
     },
     filterBtnGroup: {
-        marginBottom: 50,
+        marginBottom: 20,
         marginTop: 20,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
     },
     checkInputIcon: {
-        color: color.colorBtn,
+        // color: color.colorBtn,
+        color: 'grey',
+        borderRadius:2, 
         fontSize: 18,
     },
     checkInputLabel: {
@@ -526,6 +621,7 @@ const style = StyleSheet.create({
     checkBox: {
         flexDirection: 'row',
         alignItems: 'center',
+        paddingVertical:2
     },
     filterFieldLabel: {
         color: '#333333',
@@ -587,8 +683,10 @@ const style = StyleSheet.create({
         width: width * 0.9,
         alignSelf: 'center',
         top: height * 0.1,
-        padding: 20,
-        height: height * 0.7,
+        // padding: 20,
+        paddingHorizontal:20,
+        paddingTop:20,
+        // height: height * 0.75,
         borderRadius: 10,
     },
     selectedTextStyle: {
@@ -601,7 +699,8 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
 
-    }
+    },
+    custmCheckBox:{height:16,width:16,borderRadius:2,borderColor:'grey',borderWidth:0.6,alignItems:'center'}
 
 })
 export default HotelFilter

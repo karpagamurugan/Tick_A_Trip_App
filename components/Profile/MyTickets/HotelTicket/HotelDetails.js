@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView, Image, FlatList } from 'react-native';
-import Appbar from '../../common/Appbar';
+import Appbar from '../../../common/Appbar';
 import { useDispatch, useSelector } from 'react-redux';
-import actions from '../../../redux/user/actions';
-import font from '../../constants/font';
-import color from '../../constants/color';
+import actions from '../../../../redux/user/actions';
+import font from '../../../constants/font';
+import color from '../../../constants/color';
 import moment from 'moment'
 
 let width = Dimensions.get('window').width;
@@ -167,7 +167,7 @@ export default function HotelTicketDetails({ item, navigation }) {
                                                 <Text style={style.RoomListText}>Description: <Text style={{ color: "#565656", }}>{val?.description}</Text></Text>
                                             </View>
                                             {/* {val?.paxDetails?.name[0]?.map((item, index) => ( */}
-                                            <Text key={index} style={style.holderName}>{val?.paxDetails?.name[0]} + {val?.paxDetails?.name?.length}</Text>
+                                            <Text style={style.holderName}>{val?.paxDetails?.name[0]} + {val?.paxDetails?.name?.length}</Text>
                                             {/* ))} */}
                                         </View>
                                     ))}

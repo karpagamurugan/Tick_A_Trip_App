@@ -11,8 +11,8 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import FontAwesome from 'react-native-vector-icons/FontAwesome'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import FlightTickets from '../Profile/MyTickets/Flight';
-import HotelTicket from '../Profile/MyTickets/Hotel'
+import FlightTickets from '../Profile/MyTickets/FlightTicket/Flight';
+import HotelTicket from '../Profile/MyTickets//HotelTicket/Hotel';
 import AddTraveller from '../Profile/AddTraveller'
 import FlightResult from '../Flight/FlightResult'
 import HotelList from '../Hotel/HotelList'
@@ -21,11 +21,11 @@ import HotelDetail from '../Hotel/HotelDetail'
 import HotelRoomType from '../Hotel/HotelRoomType'
 import PopularPlacesDetails from '../Home/PopularPlaceDetails'
 import FlightDetails from '../Flight/FlightDetails'
-import HotelTicketDetails from '../Profile/MyTickets/HotelDetails'
+import HotelTicketDetails from '../Profile/MyTickets/HotelTicket/HotelDetails'
 import AddTravellerForm from '../Profile/AddTravellerForm'
 import UpdateProfile from '../Profile/UpdateProfile'
 import HotelBooking from '../Hotel/HotelBooking'
-import FlightTicketDetails from '../Profile/MyTickets/FlightDetails'
+import FlightTicketDetails from '../Profile/MyTickets/FlightTicket/FlightDetails'
 import ContactInfo from '../Flight/ContactInfo'
 import BookingConfirm from '../Hotel/BookingConfirm'
 const Stack = createNativeStackNavigator();

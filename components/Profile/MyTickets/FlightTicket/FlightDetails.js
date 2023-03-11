@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native';
-import Appbar from "../../common/Appbar";
-import font from "../../constants/font";
-import TakeOn from "../../../Assert/Icons/take-on.svg";
-import TakeOff from "../../../Assert/Icons/take-off.svg";
+import Appbar from "../../../common/Appbar";
+import FONTS from "../../../constants/font";
+import TakeOn from "../../../../Assert/Icons/take-on.svg";
+import TakeOff from "../../../../Assert/Icons/take-off.svg";
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import { useSelector } from "react-redux";
-import COLORS from "../../constants/color";
+import COLORS from "../../../constants/color";
 import moment from 'moment'
 
 const width = Dimensions.get('window').width
@@ -49,7 +49,7 @@ export default function FlightTicketDetails({ navigation }) {
                                     </View>
                                 </View>
                                 <View style={[style.FlightBannerSec]}>
-                                    <Image style={{ width: 350, height: 200 }} source={require('../../../Assert/Images/Asset5.png')} />
+                                    <Image style={{ width: 350, height: 200 }} source={require('../../../../Assert/Images/Asset5.png')} />
                                     <View style={[style.cartBackgroundDesign, { marginTop: 10 }]}>
                                         <View style={[style.LeftCircle]} />
                                         <View style={[style.RightCircle]} />
@@ -148,7 +148,7 @@ export default function FlightTicketDetails({ navigation }) {
                         </View>
 
                         <View style={[style.FlightStopingCart]} >
-                            <Text style={{ fontSize: height * 0.021, fontFamily: font.mediam, color: '#000' }}>Dubai International Airport - DXB</Text>
+                            <Text style={{ fontSize: height * 0.021, fontFamily: FONTS.mediam, color: '#000' }}>Dubai International Airport - DXB</Text>
                             <View style={{}}>
                                 <Text style={[style.FlightStopingList]}>Baggage -</Text>
                                 <Text style={[style.FlightStopingList]}>Flight Number - <Text style={[style.FlightStopingListDark]}>6902</Text></Text>
@@ -159,9 +159,9 @@ export default function FlightTicketDetails({ navigation }) {
                             <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between', }}>
                                 <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between', }}>
                                     <Text style={[style.timeAnddate]}>5:30 PM</Text>
-                                    <Text style={{ fontFamily: font.mediam, color: '#000' }}>Jan 9, 2023</Text>
+                                    <Text style={{ fontFamily: FONTS.mediam, color: '#000' }}>Jan 9, 2023</Text>
                                 </View>
-                                <Text style={{ fontFamily: font.mediam, color: '#000' }}>Dubai</Text>
+                                <Text style={{ fontFamily: FONTS.mediam, color: '#000' }}>Dubai</Text>
                             </View>
                         </View>
                     </View>
@@ -249,7 +249,7 @@ export default function FlightTicketDetails({ navigation }) {
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
                         <View style={style.total}>
                             <Text style={style.totalText}>Total</Text>
-                            <Text style={{ color: 'white', fontFamily: font.fontBold }}>:</Text>
+                            <Text style={{ color: 'white', fontFamily: FONTS.fontBold }}>:</Text>
                             <Text style={style.priceTag}> Rs  <Text style={[style.price, { fontSize: height * 0.03 }]}>{flight_tickets_details?.priceDetails?.TotalFare?.Amount}</Text></Text>
                         </View>
                     </View>
@@ -261,7 +261,7 @@ export default function FlightTicketDetails({ navigation }) {
 
 const style = StyleSheet.create({
     CountryShortName: {
-        fontFamily: font.fontBold,
+        fontFamily: FONTS.fontBold,
         textAlign: "center",
         color: '#3B8ACF',
         fontSize: height * 0.030,
@@ -270,11 +270,11 @@ const style = StyleSheet.create({
         fontSize: height * 0.016,
         textAlign: "center",
         color: '#333333',
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
     },
     ToName: {
         fontSize: height * 0.030,
-        fontFamily: font.fontBold,
+        fontFamily: FONTS.fontBold,
         color: '#333333',
     },
     cartBackgroundDesign: {
@@ -294,12 +294,12 @@ const style = StyleSheet.create({
     cartTitle: {
         color: '#BEEAFC',
         fontSize: height * 0.020,
-        fontFamily: font.fontBold,
+        fontFamily: FONTS.fontBold,
     },
     cartContent: {
         color: '#FFFFFF',
         fontSize: height * 0.019,
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
     },
     LeftCircle: {
         width: 25,
@@ -322,7 +322,7 @@ const style = StyleSheet.create({
     commonTitle: {
         color: '#212529',
         fontSize: height * 0.025,
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
     },
     FlightTakeOnIcon: {
         backgroundColor: '#1B5CB7',
@@ -358,25 +358,25 @@ const style = StyleSheet.create({
     FlightStopingList: {
         color: '#777',
         fontSize: height * 0.018,
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         paddingVertical: 5,
     },
     FlightStopingListDark: {
-        fontFamily: font.fontBold,
+        fontFamily: FONTS.fontBold,
     },
     timeAnddate: {
         backgroundColor: '#4C94F2',
         paddingHorizontal: 10,
         paddingVertical: 4,
         color: '#fff',
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
         fontSize: height * 0.015,
         borderRadius: 6,
         marginRight: 10,
     },
     passengerList: {
         color: '#212529',
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
         fontSize: height * 0.020,
     },
     passengerListBox: {
@@ -390,12 +390,12 @@ const style = StyleSheet.create({
     },
     bg: { backgroundColor: COLORS.bg, padding: 20, margin: 10, borderRadius: 7, elevation: 5, shadowColor: COLORS.bg },
     amountContainer: { flexDirection: 'row', justifyContent: 'space-between' },
-    amountName: { fontFamily: font.light, color: 'white', fontSize: height * 0.022 },
-    price: { fontFamily: font.mediam, color: 'white', fontSize: height * 0.026 },
-    priceTag: { fontFamily: font.font, color: 'white', fontSize: height * 0.017 },
+    amountName: { fontFamily: FONTS.light, color: 'white', fontSize: height * 0.022 },
+    price: { fontFamily: FONTS.mediam, color: 'white', fontSize: height * 0.026 },
+    priceTag: { fontFamily: FONTS.font, color: 'white', fontSize: height * 0.017 },
     total: {
         flexDirection: 'row', justifyContent: 'space-between', backgroundColor: COLORS.darkblue,
         paddingHorizontal: 15, paddingVertical: 3, borderRadius: 22, alignItems: 'center'
     },
-    totalText: { fontFamily: font.fontBold, color: 'white', fontSize: height * 0.022 },
+    totalText: { fontFamily: FONTS.fontBold, color: 'white', fontSize: height * 0.022 },
 })
