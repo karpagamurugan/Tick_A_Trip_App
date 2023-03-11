@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-const FONT_FAMILY = {
+const FONTS = {
     font: 'Poppins-Regular',
     fontBold:'Poppins-Bold',
     fontSemi:'Poppins-SemiBold',
@@ -9,4 +9,4 @@ const FONT_FAMILY = {
     light:'Poppins-Light',
     extraLight:'Poppins-ExtraLight'
 }
-export default FONT_FAMILY
+export default FONTS

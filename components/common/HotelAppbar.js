@@ -3,12 +3,11 @@ import React from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight } from 'react-native';
 import EditIcon from '../../Assert/Images/icon/edit.svg';
 import BackArrow from '../../Assert/Images/icon/backward-arrow.svg';
-import color from '../constants/color';
-import font from '../constants/font';
+import COLORS from '../constants/color';
+import FONTS from '../constants/font';
 import { useNavigation } from '@react-navigation/native';
 import Arrow from '../../Assert/Images/icon/backward-arrow-2.svg';
 import Hotel from '../../Assert/Icons/hotel.svg';
-import FONT_FAMILY from '../constants/font';
 import { useSelector } from 'react-redux';
 
 let width = Dimensions.get('window').width;
@@ -29,7 +28,7 @@ export default function HotelAppbar({ title }) {
                 </TouchableHighlight>
                    <View style={{alignItems:'center'}}>
                    <Hotel height={30} width={30}/>
-                   <Text style={{fontSize:height*0.013,color:color.BtnColorDark,fontFamily:FONT_FAMILY.font}}>Hotels</Text>
+                   <Text style={{fontSize:height*0.013,color:COLORS.BtnColorDark,fontFamily:FONTS.font}}>Hotels</Text>
                    </View>
                 <View style={styles.searchCity}>
                     <Text style={styles.searchIn}>{RoomGuestPlace?.Place}</Text>
@@ -44,15 +43,15 @@ export default function HotelAppbar({ title }) {
 
 const styles = StyleSheet.create({
     searchCount:{
-        fontFamily:font.font,
+        fontFamily:FONTS.font,
         color:'gray',
         fontSize:13,
     },
     searchIn:{
-        fontFamily:font.fontSemi,
+        fontFamily:FONTS.fontSemi,
         alignSelf:'center',
         letterSpacing:0.5,
-        color:color.colorText,
+        color:COLORS.colorText,
         lineHeight:18,
     },
     searchCity:{
@@ -74,7 +73,7 @@ const styles = StyleSheet.create({
         // width: width * 0.9,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: color.AppbarColor,
+        backgroundColor: COLORS.AppbarColor,
         height: height * 0.07,
         // borderTopRightRadius: 40,
         // borderBottomRightRadius: 40,

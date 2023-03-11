@@ -1,7 +1,7 @@
 /* eslint-disable prettier/prettier */
 import { Dimensions, StyleSheet } from "react-native";
-import color from "../constants/color";
-import font from "../constants/font";
+import COLORS from "../constants/color";
+import FONTS from "../constants/font";
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -48,31 +48,31 @@ const style = StyleSheet.create({
     },
     hotelListCardReviewBlog: {
         color: '#FFC400',
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
     },
     hotelListLocIcon: {
         fontSize: 20,
         marginRight: 5,
     },
     hotelListLocName: {
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
         fontSize: 13,
     },
     ListHotelName: {
-        fontFamily: font.fontSemi,
+        fontFamily: FONTS.fontSemi,
         fontSize: 18,
-        color: color.colorText,
+        color: COLORS.colorText,
         letterSpacing: 0.5,
     },
     ListHotelPrice: {
-        fontFamily: font.fontSemi,
+        fontFamily: FONTS.fontSemi,
         fontSize: 14,
-        color: color.colorText,
+        color: COLORS.colorText,
         letterSpacing: 0.5,
         marginTop: 2,
     },
     taxTect: {
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         fontSize: 11,
         color: '#999999',
         letterSpacing: 0.5,
@@ -80,7 +80,7 @@ const style = StyleSheet.create({
     },
     ListHotelDescription: {
         color: '#666666',
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         marginVertical: 8,
     },
     ListHotelBtn: {
@@ -94,7 +94,7 @@ const style = StyleSheet.create({
     ListHotelBtnText: {
         textAlign: "center",
         color: '#fff',
-        fontFamily: font.fontSemi,
+        fontFamily: FONTS.fontSemi,
         letterSpacing: 0.5,
     },
     hotelDesCont: {
@@ -122,11 +122,11 @@ const style = StyleSheet.create({
         elevation: 15,
     },
     RoomTitle: {
-        fontFamily: font.fontBold,
+        fontFamily: FONTS.fontBold,
         letterSpacing: 0.8,
         alignSelf: 'center',
         fontSize: height*0.025,
-        color: color.colorText,
+        color: COLORS.colorText,
         paddingTop: 20,
         textTransform: 'capitalize',
     },
@@ -143,7 +143,7 @@ const style = StyleSheet.create({
         paddingBottom: 10,
     },
     HotelDetailHotelName: {
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
         color: '#fff',
         fontSize: height*0.02,
     },
@@ -161,21 +161,21 @@ const style = StyleSheet.create({
     },
     HotelDetailHotelPrice: {
         color: '#fff',
-        fontFamily: font.fontBold,
+        fontFamily: FONTS.fontBold,
         fontSize: height*0.025,
     },
     HotelDetailHotelPriceTxt: {
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         fontSize: 13,
         color: '#fff',
     },
     HotelDetailHotelTax: {
         color: '#fff',
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         fontSize: 13,
     },
     HotelTitle: {
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
         color: '#52ADE5',
         fontSize: 14,
         flexDirection: 'row',
@@ -189,27 +189,27 @@ const style = StyleSheet.create({
         fontSize: 20,
     },
     TitleMain: {
-        fontFamily: font.fontSemi,
+        fontFamily: FONTS.fontSemi,
         fontSize: 17,
-        color: color.colorText,
+        color: COLORS.colorText,
         letterSpacing: 0.5,
         marginTop: 15,
     },
     parrah: {
-        fontFamily: font.font,
+        fontFamily: FONTS.font,
         fontSize: 15,
-        color: color.colorGrey,
+        color: COLORS.colorGrey,
     },
     list: {
-        fontFamily: font.font,
-        color: color.colorGrey,
+        fontFamily: FONTS.font,
+        color: COLORS.colorGrey,
         marginBottom: 5,
     },
     listIcon: {
         color: '#0050A6',
     },
     bookingBtn: {
-        backgroundColor: color.colorBtn,
+        backgroundColor: COLORS.colorBtn,
         alignItems: 'center',
         paddingVertical: 12,
         borderRadius: 100,
@@ -218,7 +218,7 @@ const style = StyleSheet.create({
     },
     bookingBtnTxt: {
         color: '#fff',
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
     },
     AdultQtyList: {
         flexDirection: 'row',
@@ -230,19 +230,19 @@ const style = StyleSheet.create({
         backgroundColor: '#000',
         color: '#fff',
         borderRadius: 100,
-        fontFamily: font.fontBold,
+        fontFamily: FONTS.fontBold,
         fontSize: 18,
         paddingHorizontal: 10,
         paddingVertical: 0,
     },
     AdultQtyListCount: {
         color: '#000',
-        fontFamily: font.fontBold,
+        fontFamily: FONTS.fontBold,
         fontSize: 18,
     },
     dropStyleChildAge: {
         width: width * 0.3,
-        borderColor: color.colorGrey,
+        borderColor: COLORS.colorGrey,
         borderWidth: 1,
         paddingHorizontal: 5,
         marginBottom: 5,
@@ -255,7 +255,7 @@ const style = StyleSheet.create({
     AlertBox: {
         position: 'absolute',
         bottom: 10,
-        backgroundColor: color.AppbarColor,
+        backgroundColor: COLORS.AppbarColor,
         width: width * 0.9,
         alignSelf: 'center',
         paddingHorizontal: 15,
@@ -277,13 +277,13 @@ const style = StyleSheet.create({
         // borderBottomWidth:1,
         // borderBottomColor:color.borderColor,
         textAlign:'center',
-        color:color.colorBtn,
-        fontFamily:font.mediam,
+        color:COLORS.colorBtn,
+        fontFamily:FONTS.mediam,
         marginBottom:3,
     },
     AlertBoxCon:{
-        color:color.colorText,
-        fontFamily:font.mediam,
+        color:COLORS.colorText,
+        fontFamily:FONTS.mediam,
     },
 })
 

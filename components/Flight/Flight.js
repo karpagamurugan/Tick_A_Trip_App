@@ -15,11 +15,9 @@ import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Dropdown } from 'react-native-element-dropdown'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import AutoCompleteTextField from '../common/AutoComplete';
 import { useDispatch, useSelector } from 'react-redux';
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import FlightAction from '../../redux/Flight/actions';
-import Autocomplete from 'react-native-autocomplete-input';
 import actions from '../../redux/Flight/actions';
 import CommonAction from '../../redux/common/actions';
 import COLORS from '../constants/color';
@@ -92,7 +90,6 @@ const Flight = ({ navigation }) => {
       class: classType,
       target: "Test"
     }
-console.log('payloaddata',payloaddata)
 
     dispatch({
       type: actions.SET_FLIGHT_SEARCH,
@@ -585,46 +582,6 @@ console.log('payloaddata',payloaddata)
                     </View>
                 }
               </View>
-
-
-
-              {/* <AutoCompleteTextField
-                hintText="Select.."
-                defaultValue={selctedFromPlace}
-                placeHolderText="From"
-                value={selctedFromPlace.toString()}
-                type='from'
-                data={
-                  Airport_Name?.message?.map((e, i) => {
-                    return (
-                      { display: e?.city, value: e }
-                    )
-                  })
-                }
-                onSelected={(e) => {
-                  setSelectedFromPlace(selctedFromPlace = e.city)
-                }}
-              /> */}
-
-
-              {/* <AutoCompleteTextField
-                hintText="Select.."
-                defaultValue={selctedToPlace.toString()}
-                placeHolderText="To"
-                value={selctedToPlace.toString()}
-                type='to'
-                data={
-                  Airport_Name?.message?.map((e, i) => {
-                    return (
-                      { display: e.city, value: e }
-                    )
-                  })
-                }
-                onSelected={(e) => {
-                  setSelectedToPlace(selctedToPlace = e.city)
-                }}
-              /> */}
-
 
 
 

@@ -3,8 +3,8 @@ import React from 'react';
 import { View, Text, Dimensions, StyleSheet, TouchableHighlight } from 'react-native';
 import EditIcon from '../../Assert/Images/icon/edit.svg';
 import BackArrow from '../../Assert/Images/icon/backward-arrow.svg';
-import color from '../constants/color';
-import font from '../constants/font';
+import COLORS from '../constants/color';
+import FONTS from '../constants/font';
 import { useNavigation } from '@react-navigation/native';
 import Arrow from '../../Assert/Images/icon/backward-arrow-2.svg';
 import Flight from '../../Assert/Images/icon/flight.svg';
@@ -29,7 +29,7 @@ export default function Appbar({ title }) {
                             </View>
                         </TouchableHighlight>
                         <Flight height={40} width={40} />
-                        <Text style={{ fontFamily: font.fontSemi, color: color.textBlue, fontSize: height * 0.023, marginLeft: 0 }}>{title}</Text>
+                        <Text style={{ fontFamily: FONTS.fontSemi, color: COLORS.textBlue, fontSize: height * 0.023, marginLeft: 0 }}>{title}</Text>
                         <View style={{ width: width*0.17 }} />
                     </View>
                     :
@@ -39,7 +39,7 @@ export default function Appbar({ title }) {
                                 <BackArrow height={20} width={20} />
                             </View>
                         </TouchableHighlight>
-                        <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.026 }}>{title}</Text>
+                        <Text style={{ fontFamily: FONTS.fontBold, color: COLORS.colorText, fontSize: height * 0.026 }}>{title}</Text>
                         <View style={{ width: 10 }} />
                     </View>
             }
@@ -54,7 +54,7 @@ const styles = StyleSheet.create({
         width: width * 0.9,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        backgroundColor: color.AppbarColor,
+        backgroundColor: COLORS.AppbarColor,
         height: height * 0.07,
         borderTopRightRadius: 40,
         borderBottomRightRadius: 40,

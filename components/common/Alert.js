@@ -3,10 +3,9 @@ import React, { useState, useEffect, } from "react";
 import { View, Dimensions, Modal, Text,StyleSheet } from "react-native";
 import { useDispatch, useSelector } from "react-redux";
 import COLORS from "../constants/color";
-import FONT_FAMILY from "../constants/font";
+import FONTS from "../constants/font";
 import Ant from 'react-native-vector-icons/AntDesign';
 import CommonAction from '../../redux/common/actions';
-import { Colors } from "react-native/Libraries/NewAppScreen";
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -62,12 +61,12 @@ const style = StyleSheet.create({
     AlertBoxHead:{
         textAlign:'center',
         color:COLORS.colorBtn,
-        fontFamily:FONT_FAMILY.mediam,
+        fontFamily:FONTS.mediam,
         marginBottom:3,
     },
     AlertBoxCon:{
         paddingLeft:10,
         color:'white',
-        fontFamily:FONT_FAMILY.mediam,
+        fontFamily:FONTS.mediam,
     },
 })
