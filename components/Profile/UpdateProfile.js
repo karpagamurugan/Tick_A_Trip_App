@@ -1,20 +1,37 @@
-import React,{useState} from "react";
-import {View,Text,TouchableHighlight,ScrollView,StyleSheet,Dimensions,Image,TextInput} from 'react-native';
+import React, { useState } from "react";
+import { View, Text, TouchableHighlight, ScrollView, StyleSheet, Dimensions, Image, TextInput, Alert, Modal } from 'react-native';
 import FONTS from "../constants/font";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import moment from "moment";
 import CalendarIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Appbar from "../common/Appbar";
 import DocumentPicker from "react-native-document-picker";
+import COLORS from "../constants/color";
+import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
+import { Controller, useForm } from "react-hook-form";
+import DatePicker from "react-native-date-picker";
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
-function UpdateProfile(){
+function UpdateProfile() {
+
+    const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
 
     var [image, setImage] = useState() //set selected profile image
 
     var [dob, setDob] = useState(new Date()); //set DOB in profile update
+
+    var [showGenderModal, setshowGenderModal] = useState(false)
+    var [showMaritalStatus, setshowMaritalStatus] = useState(false)
+    var [showDatePick, setShowDatePick] = useState(false)
+
+    var [myGender, setMyGender] = useState("Male");
+    var [myMaritialStatus, setMyMaritialStatus] = useState("Single");
+
+    const btnSubmit = (d) => {
+        console.log(d)
+    }
 
 
     async function filePicker() {
@@ -49,164 +66,320 @@ function UpdateProfile(){
     } //file pickers function...
 
 
-    return(
-             <View style={styles.mainContainer}>
-                    {/* <TouchableHighlight underlayColor={'transparent'} style={styles.cancelBtn} onPress={() =>
+    return (
+        <View style={styles.mainContainer}>
+
+            {/* <TouchableHighlight underlayColor={'transparent'} style={styles.cancelBtn} onPress={() =>
                         setOpenModel(!openModel)
                     }>
                         <MaterialIcons name='cancel' size={23} color='red' />
                     </TouchableHighlight> */}
-                    <Appbar title={'Edit Profile'}/>
-                    <View style={styles.modalMainContainer}>
-                        <ScrollView>
+            <Appbar title={'Edit Profile'} />
+            <View style={styles.modalMainContainer}>
+                <ScrollView showsVerticalScrollIndicator={false}>
+                    <View>
+                        {/* <Text style={styles.modalTitle}>Profile Edit</Text> */}
+                        <View style={{ height: 20 }} />
+                        <View style={styles.modalSubContainer}>
+
+                            <View style={styles.imageView}>
+                                <Image style={styles.circleAvatar}
+                                    source={{ uri: "https://hips.hearstapps.com/hmg-prod/images/30th-anniversary-of-apollo-11-landing-on-the-moon-astronaut-news-photo-51098545-1547940625.jpg" }}
+                                />
+                                <TouchableHighlight style={styles.editBtn}>
+                                    <Text style={{
+                                        color: '#fff',
+                                        fontFamily: FONTS.fontSemi,
+                                        fontSize: height * 0.015
+                                    }}>Choose Image...</Text>
+                                </TouchableHighlight>
+                            </View>
+
+                            {/* Gender*/}
                             <View>
-                                {/* <Text style={styles.modalTitle}>Profile Edit</Text> */}
-
-                                <View style={styles.modalSubContainer}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        {
-                                            (image?.URL === undefined || image?.URL === null || image?.URL === '') ?
-                                                <View /> :
-                                                <Image style={styles.profile} source={{ uri: image?.URL }} />
-                                        }
-                                        <TouchableHighlight underlayColor={'transparent'} onPress={() => filePicker()}>
-                                            <Text style={styles.chooseProfile}>
-                                                Choose Profile
-                                            </Text>
-                                        </TouchableHighlight>
-                                    </View>
-
-
-
-                                    {/* Gender*/}
+                                <TouchableHighlight
+                                    underlayColor={'transparent'}
+                                    onPress={() => setshowGenderModal(!showGenderModal)}
+                                >
                                     <View style={styles.editTextBorder}>
                                         <Text style={styles.placeHolderText}>Gender</Text>
-                                        <TextInput
-                                            placeholderTextColor={"gray"}
-                                            style={styles.inputeEditor}
-                                            placeholder="gender"
-                                            keyboardType='default'
-                                            // onChangeText={(f) => {
-                                            //     setFname(f)
-                                            // }}
-                                            numberOfLines={1}
-                                        // value={fname}
-                                        />
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            paddingRight: 8
+                                        }}>
+                                            <Text style={{ fontFamily: FONTS.font, color: 'black', paddingVertical: 10, paddingLeft: 7 }}>{myGender}</Text>
+                                            <View style={{ flexGrow: 1 }} />
+                                            {
+                                                showGenderModal ?
+                                                    <MaterialIcons name="keyboard-arrow-up" color={'#000'} size={25} /> :
+                                                    <MaterialIcons name="keyboard-arrow-down" color={'#000'} size={25} />
+                                            }
+                                        </View>
                                     </View>
+                                </TouchableHighlight>
+                                {
+                                    showGenderModal ?
+                                        <View
+                                            style={styles.dropDownContainer}>
+                                            <TouchableHighlight
+                                                underlayColor={"transparent"}
+                                                onPress={() => {
+                                                    setMyGender("Male")
+                                                    setshowGenderModal(false)
+                                                }}
+                                            >
+                                                <Text style={styles.dropDownTextStyle}>Male</Text>
+                                            </TouchableHighlight>
+                                            <TouchableHighlight
+                                                underlayColor={"transparent"}
+                                                onPress={() => {
+                                                    setMyGender("Female")
+                                                    setshowGenderModal(false)
+                                                }}
+                                            >
+                                                <Text style={styles.dropDownTextStyle}>Female</Text>
+                                            </TouchableHighlight>
+                                        </View> : <></>
+                                }
+                            </View>
 
-                                    {/* user Name*/}
-                                    <View style={styles.editTextBorder}>
-                                        <Text style={styles.placeHolderText}>UserName</Text>
+                            {/* user Name*/}
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>UserName</Text>
+                                <Controller
+                                    control={control}
+                                    name="userName"
+                                    rules={{
+                                        required: {
+                                            value: true,
+                                            message: 'Enter your user name',
+                                        },
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
                                         <TextInput
+                                            {...register("userName")}
                                             placeholderTextColor={"gray"}
+                                            name="userName"
                                             style={styles.inputeEditor}
                                             placeholder="UserName"
                                             keyboardType='default'
-                                            // onChangeText={(f) => {
-                                            //     setFname(f)
-                                            // }}
+                                            onChangeText={(e) => {
+                                                onChange(e)
+                                            }}
                                             numberOfLines={1}
-                                        // value={fname}
                                         />
-                                    </View>
+                                    )}
+                                />
+                            </View>
+                            {errors.userName && (
+                                <Text style={styles.errorMsg}>{errors.userName.message}</Text>
+                            )}
 
-                                    {/* First Name*/}
-                                    <View style={styles.editTextBorder}>
-                                        <Text style={styles.placeHolderText}>FirstName</Text>
+
+                            {/* First Name*/}
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>FirstName</Text>
+                                <Controller
+                                    control={control}
+                                    name="firstName"
+                                    rules={{
+                                        required: {
+                                            value: true,
+                                            message: 'Enter your first name',
+                                        },
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
                                         <TextInput
+                                            {...register("firstName")}
                                             placeholderTextColor={"gray"}
+                                            name="firstName"
                                             style={styles.inputeEditor}
-                                            placeholder="FirstName"
+                                            placeholder="firstName"
                                             keyboardType='default'
-                                            // onChangeText={(f) => {
-                                            //     setFname(f)
-                                            // }}
+                                            onChangeText={(e) => {
+                                                onChange(e)
+                                            }}
                                             numberOfLines={1}
-                                        // value={fname}
                                         />
-                                    </View>
+                                    )}
+                                />
+                            </View>
+                            {errors.firstName && (
+                                <Text style={styles.errorMsg}>{errors.firstName.message}</Text>
+                            )}
 
-                                    {/* last Name*/}
-                                    <View style={styles.editTextBorder}>
-                                        <Text style={styles.placeHolderText}>LastName</Text>
+                            {/* last Name*/}
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>LastName</Text>
+                                <Controller
+                                    control={control}
+                                    name="lastName"
+                                    rules={{
+                                        required: {
+                                            value: true,
+                                            message: 'Enter your last name',
+                                        },
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
                                         <TextInput
-
+                                            {...register("lastName")}
                                             placeholderTextColor={"gray"}
+                                            name="lastName"
                                             style={styles.inputeEditor}
-                                            placeholder="LastName"
+                                            placeholder="lastName"
                                             keyboardType='default'
-                                            // onChangeText={(l) => setLname(l)}
+                                            onChangeText={(e) => {
+                                                onChange(e)
+                                            }}
                                             numberOfLines={1}
-                                        // value={lname}
                                         />
-                                    </View>
+                                    )}
+                                />
+                            </View>
+                            {errors.lastName && (
+                                <Text style={styles.errorMsg}>{errors.lastName.message}</Text>
+                            )}
 
-                                    {/* DOB */}
-                                    <View style={styles.editTextBorder}>
-                                        <Text style={styles.placeHolderText}>Date-Of-Birth</Text>
-                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                            <Text style={{ fontFamily: FONTS.font, color: 'black', paddingVertical: 10, paddingLeft: 7 }}>{moment(dob).format('YYYY-MM-DD')}</Text>
-                                            <TouchableHighlight onPress={() => setShowPicker(!showPicker)} underlayColor='transparent' style={{ paddingRight: 5 }}>
-                                                <CalendarIcon name="calendar" size={25} color="gray" />
-                                            </TouchableHighlight>
-                                        </View>
-                                    </View>
-
-                                    {/* personal maritial status */}
-                                    <View style={styles.editTextBorder}>
-                                        <Text style={styles.placeHolderText}>Maritial Status</Text>
-                                        <TextInput
-                                            placeholderTextColor={"gray"}
-                                            style={styles.inputeEditor}
-                                            placeholder="Maritial Status"
-                                            // onChangeText={(pmail) => {
-                                            //     setPrmail(pmail)
-                                            // }}
-                                            numberOfLines={1}
-                                        // value={prmail}
-                                        />
-                                    </View>
-
-
-                                    {/* personal mobile no */}
-                                    <View style={styles.editTextBorder}>
-                                        <Text style={styles.placeHolderText}>Mobile Number</Text>
-                                        <TextInput
-                                            placeholderTextColor={"gray"}
-                                            style={styles.inputeEditor}
-                                            placeholder="mobilenumber"
-                                            keyboardType='number-pad'
-                                            // onChangeText={(no) => {
-                                            //     setMobileNo(no)
-                                            // }}
-                                            numberOfLines={1}
-                                            maxLength={10}
-                                        // value={mobileNo}
-                                        />
-                                    </View>
-                                </View>
-
-                                <View style={styles.updateBtn}>
-                                    <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                                        <Text style={styles.updateText}>
-                                            Update
-                                        </Text>
+                            {/* DOB */}
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>Date-Of-Birth</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <Text style={{ fontFamily: FONTS.font, color: 'black', paddingVertical: 10, paddingLeft: 7 }}>{moment(dob).format('YYYY-MM-DD')}</Text>
+                                    <TouchableHighlight onPress={() => setShowDatePick(true)} underlayColor='transparent' style={{ paddingRight: 5 }}>
+                                        <CalendarIcon name="calendar" size={25} color="gray" />
                                     </TouchableHighlight>
                                 </View>
                             </View>
-                        </ScrollView>
 
+                            {/* personal maritial status */}
+                            <View>
+                                <TouchableHighlight
+                                    underlayColor={'transparent'}
+                                    onPress={() => setshowMaritalStatus(!showMaritalStatus)}
+                                >
+                                    <View style={styles.editTextBorder}>
+                                        <Text style={styles.placeHolderText}>Maritial Status</Text>
+                                        <View style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            paddingRight: 8
+                                        }}>
+                                            <Text style={{ fontFamily: FONTS.font, color: 'black', paddingVertical: 10, paddingLeft: 7 }}>{myMaritialStatus}</Text>
+                                            <View style={{ flexGrow: 1 }} />
+                                            {
+                                                showMaritalStatus ?
+                                                    <MaterialIcons name="keyboard-arrow-up" color={'#000'} size={25} /> :
+                                                    <MaterialIcons name="keyboard-arrow-down" color={'#000'} size={25} />
+                                            }
+                                        </View>
+                                    </View>
+                                </TouchableHighlight>
+                                {
+                                    showMaritalStatus ?
+                                        <View
+                                            style={styles.dropDownContainer}
+                                        >
+                                            <TouchableHighlight
+                                                underlayColor={"transparent"}
+                                                onPress={() => {
+                                                    setMyMaritialStatus("Single")
+                                                    setshowMaritalStatus(false)
+                                                }}
+                                            >
+                                                <Text style={styles.dropDownTextStyle}>Single</Text>
+                                            </TouchableHighlight>
+                                            <TouchableHighlight
+                                                underlayColor={"transparent"}
+                                                onPress={() => {
+                                                    setMyMaritialStatus("Married")
+                                                    setshowMaritalStatus(false)
+                                                }}
+                                            >
+                                                <Text style={styles.dropDownTextStyle}>Married</Text>
+                                            </TouchableHighlight>
+                                        </View> : <></>
+                                }
+                            </View>
+
+
+                            {/* personal mobile no */}
+                            <View style={styles.editTextBorder}>
+                                <Text style={styles.placeHolderText}>Mobile Number</Text>
+                                <Controller
+                                    control={control}
+                                    name="mobileNumber"
+                                    rules={{
+                                        required: {
+                                            value: true,
+                                            message: 'Enter your phone number',
+                                        },
+                                        min: {
+                                            value: 10,
+                                            message: 'Please check the phone number'
+                                        }
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            {...register("mobileNumber")}
+                                            placeholderTextColor={"gray"}
+                                            name="mobileNumber"
+                                            style={styles.inputeEditor}
+                                            placeholder="mobileNumber"
+                                            keyboardType='default'
+                                            onChangeText={(e) => {
+                                                onChange(e)
+                                            }}
+                                            numberOfLines={1}
+                                        />
+                                    )}
+                                />
+                            </View>
+                            {errors.mobileNumber && (
+                                <Text style={styles.errorMsg}>{errors.mobileNumber.message}</Text>
+                            )}
+
+                        </View>
+                        <TouchableHighlight onPress={handleSubmit(btnSubmit)}
+                            underlayColor='#ddd'
+                            style={styles.saveBtn}
+                        >
+                            <Text style={{
+                                fontFamily: FONTS.fontSemi,
+                                color: '#fff',
+                                fontSize: height * 0.02,
+                                alignSelf: 'center'
+                            }}>
+                                UPDATE
+                            </Text>
+                        </TouchableHighlight>
+                        <View style={{ height: 20 }} />
                     </View>
-                </View>
+                </ScrollView>
+                <DatePicker
+                    modal
+                    mode="date"
+                    open={showDatePick}
+                    date={dob}
+                    onConfirm={(date) => {
+                        setDob(date)
+                        setShowDatePick(false)
+                    }}
+                    onCancel={() => {
+                        setShowDatePick(false)
+                    }}
+                />
+            </View>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    mainContainer: { height: height, width: width, backgroundColor: 'white', },
-    editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: 'gray', marginTop: 20, },
+    mainContainer: { height: height * 0.83, width: width, backgroundColor: 'white' },
+    editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: '#2B64FF', marginTop: 20, },
     inputeEditor: { paddingLeft: 10, fontFamily: FONTS.font, color: "#000000", width: width * 0.5 },
     placeHolderText: {
-        color: 'gray',
+        color: '#2B64FF',
         position: 'absolute',
         fontSize: 12,
         paddingLeft: 5,
@@ -215,6 +388,38 @@ const styles = StyleSheet.create({
         left: 10,
         backgroundColor: '#ffffff',
         fontFamily: FONTS.font
+    },
+    circleAvatar: {
+        height: 95,
+        width: 95,
+        backgroundColor: '#F0EFE8',
+        borderRadius: 190 / 2,
+        alignSelf: 'center',
+        marginVertical: 5
+    },
+    imageView: {
+
+    },
+    editBtn: {
+        height: 32,
+        width: 120,
+        backgroundColor: COLORS.BtnColor,
+        borderRadius: 25,
+        alignItems: 'center',
+        alignContent: 'center',
+        justifyContent: 'center',
+        position: 'absolute',
+        bottom: -6,
+        alignSelf: 'center'
+    },
+    saveBtn: {
+        height: 40,
+        width: "50%",
+        backgroundColor: COLORS.BtnColor,
+        alignSelf: 'center',
+        justifyContent: 'center',
+        borderRadius: 20,
+        marginTop: 15
     },
     modalMainContainer: {
         borderRadius: 10,
@@ -229,6 +434,26 @@ const styles = StyleSheet.create({
         paddingTop: 20,
         color: 'black',
         fontSize: height * 0.025
+    },
+    errorMsg: {
+        color: 'red',
+        fontSize: 12,
+        fontFamily: FONTS.light,
+        margin: 2
+    },
+    dropDownContainer: {
+        backgroundColor: '#fff',
+        // borderColor: COLORS.TextDarkGrey,
+        //borderWidth: 1,
+        marginTop: 10,
+        width: "100%",
+        borderRadius: 10,
+        elevation: 5
+    },
+    dropDownTextStyle: {
+        color: '#000',
+        padding: 15,
+        fontFamily: FONTS.mediam
     },
     modalSubContainer: { backgroundColor: 'white', width: width, paddingHorizontal: 20 },
     chooseProfile: { color: 'white', backgroundColor: 'green', paddingVertical: 2, paddingHorizontal: 5, borderRadius: 15, fontSize: height * 0.02 },
