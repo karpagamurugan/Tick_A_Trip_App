@@ -23,6 +23,7 @@ import DeleteIcon from '../../Assert/Images/icon/Delete_Icon.svg';
 import ProfileIcon from '../../Assert/Images/Profile.svg';
 import ContactInfo from "./ContactInfo";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Snackbar from 'react-native-snackbar';
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
@@ -33,7 +34,7 @@ export default function FlightBooking({ navigation, route }) {
     const { AddTravaller_nationality, travelers_list } = useSelector((state) => state.userReducer)
     var [travelRec, setTravelRec] = useState({ CountryCode: false, Nationality: false })
     var [selectedNationality, setSelectedNationality] = useState({ CountryCode: '', Nationality: '', })
-    var [getSelectId, setGetSelectId] = useState({ CountryCode: '' })
+    var [getSelectId, setGetSelectId] = useState({ CountryCode: '', Nationality: '', })
     var [addIconDownUp, setAddIconsDownUp] = useState(true);
     var [checkBoxOne, setCheckBoxOne] = useState(false);
     var [checkBoxTwo, setCheckBoxTwo] = useState(false);
@@ -49,7 +50,8 @@ export default function FlightBooking({ navigation, route }) {
     const [title, setTitle] = useState();
     const [travelFirstName, setTravelFirstName] = useState();
     const [travelLastName, setTravelLastName] = useState();
-    var [selectedUser, setSelectedUser] =useState() 
+    var [selectedUser, setSelectedUser] = useState()
+    var [listData, setListData] = useState([]);
 
 
     useEffect(() => {
@@ -57,7 +59,6 @@ export default function FlightBooking({ navigation, route }) {
             await AsyncStorage.getItem('tickatrip-token').then(
                 (res) => {
                     // console.log('Use Travel', res)
-
                     if (res !== null) {
                         dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN, payload: res })
                     } else {
@@ -85,9 +86,9 @@ export default function FlightBooking({ navigation, route }) {
         handleDebugger()
     }
 
-    // console.log('travelers_list', travelers_list?.travelers)
 
     const EditTravelDetails = (item) => {
+        console.log('EditTravelDetails', item)
         setSelectedUser(item)
         setTravellerEdit(!travellerEdit)
         dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN })
@@ -96,7 +97,7 @@ export default function FlightBooking({ navigation, route }) {
         let addTravelLastName = { lastName: item.last_name }
         setTravelFirstName(item.first_name)
         setTravelLastName(item.last_name)
-        setSelectedNationality({ Nationality: item.nationality.name })
+        setSelectedNationality({ getSelectId: item.nationality.id, Nationality: item.nationality.name })
         setTravelRec({ Nationality: true })
         setDobDate(new Date(item.dob))
         setTitle(item.title)
@@ -109,38 +110,77 @@ export default function FlightBooking({ navigation, route }) {
             setGender(item.gender)
         }
         reset({ ...addTravelFirstName, ...addTravelLastName, })
-
     }
     const updateBtn = () => {
-        let item = travelers_list?.travelers
         var data = {
-            traveler_id: "",
+            traveler_id: selectedUser.id,
             title: title,
             first_name: travelFirstName,
             last_name: travelLastName,
             gender: gender,
-            email: "",
-            phone: "",
-            dob: "",
-            passport: "",
-            nationality: selectedNationality,
-            issue_country: "",
-            expire_date: "",
+            email: selectedUser.email,
+            phone: selectedUser.phone,
+            dob: selectedUser.dob,
+            passport: selectedUser.passport,
+            country_code: selectedUser.country_code.id,
+            issue_country: selectedUser.issue_country.id,
+            nationality: selectedNationality.getSelectId,
+            expire_date: selectedUser.expire_date,
         };
-
-        console.log("kldfjhgdfughdfkjuhidf", selectedUser)
+        dispatch({
+            type: userAction.SET_FLIGHT_UPDATE_TRAVELLER,
+            payload: data
+        })
+        reset({ ...travelFirstName, ...travelLastName });
+        setTitle("");
+        setGender("");
+        setSelectType("");
+        setTravelLastName("");
+        setDobDate(new Date());
+        setSelectedNationality("");
+        setTravellerEdit(!travellerEdit)
+    }
+    const deleteTraveller = () => {
+        var deleteData = {
+            traveler_id: selectedUser.id,
+        }
+        dispatch({
+            type: userAction.GET_DELETE_TRAVELLER,
+            payload: deleteData
+        })
+    }
+    const SubmitAddBtn = (data) => {
+        setListData(listData = {
+            select_type: data.selectedType,
+            title: data.nametitle,
+            first_name: data.firstName,
+            last_name: data.lastName,
+            gender: data.selectedgender,
+            dob: moment(data.dobDate).format('YYYY-MM-DD'),
+            nationality: getSelectId?.Nationality,
+            passport: data.passportNumber,
+        })
+        console.log('listData',data)
+        dispatch({
+            type: userAction.GET_ADD_TRAVELLER_VALUE,
+            payload: data
+        })
+        // reset();
+        // setTitle("");
+        // setGender("");
+        // setSelectType("");
+        // setDobDate(new Date());
+        // setPassportExDate(new Date());
+        // setSelectedNationality("");
 
         // dispatch({
-        //     type: userAction.SET_FLIGHT_UPDATE_TRAVELLER,
-        //     payload: {
-        //         nationality: selectedNationality.Nationality
-        //     }
+        //     type: userAction.GET_ADD_TRAVELLER_FORM, payload: [...listData]
         // })
-    }
 
+    }
     const selectAdult = [
         { name: 'Adult', value: 'Adult' },
-        { name: 'Children', value: 'Children' },
+        { name: 'Child', value: 'Child' },
         { name: 'Infant', value: 'Infant' },
     ]
     const selectTitleName = [
@@ -155,39 +195,6 @@ export default function FlightBooking({ navigation, route }) {
         { name: 'Male', value: 'Male' },
         { name: 'Female', value: 'Female' },
     ]
-    let AdultCount = [
-        { value: '0', labelField: "0 Adult" },
-        { value: '1', labelField: "1 Adult" },
-        { value: '2', labelField: "2 Adult" },
-        { value: '3', labelField: "3 Adult" },
-        { value: '4', labelField: "4 Adult" },
-        { value: '5', labelField: "5 Adult" },
-        { value: '6', labelField: "6 Adult" },
-        { value: '7', labelField: "7 Adult" },
-        { value: '8', labelField: "8 Adult" },
-        { value: '9', labelField: "9 Adult" },
-    ] //Adult count
-
-    let ChildCount = [
-        { value: '0', labelField: "0 Child" },
-        { value: '1', labelField: "1 Child" },
-        { value: '2', labelField: "2 Child" },
-        { value: '3', labelField: "3 Child" },
-        { value: '4', labelField: "4 Child" },
-        { value: '5', labelField: "5 Child" },
-        { value: '6', labelField: "6 Child" },
-    ] //Child count
-
-    let InfantCount = [
-        { value: '0', labelField: "0 Infant" },
-        { value: '1', labelField: "1 Infant" },
-        { value: '2', labelField: "2 Infant" },
-        { value: '3', labelField: "3 Infant" },
-        { value: '4', labelField: "4 Infant" },
-        { value: '5', labelField: "5 Infant" },
-        { value: '6', labelField: "6 Infant" },
-    ] //Child count
-
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             {/* appbar */}
@@ -197,20 +204,20 @@ export default function FlightBooking({ navigation, route }) {
                 </TouchableHighlight>
                 <Flight height={34} width={34} />
                 <View style={styles.appbarPlaceContainer}>
-                    <View style={{ paddingHorizontal: 15, flexDirection: 'row' }}>
+                    <View style={{ paddingHorizontal: 15, flexDirection: 'row',justifyContent:'space-around' }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <FromIcon height={15} width={15} />
                             <View style={{ paddingLeft: 10 }}>
                                 <Text style={styles.appbarPlace}>{route?.params?.flightInfo?.fromCity}</Text>
-                                <Text style={styles.appBarTraveller}>{route?.params?.flightInfo?.adult_flight} adult, {route?.params?.flightInfo?.child_flight} child, {route?.params?.flightInfo?.infant_flight} Infant</Text>
+                                {/* <Text style={styles.appBarTraveller}>{route?.params?.flightInfo?.adult_flight} Adult, {route?.params?.flightInfo?.child_flight} Child, {route?.params?.flightInfo?.infant_flight} Infant</Text> */}
                             </View>
                         </View>
 
-                        <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10 }}>
+                        <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10,justifyContent:'space-around' }}>
                             <ToIcon height={19} width={19} />
                             <View style={{ paddingLeft: 10 }}>
                                 <Text style={styles.appbarPlace}>{route?.params?.flightInfo?.toCity}</Text>
-                                <Text style={styles.appBarTraveller}>{route?.params?.flightInfo?.class}</Text>
+                                {/* <Text style={styles.appBarTraveller}>{route?.params?.flightInfo?.class}</Text> */}
                             </View>
                         </View>
                     </View>
@@ -236,69 +243,19 @@ export default function FlightBooking({ navigation, route }) {
                             </View>
                         </View>
 
-
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 25 }}>
                             <View>
                                 <Text style={styles.title}>Adult</Text>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
                                     <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                    <View style={styles.dropDown}>
-                                        <Dropdown
-                                            data={AdultCount}
-                                            labelField="labelField"
-                                            valueField="value"
-                                            value={adult}
-                                            showsVerticalScrollIndicator={true}
-                                            name="adult"
-                                            placeholder=''
-                                            onChange={(item) => {
-                                                setAdult(item?.value)
-                                                // console.log('item', item)
-                                            }}
-                                            selectedTextProps={{
-                                                style: {
-                                                    fontSize: 13,
-                                                    fontWeight: '500',
-                                                    fontFamily: FONTS.fontBold,
-                                                    letterSpacing: 0.5,
-                                                    padding: 0,
-                                                    color: '#101010',
-                                                },
-                                            }}
-                                        />
-                                    </View>
-
+                                    <Text style={styles.TravellerCountShow}>{route?.params?.flightInfo?.adult_flight} Adult</Text>
                                 </View>
                             </View>
                             <View>
                                 <Text style={styles.title}>Child</Text>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
                                     <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                    <View style={styles.dropDown}>
-                                        <Dropdown
-                                            data={ChildCount}
-                                            labelField="labelField"
-                                            valueField="value"
-                                            value={child}
-                                            showsVerticalScrollIndicator={true}
-                                            name="child"
-                                            placeholder=''
-                                            onChange={(item) => {
-                                                setchild(item.value)
-                                            }}
-                                            selectedTextProps={{
-                                                style: {
-                                                    fontSize: 13,
-                                                    fontWeight: '500',
-                                                    fontFamily: FONTS.fontBold,
-                                                    letterSpacing: 0.5,
-                                                    padding: 0,
-                                                    color: '#101010',
-                                                },
-                                            }}
-                                            style={styles.text}
-                                        />
-                                    </View>
+                                    <Text style={styles.TravellerCountShow}>{route?.params?.flightInfo?.child_flight} Child</Text>
 
                                 </View>
                             </View>
@@ -306,32 +263,7 @@ export default function FlightBooking({ navigation, route }) {
                                 <Text style={styles.title}>Infant</Text>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
                                     <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                    <View style={styles.dropDown}>
-                                        <Dropdown
-                                            data={InfantCount}
-                                            labelField="labelField"
-                                            valueField="value"
-                                            value={infant}
-                                            showsVerticalScrollIndicator={true}
-                                            name="infant"
-                                            placeholder=''
-                                            onChange={(item) => {
-                                                setInfant(item.value)
-                                            }}
-                                            selectedTextProps={{
-                                                style: {
-                                                    fontSize: 13,
-                                                    fontWeight: '500',
-                                                    fontFamily: FONTS.fontBold,
-                                                    letterSpacing: 0.5,
-                                                    padding: 0,
-                                                    color: '#101010',
-                                                },
-                                            }}
-                                            style={styles.text}
-                                        />
-                                    </View>
-
+                                    <Text style={styles.TravellerCountShow}>{route?.params?.flightInfo?.infant_flight} Infant</Text>
                                 </View>
                             </View>
                         </View>
@@ -449,7 +381,7 @@ export default function FlightBooking({ navigation, route }) {
                                         rules={{
                                             required: {
                                                 value: true,
-                                                message: 'Select Your Title',
+                                                message: 'Select Title',
                                             }
                                         }}
                                         render={({ field: { onChange, value } }) => (
@@ -506,7 +438,10 @@ export default function FlightBooking({ navigation, route }) {
                                                 keyboardType='default'
                                                 {...register("firstName")}
                                                 value={value}
-                                                onChangeText={value => onChange(value.toLowerCase())}
+                                                onChangeText={value => {
+                                                    onChange(value.toLowerCase())
+                                                    setTravelFirstName(value)
+                                                }}
                                             />
                                         )}
                                     />
@@ -533,7 +468,11 @@ export default function FlightBooking({ navigation, route }) {
                                             keyboardType='default'
                                             value={value}
                                             {...register('lastName')}
-                                            onChangeText={value => onChange(value.toLowerCase())}
+                                            onChangeText={value => {
+                                                onChange(value.toLowerCase())
+                                                setTravelLastName(value)
+                                            }
+                                            }
                                         />
                                     )}
                                 />
@@ -541,7 +480,6 @@ export default function FlightBooking({ navigation, route }) {
                                     <Text style={[styles.errormessage]}>{errors.lastName.message}</Text>
                                 )}
                             </View>
-
                             <View style={styles.editTextBorder}>
                                 <Controller
                                     control={control}
@@ -601,6 +539,33 @@ export default function FlightBooking({ navigation, route }) {
                                     <Text style={[styles.errormessage]}>{errors.dob.message}</Text>
                                 )}
                             </View>
+                            <View style={styles.editTextBorder}>
+                            <Controller
+                                control={control}
+                                name="passportNumber"
+                                rules={{
+                                    required: 'Enter your Phone Code',
+                                    pattern: {
+                                        value: true,
+                                        message: 'Enter your Passport Number!',
+                                    }
+                                }}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput
+                                        placeholderTextColor={"gray"}
+                                        style={styles.inputeEditor}
+                                        placeholder="Passport Number"
+                                        keyboardType="default"
+                                        onChangeText={value => onChange(value.toUpperCase())}
+                                        {...register("passportNumber")}
+                                        value={value}
+                                    />
+                                )}
+                            />
+                            {errors.passportNumber && (
+                                    <Text style={[styles.errormessage]}>{errors.passportNumber.message}</Text>
+                                )}
+                        </View>
                             <View>
                                 <View style={[styles.editTextBorder]}>
                                     <View
@@ -720,6 +685,7 @@ export default function FlightBooking({ navigation, route }) {
                             <View style={{ marginVertical: 20, width: '90%', alignSelf: 'center' }}>
                                 {(travellerEdit === true) ?
                                     <TouchableOpacity
+                                        onPress={handleSubmit(SubmitAddBtn)}
                                         style={[styles.clickBtn]}>
                                         <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
                                     </TouchableOpacity> :
@@ -751,7 +717,9 @@ export default function FlightBooking({ navigation, route }) {
                                         style={{ marginRight: 20 }}>
                                         <EditIcon height={22} width={22} />
                                     </TouchableOpacity>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() => deleteTraveller(item)}
+                                    >
                                         <DeleteIcon height={22} width={22} />
                                     </TouchableOpacity>
                                 </View>
@@ -768,7 +736,7 @@ export default function FlightBooking({ navigation, route }) {
                                     <Text style={{ fontSize: 17, fontFamily: FONTS.mediam, color: '#1B5CB7' }}>{item?.title} {item?.first_name} {item?.last_name}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <TouchableOpacity onPress={() => setTravellerEdit(!travellerEdit)} style={{ marginRight: 20 }}>
+                                    <TouchableOpacity onPress={() => EditTravelDetails(item)} style={{ marginRight: 20 }}>
                                         <EditIcon height={22} width={22} />
                                     </TouchableOpacity>
                                     <TouchableOpacity>
@@ -789,7 +757,7 @@ export default function FlightBooking({ navigation, route }) {
                                     <Text style={{ fontSize: 17, fontFamily: FONTS.mediam, color: '#1B5CB7' }}>{item?.title} {item?.first_name} {item?.last_name}</Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <TouchableOpacity onPress={() => setTravellerEdit(!travellerEdit)} style={{ marginRight: 20 }}>
+                                    <TouchableOpacity onPress={() => EditTravelDetails(item)} style={{ marginRight: 20 }}>
                                         <EditIcon height={22} width={22} />
                                     </TouchableOpacity>
                                     <TouchableOpacity>
@@ -901,7 +869,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     confirmBook: { fontFamily: FONTS.mediam, color: 'white', fontSize: height * 0.027 },
-    editTextBorder: { backgroundColor: '#E9F3FF', borderWidth: 1, height: 50, borderRadius: 3, borderColor: '#2B64FF', marginTop: 8, marginBottom: 5, paddingHorizontal: 5, },
+    editTextBorder: { backgroundColor: '#E9F3FF', borderWidth: 1, height: 50, borderRadius: 3, borderColor: '#2B64FF', marginBottom: 15, paddingHorizontal: 5, },
     formTitle: {
         fontSize: height * 0.020,
         color: '#2B64FF',
@@ -932,5 +900,15 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20,
         paddingVertical: 15,
         borderRadius: 5
+    },
+    errormessage: {
+        color: "red",
+        fontSize: 10,
+        fontWeight: "500",
+        marginTop: 2,
+    },
+    TravellerCountShow:{
+        fontFamily: FONTS.fontBold,
+        color:'#000'
     }
 })

@@ -96,7 +96,7 @@ const AddTravellerForm = ({ innerRef }) => {
     ]
     const selectAdult = [
         { name: 'Adult', value: 'Adult' },
-        { name: 'Children', value: 'Children' },
+        { name: 'Child', value: 'Child' },
         { name: 'Infant', value: 'Infant' },
     ]
 
@@ -106,7 +106,7 @@ const AddTravellerForm = ({ innerRef }) => {
             title: data.nametitle,
             first_name: data.firstName,
             last_name: data.lastName,
-            // select_type: data.selectedType,
+            select_type: data.selectedType,
             gender: data.selectedgender,
             email: data.email,
             dob: moment(data.dobDate).format('YYYY-MM-DD'),
@@ -138,11 +138,6 @@ const AddTravellerForm = ({ innerRef }) => {
             dispatch({
                 type: userAction.GET_ADD_TRAVELLER_FORM, payload: [...listData]
             })
-
-            console.log('value not exist');
-
-            console.log('Travaller', AddTravaller_form);
-            console.log('Travaller', AddTravaller_form.length);
             reset();
             setTitle("");
             setGender("");
@@ -153,14 +148,6 @@ const AddTravellerForm = ({ innerRef }) => {
             setSelectedIssuing("");
             setSelectedNationality("");
         }
-       
-        // dispatch({
-        //     type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
-        //     payload: {
-        //         data: listData,
-        //         // navigation: navigation
-        //     }
-        // })
     }
 
 
@@ -294,7 +281,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                             placeholder="Type"
                                             labelField="value"
                                             valueField="value"
-                                            name="Adult"
+                                            name="adult"
                                             data={selectAdult}
                                             value={selectType}
                                             {...register('selectedType')}
@@ -871,7 +858,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                         style={styles.inputeEditor}
                                         placeholder="Passport Number"
                                         keyboardType="default"
-                                        onChangeText={value => onChange(value.toLowerCase())}
+                                        onChangeText={value => onChange(value.toUpperCase())}
                                         {...register("passportNumber")}
                                         value={value}
                                     />

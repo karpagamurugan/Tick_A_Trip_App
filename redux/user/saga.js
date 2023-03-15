@@ -27,6 +27,7 @@ const userSaga = function* () {
         yield takeEvery(actions.GET_ADD_TRAVELLER_TOKEN, getTraveller),
         yield takeEvery(actions.SET_FLIGHT_TICKETS_DETAILS, flightTicketsDetails),
         yield takeEvery(actions.SET_FLIGHT_UPDATE_TRAVELLER, updateTraveler),
+        yield takeEvery(actions.GET_DELETE_TRAVELLER, getDeleteTraveller),
     ])
 }
 
@@ -66,7 +67,7 @@ const getData = async () => {
 const getAddtoTravellerValue = function* (data) {
     // async function* getAddtoTravellerValue(data) {
     const { payload } = data
-    // console.log('payload', payload)
+    // console.log('flight booking payload', payload)
     try {
         const result = yield call(() =>
             axios.post(
@@ -79,8 +80,9 @@ const getAddtoTravellerValue = function* (data) {
             }
             )
         );
+        console.log('get booking result', result)
+
         if (result?.data?.status === true) {
-            console.log('get', result?.data)
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully' } })
             // yield put({ type: userAction.GET_ADD_TRAVELLER_TOKEN, payload: true })
             getData()
@@ -150,49 +152,93 @@ const getTraveller = function* (data) {
         );
 
         if (result?.data.status === true) {
-            console.log('get', 'Add Successfully')
-            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully Successfully' } })
-            // AsyncStorage.setItem('tickatrip-token', result.data.success.token)
             yield put({ type: actions.SET_ADD_TRAVELLER_TOKEN, payload: result.data });
         } else {
             console.log('get', 'Sometyhing went wrtong')
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.error } })
         }
     } catch (err) {
-        // console.log('getSearchTraveller', err)
 
     }
 }
 const updateTraveler = function* (data) {
     const { payload } = data
-    console.log("update Payload",payload)
+    console.log("update Payload", payload)
     try {
         const result = yield call(() =>
             axios.post(
                 `${API_URL}/user/updateTraveler`,
-                payload, {
-                headers: {
-                    // accept: 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                },
-            }
+
+                payload,
+                {
+                    headers: {
+                        // accept: 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+
             )
         );
-        if (result?.data.status === true) {
-            console.log('get', 'Add Successfully')
-            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully Successfully' } })
-            // AsyncStorage.setItem('tickatrip-token', result.data.success.token)
-            yield put({ type: actions.SET_FLIGHT_UPDATE_TRAVELLER, payload: result.data });
+        if (result?.data?.status === true) {
+            console.log('update success', 'Add Successfully')
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully Successfully' } })
+           var token=''
+            AsyncStorage.getItem('tickatrip-token').then(
+                (res) => {
+                    console.log("update traveler token", res)
+                    token=res
+                   
+                }
+            ).catch(e=>console.log('e',e))
+
+            if (token !== null) {
+                yield put({ type: actions.GET_ADD_TRAVELLER_TOKEN, payload: token })
+            } else {
+                yield put({ type: actions.GET_ADD_TRAVELLER_TOKEN, payload: token })
+            }
         } else {
-            console.log('get', 'Sometyhing went wrtong')
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.error } })
+            console.log('update result failed', result?.data?.status?.error)
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.status?.error } })
         }
-     
+
     } catch (err) {
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-        yield put({ type: actions.SET_FLIGHT_UPDATE_TRAVELLER, payload: err.data })
+        console.log('update err', err)
+        // yield put({ type: actions.SET_FLIGHT_UPDATE_TRAVELLER, payload: err.data })
     }
 }
+const getDeleteTraveller = function* (data) {
+    const { payload } = data;
+    // console.log("delete_Traveller", payload)
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/user/deleteTraveler`,
+
+                payload,
+                {
+                    headers: {
+                        // accept: 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+
+            )
+        );
+
+        console.log("delete_result", result?.data)
+        if (result?.data?.status === true) {
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Deleted' } })
+            yield put({ type: actions.GET_ADD_TRAVELLER_TOKEN });
+        } else {
+            console.log("delete_result", result?.data?.status?.error)
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.status?.error } })
+        }
+    } catch (err) {
+        yield put({ type: actions.GET_ADD_TRAVELLER_TOKEN });
+    }
+};
+
 const getUserRegister = function* (data) {
     const { payload, navigation } = data
     console.log(payload)

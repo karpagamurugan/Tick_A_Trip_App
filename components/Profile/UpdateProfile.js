@@ -5,6 +5,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import moment from "moment";
 import CalendarIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import Appbar from "../common/Appbar";
+import DocumentPicker from "react-native-document-picker";
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;

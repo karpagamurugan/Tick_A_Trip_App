@@ -12,6 +12,7 @@ var width = Dimensions.get('window').width;
 
 export default function AddTraveller({ navigation }) {
     const { travelers_list } = useSelector((state) => state.userReducer)
+    console.log("travelers_list",travelers_list)
     var [useToken, setUseToken] = useState('')
     const dispatch = useDispatch()
     useEffect(() => {
@@ -53,8 +54,9 @@ export default function AddTraveller({ navigation }) {
                             <View key={index} style={styles.card}>
                                 <Text>{item?.email}</Text>
                                 <Text>{item?.phone}</Text>
+                                <Text>{item?.type}</Text>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: width * 0.5 }}>
-                                    <Text>Female</Text>
+                                    <Text>{item?.gender}</Text>
                                     <Text>Indian</Text>
                                 </View>
 
