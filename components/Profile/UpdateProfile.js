@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, TouchableHighlight, ScrollView, StyleSheet, Dimensions, Image, TextInput, Alert, Modal } from 'react-native';
 import FONTS from "../constants/font";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
@@ -10,11 +10,18 @@ import COLORS from "../constants/color";
 import Pressable from "react-native/Libraries/Components/Pressable/Pressable";
 import { Controller, useForm } from "react-hook-form";
 import DatePicker from "react-native-date-picker";
+import { useSelector } from "react-redux";
+import { PROFILE_URL } from "../constants/constProfileApi";
+import RNFS from 'react-native-fs';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 function UpdateProfile() {
+
+    const { userProfileData, isLogin } = useSelector((state) => state.userReducer)
+
+    var profileData = userProfileData;
 
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
 
@@ -26,13 +33,22 @@ function UpdateProfile() {
     var [showMaritalStatus, setshowMaritalStatus] = useState(false)
     var [showDatePick, setShowDatePick] = useState(false)
 
-    var [myGender, setMyGender] = useState("Male");
-    var [myMaritialStatus, setMyMaritialStatus] = useState("Single");
+    var [myGender, setMyGender] = useState(profileData?.gender);
+    var [myMaritialStatus, setMyMaritialStatus] = useState(profileData?.married_status);
+    var [myProfileUrl , setMyProfileUrl] = useState(profileData?.profile_image.toString())
 
     const btnSubmit = (d) => {
         console.log(d)
     }
 
+    useEffect(()=>{
+        reset({
+          userName:profileData?.name.toString(),
+          firstName:profileData?.first_name.toString(),
+          lastName:profileData?.last_name.toString(),
+          mobileNumber:profileData?.phone.toString(),
+        })
+    },[])
 
     async function filePicker() {
         var res = null
@@ -54,6 +70,8 @@ function UpdateProfile() {
                 type: res.type,
                 name: res?.name,
             })
+
+            console.log(image.URL)
 
         } catch (e) {
             if (DocumentPicker.isCancel(e)) {
@@ -83,10 +101,17 @@ function UpdateProfile() {
                         <View style={styles.modalSubContainer}>
 
                             <View style={styles.imageView}>
+                                {
+                                // image!=""?
+                                // <Image style={styles.circleAvatar}
+                                //     source={require(image)}
+                                // />:   
                                 <Image style={styles.circleAvatar}
-                                    source={{ uri: "https://hips.hearstapps.com/hmg-prod/images/30th-anniversary-of-apollo-11-landing-on-the-moon-astronaut-news-photo-51098545-1547940625.jpg" }}
-                                />
-                                <TouchableHighlight style={styles.editBtn}>
+                                    source={{ uri:`${PROFILE_URL}${myProfileUrl}`}}
+                                />}
+                                <TouchableHighlight 
+                                onPress={()=>filePicker()}
+                                style={styles.editBtn}>
                                     <Text style={{
                                         color: '#fff',
                                         fontFamily: FONTS.fontSemi,
@@ -161,6 +186,7 @@ function UpdateProfile() {
                                             {...register("userName")}
                                             placeholderTextColor={"gray"}
                                             name="userName"
+                                            value={value}
                                             style={styles.inputeEditor}
                                             placeholder="UserName"
                                             keyboardType='default'
@@ -194,6 +220,7 @@ function UpdateProfile() {
                                             {...register("firstName")}
                                             placeholderTextColor={"gray"}
                                             name="firstName"
+                                            value={value}
                                             style={styles.inputeEditor}
                                             placeholder="firstName"
                                             keyboardType='default'
@@ -226,6 +253,7 @@ function UpdateProfile() {
                                             {...register("lastName")}
                                             placeholderTextColor={"gray"}
                                             name="lastName"
+                                            value={value}
                                             style={styles.inputeEditor}
                                             placeholder="lastName"
                                             keyboardType='default'
@@ -324,6 +352,7 @@ function UpdateProfile() {
                                             {...register("mobileNumber")}
                                             placeholderTextColor={"gray"}
                                             name="mobileNumber"
+                                            value={value}
                                             style={styles.inputeEditor}
                                             placeholder="mobileNumber"
                                             keyboardType='default'
