@@ -214,7 +214,7 @@ const getDeleteTraveller = function* (data) {
         const result = yield call(() =>
             axios.post(
                 `${API_URL}/user/deleteTraveler`,
-
+                
                 payload,
                 {
                     headers: {

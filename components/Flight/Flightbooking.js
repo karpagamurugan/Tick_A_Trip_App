@@ -42,6 +42,7 @@ export default function FlightBooking({ navigation, route }) {
     var [adult, setAdult] = useState(route?.params?.flightInfo?.adult_flight?.toString()) //set adult count
     var [child, setchild] = useState(route?.params?.flightInfo?.child_flight?.toString()) //set child count
     var [infant, setInfant] = useState(route?.params?.flightInfo?.infant_flight?.toString()) //set infant count
+    var [travellerSelectType, setTravellerSelectType] = useState([]);
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
     const [gender, setGender] = useState();
     const [open, setOpen] = useState(false);
@@ -52,8 +53,7 @@ export default function FlightBooking({ navigation, route }) {
     const [travelLastName, setTravelLastName] = useState();
     var [selectedUser, setSelectedUser] = useState()
     var [listData, setListData] = useState([]);
-
-
+    var [flightInfoType, setFlightInfoType] = useState({ flightAdultList: '', flightChildList: '', flightInfantList: '' });
     useEffect(() => {
         const travel = async () => {
             await AsyncStorage.getItem('tickatrip-token').then(
@@ -68,6 +68,27 @@ export default function FlightBooking({ navigation, route }) {
             )
         }
         travel();
+    }, []);
+
+    useEffect(() => {
+        var adultList = travelers_list?.travelers?.filter((el) => el.type === 'Adult')?.slice(0, route?.params?.flightInfo?.adult_flight)
+        var childList = travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, route?.params?.flightInfo?.child_flight)
+        var infantList = travelers_list?.travelers?.filter((el) => el.type === 'Infant')?.slice(0, route?.params?.flightInfo?.infant_flight)
+        var list = []
+        if(adultList > 0){
+            list.push({ name: 'Adult', value: 'Adult' },)
+            setTravellerSelectType({...travellerSelectType,list})
+        }
+        if(childList > 0){
+            list.push({ name: 'Child', value: 'Child' },)
+            setTravellerSelectType({...travellerSelectType,list})
+        }
+        if(infantList > 0){
+            list.push({ name: 'Infant', value: 'Infant' },)
+            setTravellerSelectType({...travellerSelectType,list})
+        }
+
+        setFlightInfoType(flightInfoType = { flightAdultList: adultList?.length, flightChildList: childList?.length, flightInfantList: infantList?.length })
     }, []);
 
     const handleDebugger = useCallback(
@@ -88,7 +109,6 @@ export default function FlightBooking({ navigation, route }) {
 
 
     const EditTravelDetails = (item) => {
-        console.log('EditTravelDetails', item)
         setSelectedUser(item)
         setTravellerEdit(!travellerEdit)
         dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN })
@@ -140,18 +160,15 @@ export default function FlightBooking({ navigation, route }) {
         setSelectedNationality("");
         setTravellerEdit(!travellerEdit)
     }
-    const deleteTraveller = () => {
-        var deleteData = {
-            traveler_id: selectedUser.id,
-        }
+    const deleteTraveller = (item) => {
         dispatch({
             type: userAction.GET_DELETE_TRAVELLER,
-            payload: deleteData
+            payload: item.id
         })
     }
     const SubmitAddBtn = (data) => {
         setListData(listData = {
-            select_type: data.selectedType,
+            type: data.selectedType,
             title: data.nametitle,
             first_name: data.firstName,
             last_name: data.lastName,
@@ -159,11 +176,11 @@ export default function FlightBooking({ navigation, route }) {
             dob: moment(data.dobDate).format('YYYY-MM-DD'),
             nationality: getSelectId?.Nationality,
             passport: data.passportNumber,
+
         })
-        console.log('listData',data)
         dispatch({
             type: userAction.GET_ADD_TRAVELLER_VALUE,
-            payload: data
+            payload: listData
         })
         // reset();
         // setTitle("");
@@ -178,11 +195,32 @@ export default function FlightBooking({ navigation, route }) {
         // })
 
     }
-    const selectAdult = [
-        { name: 'Adult', value: 'Adult' },
-        { name: 'Child', value: 'Child' },
-        { name: 'Infant', value: 'Infant' },
-    ]
+    // ||
+    // flightInfoType?.flightChildList !== child ||
+    // flightInfoType?.flightInfantList !== infant
+    useEffect(() => {
+
+        // if(flightInfoType?.flightAdultList !== parseInt(adult) &&  parseInt(child)===0 &&  parseInt(infant)===0){
+        //     setTravellerSelectType([
+        //         { name: 'Adult', value: 'Adult' },])
+        // }else if( parseInt(adult)===0 && flightInfoType?.flightChildList !== parseInt(child)&&  parseInt(infant)==0){
+        //     setTravellerSelectType([
+        //         { name: 'Child', value: 'Child' },])
+        // }else{
+        //     setTravellerSelectType([
+        //                 { name: 'Adult', value: 'Adult' },
+        //                 { name: 'Child', value: 'Child' },
+        //                 { name: 'Infant', value: 'Infant' },]) 
+        // }
+
+       
+
+    }, []);
+    // const travellerSelectType = [
+    //     { name: 'Adult', value: 'Adult' },
+    //     { name: 'Child', value: 'Child' },
+    //     { name: 'Infant', value: 'Infant' },
+    // ]
     const selectTitleName = [
         { name: 'Mr', value: 'Mr' },
         { name: 'Miss', value: 'Miss' },
@@ -204,7 +242,7 @@ export default function FlightBooking({ navigation, route }) {
                 </TouchableHighlight>
                 <Flight height={34} width={34} />
                 <View style={styles.appbarPlaceContainer}>
-                    <View style={{ paddingHorizontal: 15, flexDirection: 'row',justifyContent:'space-around' }}>
+                    <View style={{ paddingHorizontal: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <FromIcon height={15} width={15} />
                             <View style={{ paddingLeft: 10 }}>
@@ -213,13 +251,16 @@ export default function FlightBooking({ navigation, route }) {
                             </View>
                         </View>
 
-                        <View style={{ flexDirection: 'row', alignItems: 'center', paddingLeft: 10,justifyContent:'space-around' }}>
+                        <View style={[styles.verticalLine]} />
+
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                             <ToIcon height={19} width={19} />
                             <View style={{ paddingLeft: 10 }}>
                                 <Text style={styles.appbarPlace}>{route?.params?.flightInfo?.toCity}</Text>
                                 {/* <Text style={styles.appBarTraveller}>{route?.params?.flightInfo?.class}</Text> */}
                             </View>
                         </View>
+
                     </View>
                 </View>
             </View>
@@ -241,9 +282,16 @@ export default function FlightBooking({ navigation, route }) {
                                     <Text style={styles.text}>{moment(get_Revalidate?.ArrivalDateTime).format('DD-MM-YYYY')}</Text>
                                 </View>
                             </View>
+                            <View>
+                                <Text style={styles.title}>Class</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                    <MaterialCommunityIcons name="sofa-single-outline" color={COLORS.colorBtn} size={25} />
+                                    <Text style={styles.text}>{route?.params?.flightInfo?.class}</Text>
+                                </View>
+                            </View>
                         </View>
 
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 25 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingBottom: 25 }}>
                             <View>
                                 <Text style={styles.title}>Adult</Text>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', }}>
@@ -344,7 +392,7 @@ export default function FlightBooking({ navigation, route }) {
                                             labelField="name"
                                             valueField="value"
                                             name="selectedType"
-                                            data={selectAdult}
+                                            data={travellerSelectType}
                                             value={selectType}
                                             {...register('selectedType')}
                                             onChange={(item) => {
@@ -539,33 +587,6 @@ export default function FlightBooking({ navigation, route }) {
                                     <Text style={[styles.errormessage]}>{errors.dob.message}</Text>
                                 )}
                             </View>
-                            <View style={styles.editTextBorder}>
-                            <Controller
-                                control={control}
-                                name="passportNumber"
-                                rules={{
-                                    required: 'Enter your Phone Code',
-                                    pattern: {
-                                        value: true,
-                                        message: 'Enter your Passport Number!',
-                                    }
-                                }}
-                                render={({ field: { onChange, value } }) => (
-                                    <TextInput
-                                        placeholderTextColor={"gray"}
-                                        style={styles.inputeEditor}
-                                        placeholder="Passport Number"
-                                        keyboardType="default"
-                                        onChangeText={value => onChange(value.toUpperCase())}
-                                        {...register("passportNumber")}
-                                        value={value}
-                                    />
-                                )}
-                            />
-                            {errors.passportNumber && (
-                                    <Text style={[styles.errormessage]}>{errors.passportNumber.message}</Text>
-                                )}
-                        </View>
                             <View>
                                 <View style={[styles.editTextBorder]}>
                                     <View
@@ -684,14 +705,21 @@ export default function FlightBooking({ navigation, route }) {
                             </View>
                             <View style={{ marginVertical: 20, width: '90%', alignSelf: 'center' }}>
                                 {(travellerEdit === true) ?
-                                    <TouchableOpacity
-                                        onPress={handleSubmit(SubmitAddBtn)}
-                                        style={[styles.clickBtn]}>
-                                        <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
-                                    </TouchableOpacity> :
+
+                                    (flightInfoType?.flightAdultList !== parseInt(adult) || flightInfoType?.flightChildList !== child || flightInfoType?.flightInfantList !== infant) ?
+                                        <TouchableOpacity
+                                            onPress={handleSubmit(SubmitAddBtn)}
+                                            style={[styles.clickBtn]}>
+                                            <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
+                                        </TouchableOpacity> :
+                                        <TouchableOpacity
+                                            disabled={true}
+                                            style={[styles.clickBtn, { opacity: 0.5 }]}>
+                                            <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
+                                        </TouchableOpacity>
+                                    :
                                     <TouchableHighlight
                                         onPress={() => updateBtn()}
-                                        // onPress={()=>console.log('pressed')}
                                         style={[styles.clickBtn]}>
                                         <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Update</Text>
                                     </TouchableHighlight>
@@ -739,7 +767,9 @@ export default function FlightBooking({ navigation, route }) {
                                     <TouchableOpacity onPress={() => EditTravelDetails(item)} style={{ marginRight: 20 }}>
                                         <EditIcon height={22} width={22} />
                                     </TouchableOpacity>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() => deleteTraveller(item)}
+                                    >
                                         <DeleteIcon height={22} width={22} />
                                     </TouchableOpacity>
                                 </View>
@@ -760,7 +790,9 @@ export default function FlightBooking({ navigation, route }) {
                                     <TouchableOpacity onPress={() => EditTravelDetails(item)} style={{ marginRight: 20 }}>
                                         <EditIcon height={22} width={22} />
                                     </TouchableOpacity>
-                                    <TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() => deleteTraveller(item)}
+                                    >
                                         <DeleteIcon height={22} width={22} />
                                     </TouchableOpacity>
                                 </View>
@@ -837,7 +869,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         paddingRight: 15
     },
-    appbarPlaceContainer: { backgroundColor: 'white', width: width * 0.75, height: 40, marginLeft: 10, borderRadius: 30 },
+    appbarPlaceContainer: { backgroundColor: 'white', width: width * 0.75, marginLeft: 5, borderRadius: 30, paddingVertical: 10 },
     appbarPlace: { fontFamily: FONTS.font, fontSize: height * 0.018 },
     appBarTraveller: { fontFamily: FONTS.font, marginTop: -6, fontSize: height * 0.016 },
     title: { fontFamily: FONTS.font, color: 'grey', fontSize: height * 0.0162 },
@@ -907,8 +939,13 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         marginTop: 2,
     },
-    TravellerCountShow:{
+    TravellerCountShow: {
         fontFamily: FONTS.fontBold,
-        color:'#000'
+        color: '#000'
+    },
+    verticalLine: {
+        height: height * 0.030,
+        width: 1,
+        backgroundColor: '#ddd'
     }
 })

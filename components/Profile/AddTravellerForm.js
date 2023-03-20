@@ -865,8 +865,8 @@ const AddTravellerForm = ({ innerRef }) => {
                                 )}
                             />
                             {errors.passportNumber && (
-                                    <Text style={[styles.errormessage]}>{errors.passportNumber.message}</Text>
-                                )}
+                                <Text style={[styles.errormessage]}>{errors.passportNumber.message}</Text>
+                            )}
                         </View>
                         {/*Expiry Date */}
                         <View style={[styles.editTextBorder]}>
@@ -957,8 +957,8 @@ const AddTravellerForm = ({ innerRef }) => {
 const styles = StyleSheet.create({
     subContainer: { flexDirection: 'column', alignItems: 'center' },
     editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: '#067fc030', marginTop: 20, marginBottom: 5, },
-    updateBtn: { backgroundColor: '#0d6efd', borderRadius: 5,  justifyContent: 'center', width: 130,alignSelf: 'flex-end', },
-    updateText: { color: '#fff', fontFamily: FONTS.font, alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 10,alignItems: 'center' },
+    updateBtn: { backgroundColor: '#0d6efd', borderRadius: 5, justifyContent: 'center', width: 130, alignSelf: 'flex-end', },
+    updateText: { color: '#fff', fontFamily: FONTS.font, alignSelf: 'center', paddingVertical: 10, paddingHorizontal: 10, alignItems: 'center' },
     placeHolderText: {
         color: '#067fc0',
         position: 'absolute',
