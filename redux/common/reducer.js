@@ -4,6 +4,7 @@ import actions from '../common/actions';
 const initialState = {
     common_loader: false,
     hotel_loader: false,
+    flight_loader: false,
     setAlert: {
         status: false,
         message:'',
@@ -22,6 +23,11 @@ const CommonReducer = (state = initialState, action) => {
                 ...state,
                 hotel_loader: action.payload
             };
+            case actions.FLIGHT_LOADER:
+                return {
+                    ...state,
+                    flight_loader: action.payload
+                };
         case actions.SET_ALERT:
             return {
                 ...state,

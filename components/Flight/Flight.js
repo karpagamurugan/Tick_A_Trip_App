@@ -41,7 +41,7 @@ const Flight = ({ navigation }) => {
   var [ToDate, setTodate] = useState(moment(new Date()).add(1, 'day')); //return date
   var [fromPicker, setFromPicker] = useState(false) //show depart date picker
   var [toPicker, setToPicker] = useState(false) //show retuen date picker
-  var [adult, setAdult] = useState(0) //set adult count
+  var [adult, setAdult] = useState(1) //set adult count
   var [child, setchild] = useState(0) //set child count
   var [infant, setInfant] = useState(0) //set infant count
   var [classType, setClassType] = useState('Economy'); //select class type
@@ -77,7 +77,7 @@ const Flight = ({ navigation }) => {
   let classList = [{ value: 'Business' }, { value: 'Economy' }];
 
   const FlightSearch = () => {
-
+    dispatch({ type: CommonAction.FLIGHT_LOADER, payload: true });
     const payloaddata = {
       journey_type: (oneTrip === true) ? 'OneWay' : 'RoundTrip',
       airport_from_code: selectedFromVal?.code,
@@ -108,7 +108,6 @@ const Flight = ({ navigation }) => {
         }
       }
     })
-    dispatch({ type: CommonAction.FLIGHT_LOADER, payload: true });
 
   }
 
@@ -118,7 +117,6 @@ const Flight = ({ navigation }) => {
       <Modal
         transparent={true}
         visible={showTraveller}
-
       >
         <Pressable
           onPress={() => setShowTraveller(!showTraveller)}

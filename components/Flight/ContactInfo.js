@@ -16,7 +16,7 @@ const ContactInfo = () => {
     var [travelRec, setTravelRec] = useState({ CountryCode: false, Nationality: false })
     var [selectedCountryCode, setSelectedCountryCode] = useState({ CountryCode: '', Nationality: '', })
     var [getSelectId, setGetSelectId] = useState({ CountryCode: '' })
-    var [iconDownUp, setIconsDownUp] = useState(true);
+    var [showContact, setShowContact] = useState(true);
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
 
     useEffect(() => {
@@ -46,11 +46,11 @@ const ContactInfo = () => {
             <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={[styles.formTitle]}>Fill Contact Details *</Text>
-                    <TouchableOpacity onPress={() => setIconsDownUp(!iconDownUp)}>
-                        <AntDesign name={iconDownUp ? 'upcircleo' : 'downcircleo'} style={{ color: '#2B64FF', fontSize: height * 0.022, paddingRight: 15 }} />
+                    <TouchableOpacity onPress={() => setShowContact(!showContact)}>
+                        <AntDesign name={showContact ? 'upcircleo' : 'downcircleo'} style={{ color: '#2B64FF', fontSize: height * 0.022, paddingRight: 15 }} />
                     </TouchableOpacity>
                 </View>
-                {(iconDownUp === true) ?
+                {(showContact === true) ?
                     <View>
                         <View style={styles.editTextBorder}>
                             <Controller

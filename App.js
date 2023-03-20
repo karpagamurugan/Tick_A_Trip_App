@@ -21,6 +21,7 @@ import Hotel from './components/Hotel/Hotel';
 import { View } from 'react-native';
 import HotelLoader from './components/common/hotelLoader';
 import Alert from './components/common/Alert';
+import FlightLoader from './components/common/flightLoader';
 
 function App() {
   const Stack = createNativeStackNavigator();
@@ -35,6 +36,7 @@ function App() {
     <Provider store={store}>
       <Loader/>
       <HotelLoader/>
+      <FlightLoader/>
       <Alert/>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Splash'>

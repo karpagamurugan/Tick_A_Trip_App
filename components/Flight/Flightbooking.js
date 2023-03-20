@@ -24,6 +24,7 @@ import ProfileIcon from '../../Assert/Images/Profile.svg';
 import ContactInfo from "./ContactInfo";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
@@ -35,7 +36,7 @@ export default function FlightBooking({ navigation, route }) {
     var [travelRec, setTravelRec] = useState({ CountryCode: false, Nationality: false })
     var [selectedNationality, setSelectedNationality] = useState({ CountryCode: '', Nationality: '', })
     var [getSelectId, setGetSelectId] = useState({ CountryCode: '', Nationality: '', })
-    var [addIconDownUp, setAddIconsDownUp] = useState(true);
+    var [showAddTraveller, setShowAddTraveller] = useState(false);
     var [checkBoxOne, setCheckBoxOne] = useState(false);
     var [checkBoxTwo, setCheckBoxTwo] = useState(false);
     var [travellerEdit, setTravellerEdit] = useState(true);
@@ -54,6 +55,22 @@ export default function FlightBooking({ navigation, route }) {
     var [selectedUser, setSelectedUser] = useState()
     var [listData, setListData] = useState([]);
     var [flightInfoType, setFlightInfoType] = useState({ flightAdultList: '', flightChildList: '', flightInfantList: '' });
+  
+
+    const selectTitleName = [
+        { name: 'Mr', value: 'Mr' },
+        { name: 'Miss', value: 'Miss' },
+        { name: 'Mrs', value: 'Mrs' },
+        { name: 'Lord', value: 'Lord' },
+        { name: 'Lady', value: 'Lady' },
+        { name: 'Inf', value: 'Inf' },
+    ]
+    const selectGender = [
+        { name: 'Male', value: 'Male' },
+        { name: 'Female', value: 'Female' },
+    ]
+
+    // console.log('travelers_list',travelers_list)
     useEffect(() => {
         const travel = async () => {
             await AsyncStorage.getItem('tickatrip-token').then(
@@ -91,9 +108,7 @@ export default function FlightBooking({ navigation, route }) {
         setFlightInfoType(flightInfoType = { flightAdultList: adultList?.length, flightChildList: childList?.length, flightInfantList: infantList?.length })
     }, []);
 
-    const handleDebugger = useCallback(
-        debounce((e) => console.log(e), 400)
-        , []);
+   
 
     const handleSelectNationality = (e) => {
         Keyboard.dismiss()
@@ -104,7 +119,6 @@ export default function FlightBooking({ navigation, route }) {
             payload: []
         })
         setTravelRec(travelRec = { CountryCode: travelRec.CountryCode, IssuingName: travelRec.IssuingName, Nationality: true });
-        handleDebugger()
     }
 
 
@@ -131,6 +145,8 @@ export default function FlightBooking({ navigation, route }) {
         }
         reset({ ...addTravelFirstName, ...addTravelLastName, })
     }
+
+
     const updateBtn = () => {
         var data = {
             traveler_id: selectedUser.id,
@@ -160,12 +176,15 @@ export default function FlightBooking({ navigation, route }) {
         setSelectedNationality("");
         setTravellerEdit(!travellerEdit)
     }
+
+
     const deleteTraveller = (item) => {
         dispatch({
             type: userAction.GET_DELETE_TRAVELLER,
             payload: item.id
         })
     }
+
     const SubmitAddBtn = (data) => {
         setListData(listData = {
             type: data.selectedType,
@@ -195,44 +214,8 @@ export default function FlightBooking({ navigation, route }) {
         // })
 
     }
-    // ||
-    // flightInfoType?.flightChildList !== child ||
-    // flightInfoType?.flightInfantList !== infant
-    useEffect(() => {
-
-        // if(flightInfoType?.flightAdultList !== parseInt(adult) &&  parseInt(child)===0 &&  parseInt(infant)===0){
-        //     setTravellerSelectType([
-        //         { name: 'Adult', value: 'Adult' },])
-        // }else if( parseInt(adult)===0 && flightInfoType?.flightChildList !== parseInt(child)&&  parseInt(infant)==0){
-        //     setTravellerSelectType([
-        //         { name: 'Child', value: 'Child' },])
-        // }else{
-        //     setTravellerSelectType([
-        //                 { name: 'Adult', value: 'Adult' },
-        //                 { name: 'Child', value: 'Child' },
-        //                 { name: 'Infant', value: 'Infant' },]) 
-        // }
-
-       
-
-    }, []);
-    // const travellerSelectType = [
-    //     { name: 'Adult', value: 'Adult' },
-    //     { name: 'Child', value: 'Child' },
-    //     { name: 'Infant', value: 'Infant' },
-    // ]
-    const selectTitleName = [
-        { name: 'Mr', value: 'Mr' },
-        { name: 'Miss', value: 'Miss' },
-        { name: 'Mrs', value: 'Mrs' },
-        { name: 'Lord', value: 'Lord' },
-        { name: 'Lady', value: 'Lady' },
-        { name: 'Inf', value: 'Inf' },
-    ]
-    const selectGender = [
-        { name: 'Male', value: 'Male' },
-        { name: 'Female', value: 'Female' },
-    ]
+    
+  
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             {/* appbar */}
@@ -369,11 +352,11 @@ export default function FlightBooking({ navigation, route }) {
                 <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={[styles.formTitle]}>Add Traveller Details *</Text>
-                        <TouchableOpacity onPress={() => setAddIconsDownUp(!addIconDownUp)}>
-                            <AntDesign name={addIconDownUp ? 'upcircleo' : 'downcircleo'} style={{ color: '#2B64FF', fontSize: height * 0.022, paddingRight: 15 }} />
+                        <TouchableOpacity onPress={() => setShowAddTraveller(!showAddTraveller)}>
+                            <AntDesign name={showAddTraveller ? 'upcircleo' : 'downcircleo'} style={{ color: '#2B64FF', fontSize: height * 0.022, paddingRight: 15 }} />
                         </TouchableOpacity>
                     </View>
-                    {(addIconDownUp === true) ?
+                    {(showAddTraveller === true) ?
                         <View>
                             <View style={[styles.editTextBorder]}>
                                 <Controller
@@ -708,12 +691,12 @@ export default function FlightBooking({ navigation, route }) {
 
                                     (flightInfoType?.flightAdultList !== parseInt(adult) || flightInfoType?.flightChildList !== child || flightInfoType?.flightInfantList !== infant) ?
                                         <TouchableOpacity
-                                            onPress={handleSubmit(SubmitAddBtn)}
-                                            style={[styles.clickBtn]}>
-                                            <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
+                                        disabled={true}
+                                        style={[styles.clickBtn,{opacity:0.75}]}>
+                                            <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam,opacity:0.5 }}>Disabled</Text>
                                         </TouchableOpacity> :
                                         <TouchableOpacity
-                                            disabled={true}
+                                            onPress={handleSubmit(SubmitAddBtn)}
                                             style={[styles.clickBtn, { opacity: 0.5 }]}>
                                             <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
                                         </TouchableOpacity>
