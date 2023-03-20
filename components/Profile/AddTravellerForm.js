@@ -15,11 +15,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import userAction from '../../redux/user/actions'
 import Snackbar from 'react-native-snackbar';
 import { debounce } from 'lodash';
+import { useEffect } from 'react';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
-const AddTravellerForm = ({ innerRef }) => {
+const AddTravellerForm = ({ navigation, route }) => {
+
     const dispatch = useDispatch();
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
     let [dobDate, setDobDate] = useState(new Date());
@@ -36,7 +38,7 @@ const AddTravellerForm = ({ innerRef }) => {
     var [selectedCountryCode, setSelectedCountryCode] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
     var [selectedIssuing, setSelectedIssuing] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
     var [selectedNationality, setSelectedNationality] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
-    var [getSelectId, setGetSelectId] = useState({ CountryCode:'' , IssuingName: '', Nationality: '', })
+    var [getSelectId, setGetSelectId] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
 
 
     const handleDebugger = useCallback(
@@ -60,7 +62,7 @@ const AddTravellerForm = ({ innerRef }) => {
     const handleSelectIssuing = (e) => {
         Keyboard.dismiss()
         setSelectedIssuing(selectedIssuing = { CountryCode: selectedIssuing.CountryCode, IssuingName: e.name, Nationality: selectedIssuing.Nationality });
-        setGetSelectId(getSelectId = { CountryCode:getSelectId.CountryCode, IssuingName: e.id, Nationality:getSelectId.Nationality, });
+        setGetSelectId(getSelectId = { CountryCode: getSelectId.CountryCode, IssuingName: e.id, Nationality: getSelectId.Nationality, });
         dispatch({
             type: userAction.GET_ADD_TRAVELLER_COUNTRY_ISSUING,
             payload: []
@@ -101,61 +103,114 @@ const AddTravellerForm = ({ innerRef }) => {
     ]
 
     const SubmitAddBtn = (data, e) => {
-        console.log('button pressed',data)
-        setListData(listData = {
-            title: data.nametitle,
-            first_name: data.firstName,
-            last_name: data.lastName,
-            select_type: data.selectedType,
-            gender: data.selectedgender,
-            email: data.email,
-            dob: moment(data.dobDate).format('YYYY-MM-DD'),
-            // phone_code: data.phoneCode,
-            phone: data.mobileNumber,
-            passport: data.passportNumber,
-            expire_date: moment(data.passportExDate).format('YYYY-MM-DD'),
-            country_code: getSelectId?.CountryCode,
-            issue_country: getSelectId?.IssuingName,
-            nationality: getSelectId?.Nationality,
-        })
-        dispatch({
-            type: userAction.GET_ADD_TRAVELLER_VALUE,
-            payload: listData
-        })
 
+        if (route.params != undefined) {
 
-        if (AddTravaller_form.find((List) => List?.email === data?.email) && ((List) => List?.mobileNumber === data?.mobileNumber)) {
-            Snackbar.show({
-                text: 'Email already exist',
-                duration: Snackbar.LENGTH_SHORT,
-                action: {
-                    text: 'UNDO',
-                    textColor: 'red',
-                    onPress: () => { /* Do something. */ },
-                },
-            })
+            console.log(data)
+
         } else {
-            dispatch({
-                type: userAction.GET_ADD_TRAVELLER_FORM, payload: [...listData]
-            })
-            reset();
-            setTitle("");
-            setGender("");
-            setSelectType("");
-            setDobDate(new Date());
-            setPassportExDate(new Date());
-            setSelectedCountryCode("");
-            setSelectedIssuing("");
-            setSelectedNationality("");
+
+            console.log('button pressed', data)
+
+            // setListData(listData = {
+            //     title: data.nametitle,
+            //     first_name: data.firstName,
+            //     last_name: data.lastName,
+            //     select_type: data.selectedType,
+            //     gender: data.selectedgender,
+            //     email: data.email,
+            //     dob: moment(data.dobDate).format('YYYY-MM-DD'),
+            //     // phone_code: data.phoneCode,
+            //     phone: data.mobileNumber,
+            //     passport: data.passportNumber,
+            //     expire_date: moment(data.passportExDate).format('YYYY-MM-DD'),
+            //     country_code: getSelectId?.CountryCode,
+            //     issue_country: getSelectId?.IssuingName,
+            //     nationality: getSelectId?.Nationality,
+            // })
+            // dispatch({
+            //     type: userAction.GET_ADD_TRAVELLER_VALUE,
+            //     payload: listData
+            // })
+
+
+            // if (AddTravaller_form.find((List) => List?.email === data?.email) && ((List) => List?.mobileNumber === data?.mobileNumber)) {
+            //     Snackbar.show({
+            //         text: 'Email already exist',
+            //         duration: Snackbar.LENGTH_SHORT,
+            //         action: {
+            //             text: 'UNDO',
+            //             textColor: 'red',
+            //             onPress: () => { /* Do something. */ },
+            //         },
+            //     })
+            // } else {
+            //     dispatch({
+            //         type: userAction.GET_ADD_TRAVELLER_FORM, payload: [...listData]
+            //     })
+            //     reset();
+            //     setTitle("");
+            //     setGender("");
+            //     setSelectType("");
+            //     setDobDate(new Date());
+            //     setPassportExDate(new Date());
+            //     setSelectedCountryCode("");
+            //     setSelectedIssuing("");
+            //     setSelectedNationality("");
+            // }
+
         }
     }
+
+
+    useEffect(() => {
+
+        if (route.params != undefined) {
+            const data = route.params.data;
+
+            console.log(data)
+
+
+            const firstName = data?.first_name
+            const nametitle = data?.title
+            const lastName = data?.last_name
+            const email = data?.email
+            const phone = data?.phone
+            const passNo = data?.passport
+            const type = data?.type
+            const selectedgender = data?.gender
+
+            setTitle(nametitle)
+            setSelectType(type)
+            setGender(selectedgender)
+
+            reset({
+                firstName: firstName,
+                nametitle: nametitle,
+                selectedType: type,
+                selectedgender: selectedgender,
+                lastName: lastName,
+                email: email,
+                mobileNumber: phone,
+                phoneCode: data?.country_code?.dial_code,
+                passportNumber: passNo,
+                passportExDate: setPassportExDate(new Date(data?.expire_date + " 00:00:00")),
+            })
+
+        }
+
+    }, [route.params])
 
 
     return (
         <View style={{ width: width, height: height, backgroundColor: 'white' }}>
             <Appbar title={'Traveller'} />
             <View style={{ height: height * 0.82, width: width, paddingTop: 10 }}>
-                <ScrollView>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps="handled"
+                    alwaysBounceVertical
+                >
                     <View style={{ marginHorizontal: 20, marginBottom: 10 }}>
                         <View style={styles.editTextBorder}>
                             <Text style={styles.placeHolderText}>Title</Text>
@@ -175,12 +230,12 @@ const AddTravellerForm = ({ innerRef }) => {
                                         data={selectTitleName}
                                         labelField="name"
                                         valueField="value"
-                                        value={title}
+                                        value={value}
                                         name="nametitle"
                                         {...register("nametitle")}
                                         onChange={(item) => {
                                             onChange(item.value)
-                                            setTitle(item.value)
+                                            //setTitle(item.value)
                                         }}
                                         selectedTextProps={{
                                             style: {
@@ -225,7 +280,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                         keyboardType='default'
                                         {...register("firstName")}
                                         value={value}
-                                        onChangeText={value => onChange(value.toLowerCase())}
+                                        onChangeText={value => onChange(value)}
                                     />
                                 )}
                             />
@@ -254,7 +309,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                         keyboardType='default'
                                         value={value}
                                         {...register('lastName')}
-                                        onChangeText={value => onChange(value.toLowerCase())}
+                                        onChangeText={value => onChange(value)}
                                     />
                                 )}
                             />
@@ -288,7 +343,6 @@ const AddTravellerForm = ({ innerRef }) => {
                                             onChange={(item) => {
                                                 onChange(item.value)
                                                 setSelectType(item.value)
-
                                             }}
                                             selectedTextProps={{
                                                 style: {
@@ -436,9 +490,6 @@ const AddTravellerForm = ({ innerRef }) => {
                                         <MaterialIcons Icon name="calendar-month-outline" size={25} color="gray" />
                                     </View>
                                 </TouchableHighlight>
-                                {errors.dob && (
-                                    <Text style={[styles.errormessage]}>{errors.dob.message}</Text>
-                                )}
                             </View>
                             <View style={[styles.editTextBorder, { width: "49%" }]}>
                                 {/* optional Phone Code no */}
@@ -447,7 +498,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                     control={control}
                                     name="phoneCode"
                                     rules={{
-                                        required: 'Enter your Phone Code',
+                                        required: false,
                                         pattern: {
                                             value: /^(?:0\.(?:0[0-9]|[0-9]\d?)|[0-9]\d*(?:\.\d{1,2})?)(?:e[+-]?\d+)?$/,
                                             message: 'Enter valid Phone Code!',
@@ -466,9 +517,6 @@ const AddTravellerForm = ({ innerRef }) => {
                                         />
                                     )}
                                 />
-                                {errors.phoneCode && (
-                                    <Text style={[styles.errormessage]}>{errors.phoneCode.message}</Text>
-                                )}
                             </View>
                         </View>
 
@@ -846,7 +894,7 @@ const AddTravellerForm = ({ innerRef }) => {
                                 control={control}
                                 name="passportNumber"
                                 rules={{
-                                    required: 'Enter your Phone Code',
+                                    required: 'Enter your passport no.',
                                     pattern: {
                                         value: true,
                                         message: 'Enter your Passport Number!',
@@ -858,9 +906,9 @@ const AddTravellerForm = ({ innerRef }) => {
                                         style={styles.inputeEditor}
                                         placeholder="Passport Number"
                                         keyboardType="default"
-                                        onChangeText={value => onChange(value.toUpperCase())}
+                                        onChangeText={val => onChange(val.toUpperCase())}
                                         {...register("passportNumber")}
-                                        value={value}
+                                        value={value?.toUpperCase()}
                                     />
                                 )}
                             />
@@ -884,7 +932,7 @@ const AddTravellerForm = ({ innerRef }) => {
                         <View style={styles.updateBtn}>
                             <TouchableHighlight onPress={handleSubmit(SubmitAddBtn)} underlayColor='transparent'>
                                 <Text style={styles.updateText}>
-                                    Add
+                                    {route.params != undefined ? "Update" : "Add"}
                                 </Text>
                             </TouchableHighlight>
                         </View>

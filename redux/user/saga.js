@@ -28,7 +28,60 @@ const userSaga = function* () {
         yield takeEvery(actions.SET_FLIGHT_TICKETS_DETAILS, flightTicketsDetails),
         yield takeEvery(actions.SET_FLIGHT_UPDATE_TRAVELLER, updateTraveler),
         yield takeEvery(actions.GET_DELETE_TRAVELLER, getDeleteTraveller),
+        yield takeEvery(actions.UPDATE_PROFILE , handleProfileUpdate)
     ])
+}
+
+const handleProfileUpdate = function* (data) {
+
+    yield put({ type: CommonAction.COMMON_LOADER,payload:true})
+
+    const {payload} = data
+    const {navigation} = data
+    
+    const body = payload.data
+    let formData = new FormData()
+
+    if(body?.file!=undefined){
+        formData.append('profile_image',{
+            uri: body?.file?.image?.URL,
+            type: body?.file?.image?.type,
+            name: body?.file?.image?.name,
+        })
+    }
+    formData.append('dob',body?.dob)
+    formData.append('first_name',body?.first_name)
+    formData.append('gender',body?.gender)
+    formData.append('last_name',body?.last_name)
+    formData.append('married_status',body?.married_status)
+    formData.append('phone',body?.phone)
+    formData.append('username',body?.username)
+
+    try{
+        const result = yield call(()=>axios.post(
+            `${API_URL}/user/updateProfile`,
+            formData, {
+            headers: {
+                //accept: 'application/json',
+                'Content-Type':'multipart/form-data',
+            },
+        }))
+
+        if(result?.data?.status === true){
+            yield put({ type: actions.GET_USER_PROFILE});
+            yield put({ type: CommonAction.COMMON_LOADER,payload:false})
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Profile Updated Successfully!' } })
+        }else{
+            yield put({ type: CommonAction.COMMON_LOADER,payload:false})
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Failed to Update Profile!' } })
+        }
+
+
+    }catch(e){
+        yield put({ type: CommonAction.COMMON_LOADER,payload:false})
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Failed to Update Profile!' } })
+    }
+
 }
 
 const getHotelDetails = function* (data) {
