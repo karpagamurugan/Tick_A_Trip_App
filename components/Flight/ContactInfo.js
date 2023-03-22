@@ -10,14 +10,23 @@ import userActions from '../../redux/user/actions';
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
-const ContactInfo = () => {
+const ContactInfo = (props) => {
+    // const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
+
+    // register2={register2} control2={control2} errors2={errors2} reset2={reset2} setValue2={setValue2}
+
+    var register = props?.register2;
+    var control = props?.control2;
+    var errors = props?.errors2;
+    var reset = props?.reset2;
+    var setValue = props?.setValue2;
+
     const dispatch = useDispatch()
     const { userProfileData, AddTravaller_country_code } = useSelector((state) => state.userReducer)
     var [travelRec, setTravelRec] = useState({ CountryCode: false, Nationality: false })
     var [selectedCountryCode, setSelectedCountryCode] = useState({ CountryCode: '', Nationality: '', })
-    var [getSelectId, setGetSelectId] = useState({ CountryCode: '' })
+    // var [getSelectId, setGetSelectId] = useState({ CountryCode: '' })
     var [showContact, setShowContact] = useState(true);
-    const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
 
     useEffect(() => {
         dispatch({ type: userActions.GET_USER_PROFILE })
@@ -28,17 +37,15 @@ const ContactInfo = () => {
     }, [])
 
     const handleSelectionCode = (e) => {
-        console.log('value', e)
         Keyboard.dismiss()
         setSelectedCountryCode(selectedCountryCode = { CountryCode: e.dial_code + "-" + e.name });
-        setGetSelectId(getSelectId = { CountryCode: e.id });
+        // setGetSelectId(getSelectId = { CountryCode: e.id });
+        props.setCountryCode(props.cuntryCode = { CountryCode: e.id })
         dispatch({
             type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
             payload: []
         })
         setTravelRec(travelRec = { CountryCode: true });
-        console.log(travelRec.CountryCode)
-        handleDebugger()
     }
 
     return (
@@ -75,8 +82,8 @@ const ContactInfo = () => {
                                 )}
                             />
                             {errors.Name && (
-                                    <Text style={[styles.errormessage]}>{errors.Name.message}</Text>
-                                )}
+                                <Text style={[styles.errormessage]}>{errors.Name.message}</Text>
+                            )}
                         </View>
                         <View style={styles.editTextBorder}>
                             <Controller
@@ -101,8 +108,8 @@ const ContactInfo = () => {
                                 )}
                             />
                             {errors.Email && (
-                                    <Text style={[styles.errormessage]}>{errors.Email.message}</Text>
-                                )}
+                                <Text style={[styles.errormessage]}>{errors.Email.message}</Text>
+                            )}
                         </View>
                         <View style={styles.editTextBorder}>
                             <Controller
@@ -112,8 +119,17 @@ const ContactInfo = () => {
                                     required: {
                                         value: true,
                                         message: "Enter Your Phone"
-                                    }
+                                    },
+                                    maxLength: {
+                                        value: 10,
+                                        message: "Number must be 10 digits"
+                                    },
+                                    minLength: {
+                                        value: 10,
+                                        message: "Number must be 10 digits "
+                                    },
                                 }}
+
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         placeholderTextColor={"gray"}
@@ -123,12 +139,13 @@ const ContactInfo = () => {
                                         {...register("Phone")}
                                         value={value}
                                         onChangeText={value => onChange(value.toLowerCase())}
+                                        maxLength={10}
                                     />
                                 )}
                             />
                             {errors.Phone && (
-                                    <Text style={[styles.errormessage]}>{errors.Phone.message}</Text>
-                                )}
+                                <Text style={[styles.errormessage]}>{errors.Phone.message}</Text>
+                            )}
                         </View>
                         <View style={styles.editTextBorder}>
                             <Controller
@@ -159,42 +176,59 @@ const ContactInfo = () => {
                                     }}
                                 >
 
-                                    <TextInput
-                                        keyboardType={'default'}
-                                        placeholder={'Country Code'}
-                                        placeholderTextColor="gray"
-                                        numberOfLines={1}
-                                        name="add_countrycode"
-                                        value={selectedCountryCode?.CountryCode}
-                                        onChangeText={(e) => {
-                                            if (e === '') {
-                                                setTravelRec(travelRec = { CountryCode: true });
-                                            }
-                                            if (e?.length >= 3) {
-                                                dispatch({
-                                                    type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
-                                                    payload: {
-                                                        name: e,
-                                                        type: 'country-code',
-                                                    }
-                                                })
-                                                setSelectedCountryCode(selectedCountryCode = { CountryCode: e })
-                                            } else {
-                                                setSelectedCountryCode(selectedCountryCode = { CountryCode: e })
-                                                dispatch({
-                                                    type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
-                                                    payload: []
-                                                })
-                                            }
-                                        }}
-                                        style={{
-                                            color: 'black',
-                                            width: width * 0.9,
-                                            paddingTop: 8,
-                                            paddingLeft: 5,
-                                            paddingBottom: 0,
-                                        }}
-                                    />
+                                    <View>
+                                        <Controller
+                                            control={control}
+                                            name="CountryCode"
+                                            rules={{
+                                                required: {
+                                                    value: true,
+                                                    message: "Enter Your CountryCode"
+                                                }
+                                            }}
+                                            render={({ field: { onChange, value } }) => (
+                                                <TextInput
+                                                    placeholderTextColor={"gray"}
+                                                    name='CountryCode'
+                                                    placeholder="CountryCode"
+                                                    keyboardType='default'
+                                                    {...register("CountryCode")}
+                                                    numberOfLines={1}
+                                                    value={selectedCountryCode?.CountryCode}
+                                                    onChangeText={(e) => {
+                                                        onChange(e)
+                                                        if (e === '') {
+                                                            setTravelRec(travelRec = { CountryCode: true });
+                                                        }
+                                                        if (e?.length >= 3) {
+                                                            dispatch({
+                                                                type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
+                                                                payload: {
+                                                                    name: e,
+                                                                    type: 'country-code',
+                                                                }
+                                                            })
+                                                            setSelectedCountryCode(selectedCountryCode = { CountryCode: e })
+                                                        } else {
+                                                            setSelectedCountryCode(selectedCountryCode = { CountryCode: e })
+                                                            dispatch({
+                                                                type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
+                                                                payload: []
+                                                            })
+                                                        }
+                                                    }}
+                                                    style={{
+                                                        color: 'black',
+                                                        width: width * 0.9,
+                                                        paddingTop: 8,
+                                                        paddingLeft: 5,
+                                                        paddingBottom: 0,
+                                                    }}
+                                                />
+                                            )}
+                                        />
+
+                                    </View>
                                     {
                                         selectedCountryCode?.CountryCode !== "" ?
                                             <TouchableHighlight
@@ -216,6 +250,10 @@ const ContactInfo = () => {
                                     }
                                 </View>
                             </View>
+
+                            {errors.CountryCode && (
+                                <Text style={[styles.errormessage]}>{errors.CountryCode.message}</Text>
+                            )}
                             {
                                 (AddTravaller_country_code?.message === undefined && selectedCountryCode?.CountryCode !== '' && travelRec.CountryCode === false) ?
                                     <View style={{
@@ -267,6 +305,33 @@ const ContactInfo = () => {
                                     </View>
                             }
                         </View>
+
+                        <View style={styles.editTextBorder}>
+                            <Controller
+                                control={control}
+                                name="PostalCode"
+                                rules={{
+                                    required: {
+                                        value: true,
+                                        message: "Enter Your PostalCode"
+                                    }
+                                }}
+                                render={({ field: { onChange, value } }) => (
+                                    <TextInput
+                                        placeholderTextColor={"gray"}
+                                        name='PostalCode'
+                                        placeholder="PostalCode"
+                                        keyboardType='default'
+                                        {...register("PostalCode")}
+                                        value={value}
+                                        onChangeText={value => onChange(value.toLowerCase())}
+                                    />
+                                )}
+                            />
+                            {errors.PostalCode && (
+                                    <Text style={[styles.errormessage]}>{errors.PostalCode.message}</Text>
+                                )}
+                        </View>
                     </View> : <></>
                 }
             </View>
@@ -279,13 +344,19 @@ const styles = StyleSheet.create({
         backgroundColor: '#E9F3FF',
         borderWidth: 1, height: 50,
         borderRadius: 3, borderColor: '#2B64FF',
-        marginTop: 8, marginBottom: 5,
+        marginTop: 8, marginBottom: 10,
         paddingHorizontal: 5,
     },
     formTitle: {
         fontSize: height * 0.020,
         color: '#2B64FF',
         fontFamily: FONTS.mediam,
+    },
+    errormessage: {
+        color: "red",
+        fontSize: 10,
+        fontWeight: "500",
+        marginTop: 2,
     },
 })
 export default ContactInfo;

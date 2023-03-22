@@ -16,7 +16,7 @@ export default function Alert() {
 
     useEffect(() => {
         if (setAlert.status === true) {
-            setTimeout(() => dispatch({ type: CommonAction.SET_ALERT, payload: { status: false, message: '' } }), 1000)
+            setTimeout(() => dispatch({ type: CommonAction.SET_ALERT, payload: { status: false, message: '' } }), 3000)
         }
     }, [setAlert,dispatch])
 

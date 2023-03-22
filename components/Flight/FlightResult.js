@@ -202,7 +202,7 @@ export default function FlightResult({ navigation,route }) {
             <View style={{ backgroundColor: 'grey', height: 0.3 }} />
 
             <ImageBackground source={require('../../Assert/Images/map.jpg')} style={{ height: height, width: width, paddingBottom: 20 }}>
-                <ScrollView>
+                <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                     <View>
                         {
                             Flight_search_result?.message?.map((item, index) => (

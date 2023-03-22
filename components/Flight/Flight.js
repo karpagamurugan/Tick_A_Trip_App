@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, Image, Dimensions, StyleSheet, ScrollView, Modal, TouchableHighlight, Pressable, ImageBackground, TextInput, Keyboard } from 'react-native';
 import font from '../constants/font';
 import Appbar from '../common/Appbar';
@@ -49,6 +49,37 @@ const Flight = ({ navigation }) => {
   var [selectedFromVal, setSelectedFromVal] = useState(selectedFromVal = { city: '', code: '' }) //select from Place
   var [selectedToVal, setSelectedToVal] = useState(selectedToVal = { city: '', code: '' }) //select to place
 
+  let ChildAndInfant = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }] //child and infant count
+  let AdultCount = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }, { value: '7' }, { value: '8' }, { value: '9' }] //adult count
+
+  let classList = [{ value: 'Business' }, { value: 'Economy' }];
+  const { AddTravaller_nationality, travelers_list } = useSelector((state) => state.userReducer)
+ 
+  var tempList=[]
+useEffect(()=>{
+  var adultList = travelers_list?.travelers?.filter((el) => el.type === 'Adult')?.slice(0, 2)
+  var childList = travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, 1)
+  var infantList = travelers_list?.travelers?.filter((el) => el.type === 'Infant')?.slice(0, 0)
+  // console.log(adultList)
+  // console.log(childList)
+  // console.log(infantList)
+  for(let i = 0;i<adultList?.length;i++){
+    tempList.push(adultList[i])
+  }
+  for(let j = 0;j<childList?.length;j++){
+    tempList.push(adultList[j])
+
+  }
+  for(let k = 0;k<childList?.length;k++){
+    tempList.push(adultList[k])
+
+  }
+  // tempList.push(adultList,childList,infantList)
+  console.log('templist...',tempList)
+
+},[])
+
+
   const handleSelection = (e) => {
     Keyboard.dismiss()
     dispatch({
@@ -70,11 +101,6 @@ const Flight = ({ navigation }) => {
     setNoRecord(noRecord = { to: false, from: noRecord.from })
 
   }
-
-  let ChildAndInfant = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }] //child and infant count
-  let AdultCount = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }, { value: '7' }, { value: '8' }, { value: '9' }] //adult count
-
-  let classList = [{ value: 'Business' }, { value: 'Economy' }];
 
   const FlightSearch = () => {
     dispatch({ type: CommonAction.FLIGHT_LOADER, payload: true });
@@ -289,23 +315,6 @@ const Flight = ({ navigation }) => {
                 </TouchableHighlight>
               </View>
 
-
-              {/* <View style={{
-   borderWidth: 1,
-   borderRadius: 2,
-   borderColor: '#ddd',
-   borderBottomWidth: 0,
-   shadowColor: '#000',
-   shadowOffset: { width: 0, height: 2 },
-   shadowOpacity: 0.8,
-   shadowRadius: 2,
-   elevation: 1,
-   marginLeft: 5,
-   marginRight: 5,
-   marginTop: 10,
-}}>
-                    <Text>ncieuhiu</Text>
-                  </View> */}
 
               <View style={{ flexDirection: 'column' }}>
 

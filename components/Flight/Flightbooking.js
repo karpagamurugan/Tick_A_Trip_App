@@ -25,6 +25,10 @@ import ContactInfo from "./ContactInfo";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
+import CommonAction from '../../redux/common/actions';
+import {RAZOR_KEY,RAZOR_KEY_SECRET,CURRENCY,TIMEOUT} from '../../components/constants/constApi';
+import RazorpayCheckout from "react-native-razorpay";
+
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
@@ -39,23 +43,26 @@ export default function FlightBooking({ navigation, route }) {
     var [showAddTraveller, setShowAddTraveller] = useState(false);
     var [checkBoxOne, setCheckBoxOne] = useState(false);
     var [checkBoxTwo, setCheckBoxTwo] = useState(false);
-    var [travellerEdit, setTravellerEdit] = useState(true);
+    var [travellerEdit, setTravellerEdit] = useState(false);
     var [adult, setAdult] = useState(route?.params?.flightInfo?.adult_flight?.toString()) //set adult count
     var [child, setchild] = useState(route?.params?.flightInfo?.child_flight?.toString()) //set child count
     var [infant, setInfant] = useState(route?.params?.flightInfo?.infant_flight?.toString()) //set infant count
     var [travellerSelectType, setTravellerSelectType] = useState([]);
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
+    const {register: register2,formState: { errors: errors2 }, handleSubmit: handleSubmit2,control:control2,reset:reset2,setValue:setValue2} = useForm();
     const [gender, setGender] = useState();
-    const [open, setOpen] = useState(false);
+    const [showDatePicker, setShowDatePicker] = useState(false);
     let [dobDate, setDobDate] = useState(new Date());
     const [selectType, setSelectType] = useState();
     const [title, setTitle] = useState();
-    const [travelFirstName, setTravelFirstName] = useState();
-    const [travelLastName, setTravelLastName] = useState();
+
     var [selectedUser, setSelectedUser] = useState()
-    var [listData, setListData] = useState([]);
     var [flightInfoType, setFlightInfoType] = useState({ flightAdultList: '', flightChildList: '', flightInfantList: '' });
   
+    var [cuntryCode, setCountryCode] = useState({ CountryCode: '' })
+
+    var[allTravellerList,setAllTravellerList]=useState([]);
+    var [editedIndex,setEditedIndex]=useState();
 
     const selectTitleName = [
         { name: 'Mr', value: 'Mr' },
@@ -70,12 +77,10 @@ export default function FlightBooking({ navigation, route }) {
         { name: 'Female', value: 'Female' },
     ]
 
-    // console.log('travelers_list',travelers_list)
     useEffect(() => {
         const travel = async () => {
             await AsyncStorage.getItem('tickatrip-token').then(
                 (res) => {
-                    // console.log('Use Travel', res)
                     if (res !== null) {
                         dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN, payload: res })
                     } else {
@@ -87,27 +92,88 @@ export default function FlightBooking({ navigation, route }) {
         travel();
     }, []);
 
-    useEffect(() => {
+    const TypeDropDownList =()=>{
+        // if(travellerEdit === true){
+        //     // setTravellerSelectType([{ name: 'Adult', value: 'Adult' },{ name: 'Infant', value: 'Infant' },{ name: 'Child', value: 'Child' },])
+        // }else{
+            var list = []
+            // console.log('allTravellerList',allTravellerList)
+            var filteredAdultList = allTravellerList.filter((item)=>item?.type.toLowerCase() === 'adult')
+            var filteredChildList = allTravellerList.filter((item)=>item?.type.toLowerCase() === 'child')
+            var filteredInfantList = allTravellerList.filter((item)=>item?.type.toLowerCase() === 'infant')
+           
+            if(filteredAdultList?.length !== parseInt(adult)){
+                console.log('if....')
+                list.push({ name: 'Adult', value: 'Adult' },)
+            }else{
+                console.log('else...')
+            }
+
+             if(filteredChildList?.length !== parseInt(child) ){
+                console.log('if....')
+                list.push({ name: 'Child', value: 'Child' },)    
+
+            }else{
+                console.log('else2....')
+            }
+
+            if(filteredInfantList?.length !== parseInt(infant) ){
+                console.log('if....')
+                list.push({ name: 'Infant', value: 'Infant' },)
+
+            }else{
+                console.log('else3....')
+            }
+    
+            // if(flightInfoType?.flightAdultList < parseInt(adult) ){
+            //     list.push({ name: 'Adult', value: 'Adult' },)
+            // }else{
+            //     console.log('else1....')
+            // }
+
+            // if(flightInfoType?.flightInfantList < parseInt(infant) ){
+            //     list.push({ name: 'Infant', value: 'Infant' },)
+            // }else{
+            //     console.log('else2....')
+            // }
+
+            // if(flightInfoType?.flightChildList < parseInt(child) ){
+            //     list.push({ name: 'Child', value: 'Child' },)    
+            // }else{
+            //     console.log('else3....')
+            // }
+            
+            setTravellerSelectType(list)
+        // }
+    }
+
+    const TravellerList =()=>{
         var adultList = travelers_list?.travelers?.filter((el) => el.type === 'Adult')?.slice(0, route?.params?.flightInfo?.adult_flight)
         var childList = travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, route?.params?.flightInfo?.child_flight)
         var infantList = travelers_list?.travelers?.filter((el) => el.type === 'Infant')?.slice(0, route?.params?.flightInfo?.infant_flight)
-        var list = []
-        if(adultList > 0){
-            list.push({ name: 'Adult', value: 'Adult' },)
-            setTravellerSelectType({...travellerSelectType,list})
+        var tempList =[];
+         
+        for(let i = 0;i<adultList?.length;i++){
+          tempList.push(adultList[i])
         }
-        if(childList > 0){
-            list.push({ name: 'Child', value: 'Child' },)
-            setTravellerSelectType({...travellerSelectType,list})
+        for(let j = 0;j<childList?.length;j++){
+          tempList.push(childList[j])
+      
         }
-        if(infantList > 0){
-            list.push({ name: 'Infant', value: 'Infant' },)
-            setTravellerSelectType({...travellerSelectType,list})
+        for(let k = 0;k<infantList?.length;k++){
+          tempList.push(infantList[k])
+      
         }
+        setAllTravellerList(allTravellerList=tempList)
 
+        console.log('travellerEdit',travellerEdit)
         setFlightInfoType(flightInfoType = { flightAdultList: adultList?.length, flightChildList: childList?.length, flightInfantList: infantList?.length })
-    }, []);
+        TypeDropDownList()
+    }
 
+    useEffect(() => {
+        TravellerList()   
+    }, []);
    
 
     const handleSelectNationality = (e) => {
@@ -122,23 +188,24 @@ export default function FlightBooking({ navigation, route }) {
     }
 
 
-    const EditTravelDetails = (item) => {
+    const EditTravelDetails = (item,index) => {
+        setShowAddTraveller(true)
+        setEditedIndex(editedIndex=index)
         setSelectedUser(item)
-        setTravellerEdit(!travellerEdit)
+        setTravellerEdit(true)
         dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN })
 
         let addTravelFirstName = { firstName: item.first_name }
         let addTravelLastName = { lastName: item.last_name }
-        setTravelFirstName(item.first_name)
-        setTravelLastName(item.last_name)
+
         setSelectedNationality({ getSelectId: item.nationality.id, Nationality: item.nationality.name })
         setTravelRec({ Nationality: true })
         setDobDate(new Date(item.dob))
         setTitle(item.title)
         setSelectType(item.type)
-        if (item.gender.toLowerCase() === 'm') {
+        if (item?.gender?.toLowerCase() === 'm') {
             setGender('Male')
-        } else if (item.gender.toLowerCase() === 'f') {
+        } else if (item?.gender?.toLowerCase() === 'f') {
             setGender('Female')
         } else {
             setGender(item.gender)
@@ -147,46 +214,10 @@ export default function FlightBooking({ navigation, route }) {
     }
 
 
-    const updateBtn = () => {
-        var data = {
-            traveler_id: selectedUser.id,
-            title: title,
-            first_name: travelFirstName,
-            last_name: travelLastName,
-            gender: gender,
-            email: selectedUser.email,
-            phone: selectedUser.phone,
-            dob: selectedUser.dob,
-            passport: selectedUser.passport,
-            country_code: selectedUser.country_code.id,
-            issue_country: selectedUser.issue_country.id,
-            nationality: selectedNationality.getSelectId,
-            expire_date: selectedUser.expire_date,
-        };
-        dispatch({
-            type: userAction.SET_FLIGHT_UPDATE_TRAVELLER,
-            payload: data
-        })
-        reset({ ...travelFirstName, ...travelLastName });
-        setTitle("");
-        setGender("");
-        setSelectType("");
-        setTravelLastName("");
-        setDobDate(new Date());
-        setSelectedNationality("");
-        setTravellerEdit(!travellerEdit)
-    }
-
-
-    const deleteTraveller = (item) => {
-        dispatch({
-            type: userAction.GET_DELETE_TRAVELLER,
-            payload: item.id
-        })
-    }
-
-    const SubmitAddBtn = (data) => {
-        setListData(listData = {
+    const updateBtn = (data) => {
+        console.log(data,'DATA......')
+    
+        allTravellerList[editedIndex] = {
             type: data.selectedType,
             title: data.nametitle,
             first_name: data.firstName,
@@ -194,28 +225,132 @@ export default function FlightBooking({ navigation, route }) {
             gender: data.selectedgender,
             dob: moment(data.dobDate).format('YYYY-MM-DD'),
             nationality: getSelectId?.Nationality,
-            passport: data.passportNumber,
+        }
 
-        })
-        dispatch({
-            type: userAction.GET_ADD_TRAVELLER_VALUE,
-            payload: listData
-        })
-        // reset();
-        // setTitle("");
-        // setGender("");
-        // setSelectType("");
-        // setDobDate(new Date());
-        // setPassportExDate(new Date());
-        // setSelectedNationality("");
+        TypeDropDownList()
 
-        // dispatch({
-        //     type: userAction.GET_ADD_TRAVELLER_FORM, payload: [...listData]
-        // })
+        setTitle("");
+        setGender("");
+        setSelectType("");
+        setDobDate(new Date());
+        setSelectedNationality("");
+        setTravellerEdit(false)
+        // reset()
+        console.log(travellerEdit)
+        let addTravelFirstName = { firstName: '' }
+        let addTravelLastName = { lastName: ''}
+        reset({ ...addTravelFirstName, ...addTravelLastName, })
+    }
+
+
+    const deleteTraveller = (item) => {
+            var DeletedList =[]
+            DeletedList = allTravellerList.filter((data)=>data?.id !==item?.id)
+            setAllTravellerList(allTravellerList=DeletedList)
+            TypeDropDownList()
+    }
+
+    const SubmitAddBtn = (data) => {
+
+                console.log('adult...')
+                var AddedAdult = {
+                        type: data.selectedType,
+                        title: data.nametitle,
+                        first_name: data.firstName,
+                        last_name: data.lastName,
+                        gender: data.selectedgender,
+                        dob: moment(data.dobDate).format('YYYY-MM-DD'),
+                        nationality: getSelectId?.Nationality,
+                        passport: data.passportNumber,
+                        // id:'ID'+Math.floor((Math.random() * 10) + 1)
+            
+                    }
+                    setAllTravellerList(allTravellerList=[...allTravellerList,AddedAdult])
+         
+
+      
+        TypeDropDownList()
+
+        setTitle("");
+        setGender("");
+        setSelectType("");
+        setDobDate(new Date());
+        setSelectedNationality("");
+
+        let addTravelFirstName = { firstName: '' }
+        let addTravelLastName = { lastName: ''}
+        reset({ ...addTravelFirstName, ...addTravelLastName, })
 
     }
     
+
+    const submitBtn =(data)=>{
+        console.log('data',data)
+
+        var filteredAdultList = allTravellerList.filter((item)=>item?.type.toLowerCase() === 'adult')
+        var filteredChildList = allTravellerList.filter((item)=>item?.type.toLowerCase() === 'child')
+        var filteredInfantList = allTravellerList.filter((item)=>item?.type.toLowerCase() === 'infant')
+       
+
+        if(filteredAdultList?.length !== parseInt(adult) ||filteredChildList?.length !== parseInt(child)||filteredInfantList?.length !== parseInt(infant)){
+            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Add a Traveller ' } })
+        }else if(checkBoxOne !== true){
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Accept the Privacy Policy' } })
+            }else{
+         
+                PaymentGateWay(data)
+            }
+        // else if(filteredChildList?.length !== parseInt(child)){
+        //     dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Accept the Privacy Policy' } })
+        // }else if(filteredInfantList?.length !== parseInt(infant)){
+        //     dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Accept the Privacy Policy' } })
+        // }
+          
+            
+     
+    }
   
+    const PaymentGateWay =(data)=>{
+
+            var options = {
+                key: RAZOR_KEY,
+                key_secret: RAZOR_KEY_SECRET,
+                amount: '1000',
+                // amount: parseFloat(parseFloat(RoomType?.netPrice) * 100),
+                currency: CURRENCY,
+                name: data?.Name,
+                description: "Payment Tick A Trip",
+                timeout: TIMEOUT,
+                // order_id:'TickATrip_'+generateUUID(8),
+                     prefill: {
+                  email: data?.Email,
+                  contact: data?.Phone,
+                  name: data?.Name
+                },
+                notes: {
+                  address: "",
+                },
+                theme: {
+                  color: "#0543e9",
+                },
+              };
+                RazorpayCheckout.open(options).then((data) => {
+                  
+                    var dataList= {
+                        'name':'durgadevi'
+                                  }
+                                  console.log(dataList,'final data for booking')
+                    //   dispatch({type:hotelActions.SET_HOTEL_BOOKING,payload:dataList,navigation:navigation})
+
+
+                  }).catch((error) => {
+                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
+                        console.log('error',error)
+                  });
+            
+        }
+
+        // console.log(  'ID'+Math.floor((Math.random() * 10) + 1))
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             {/* appbar */}
@@ -347,7 +482,9 @@ export default function FlightBooking({ navigation, route }) {
                     </View>
                 </View>
 
-                <ContactInfo />
+               
+
+                <ContactInfo cuntryCode={cuntryCode} setCountryCode={setCountryCode} register2={register2} control2={control2} errors2={errors2} reset2={reset2} setValue2={setValue2}/>
 
                 <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -471,7 +608,6 @@ export default function FlightBooking({ navigation, route }) {
                                                 value={value}
                                                 onChangeText={value => {
                                                     onChange(value.toLowerCase())
-                                                    setTravelFirstName(value)
                                                 }}
                                             />
                                         )}
@@ -501,7 +637,6 @@ export default function FlightBooking({ navigation, route }) {
                                             {...register('lastName')}
                                             onChangeText={value => {
                                                 onChange(value.toLowerCase())
-                                                setTravelLastName(value)
                                             }
                                             }
                                         />
@@ -558,7 +693,7 @@ export default function FlightBooking({ navigation, route }) {
                                 )}
                             </View>
                             <View style={[styles.editTextBorder]}>
-                                <TouchableHighlight underlayColor={'transparent'} onPress={() => setOpen(!open)} style={{ paddingRight: 5 }}>
+                                <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowDatePicker(!showDatePicker)} style={{ paddingRight: 5 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <Text style={{ color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
                                             {moment(dobDate).format('DD/MM/YYYY').toString()}
@@ -687,9 +822,9 @@ export default function FlightBooking({ navigation, route }) {
                                 }
                             </View>
                             <View style={{ marginVertical: 20, width: '90%', alignSelf: 'center' }}>
-                                {(travellerEdit === true) ?
+                                {(travellerEdit === false) ?
 
-                                    (flightInfoType?.flightAdultList !== parseInt(adult) || flightInfoType?.flightChildList !== child || flightInfoType?.flightInfantList !== infant) ?
+                                    (flightInfoType?.flightAdultList === parseInt(adult) || flightInfoType?.flightChildList === child || flightInfoType?.flightInfantList === infant) ?
                                         <TouchableOpacity
                                         disabled={true}
                                         style={[styles.clickBtn,{opacity:0.75}]}>
@@ -697,12 +832,13 @@ export default function FlightBooking({ navigation, route }) {
                                         </TouchableOpacity> :
                                         <TouchableOpacity
                                             onPress={handleSubmit(SubmitAddBtn)}
-                                            style={[styles.clickBtn, { opacity: 0.5 }]}>
+                                            style={[styles.clickBtn]}>
                                             <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
                                         </TouchableOpacity>
                                     :
                                     <TouchableHighlight
-                                        onPress={() => updateBtn()}
+                                        underlayColor='transparent'
+                                        onPress={handleSubmit(updateBtn)}
                                         style={[styles.clickBtn]}>
                                         <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Update</Text>
                                     </TouchableHighlight>
@@ -713,7 +849,35 @@ export default function FlightBooking({ navigation, route }) {
 
                 </View>
                 <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
-                    {travelers_list?.travelers?.filter((el) => el.type === 'Adult')?.slice(0, route?.params?.flightInfo?.adult_flight)?.map((item, index) => {
+                {allTravellerList?.map((item, index) => {
+                        return (
+                            <View key={index} style={[styles.travellerDetails, { marginBottom: 20 }]}>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                                    <View style={{ marginRight: 10 }}>
+                                        <ProfileIcon height={22} width={22} />
+                                    </View>
+                                    <Text style={{ fontSize: 17, fontFamily: FONTS.mediam, color: '#1B5CB7' }}>{item?.title} {item?.first_name} {item?.last_name} 
+                                    <Text style={{ fontSize: height*0.015, fontFamily: FONTS.mediam, color: 'grey' }}>
+                                    ({item?.type})</Text></Text>
+                                </View>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                                    <TouchableOpacity
+                                        onPress={() => EditTravelDetails(item,index)}
+                                        style={{ marginRight: 20 }}>
+                                        <EditIcon height={22} width={22} />
+                                    </TouchableOpacity>
+                                    <TouchableOpacity
+                                        onPress={() => deleteTraveller(item)}
+                                    >
+                                        <DeleteIcon height={22} width={22} />
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        );
+                    })}
+
+
+                    {/* {travelers_list?.travelers?.filter((el) => el.type === 'Adult')?.slice(0, route?.params?.flightInfo?.adult_flight)?.map((item, index) => {
                         return (
                             <View key={index} style={[styles.travellerDetails, { marginBottom: 20 }]}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
@@ -736,8 +900,9 @@ export default function FlightBooking({ navigation, route }) {
                                 </View>
                             </View>
                         );
-                    })}
-                    {travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, route?.params?.flightInfo?.child_flight)?.map((item, index) => {
+                    })} */}
+
+                    {/* {travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, route?.params?.flightInfo?.child_flight)?.map((item, index) => {
                         return (
                             <View key={index} style={[styles.travellerDetails, { marginBottom: 20 }]}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
@@ -781,9 +946,7 @@ export default function FlightBooking({ navigation, route }) {
                                 </View>
                             </View>
                         );
-                    })}
-
-
+                    })} */}
 
                     <View style={{ width: "90%", alignSelf: "center" }} >
                         <View style={{ flexDirection: 'row', alignItems: "flex-start", paddingBottom: 15 }}>
@@ -791,20 +954,21 @@ export default function FlightBooking({ navigation, route }) {
                                 <MaterialIcons style={[styles.checkBoxStyl]} name={checkBoxOne ? "check-box" : "check-box-outline-blank"} />
                             </Pressable>
                             <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center', alignSelf: 'center' }}>
-                                <Text style={{ color: "#333333", fontSize: 14, fontFamily: FONTS.font, flex: 1 }}>By completing this booking you agree to the
-                                    <TouchableOpacity><Text style={[styles.policystyl]}> booking terms</Text></TouchableOpacity> <Text> and</Text>
+                                <Text style={{ color: "#333333", fontSize: 14, fontFamily: FONTS.font, flex: 1 }}>By completing this booking your agree to the 
+                                    <TouchableOpacity><Text style={[styles.policystyl]}> booking terms</Text></TouchableOpacity> <Text> &</Text>
                                     <TouchableOpacity><Text style={[styles.policystyl]}> privacy policy.</Text></TouchableOpacity><Text style={{ color: '#C80505' }}>*</Text></Text>
                             </View>
                         </View>
-                        <View style={{ flexDirection: 'row', alignItems: "flex-start" }}>
+                        {/* <View style={{ flexDirection: 'row', alignItems: "flex-start" }}>
                             <Pressable onPress={() => setCheckBoxTwo(!checkBoxTwo)}>
                                 <MaterialIcons style={[styles.checkBoxStyl]} name={checkBoxTwo ? "check-box" : "check-box-outline-blank"} />
                             </Pressable>
                             <Text style={{ color: "#333333", fontSize: 14, fontFamily: FONTS.font, flex: 1 }}>Send me travel offers, deals, and news by email & message</Text>
-                        </View>
+                        </View> */}
                     </View>
                 </View>
-                <Controller
+
+                <Controller register
                     control={control}
                     name="dob"
                     rules={{
@@ -816,27 +980,27 @@ export default function FlightBooking({ navigation, route }) {
                     render={({ field: { onChange, value } }) => (
                         <DatePicker
                             modal
-                            open={open}
+                            open={showDatePicker}
                             date={dobDate}
                             mode="date"
                             {...register("dob")}
                             name="dob"
                             value={value}
                             onConfirm={(DOB) => {
-                                onChange(dobDate = DOB)
-                                setOpen(!open);
+                                onChange(DOB)
+                                setShowDatePicker(!showDatePicker);
                                 setDobDate(dobDate = DOB);
-                                console.log('fdskmfk', DOB)
                             }}
                             onCancel={() => {
-                                setOpen(!open);
+                                setShowDatePicker(!showDatePicker);
                             }}
                         />
                     )}
                 />
 
             </ScrollView>
-            <TouchableOpacity style={styles.ConfirmBtn} onPress={() => { }}>
+            <TouchableOpacity style={styles.ConfirmBtn} 
+            onPress={ handleSubmit2(submitBtn) }>
                 <Text style={styles.confirmBook}>Confirm & Book</Text>
             </TouchableOpacity>
         </View>
@@ -913,7 +1077,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingHorizontal: 20,
-        paddingVertical: 15,
+        paddingVertical: 10,
         borderRadius: 5
     },
     errormessage: {
