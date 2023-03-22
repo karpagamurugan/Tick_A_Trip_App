@@ -29,6 +29,7 @@ import FlightTicketDetails from '../Profile/MyTickets/FlightTicket/FlightDetails
 import ContactInfo from '../Flight/ContactInfo'
 import BookingConfirm from '../Hotel/BookingConfirm'
 import Search from '../GlobalSearch/Search'
+import Otp from '../Profile/Otp'
 const Stack = createNativeStackNavigator();
 
 function HomeTab() {
@@ -64,6 +65,7 @@ function ProfileTab() {
             <Stack.Screen name="addtravellerform" component={AddTravellerForm} options={{ headerShown: false }} />
             <Stack.Screen name="HotelTicketDetails" component={HotelTicketDetails} options={{ headerShown: false }} />
             <Stack.Screen name="updateProfile" component={UpdateProfile} options={{ headerShown: false }} />
+            <Stack.Screen name="Otp" component={Otp} options={{ headerShown: false }} />
 
         </Stack.Navigator>
     )

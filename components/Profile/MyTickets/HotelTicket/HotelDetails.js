@@ -11,15 +11,13 @@ let height = Dimensions.get('window').height;
 
 export default function HotelTicketDetails({ item, navigation }) {
     var [selectedTab, setSelectedTab] = useState(0);
-
-
     const { Hotel_details } = useSelector((state) => state.userReducer);
     const dispatch = useDispatch();
-
     const hadleClick = (index) => {
-
         setSelectedTab(index)
     }
+    console.log('Hotel_details', Hotel_details)
+
     return (
         <View style={[style.mainContainer,]}>
             <Appbar title={'Booking Details'} />
@@ -40,14 +38,14 @@ export default function HotelTicketDetails({ item, navigation }) {
                 </TouchableHighlight>
             </View>
 
-            <ScrollView style={{height:height}}>
+            <ScrollView style={{ height: height }}>
                 <View>
                     {
                         (selectedTab === 0) ?
                             <ScrollView>
                                 <View>
                                     <View style={{ alignSelf: 'center', marginTop: 30, alignItems: "center", }}>
-                                      
+
                                         <View style={{ flexDirection: "row", alignItems: "center", }}>
                                             <Text style={{ fontSize: 15, color: "#003AA8", fontFamily: FONTS.mediam, }}>Your Supplier Confirmation No :</Text>
                                             <Text style={{ fontFamily: FONTS.mediam, }}> {Hotel_details?.message?.supplierConfirmationNum}</Text>
@@ -126,45 +124,57 @@ export default function HotelTicketDetails({ item, navigation }) {
                                                     {Hotel_details?.message?.roomBookDetails?.NetPrice}
                                                 </Text>
                                             </View>
-                                            {(Hotel_details?.message?.roomBookDetails?.fareType===''||Hotel_details?.message?.roomBookDetails?.fareType===undefined||Hotel_details?.message?.roomBookDetails?.fareType===null)?<View/>:
+                                            {(Hotel_details?.message?.roomBookDetails?.fareType === '' || Hotel_details?.message?.roomBookDetails?.fareType === undefined || Hotel_details?.message?.roomBookDetails?.fareType === null) ? <View /> :
                                                 <View style={[style.paddBottom10]}>
-                                                <Text style={style.bookingTitle}>Fair Type</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.fareType}</Text>
-                                            </View>
+                                                    <Text style={style.bookingTitle}>Fair Type</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.fareType}</Text>
+                                                </View>
                                             }
-                                           {(Hotel_details?.message?.roomBookDetails?.customerEmail===''||Hotel_details?.message?.roomBookDetails?.customerEmail===undefined||Hotel_details?.message?.roomBookDetails?.customerEmail===null)?<View />:
-                                             <View style={[style.paddBottom10]}>
-                                             <Text style={style.bookingTitle}>Customer Email</Text>
-                                             <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.customerEmail}</Text>
-                                         </View>
-                                           }
-                                            {(Hotel_details?.message?.roomBookDetails?.customerPhone===''||Hotel_details?.message?.roomBookDetails?.customerPhone===undefined||Hotel_details?.message?.roomBookDetails?.customerPhone===null)?<View />:
+                                            {(Hotel_details?.message?.roomBookDetails?.customerEmail === '' || Hotel_details?.message?.roomBookDetails?.customerEmail === undefined || Hotel_details?.message?.roomBookDetails?.customerEmail === null) ? <View /> :
                                                 <View style={[style.paddBottom10]}>
-                                                <Text style={style.bookingTitle}>Customer Phone</Text>
-                                                <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.customerPhone}</Text>
-                                            </View>
+                                                    <Text style={style.bookingTitle}>Customer Email</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.customerEmail}</Text>
+                                                </View>
+                                            }
+                                            {(Hotel_details?.message?.roomBookDetails?.customerPhone === '' || Hotel_details?.message?.roomBookDetails?.customerPhone === undefined || Hotel_details?.message?.roomBookDetails?.customerPhone === null) ? <View /> :
+                                                <View style={[style.paddBottom10]}>
+                                                    <Text style={style.bookingTitle}>Customer Phone</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.customerPhone}</Text>
+                                                </View>
                                             }
                                         </View>
                                         <Text style={style.centerLine}></Text>
-                                        <View style={{paddingBottom:20}}>
+                                        <View style={{ paddingBottom: 20 }}>
                                             <Text style={style.bookingTitle}>Cancellation Policy</Text>
-                                            <Text style={[style.bookingListContent,{fontSize:14}]}>{Hotel_details?.message?.roomBookDetails?.cancellationPolicy}</Text>
+                                            <Text style={[style.bookingListContent, { fontSize: 14 }]}>{Hotel_details?.message?.roomBookDetails?.cancellationPolicy}</Text>
                                         </View>
                                     </View>
                                 </View>
                             </ScrollView> : (selectedTab === 1) ?
                                 <ScrollView style={{ marginHorizontal: 10, marginTop: 20, }}>
                                     {Hotel_details?.message?.roomBookDetails?.rooms?.map((val, index) => (
-                                        <View style={{ borderRadius: 10, padding: 15, borderWidth: 1, borderColor: '#bbb', }} key={index}>
-                                            <Text style={style.RoomText}>Room : 1</Text>
-                                            <View style={style.yellowBox}>
-                                                <Text style={style.RoomListText}>Name: <Text style={{ color: "#565656", }}>{val?.name}</Text></Text>
-                                                <Text style={style.RoomListText}>BoardType: <Text style={{ color: "#565656", }}>{val?.boardType}</Text></Text>
-                                                <Text style={style.RoomListText}>Description: <Text style={{ color: "#565656", }}>{val?.description}</Text></Text>
+                                        <View style={{ borderRadius: 10, padding: 10, borderWidth: 1, borderColor: '#D6E6F9', }}>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                <View style={{ paddingRight: 10 }}>
+
+                                                    {(Hotel_details?.message?.roomBookDetails?.image === null || Hotel_details?.message?.roomBookDetails?.image === undefined) ?
+                                                        <Image
+                                                            style={{ width: 140, height: 145, borderRadius: 5, }}
+                                                            source={require('../../../../Assert/Images/imageNotFound.jpg')}
+                                                        /> :
+                                                        <Image source={Hotel_details?.message?.roomBookDetails?.image} />
+                                                    }
+                                                </View>
+                                                <View style={{ width: '100%', flex: 1 }} key={index} >
+                                                    <Text style={style.RoomText}>Room : 1</Text>
+                                                    <View>
+                                                        <Text style={style.RoomListText}>Name: <Text style={{ color: "#000000", fontSize: 17, textTransform: 'capitalize' }}>{val?.name}</Text></Text>
+                                                        <Text style={style.RoomListText}>BoardType: <Text style={{ color: "#000000", fontSize: 17, textTransform: 'capitalize' }}>{val?.boardType}</Text></Text>
+                                                    </View>
+                                                </View>
                                             </View>
-                                            {/* {val?.paxDetails?.name[0]?.map((item, index) => ( */}
-                                            <Text style={style.holderName}>{val?.paxDetails?.name[0]} + {val?.paxDetails?.name?.length}</Text>
-                                            {/* ))} */}
+                                            <Text style={style.RoomListText}>Description: <Text style={{ color: "#000000", fontSize: 17, textTransform: 'capitalize' }}>{val?.description}</Text></Text>
+                                            <Text style={[style.CoustomerName]}>{val?.paxDetails?.name[0]} + {val?.paxDetails?.name?.length}</Text>
                                         </View>
                                     ))}
                                 </ScrollView> :
@@ -198,7 +208,7 @@ const style = StyleSheet.create({
         borderRadius: 15,
         alignItems: 'center'
     },
-   
+
     centerLine: {
         width: "100%",
         height: 1,
@@ -220,39 +230,24 @@ const style = StyleSheet.create({
         fontFamily: FONTS.mediam,
     },
     RoomText: {
-        fontSize: 22,
+        fontSize: 25,
         fontWeight: "700",
         textAlign: "center",
         borderBottomWidth: 1,
-        borderColor: "#e0e0e0",
+        borderColor: "#E9F3FF",
         paddingBottom: 10,
+        color: '#0050A6',
+        width: '100%',
     },
-    yellowBox: {
-        backgroundColor: "#f6c22036",
-        padding: 15,
-        marginTop: 10,
-        borderBottomWidth: 2,
-        borderColor: "#c5c5c5",
-        borderRadius: 10,
-    },
+
     RoomListText: {
-        fontSize: 17,
+        fontSize: 18,
         fontWeight: "500",
-        color: "#161616",
+        color: "#0050A6",
         lineHeight: 35,
+        paddingTop: 6,
     },
-    holderName: {
-        fontSize: 17,
-        fontWeight: "500",
-        color: "#919aa3",
-        marginTop: 15,
-        padding: 15,
-        borderLeftWidth: 4,
-        borderRightWidth: 4,
-        borderColor: "#f6c220",
-        width: "70%",
-        borderRadius: 10,
-    },
+
     bookingDetailStyl: {
         color: "#003AA8",
         fontSize: 20,
@@ -261,5 +256,12 @@ const style = StyleSheet.create({
     },
     paddBottom10: {
         paddingBottom: 10
+    },
+    CoustomerName: {
+        fontSize: 19,
+        paddingVertical: 8,
+        borderTopWidth: 1,
+        borderColor: '#E9F3FF',
+        marginTop: 8
     }
 })

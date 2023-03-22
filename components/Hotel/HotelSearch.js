@@ -532,14 +532,14 @@ const HotelSearch = ({ navigation }) => {
         transparent={true}
         animationType='slide'
       >
-        <View style={style.GuestModel}>
+        <View style={[style.GuestModel]}>
           <ScrollView>
             <TouchableHighlight style={style.closeGuestModel} onPress={() => setShowGuestModal(false)}>
-              <Ionicons style={{ color: '#fff', fontSize: 20, }} name='close' />
+              <Ionicons style={{ color: '#2B64FF', fontSize: 20, }} name='close' />
             </TouchableHighlight>
             <View style={style.GuestModelInner}>
               <View style={style.GuestModelInnerHead}>
-                <View><Text style={{ color: '#fff', fontFamily: font.mediam, textAlign: 'center' }}>Rooms & Guests</Text></View>
+                <View><Text style={{ color: '#000', fontFamily: font.mediam,fontSize:19 }}>Rooms & Guests</Text></View>
               </View>
 
               <View>
@@ -592,8 +592,8 @@ const HotelSearch = ({ navigation }) => {
 const style = StyleSheet.create({
   closeGuestModel: {
     alignSelf: 'flex-end',
-    marginRight: 30,
-    backgroundColor: 'red',
+    marginRight: 20,
+    backgroundColor: '#E9F3FF',
     paddingHorizontal: 8,
     paddingVertical: 8,
     borderRadius: 100,
@@ -612,17 +612,21 @@ const style = StyleSheet.create({
     paddingVertical: 5,
   },
   roomNoTxt: {
-    backgroundColor: '#f6c220',
     textAlign: 'center',
     paddingHorizontal: 20,
     paddingVertical: 2,
-    fontFamily: font.fontSemi,
+    fontFamily: font.fontBold,
     color: color.colorText,
+    borderBottomWidth:1,
+    borderColor:'#003AA8',
+    fontSize:16
   },
   roomColumn: {
     backgroundColor: '#fff',
     borderRadius: 10,
     marginBottom: 10,
+    paddingHorizontal:20,
+    paddingTop:10
   },
   GuestAddBtns: {
     flexDirection: 'row',
@@ -636,8 +640,9 @@ const style = StyleSheet.create({
   },
   GuestModelInner: {
     backgroundColor: '#004d83',
-    marginHorizontal: 30,
+    marginHorizontal: 10,
     padding: 20,
+    borderRadius:20
   },
   GuestModel: {
     flex: 1,

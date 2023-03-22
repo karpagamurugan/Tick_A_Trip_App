@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight } from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable } from 'react-native';
 import COLORS from '../../../constants/color';
 import FONTS from '../../../constants/font';
 import ArrowIcon from 'react-native-vector-icons/AntDesign';
@@ -8,13 +8,30 @@ import moment from 'moment';
 import FlightIcon from '../../../../Assert/Images/icon/flight-airplane-svgrepo-com.svg';
 import FlightDetails from '../FlightTicket/FlightDetails';
 import FlightAction from '../../../../redux/common/actions'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import IoniconsIcon from 'react-native-vector-icons/Ionicons';
+import Otp from '../../Otp';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 export default function FlightCard({ item, navigation, type }) {
-const dispatch = useDispatch()
+    const { otpModalView } = useSelector((state) => state.userReducer)
+    const dispatch = useDispatch()
+
+    const OnCancelFlightBooking = (item, index) => {
+        // setModalVisible(true)
+        dispatch({
+            type: userAction.OTP_MODAL_VIEW, payload: true
+        })
+        dispatch({
+            type: userAction.GET_FLIGHT_BOOKINGS_CANCEL_REQUEST, payload: {
+                supplierConfirmationNum: item.supplierConfirmationNum,
+                referenceNum: item.referenceNum
+            },
+            navigation: navigation
+        })
+    }
     return (
         <View style={style.card}>
             <View style={style.cardView}>
@@ -29,17 +46,17 @@ const dispatch = useDispatch()
                 <View style={style.cardText}>
                     <Text style={style.title}>PNR : {item?.AirlinePNR}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                        <View>
+                        <View style={{}}>
                             <Text style={style.depatureTime}>Depature : {moment(item?.DepartureDateTime).format('hh:mm a')}</Text>
                             <Text style={style.depatureTime}>Boarding : {moment(item?.ArrivalDateTime).format('hh:mm a')}</Text>
 
                         </View>
                         {
-                       (type === 'upcoming')? 
-                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
-                        <Text style={style.cancelbtn}>Cancel</Text>
-                    </TouchableHighlight>:<View/>
-                    }
+                            (type === 'upcoming') ?
+                                <TouchableHighlight onPress={() => OnCancelFlightBooking(item)} underlayColor='transparent'>
+                                    <Text style={style.cancelbtn}>Cancel</Text>
+                                </TouchableHighlight> : <View />
+                        }
                     </View>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                         <Text style={style.bookingDate}>{moment(item?.DepartureDateTime).format('DD/MM/YYYY')}</Text>
@@ -65,6 +82,28 @@ const dispatch = useDispatch()
                     </View>
                 </View>
             </View>
+            <Modal
+                animationType="slide"
+                visible={otpModalView}
+                transparent={true}
+            >
+                <View style={{ backgroundColor: '#0000008f', height: '100%', justifyContent: 'center' }}>
+                    <View style={style.ModalContainer}>
+                        <View style={style.modalView}>
+                            <View style={style.modalFlex}>
+                                <Text style={style.ModalLabelText}>Hotel Booking Cancel</Text>
+                                <Pressable
+                                    onPress={() => dispatch({
+                                        type: userAction.OTP_MODAL_VIEW, payload: false
+                                    })}>
+                                    <IoniconsIcon name='close' size={35} color='#7c7c7c' />
+                                </Pressable>
+                            </View>
+                            <Otp item={item} type={'flight'} />
+                        </View>
+                    </View>
+                </View>
+            </Modal>
         </View>
     )
 }
@@ -103,11 +142,11 @@ const style = StyleSheet.create({
         color: '#0041F2',
         textDecorationLine: 'underline'
     },
-    depatureTime:{ fontFamily: FONTS.font, fontSize: height * 0.02, color: '#898989' },
-    DividerHR:{ width: 1, backgroundColor: 'grey', height: height * 0.02, marginVertical: 3 },
-    place:{ fontFamily: FONTS.font,color:'grey' },
-    bookingDate:{ fontFamily: FONTS.font, color: '#FE712A', fontSize: height * 0.02 }
-  
-   
+    depatureTime: { fontFamily: FONTS.font, fontSize: height * 0.02, color: '#898989' },
+    DividerHR: { width: 1, backgroundColor: 'grey', height: height * 0.02, marginVertical: 3 },
+    place: { fontFamily: FONTS.font, color: 'grey' },
+    bookingDate: { fontFamily: FONTS.font, color: '#FE712A', fontSize: height * 0.02 }
+
+
 
 })

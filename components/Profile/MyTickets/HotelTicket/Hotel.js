@@ -41,8 +41,6 @@ export default function Hotel({navigation}) {
         setSelectedTab(index)
     }
 
-
-
     return (
         <View style={style.mainContainer}>
             <Appbar title={'HOTEL BOOKINGS'} />

@@ -62,8 +62,8 @@ const HotelSelectRoomGuest = (props) => {
 
     return (
         <View>
-            <View>
-                <Text style={{ color: color.colorBtn, fontFamily: font.mediam }}>Adult</Text>
+            <View style={{paddingTop:10}}>
+                <Text style={{ fontFamily: font.mediam,fontSize:20,color:'#000' }}>Adult</Text>
                 <View style={style.AdultQtyList}>
                     {AdultQty.map((val, index) => (
                         <TouchableHighlight key={index} style={style.adultCoutTxt} onPress={() => OnSelectAdult(val, index)}>
@@ -72,9 +72,9 @@ const HotelSelectRoomGuest = (props) => {
                     ))}
                 </View>
             </View>
-            <View>
+            <View style={{paddingTop:10}}>
                 <View style={{ flexDirection: 'row', }}>
-                    <Text style={{ color: color.colorBtn, fontFamily: font.mediam }}>Child</Text>
+                    <Text style={{ fontFamily: font.mediam,fontSize:20,color:'#000'  }}>Child</Text>
                     {row.child !== 0 ?
                         <TouchableHighlight onPress={(val) => removeSelectChild(val, room_no)} underlayColor='transparent'><Text style={{ color: 'red', marginLeft: 20 }}>Remove Child</Text></TouchableHighlight>
                         :

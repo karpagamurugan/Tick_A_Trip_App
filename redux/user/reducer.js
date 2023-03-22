@@ -21,7 +21,12 @@ const initialState = {
     AddTravaller_value: [],
     AddTravaller_token: [],
     travelers_list: [],
-    flight_tickets_details:{},
+    flight_tickets_details: {},
+    myHotelBookingsCancelRequest: [],
+    myHotelBookingsCancelVerify: [],
+    myFlightBookingsCancelRequest:[],
+    myFlightBookingsCancelVerify:[],
+    otpModalView:false,
 }
 
 const userReducer = (state = initialState, action) => {
@@ -127,6 +132,31 @@ const userReducer = (state = initialState, action) => {
                 ...state,
                 flight_tickets_details: action.payload
             }
+        case actions.SET_HOTEL_BOOKINGS_CANCEL_REQUEST:
+            return {
+                ...state,
+                myHotelBookingsCancelRequest: action.payload
+            }
+        case actions.SET_HOTEL_BOOKINGS_CANCEL_VERIFY:
+            return {
+                ...state,
+                myHotelBookingsCancelVerify: action.payload
+            }
+            case actions.SET_FLIGHT_BOOKINGS_CANCEL_REQUEST:
+                return {
+                    ...state,
+                    myFlightBookingsCancelRequest: action.payload
+                }
+            case actions.SET_FLIGHT_BOOKINGS_CANCEL_VERIFY:
+                return {
+                    ...state,
+                    myFlightBookingsCancelVerify: action.payload
+                }
+                case actions.OTP_MODAL_VIEW:
+                    return {
+                        ...state,
+                        otpModalView: action.payload
+                    }
         default:
             return state;
     }

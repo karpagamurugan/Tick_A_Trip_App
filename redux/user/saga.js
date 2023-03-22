@@ -28,57 +28,169 @@ const userSaga = function* () {
         yield takeEvery(actions.SET_FLIGHT_TICKETS_DETAILS, flightTicketsDetails),
         yield takeEvery(actions.SET_FLIGHT_UPDATE_TRAVELLER, updateTraveler),
         yield takeEvery(actions.GET_DELETE_TRAVELLER, getDeleteTraveller),
-        yield takeEvery(actions.UPDATE_PROFILE , handleProfileUpdate)
+        yield takeEvery(actions.UPDATE_PROFILE, handleProfileUpdate),
+        yield takeEvery(actions.GET_HOTEL_BOOKINGS_CANCEL_REQUEST, getHotelBookingsCancelRequest),
+        yield takeEvery(actions.GET_HOTEL_BOOKINGS_CANCEL_VERIFY, getHotelBookingsCancelVerify),
+        yield takeEvery(actions.GET_FLIGHT_BOOKINGS_CANCEL_REQUEST, getFlightBookingsCancelRequest),
+        yield takeEvery(actions.GET_FLIGHT_BOOKINGS_CANCEL_VERIFY, getFlightBookingsCancelVerify),
     ])
+}
+const getHotelBookingsCancelRequest = function* (data) {
+    const { payload } = data;
+    var form_data = new FormData();
+    for (var key in payload) {
+        form_data.append(key, payload[key]);
+    }
+    try {
+        const result = yield call(() =>
+            axios.post(`${API_URL}/user/hotel/requestcancellation`,
+                form_data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
+        console.log('BookingsCancelResult', result.data)
+        if (result?.data?.status === true) {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'success' } })
+        } else {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'failed' } })
+        }
+    } catch (err) {
+
+    }
+}
+const getHotelBookingsCancelVerify = function* (data) {
+    const { payload } = data;
+    console.log('VerifyPayload',payload)
+    try {
+        const result = yield call(() =>
+            axios.post(`${API_URL}/user/hotel/cancelbooking`,
+                JSON.stringify(payload), {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
+        console.log('verify resylt',result.data)
+        if (result?.data?.status === true) {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' }})
+            yield put({ type: actions.OTP_MODAL_VIEW, payload: false })
+            // yield put({ type: actions.GET_UPCOMING_HOTEL_TICKETS })
+        } else {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'failed' } })
+        }
+        
+    } catch (err) {
+      console.log('verify err',err)
+
+    }
+}
+const getFlightBookingsCancelRequest = function* (data) {
+    const { payload } = data;
+    var form_data = new FormData();
+    for (var key in payload) {
+        form_data.append(key, payload[key]);
+    }
+    try {
+        const result = yield call(() =>
+            axios.post(`${API_URL}/user/flight/requestcancellation`,
+                form_data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
+        console.log('BookingsCancelResult', result.data)
+        if (result?.data?.status === true) {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'success' } })
+        } else {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'failed' } })
+        }
+    } catch (err) {
+
+    }
+}
+const getFlightBookingsCancelVerify = function* (data) {
+    const { payload } = data;
+    console.log('VerifyPayload',payload)
+    try {
+        const result = yield call(() =>
+            axios.post(`${API_URL}/user/flight/cancelbooking`,
+                JSON.stringify(payload), {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
+        console.log('verify resylt',result.data)
+        // if (result?.data?.status === true) {
+        //     yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        //     yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
+        // } else {
+        //     yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        //     yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'failed' } })
+        // }
+        
+    } catch (err) {
+      console.log('verify err',err)
+
+    }
 }
 
 const handleProfileUpdate = function* (data) {
 
-    yield put({ type: CommonAction.COMMON_LOADER,payload:true})
+    yield put({ type: CommonAction.COMMON_LOADER, payload: true })
 
-    const {payload} = data
-    const {navigation} = data
-    
+    const { payload } = data
+    const { navigation } = data
+
     const body = payload.data
     let formData = new FormData()
 
-    if(body?.file!=undefined){
-        formData.append('profile_image',{
+    if (body?.file != undefined) {
+        formData.append('profile_image', {
             uri: body?.file?.image?.URL,
             type: body?.file?.image?.type,
             name: body?.file?.image?.name,
         })
     }
-    formData.append('dob',body?.dob)
-    formData.append('first_name',body?.first_name)
-    formData.append('gender',body?.gender)
-    formData.append('last_name',body?.last_name)
-    formData.append('married_status',body?.married_status)
-    formData.append('phone',body?.phone)
-    formData.append('username',body?.username)
+    formData.append('dob', body?.dob)
+    formData.append('first_name', body?.first_name)
+    formData.append('gender', body?.gender)
+    formData.append('last_name', body?.last_name)
+    formData.append('married_status', body?.married_status)
+    formData.append('phone', body?.phone)
+    formData.append('username', body?.username)
 
-    try{
-        const result = yield call(()=>axios.post(
+    try {
+        const result = yield call(() => axios.post(
             `${API_URL}/user/updateProfile`,
             formData, {
             headers: {
                 //accept: 'application/json',
-                'Content-Type':'multipart/form-data',
+                'Content-Type': 'multipart/form-data',
             },
         }))
 
-        if(result?.data?.status === true){
-            yield put({ type: actions.GET_USER_PROFILE});
-            yield put({ type: CommonAction.COMMON_LOADER,payload:false})
+        if (result?.data?.status === true) {
+            yield put({ type: actions.GET_USER_PROFILE });
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Profile Updated Successfully!' } })
-        }else{
-            yield put({ type: CommonAction.COMMON_LOADER,payload:false})
+        } else {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Failed to Update Profile!' } })
         }
 
 
-    }catch(e){
-        yield put({ type: CommonAction.COMMON_LOADER,payload:false})
+    } catch (e) {
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Failed to Update Profile!' } })
     }
 
@@ -235,14 +347,14 @@ const updateTraveler = function* (data) {
         if (result?.data?.status === true) {
             console.log('update success', 'Add Successfully')
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully Successfully' } })
-           var token=''
+            var token = ''
             AsyncStorage.getItem('tickatrip-token').then(
                 (res) => {
                     console.log("update traveler token", res)
-                    token=res
-                   
+                    token = res
+
                 }
-            ).catch(e=>console.log('e',e))
+            ).catch(e => console.log('e', e))
 
             if (token !== null) {
                 yield put({ type: actions.GET_ADD_TRAVELLER_TOKEN, payload: token })
@@ -267,7 +379,7 @@ const getDeleteTraveller = function* (data) {
         const result = yield call(() =>
             axios.post(
                 `${API_URL}/user/deleteTraveler`,
-                
+
                 payload,
                 {
                     headers: {
@@ -327,6 +439,7 @@ const getUserRegister = function* (data) {
 const userAthentification = function* (data) {
     yield put({ type: CommonAction.COMMON_LOADER, payload: true });
     const { payload, navigation } = data
+    console.log('payloaddhnjsf',payload)
     try {
         // axiosRetry(axios, {
         //     retries: 1000,
@@ -340,11 +453,12 @@ const userAthentification = function* (data) {
         //   };
         const result = yield call(() =>
             axios.post(`${API_URL}/login`,
-                JSON.stringify(payload),
+                payload,
                 {
                     headers: {
-                        "Content-Type": "application/json",
-                    },
+                    accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
                 }
             )
         )
@@ -459,12 +573,12 @@ const getUpcomingFlightTickets = function* (data) {
 }
 const flightTicketsDetails = function* (data) {
     const { payload } = data;
-    // console.log('flightuserId', payload)
+    // console.log('flightuserId', payload.userId)
     try {
         const result = yield call(() =>
             axios.get(`${API_URL}/user/flight/mybookings/detail/${payload.userId}`)
         )
-        console.log('flightuserId', result.data)
+        console.log('flightuserId result', result.data)
         if (result?.data?.bookings !== undefined) {
             console.log('flight details result data....', result?.data?.bookings)
             yield put({ type: actions.GET_FLIGHT_TICKETS_DETAILS, payload: result?.data?.bookings })
