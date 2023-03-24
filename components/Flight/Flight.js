@@ -14,7 +14,7 @@ import moment from 'moment';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Dropdown } from 'react-native-element-dropdown'
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
-import Ionicons from 'react-native-vector-icons/Ionicons'
+import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useDispatch, useSelector } from 'react-redux';
 import AntIcon from 'react-native-vector-icons/AntDesign'
 import FlightAction from '../../redux/Flight/actions';
@@ -78,6 +78,22 @@ useEffect(()=>{
   console.log('templist...',tempList)
 
 },[])
+
+
+// useEffect(()=>{
+//  var listDatA =[{'child':'new','child_age':['0',1]}]
+// //  listDatA.map((el)=>{...el,'val':'n','Data':'12'})
+// listDatA.map((e)=>{
+//   e.child !== 'new'?
+//   ''
+//   :
+//   (
+//     e?.Data.push('0987')
+// )
+// })
+
+//  console.log('listDatA',listDatA)
+// },[])
 
 
   const handleSelection = (e) => {

@@ -28,8 +28,12 @@ const ContactInfo = (props) => {
     // var [getSelectId, setGetSelectId] = useState({ CountryCode: '' })
     var [showContact, setShowContact] = useState(true);
 
-    useEffect(() => {
+
+    useEffect(()=>{
         dispatch({ type: userActions.GET_USER_PROFILE })
+    },[])
+
+    useEffect(() => {
         let defaultName = { Name: userProfileData?.name }
         let defaultEmail = { Email: userProfileData?.email }
         let defaultPhone = { Phone: userProfileData?.phone }
@@ -38,6 +42,15 @@ const ContactInfo = (props) => {
 
     const handleSelectionCode = (e) => {
         Keyboard.dismiss()
+
+        console.log(e,'jnswkhnfuewh')
+        let defaultName = { Name: userProfileData?.name }
+        let defaultEmail = { Email: userProfileData?.email }
+        let defaultPhone = { Phone: userProfileData?.phone }
+        let defaultCountryCode = { CountryCode: e?.country_code }
+        
+        reset({ ...defaultCountryCode,...defaultName, ...defaultEmail, ...defaultPhone})
+        
         setSelectedCountryCode(selectedCountryCode = { CountryCode: e.dial_code + "-" + e.name });
         // setGetSelectId(getSelectId = { CountryCode: e.id });
         props.setCountryCode(props.cuntryCode = { CountryCode: e.id })
@@ -100,7 +113,7 @@ const ContactInfo = (props) => {
                                         placeholderTextColor={"gray"}
                                         name='Email'
                                         placeholder="Email"
-                                        keyboardType='default'
+                                        keyboardType='email-address'
                                         {...register("Email")}
                                         value={value}
                                         onChangeText={value => onChange(value.toLowerCase())}
@@ -135,7 +148,7 @@ const ContactInfo = (props) => {
                                         placeholderTextColor={"gray"}
                                         name='Phone'
                                         placeholder="Phone"
-                                        keyboardType='default'
+                                        keyboardType='phone-pad'
                                         {...register("Phone")}
                                         value={value}
                                         onChangeText={value => onChange(value.toLowerCase())}
@@ -321,10 +334,11 @@ const ContactInfo = (props) => {
                                         placeholderTextColor={"gray"}
                                         name='PostalCode'
                                         placeholder="PostalCode"
-                                        keyboardType='default'
+                                        keyboardType='number-pad'
                                         {...register("PostalCode")}
                                         value={value}
                                         onChangeText={value => onChange(value.toLowerCase())}
+                                    
                                     />
                                 )}
                             />

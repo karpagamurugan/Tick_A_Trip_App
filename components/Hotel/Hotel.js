@@ -7,18 +7,20 @@ import style from '../common/commonStyle'
 import font from '../constants/font'
 import color from '../constants/color'
 import PopularPlaceCard from '../Home/PopularPlaceCard'
+import HotelAppbar from '../common/HotelAppbar'
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const Hotel = ({navigation}) => {
   return (
-    <View>
+    <View style={{backgroundColor:'white'}}>
       <ScrollView>
-        <Appbar title='Hotel' />
         <ImageBackground
           source={require('../../Assert/Images/hotel-bg.png')}
-          style={{ width: width, height: height * 0.2 }} resizeMode="cover">
+          style={{ width: width, height: height * 0.36 }} resizeMode="contain">
+                    <HotelAppbar title='Hotel' />
+
         </ImageBackground>
         <HotelSearch navigation={navigation} />
         <View style={style.HotelPopularList}>

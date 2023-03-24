@@ -22,7 +22,27 @@ export default function HotelAppbar({ title }) {
     return (
         <View>
 
-            <View style={styles.appbar}>
+          { 
+          (title === 'Hotel')?
+          <View style={[styles.appbar,{justifyContent:'flex-start'}]}>
+                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
+                        <BackArrow height={18} width={18} />
+                </TouchableHighlight>
+                <View style={{width:10}}/>
+                   <View style={{alignItems:'center'}}>
+                   <Hotel height={30} width={30}/>
+                   <Text style={{fontSize:height*0.013,color:COLORS.BtnColorDark,fontFamily:FONTS.font}}>Hotels</Text>
+                   </View>
+                {/* <View style={styles.searchCity}>
+                    <Text style={styles.searchIn}>{RoomGuestPlace?.Place}</Text>
+                    <Text style={styles.searchCount}>{RoomGuestPlace?.room} , { RoomGuestPlace?.Guest}</Text>
+                </View> */}
+                 <View style={{width:10}}/>
+
+                <Text style={{fontFamily:FONTS.fontBold,color:COLORS.bg,fontSize:height*0.025}}>{title}</Text>
+                <View/>
+            </View>
+          : <View style={styles.appbar}>
                 <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
                         <BackArrow height={18} width={18} />
                 </TouchableHighlight>
@@ -35,7 +55,7 @@ export default function HotelAppbar({ title }) {
                     <Text style={styles.searchCount}>{RoomGuestPlace?.room} , { RoomGuestPlace?.Guest}</Text>
                 </View>
                 <View/>
-            </View>
+            </View>}
         </View>
     )
 }

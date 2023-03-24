@@ -47,7 +47,6 @@ const getAirportnameList = function* (data) {
 
 const FlightSearch = function* (data) {
     const { payload } = data
-    console.log('payload',payload);
     try {
         const result = yield call(() =>
             axios.post(
@@ -60,8 +59,6 @@ const FlightSearch = function* (data) {
             }
             )
         );
-        console.log('error response',result?.data)
-
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_FLIGHT_SEARCH, payload: result?.data });
             payload.navigation.navigate('FlightResult',{prefs:payload?.prefs})
@@ -163,15 +160,13 @@ const setFlightBooking = function*(data){
             }
             )
         );
-        console.log('from saga,...',result?.data?.message)
+        console.log('from saga,...',result?.data)
         if(result?.data?.status === true){
-            yield put({ type: actions.GET_REVALIDATE, payload: result?.data?.message})
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-
         }else{
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Revalidation Failed'}})
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message}})
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-
         }
     } catch (err) {
         console.log('err', err)

@@ -3,8 +3,8 @@ import React, { useEffect, useState,useCallback } from 'react';
 import { View, Text, StyleSheet, Image, Dimensions,TouchableHighlight,ScrollView } from 'react-native';
 import Entypo from 'react-native-vector-icons/Entypo';
 import { useDispatch, useSelector } from 'react-redux';
-import color from '../constants/color';
-import font from '../constants/font';
+import COLORS from '../constants/color';
+import FONTS from '../constants/font';
 import actions from '../../redux/PopularPlaces/actions';
 import { API_IMG_URL } from '../constants/constApi';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -44,7 +44,7 @@ const PopularPlaceCard = ({navigation}) => {
 
             {
                 Popular_Places?.PopularPlaceList?.map((item, index) => (
-                    <TouchableHighlight style={{marginRight:10}}  key={index} underlayColor='transparent' onPress={()=>handlePassData(item)}>
+                    <TouchableHighlight style={{marginRight:25}}  key={index} underlayColor='transparent' onPress={()=>handlePassData(item)}>
                         <View>
                             <View style={style.PopularPlaceCardImage}>
                                 <Image style={style.PopularPlaceCardImageSingle} source={{ uri: `${API_IMG_URL}/server/popularplace/${item.place_image}` }} />
@@ -85,17 +85,17 @@ const style = StyleSheet.create({
     //   },
     PopularPlaceCardPrice: {
         color: '#FE712A',
-        fontFamily: font.fontBold,
+        fontFamily: FONTS.fontBold,
     },
     PopularPlaceCardStay: {
         color: '#898989',
         fontSize: height * 0.014,
-        fontFamily: font.fontSemi,
+        fontFamily: FONTS.fontSemi,
         paddingLeft: 3
     },
     PopularPlaceCardCity: {
-        fontFamily: font.fontBold,
-        color: color.colorText,
+        fontFamily: FONTS.fontBold,
+        color: COLORS.colorText,
         marginTop: 10,
         fontSize: height * 0.025
     },
@@ -110,12 +110,12 @@ const style = StyleSheet.create({
         fontSize: 10,
         paddingVertical: 3,
         paddingHorizontal: 8,
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
         borderBottomLeftRadius: 10,
     },
     PopularPlaceCardImage: {
         position: 'relative',
-        borderRadius: 15,
+        borderRadius: 8,
         overflow: 'hidden',
         shadowColor: "#000",
         shadowOffset: {
@@ -125,6 +125,8 @@ const style = StyleSheet.create({
         shadowOpacity: 0.29,
         shadowRadius: 4.65,
         elevation: 7,
+        width:width*0.41,
+        height:height*0.18
     },
     PopularPlaceCardImageSingle: {
         overflow: 'hidden',
@@ -134,6 +136,7 @@ const style = StyleSheet.create({
         resizeMode: 'cover',
         elevation: 5,
         shadowColor: '#000',
+        
     },
 })
 export default PopularPlaceCard
