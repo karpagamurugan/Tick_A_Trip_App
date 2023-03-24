@@ -241,11 +241,13 @@ const style = StyleSheet.create({
         fontSize: 18,
     },
     dropStyleChildAge: {
-        width: width * 0.3,
-        borderColor: COLORS.colorGrey,
+        width:'100%',
+        borderColor: '#003AA8',
         borderWidth: 1,
-        paddingHorizontal: 5,
+        paddingHorizontal: 10,
         marginBottom: 5,
+        paddingVertical:5,
+        borderRadius:5
     },
     childAgeList: {
         display: 'flex',

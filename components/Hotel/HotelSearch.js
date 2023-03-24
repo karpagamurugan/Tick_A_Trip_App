@@ -19,7 +19,8 @@ import hotelActions from '../../redux/Hotel/actions'
 import commonAction from '../../redux/common/actions'
 import Geocoder from 'react-native-geocoding';
 import Geolocation from '@react-native-community/geolocation';
-import AntIcon from 'react-native-vector-icons/AntDesign'
+import AntIcon from 'react-native-vector-icons/AntDesign';
+
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -36,7 +37,7 @@ const HotelSearch = ({ navigation }) => {
   const dispatch = useDispatch()
   const { Searchbyname } = useSelector((state) => state.HotelReducer)
 
-  
+
 
   const [selected, setSelected] = useState("");
   const [ciDate, setCidate] = useState(new Date())
@@ -47,8 +48,8 @@ const HotelSearch = ({ navigation }) => {
   const [selectDestination, setSelectDestination] = useState(false)
   // const [destination, setDestination] = useState({ city: 'coimbatore', country: 'india' })
   const [selectAddRoom, setSelectAddRoom] = useState([])
-  const [adultCount, setAdultCount] = useState('')
-  const [childCount, setChildCount] = useState('')
+  const [adultCount, setAdultCount] = useState(2)
+  const [childCount, setChildCount] = useState(0)
   const [currentLongitude, setCurrentLongitude] = useState('...');
   const [currentLatitude, setCurrentLatitude] = useState('...');
   const [locationStatus, setLocationStatus] = useState('');
@@ -214,18 +215,20 @@ const HotelSearch = ({ navigation }) => {
   }
 
 
-  
+
   const OnSearchHotel = () => {
-    dispatch({type:hotelActions.SET_ROOM_GUEST_PLACE,
-    payload:{
-      room:selectAddRoom?.length + ' Rooms',
-      Guest:adultCount || childCount ? adultCount + childCount +' Guests' : 0 +' Guests',
-      Place:desination?.city,
-      depatureDate:ciDate,
-      arrivalDate:coDate,
-      RoomList:selectAddRoom
-    }})
-   
+    dispatch({
+      type: hotelActions.SET_ROOM_GUEST_PLACE,
+      payload: {
+        room: selectAddRoom?.length + ' Rooms',
+        Guest: adultCount || childCount ? adultCount + childCount + ' Guests' : 0 + ' Guests',
+        Place: desination?.city,
+        depatureDate: ciDate,
+        arrivalDate: coDate,
+        RoomList: selectAddRoom
+      }
+    })
+
     dispatch({ type: commonAction.HOTEL_LOADER, payload: true })
     dispatch({
       type: hotelActions.GET_HOTEL_SEARCH, payload: {
@@ -242,6 +245,7 @@ const HotelSearch = ({ navigation }) => {
     })
   }
   useEffect(() => {
+    console.log('selectAddRoom', selectAddRoom)
     if (selectAddRoom.length !== 0) {
       let tempAdultCount = 0
       for (let i = 0; i < selectAddRoom.length; i++) {
@@ -273,150 +277,150 @@ const HotelSearch = ({ navigation }) => {
     <View style={style.hotelSearch}>
       <View style={style.hotelSearchTop}>
         <View>
-         <View style={{marginBottom:20}}>
-         <View style={style.hotelSearchFieldGroup}>
-            <View style={style.hotelSearchFieldGroupIcon}>
-              <Ionicons style={style.fieldIcon} name='location' />
-            </View>
-            <View style={style.hotelSearchFieldGroupInput}>
-              <Text style={style.Searchlabel}>DESTINATION OR HOTEL NAME</Text>
+          <View style={{ marginBottom: 20 }}>
+            <View style={style.hotelSearchFieldGroup}>
+              <View style={style.hotelSearchFieldGroupIcon}>
+                <Ionicons style={style.fieldIcon} name='location' />
+              </View>
+              <View style={style.hotelSearchFieldGroupInput}>
+                <Text style={style.Searchlabel}>DESTINATION OR HOTEL NAME</Text>
 
-              <View>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    // height: 35,
-                    width: '100%',
-                    alignItems: 'center',
-                  }}
-                >
-
-                  <TextInput
-                    keyboardType={'default'}
-                    placeholder={'Select ...'}
-                    placeholderTextColor="gray"
-                    numberOfLines={1}
-                    value={desination?.city}
-                    onChangeText={(e) => {
-                      if (e === '') {
-                        setNoRecord(noRecord = { des: true })
-                      }
-                      if (e?.length >= 3) {
-                        dispatch({
-                          type: hotelActions.GET_SELECT_NAME,
-                          payload: {
-                            name: e,
-                          }
-                        })
-
-                        setDesination(desination = { city: e })
-                      } else {
-                        setDesination(desination = { city: e })
-                        dispatch({
-                          type: hotelActions.SET_SELECT_NAME,
-                          payload: []
-                        })
-                      }
-                    }}
+                <View>
+                  <View
                     style={{
-                      color: 'black',
-                      fontFamily: font.font,
-                      width: width * 0.6,
-                      paddingTop: -15,
-                      paddingBottom: 0,
+                      flexDirection: 'row',
+                      // height: 35,
+                      width: '100%',
+                      alignItems: 'center',
                     }}
-                  />
+                  >
 
+                    <TextInput
+                      keyboardType={'default'}
+                      placeholder={'Select ...'}
+                      placeholderTextColor="gray"
+                      numberOfLines={1}
+                      value={desination?.city}
+                      onChangeText={(e) => {
+                        if (e === '') {
+                          setNoRecord(noRecord = { des: true })
+                        }
+                        if (e?.length >= 3) {
+                          dispatch({
+                            type: hotelActions.GET_SELECT_NAME,
+                            payload: {
+                              name: e,
+                            }
+                          })
 
-                  {
-                    desination?.name !== "" ?
-                      <TouchableHighlight
-                        underlayColor={'transparent'}
-                        onPress={() => {
-                          setDesination(desination = { city: '' })
+                          setDesination(desination = { city: e })
+                        } else {
+                          setDesination(desination = { city: e })
                           dispatch({
                             type: hotelActions.SET_SELECT_NAME,
                             payload: []
                           })
-                          setNoRecord(noRecord = { des: true })
+                        }
+                      }}
+                      style={{
+                        color: 'black',
+                        fontFamily: font.font,
+                        width: width * 0.6,
+                        paddingTop: -15,
+                        paddingBottom: 0,
+                      }}
+                    />
 
-                        }}
-                      >
-                        <AntIcon name="closecircle" size={15} color="gray" style={{
-                          marginLeft: 10, marginRight: 10,
-                        }} />
-                      </TouchableHighlight> : <></>
-                  }
+
+                    {
+                      desination?.name !== "" ?
+                        <TouchableHighlight
+                          underlayColor={'transparent'}
+                          onPress={() => {
+                            setDesination(desination = { city: '' })
+                            dispatch({
+                              type: hotelActions.SET_SELECT_NAME,
+                              payload: []
+                            })
+                            setNoRecord(noRecord = { des: true })
+
+                          }}
+                        >
+                          <AntIcon name="closecircle" size={15} color="gray" style={{
+                            marginLeft: 10, marginRight: 10,
+                          }} />
+                        </TouchableHighlight> : <></>
+                    }
+                  </View>
+
                 </View>
 
               </View>
 
             </View>
+            {
+              (Searchbyname === undefined && desination?.city !== '' && noRecord?.des !== false) ?
+                <View style={{
+                  backgroundColor: 'white',
+                  width: '100%',
+                  alignSelf: 'center',
+                  position: 'relative',
+                  zIndex: 2,
+                  borderRadius: 5,
+                  elevation: 10,
+                  maxHeight: height * 0.35
+                }}>
+                  <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
+                </View> : <View style={{
+                  backgroundColor: 'white',
+                  width: '90%',
+                  alignSelf: 'center',
+                  position: 'relative',
+                  zIndex: 2,
+                  borderRadius: 10,
+                  elevation: 10,
+                  maxHeight: height * 0.35
+                }}>
 
+                  <ScrollView
+                    showsVerticalScrollIndicator={true}
+                    nestedScrollEnabled
+                    keyboardShouldPersistTaps='handled'
+                  >
+                    {
+                      Searchbyname?.filter((item) => item?.city_name !== desination?.city)?.map((e, i) => {
+                        return (
+                          <TouchableHighlight
+                            underlayColor={"transparent"}
+                            onPress={() => {
+                              handleSelection(e)
+                            }}
+                            key={i}>
+                            {(e?.hotel_name == undefined) ?
+                              <Text
+                                style={{
+                                  color: 'black',
+                                  padding: 9,
+                                  fontSize: 16,
+                                  fontFamily: font.font
+                                }}>{e?.city_name} , {e?.country_name} (City)</Text>
+                              :
+                              <Text
+                                style={{
+                                  color: 'black',
+                                  padding: 9,
+                                  fontSize: 16,
+                                  fontFamily: font.font
+                                }}>{e?.hotel_name} , {e?.city_name} , {e?.country_name} (Hotel)</Text>}
+                          </TouchableHighlight>
+                        )
+                      })
+                    }
+                  </ScrollView>
+
+                </View>
+            }
           </View>
-          {
-            (Searchbyname === undefined && desination?.city !== '' && noRecord?.des !== false) ?
-              <View style={{
-                backgroundColor: 'white',
-                width: '100%',
-                alignSelf: 'center',
-                position: 'relative',
-                zIndex: 2,
-                borderRadius: 5,
-                elevation: 10,
-                maxHeight: height * 0.35
-              }}>
-                <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
-              </View> : <View style={{
-                backgroundColor: 'white',
-                width: '90%',
-                alignSelf: 'center',
-                position: 'relative',
-                zIndex: 2,
-                borderRadius: 10,
-                elevation: 10,
-                maxHeight: height * 0.35
-              }}>
-
-                <ScrollView
-                  showsVerticalScrollIndicator={true}
-                  nestedScrollEnabled
-                  keyboardShouldPersistTaps='handled'
-                >
-                  {
-                    Searchbyname?.filter((item) => item?.city_name !== desination?.city)?.map((e, i) => {
-                      return (
-                        <TouchableHighlight
-                          underlayColor={"transparent"}
-                          onPress={() => {
-                            handleSelection(e)
-                          }}
-                          key={i}>
-                         { (e?.hotel_name ==undefined)?
-                         <Text
-                            style={{
-                              color: 'black',
-                              padding: 9,
-                              fontSize: 16,
-                              fontFamily: font.font
-                            }}>{e?.city_name} , {e?.country_name} (City)</Text>
-                          :
-                          <Text
-                          style={{
-                            color: 'black',
-                            padding: 9,
-                            fontSize: 16,
-                            fontFamily: font.font
-                          }}>{e?.hotel_name} , {e?.city_name} , {e?.country_name} (Hotel)</Text>}
-                        </TouchableHighlight>
-                      )
-                    })
-                  }
-                </ScrollView>
-
-              </View>
-          }
-         </View>
 
           <View>
             <View style={style.grid}>
@@ -534,24 +538,39 @@ const HotelSearch = ({ navigation }) => {
       >
         <View style={[style.GuestModel]}>
           <ScrollView>
-            <TouchableHighlight style={style.closeGuestModel} onPress={() => setShowGuestModal(false)}>
-              <Ionicons style={{ color: '#2B64FF', fontSize: 20, }} name='close' />
-            </TouchableHighlight>
-            <View style={style.GuestModelInner}>
+          <TouchableHighlight style={style.closeGuestModel} onPress={() => setShowGuestModal(false)}>
+            <Ionicons style={{ color: '#2B64FF', fontSize: 20, }} name='close' />
+          </TouchableHighlight>
+          <View style={style.GuestModelInner}>
+            <View style={[style.GuestsRooms]}>
               <View style={style.GuestModelInnerHead}>
-                <View><Text style={{ color: '#000', fontFamily: font.mediam,fontSize:19 }}>Rooms & Guests</Text></View>
+                <View><Text style={{ color: '#000', fontFamily: font.fontBold, fontSize: 18 }}>Rooms & Guests</Text></View>
               </View>
-
+              <TouchableHighlight underlayColor='transparent' onPress={() => AddRoom()}>
+                <Text style={{ color: '#1B5CB7', fontFamily: font.fontBold, fontSize: 17 }}>+ Add Room</Text>
+              </TouchableHighlight>
+            </View>
+            <View>
               <View>
-                <View>
-                  {selectAddRoom.map((val, index) => (
-                    <View key={index} style={style.roomColumn}>
+                {console.log('selectAddRoom search', selectAddRoom)}
+                {selectAddRoom.map((val, index) => (
+
+                  <View key={index} style={[style.roomColumn]}>
+                    <View style={[style.deleteGrid]}>
                       <Text style={style.roomNoTxt}>Room No : {index + 1}</Text>
-                      <View style={style.selectGuestColumn}>
+                      <TouchableHighlight underlayColor='transparent' onPress={() => OnRemoveRoom(val, index)}>
+                        <Text style={{ color: 'red', }}> <MaterialCommunityIcons name='delete' size={30} /></Text>
+                      </TouchableHighlight>
+                    </View>
+                    <View style={style.selectGuestColumn}>
                         <HotelSelectRoomGuest
+                          // adult={adultCount}
+                          // child={childCount}
                           row={val}
                           index1={index}
                           room_no={index + 1}
+                          defAdultVal={adultCount}
+                          defChildVal={childCount}
                           changeAddRoom={(el) => setSelectAddRoom(el)}
                           selectAddRoom={selectAddRoom}
                           removeSelectChild={(e, room_no) => {
@@ -560,27 +579,21 @@ const HotelSearch = ({ navigation }) => {
                             temp[room_no - 1].child = 0
                             temp[room_no - 1].child_age = []
                             setSelectAddRoom([...temp])
+
                           }}
                         />
-                        <TouchableHighlight underlayColor='transparent' onPress={() => OnRemoveRoom(val, index)}>
-                          <Text style={{ color: 'red' }}>Remove</Text>
-                        </TouchableHighlight>
-                      </View>
                     </View>
-                  ))}
-                </View>
-                <View style={style.GuestAddBtns}>
-                  <TouchableHighlight style={style.GuestSubmitBtn} underlayColor='transparent' onPress={() => AddRoom()}>
-                    <Text style={{ color: '#fff', fontFamily: font.mediam }}>Add Room</Text>
-                  </TouchableHighlight>
-                  <TouchableHighlight style={style.GuestSubmitBtn} underlayColor='transparent' onPress={() => setShowGuestModal(false)}>
-                    <Text style={{ color: '#fff', fontFamily: font.mediam }}>Done</Text>
-                  </TouchableHighlight>
-                </View>
-
+                  </View>
+                ))}
               </View>
-
+              <View style={style.GuestAddBtns}>
+                <TouchableHighlight style={style.GuestSubmitBtn} underlayColor='transparent' onPress={() => setShowGuestModal(false)}>
+                  <Text style={{ color: '#003AA8', fontFamily: font.mediam }}>Done</Text>
+                </TouchableHighlight>
+              </View>
             </View>
+
+          </View>
           </ScrollView>
         </View>
 
@@ -600,33 +613,27 @@ const style = StyleSheet.create({
     marginBottom: 5,
   },
   GuestSubmitBtn: {
-    borderColor: '#fff',
+    borderColor: '#003AA8',
     borderWidth: 1,
     paddingHorizontal: 15,
     paddingVertical: 3,
+
   },
   selectGuestColumn: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-    paddingVertical: 5,
+    paddingHorizontal: 5,
   },
   roomNoTxt: {
-    textAlign: 'center',
-    paddingHorizontal: 20,
     paddingVertical: 2,
     fontFamily: font.fontBold,
     color: color.colorText,
-    borderBottomWidth:1,
-    borderColor:'#003AA8',
-    fontSize:16
+    fontSize: 16
   },
   roomColumn: {
     backgroundColor: '#fff',
     borderRadius: 10,
     marginBottom: 10,
-    paddingHorizontal:20,
-    paddingTop:10
+    paddingHorizontal: 20,
+    paddingVertical: 15
   },
   GuestAddBtns: {
     flexDirection: 'row',
@@ -639,10 +646,10 @@ const style = StyleSheet.create({
     paddingVertical: 5,
   },
   GuestModelInner: {
-    backgroundColor: '#004d83',
+    backgroundColor: '#E9F3FF',
     marginHorizontal: 10,
     padding: 20,
-    borderRadius:20
+    borderRadius: 20
   },
   GuestModel: {
     flex: 1,
@@ -741,5 +748,19 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  deleteGrid: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#003AA8',
+  },
+  GuestsRooms: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingHorizontal: 5
+  }
+
 })
 export default HotelSearch

@@ -106,58 +106,59 @@ const AddTravellerForm = ({ navigation, route }) => {
 
         if (route.params != undefined) {
 
-            console.log(data)
+            console.log('update Data', data)
 
         } else {
 
-            console.log('button pressed', data)
+            console.log(' update pressed', data)
 
-            // setListData(listData = {
-            //     title: data.nametitle,
-            //     first_name: data.firstName,
-            //     last_name: data.lastName,
-            //     select_type: data.selectedType,
-            //     gender: data.selectedgender,
-            //     email: data.email,
-            //     dob: moment(data.dobDate).format('YYYY-MM-DD'),
-            //     // phone_code: data.phoneCode,
-            //     phone: data.mobileNumber,
-            //     passport: data.passportNumber,
-            //     expire_date: moment(data.passportExDate).format('YYYY-MM-DD'),
-            //     country_code: getSelectId?.CountryCode,
-            //     issue_country: getSelectId?.IssuingName,
-            //     nationality: getSelectId?.Nationality,
-            // })
-            // dispatch({
-            //     type: userAction.GET_ADD_TRAVELLER_VALUE,
-            //     payload: listData
-            // })
+            setListData(listData = {
+                title: data.nametitle,
+                first_name: data.firstName,
+                last_name: data.lastName,
+                type: data.selectedType,
+                gender: data.selectedgender,
+                email: data.email,
+                area_code: data.phoneCode,
+                dob: moment(data.dobDate).format('YYYY-MM-DD'),
+                // phone_code: data.phoneCode,
+                phone: data.mobileNumber,
+                passport: data.passportNumber,
+                expire_date: moment(data.passportExDate).format('YYYY-MM-DD'),
+                country_code: getSelectId?.CountryCode,
+                issue_country: getSelectId?.IssuingName,
+                nationality: getSelectId?.Nationality,
+            })
+            dispatch({
+                type: userAction.GET_ADD_TRAVELLER_VALUE,
+                payload: listData
+            })
 
 
-            // if (AddTravaller_form.find((List) => List?.email === data?.email) && ((List) => List?.mobileNumber === data?.mobileNumber)) {
-            //     Snackbar.show({
-            //         text: 'Email already exist',
-            //         duration: Snackbar.LENGTH_SHORT,
-            //         action: {
-            //             text: 'UNDO',
-            //             textColor: 'red',
-            //             onPress: () => { /* Do something. */ },
-            //         },
-            //     })
-            // } else {
-            //     dispatch({
-            //         type: userAction.GET_ADD_TRAVELLER_FORM, payload: [...listData]
-            //     })
-            //     reset();
-            //     setTitle("");
-            //     setGender("");
-            //     setSelectType("");
-            //     setDobDate(new Date());
-            //     setPassportExDate(new Date());
-            //     setSelectedCountryCode("");
-            //     setSelectedIssuing("");
-            //     setSelectedNationality("");
-            // }
+            if (AddTravaller_form.find((List) => List?.email === data?.email) && ((List) => List?.mobileNumber === data?.mobileNumber)) {
+                Snackbar.show({
+                    text: 'Email already exist',
+                    duration: Snackbar.LENGTH_SHORT,
+                    action: {
+                        text: 'UNDO',
+                        textColor: 'red',
+                        onPress: () => { /* Do something. */ },
+                    },
+                })
+            } else {
+                dispatch({
+                    type: userAction.GET_ADD_TRAVELLER_FORM, payload: [...listData]
+                })
+                reset();
+                setTitle("");
+                setGender("");
+                setSelectType("");
+                setDobDate(new Date());
+                setPassportExDate(new Date());
+                setSelectedCountryCode("");
+                setSelectedIssuing("");
+                setSelectedNationality("");
+            }
 
         }
     }
@@ -170,7 +171,6 @@ const AddTravellerForm = ({ navigation, route }) => {
 
             console.log(data)
 
-
             const firstName = data?.first_name
             const nametitle = data?.title
             const lastName = data?.last_name
@@ -179,11 +179,16 @@ const AddTravellerForm = ({ navigation, route }) => {
             const passNo = data?.passport
             const type = data?.type
             const selectedgender = data?.gender
-
+            const exdate = data.expire_date
+            const dobDate = new Date (data.dob)
+            console.log('date-of-birth',{dobDate})
+            
             setTitle(nametitle)
             setSelectType(type)
             setGender(selectedgender)
-
+            setDobDate(dobDate)
+            
+            
             reset({
                 firstName: firstName,
                 nametitle: nametitle,
@@ -195,7 +200,10 @@ const AddTravellerForm = ({ navigation, route }) => {
                 phoneCode: data?.country_code?.dial_code,
                 passportNumber: passNo,
                 passportExDate: setPassportExDate(new Date(data?.expire_date + " 00:00:00")),
+                dobDate: setDobDate(new Date(data.dob))
+                // (new Date(item.dob)
             })
+           
 
         }
 
@@ -930,7 +938,9 @@ const AddTravellerForm = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.updateBtn}>
-                            <TouchableHighlight onPress={handleSubmit(SubmitAddBtn)} underlayColor='transparent'>
+                            <TouchableHighlight onPress={
+                                handleSubmit(SubmitAddBtn)
+                            } underlayColor='transparent'>
                                 <Text style={styles.updateText}>
                                     {route.params != undefined ? "Update" : "Add"}
                                 </Text>
