@@ -17,6 +17,8 @@ const ForgetVerify = ({ navigation }) => {
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
 
    const onSubmit=(data)=>{
+    dispatch({ type: CommonAction.COMMON_LOADER, payload: true });
+
     axios.post(
         `${API_URL}/sendPasswordRest`,
         {email:data?.Email}, {
@@ -28,13 +30,18 @@ const ForgetVerify = ({ navigation }) => {
     ).then((res)=>{
 
         if(res?.data?.status ==true){
-            console.log(res?.data,'dsficfihiu')
-            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: res?.data?.message} })
+            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: res?.data?.message[0]} })
             navigation.navigate('VerifyOtp',{email:res?.data?.message[1]})
-            console.log(res?.data?.message[1],'res?.data?.message[1]')
+            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+
         }else{
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong'} })
+            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
         }
+    }).catch(err=>{
+        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message} })
+        dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+
     })
 
    }
@@ -75,7 +82,7 @@ const ForgetVerify = ({ navigation }) => {
 
                     </View>
                     <View style={style.LoginBtnSec}>
-                        <TouchableHighlight style={style.btnLogin} onPress={handleSubmit(onSubmit)}>
+                        <TouchableHighlight underlayColor={'transparent'} style={style.btnLogin} onPress={handleSubmit(onSubmit)}>
                             <Text style={style.btnLoginText}>Send OTP</Text>
                         </TouchableHighlight>
                     </View>

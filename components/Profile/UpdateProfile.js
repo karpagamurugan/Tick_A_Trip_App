@@ -35,7 +35,7 @@ function UpdateProfile({ navigation }) {
 
     var [myGender, setMyGender] = useState(profileData?.gender);
     var [myMaritialStatus, setMyMaritialStatus] = useState(profileData?.married_status);
-    var [myProfileUrl, setMyProfileUrl] = useState(profileData?.profile_image.toString())
+    var [myProfileUrl, setMyProfileUrl] = useState(profileData?.profile_image?.toString())
     var [dob, setDob] = useState(new Date(profileData?.dob+" 00:00:00")); //set DOB in profile update
 
     const btnSubmit = (val) => {
@@ -430,7 +430,7 @@ function UpdateProfile({ navigation }) {
 }
 
 const styles = StyleSheet.create({
-    mainContainer: { height: height * 0.83, width: width, backgroundColor: 'white' },
+    mainContainer: { height: height, width: width, backgroundColor: 'white' },
     editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: '#2B64FF', marginTop: 20, },
     inputeEditor: { paddingLeft: 10, fontFamily: FONTS.font, color: "#000000", width: width * 0.5 },
     placeHolderText: {

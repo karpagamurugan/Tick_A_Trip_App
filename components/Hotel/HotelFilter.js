@@ -65,7 +65,7 @@ const HotelFilter = (props) => {
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
     const [checkFecility, setCheckFecility] = useState(null);
     const [selectFecility, setSelectFecility] = useState([])
-    const [selectRating, setSelectRating] = useState([])
+    var [selectRating, setSelectRating] = useState([])
     const [checkLocality, setCheckLocality] = useState(null)
     const [selectLocality, setSelectLocality] = useState([])
     const [shortBy, setShortBy] = useState(null)
@@ -119,6 +119,10 @@ const HotelFilter = (props) => {
         //         tempRating.push(i)
         //     }
         // }
+
+
+
+
         let tempFilter = {
             filters: {
                 price: {
@@ -134,27 +138,24 @@ const HotelFilter = (props) => {
                 locality: selectLocality.length !== 0 ? selectLocality : '',
             }
         }
-        Object.keys(tempFilter.filters).forEach((key) => {
-            if (tempFilter.filters[key] === '') {
-                delete tempFilter.filters[key]
-            }
-        })
+        console.log('selectRating',selectRating)
+        // Object.keys(tempFilter.filters).forEach((key) => {
+        //     if (tempFilter.filters[key] === '') {
+        //         delete tempFilter.filters[key]
+        //     }
+        // })
+        // dispatch({ type: commonActions.HOTEL_LOADER, payload: true })
+        // dispatch({
+        //     type: hotelActions.GET_HOTEL_FILTER, payload: {
+        //         sessionId: hotelSessionId,
+        //         // maxResult: getHotelSearchResult?.length,
+        //         maxResult: 10000,
+        //         ...tempFilter
+        //     }
+        // })
 
-        console.log({
-            sessionId: hotelSessionId,
-            // maxResult: getHotelSearchResult?.length,
-            maxResult: 10000,
-            ...tempFilter
-        })
-        dispatch({ type: commonActions.HOTEL_LOADER, payload: true })
-        dispatch({
-            type: hotelActions.GET_HOTEL_FILTER, payload: {
-                sessionId: hotelSessionId,
-                // maxResult: getHotelSearchResult?.length,
-                maxResult: 10000,
-                ...tempFilter
-            }
-        })
+
+        console.log('tempFilter',tempFilter)
     }
     return (
         <View style={{ backgroundColor: '#000000ba', width: width, height: height }}>
@@ -432,8 +433,10 @@ const HotelFilter = (props) => {
                                     <View style={[style.checkBox,{paddingHorizontal:7}]} key={index}>
                                         <TouchableHighlight underlayColor='transparent' onPress={() => {
                                             if (!selectRating.includes(val.value)) {
-                                                setSelectRating([...selectRating, val.value])
+                                                console.log(selectRating,'djcejfdeo')
+                                                setSelectRating(selectRating=[...selectRating, val.value])
                                             } else {
+                                                console.log(selectRating,'djcejfdeo')
                                                 setSelectRating(selectRating.filter((item) => item !== val.value))
                                             }
                                         }}>

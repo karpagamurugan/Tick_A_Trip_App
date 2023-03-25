@@ -456,9 +456,9 @@ const userAthentification = function* (data) {
             )
         if (result !== undefined) {
             if (result?.data?.status?.token !== null || result?.data?.status?.token !== undefined) {
-                setAuthToken(result?.data?.status?.token)
+                setAuthToken(result?.data?.status?.token)            
                 AsyncStorage.setItem('tickatrip-token', result?.data?.status?.token)
-                AsyncStorage.setItem('email', result?.status?.user?.email)
+                AsyncStorage.setItem('email', result?.data?.status?.user?.email)
                 AsyncStorage.setItem('phone', result?.data?.status?.user?.phone)
                 AsyncStorage.setItem('username', result?.data?.status?.user?.username)
                 AsyncStorage.setItem('LoggedIn', 'Sucess')

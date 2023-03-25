@@ -22,6 +22,8 @@ const VerifyOtp = ({ navigation,route }) => {
     const onSubmit=()=>{
         var otpText =otpInput?.state?.otpText.toString();
         var FinalText=otpText.replaceAll(',','')
+        dispatch({ type: CommonAction.COMMON_LOADER, payload: true });
+
         axios.post(
             `${API_URL}/verifyPasswordRest`,
             {otp:FinalText,email:route?.params?.email}, {
@@ -32,13 +34,19 @@ const VerifyOtp = ({ navigation,route }) => {
         }
         ).then((res)=>{
             if(res?.data?.status ==true){
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: res?.data?.message} })
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: res?.data?.message[0]} })
                 navigation.navigate('PasswordChange',{email:route?.params?.email})
+                dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+
             }else{
                 dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong'} })
+                dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+
             }
         }).catch(err=>{
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message} })
+            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+
         })
        }
 

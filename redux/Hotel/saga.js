@@ -63,22 +63,22 @@ const getHotelFilter = function* (data) {
                 }
             )
         );
-        console.log('result filter data', result.data.message.itineraries)
-        console.log('result filter errors', result.data.message.errors)
+        console.log(' result?.data?.message?.itineraries', result?.data?.message?.itineraries)
+        console.log(' result?.data?.message', result?.data?.message)
         if (result.data.status === true) {
-            yield put({ type: actions.SET_HOTEL_SEARCH, payload: result.data.message.itineraries });
-            yield put({ type: actions.SET_HOTEL_FILTER, payload: result.data.message.itineraries ? result.data.message.itineraries : [] })
+            yield put({ type: actions.SET_HOTEL_SEARCH, payload: result?.data?.message?.itineraries });
+            yield put({ type: actions.SET_HOTEL_FILTER, payload: result?.data?.message?.itineraries ? result?.data?.message?.itineraries : [] })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
             // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'hasgdabsjkb' } })
         }else{
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:result.data.message.error} })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:result?.data?.message?.errors} })
 
         }
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
         console.log('err', err)
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
-        yield put({ type: actions.SET_HOTEL_FILTER, payload: err.data });
+        yield put({ type: actions.SET_HOTEL_FILTER, payload: err?.data });
     }
 }
 

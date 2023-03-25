@@ -18,13 +18,14 @@ const PasswordChange = ({ navigation ,route}) => {
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
 
    const onSubmit=(data)=>{
-    console.log('datamksoqjsoiw',data)
-
+    dispatch({ type: CommonAction.COMMON_LOADER, payload: true });
     if(data?.ConfirmPassword !== data?.Password){
         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: "Passwod doesn't match"} })
+        dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+
     }else{
   axios.post(
-        `${API_URL}/sendPasswordRest`,
+        `${API_URL}/restPassword`,
         {email:route?.params?.email,
     password:data?.Password,
 password_confirmation:data?.ConfirmPassword}, {
@@ -35,12 +36,19 @@ password_confirmation:data?.ConfirmPassword}, {
     }
     ).then((res)=>{
         if(res?.data?.status ==true){
-            console.log(res?.data,'dsficfihiu')
-            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: res?.data?.message} })
+            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: res?.data?.message[0]} })
             navigation.navigate('Login')
+            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+
         }else{
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong'} })
+            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+
         }
+    }).catch(err=>{
+        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message} })
+        dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+
     })
     }
   

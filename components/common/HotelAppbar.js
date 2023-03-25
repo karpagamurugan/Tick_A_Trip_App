@@ -9,6 +9,7 @@ import { useNavigation } from '@react-navigation/native';
 import Arrow from '../../Assert/Images/icon/backward-arrow-2.svg';
 import Hotel from '../../Assert/Icons/hotel.svg';
 import { useSelector } from 'react-redux';
+import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -24,9 +25,12 @@ export default function HotelAppbar({ title }) {
 
           { 
           (title === 'Hotel')?
-          <View style={[styles.appbar,{justifyContent:'flex-start'}]}>
+          <View style={[styles.appbar,{justifyContent:'flex-start',width:width*0.85, borderTopRightRadius: 40,
+          borderBottomRightRadius: 40,}]}>
                 <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
-                        <BackArrow height={18} width={18} />
+                        {/* <BackArrow height={18} width={18} /> */}
+                        <MaterialIcon name='arrow-back-ios' color={COLORS.borderColor} size={height * 0.027} style={{ marginLeft: 8 }} />
+
                 </TouchableHighlight>
                 <View style={{width:10}}/>
                    <View style={{alignItems:'center'}}>
@@ -39,7 +43,7 @@ export default function HotelAppbar({ title }) {
                 </View> */}
                  <View style={{width:10}}/>
 
-                <Text style={{fontFamily:FONTS.fontBold,color:COLORS.bg,fontSize:height*0.025}}>{title}</Text>
+                <Text style={{fontFamily:FONTS.fontBold,color:COLORS.bg,fontSize:height*0.03,paddingLeft:20}}>{title}</Text>
                 <View/>
             </View>
           : <View style={styles.appbar}>

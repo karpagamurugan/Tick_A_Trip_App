@@ -735,7 +735,7 @@ const style = StyleSheet.create({
     shadowRadius: 4.65,
     elevation: 6,
   },
-  hotelSearch: { paddingHorizontal: 20, backgroundColor: '#fff', paddingVertical: 20, },
+  hotelSearch: { paddingHorizontal: 20, backgroundColor: '#fff', },
 
   fieldIcon: {
     fontSize: 25,
