@@ -8,34 +8,42 @@ import userActions from '../../redux/user/actions';
 import axios from 'axios';
 import { API_URL } from '../constants/constApi';
 import CommonAction from '../../redux/common/actions';
+import COLORS from '../constants/color';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const ForgetVerify = ({ navigation }) => {
+const PasswordChange = ({ navigation ,route}) => {
     const dispatch = useDispatch();
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
 
    const onSubmit=(data)=>{
-    axios.post(
+    console.log('datamksoqjsoiw',data)
+
+    if(data?.ConfirmPassword !== data?.Password){
+        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: "Passwod doesn't match"} })
+    }else{
+  axios.post(
         `${API_URL}/sendPasswordRest`,
-        {email:data?.Email}, {
+        {email:route?.params?.email,
+    password:data?.Password,
+password_confirmation:data?.ConfirmPassword}, {
         headers: {
             accept: 'application/json',
             'Content-Type': 'multipart/form-data',
         },
     }
     ).then((res)=>{
-
         if(res?.data?.status ==true){
             console.log(res?.data,'dsficfihiu')
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: res?.data?.message} })
-            navigation.navigate('VerifyOtp',{email:res?.data?.message[1]})
-            console.log(res?.data?.message[1],'res?.data?.message[1]')
+            navigation.navigate('Login')
         }else{
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong'} })
         }
     })
+    }
+  
 
    }
 
@@ -43,40 +51,71 @@ const ForgetVerify = ({ navigation }) => {
         <View style={style.SplashSection}>
             <ImageBackground source={require('../../Assert/Images/background.png')} style={style.SplashBgImage} resizeMode="cover">
                 <Image style={style.BrandLogoSplash} source={require('../../Assert/Images/white-logo.png')} />
-                
+
+
+                        {/* <Text style={{fontFamily:FONTS.mediam,color:'white',fontSize:height*0.025}}>Reset your Password</Text> */}
                 <View style={style.LoginForm}>  
                     <View style={style.FormGroup}>
-                    <Text style={style.FormLabelText}>Email</Text>
+                    <Text style={style.FormLabelText}>Password</Text>
                     <Controller
                             control={control}
-                            name="Email"
+                            name="Password"
                             rules={{
                                 required: {
                                     value: true,
-                                    message: "Email can't be empty",
+                                    message: "Password can't be empty",
                                 },
                             }}
                             render={({ field: { onChange, value } }) => (
                                 <TextInput
-                                    {...register("Email",{required:true,pattern: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i })}
-                                    name="Email"
+                                    {...register("Password")}
+                                    name="Password"
                                     onChangeText={value => onChange(value)}
-                                    textContentType="Email"
+                                    textContentType="Password"
                                     style={style.LoginInput}
-                                    keyboardType='email-address'
-                                    placeholder="Enter the Email" />
+                                    secureTextEntry
+                                    placeholder="Enter the Password" />
                             )}
                         />
-                              {errors.Email && <Text  style={style.errorMessage}>Invalid email</Text>}
 
-                        {errors.Email && (
-                            <Text style={style.errorMessage}>{errors.Email.message}</Text>
+                        {errors.Password && (
+                            <Text style={style.errorMessage}>{errors.Password.message}</Text>
+                        )}
+
+                    </View>
+
+
+                    <View style={style.FormGroup}>
+                    <Text style={style.FormLabelText}>Confirm Password</Text>
+                    <Controller
+                            control={control}
+                            name="ConfirmPassword"
+                            rules={{
+                                required: {
+                                    value: true,
+                                    message: "ConfirmPassword can't be empty",
+                                },
+                            }}
+                            render={({ field: { onChange, value } }) => (
+                                <TextInput
+                                    {...register("ConfirmPassword")}
+                                    name="ConfirmPassword"
+                                    onChangeText={value => onChange(value)}
+                                    textContentType="ConfirmPassword"
+                                    style={style.LoginInput}
+                                    secureTextEntry
+                                    placeholder="Re-enter your password" />
+                            )}
+                        />
+
+                        {errors.ConfirmPassword && (
+                            <Text style={style.errorMessage}>{errors.ConfirmPassword.message}</Text>
                         )}
 
                     </View>
                     <View style={style.LoginBtnSec}>
                         <TouchableHighlight style={style.btnLogin} onPress={handleSubmit(onSubmit)}>
-                            <Text style={style.btnLoginText}>Send OTP</Text>
+                            <Text style={style.btnLoginText}>Reset Password</Text>
                         </TouchableHighlight>
                     </View>
                 </View>
@@ -211,4 +250,4 @@ const style = StyleSheet.create({
     },
 })
 
-export default ForgetVerify;
+export default PasswordChange;

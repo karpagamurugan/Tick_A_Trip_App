@@ -22,7 +22,7 @@ import { View } from 'react-native';
 import HotelLoader from './components/common/hotelLoader';
 import Alert from './components/common/Alert';
 import FlightLoader from './components/common/flightLoader';
-
+import PasswordChange from './components/User/PasswordChange';
 function App() {
   const Stack = createNativeStackNavigator();
   useEffect(() => {
@@ -47,6 +47,7 @@ function App() {
           <Stack.Screen name="SuccessPage" component={SuccessPage} />
           <Stack.Screen name='ForgetVerify' component={ForgetVerify} />
           <Stack.Screen name='VerifyOtp' component={VerifyOtp} />
+          <Stack.Screen name='PasswordChange' component={PasswordChange} />
           <Stack.Screen name='bottomNavigation' component={BottomNavigate} />
         </Stack.Navigator>
       </NavigationContainer>

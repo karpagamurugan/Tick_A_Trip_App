@@ -6,16 +6,41 @@ import { useDispatch } from 'react-redux';
 import { Controller, useForm } from 'react-hook-form';
 import userActions from '../../redux/user/actions';
 import OTPTextInput from 'react-native-otp-textinput'
+import axios from 'axios';
+import { API_URL } from '../constants/constApi';
+import CommonAction from '../../redux/common/actions';
+
+
+
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const VerifyOtp = ({ navigation }) => {
+const VerifyOtp = ({ navigation,route }) => {
     const dispatch = useDispatch();
     let otpInput = useRef(null);
 
-    const OnLogin = () => {
-        dispatch({ type: userActions.GET_USER_LOGIN, payload: 'test' });
-    }
+    const onSubmit=()=>{
+        var otpText =otpInput?.state?.otpText.toString();
+        var FinalText=otpText.replaceAll(',','')
+        axios.post(
+            `${API_URL}/verifyPasswordRest`,
+            {otp:FinalText,email:route?.params?.email}, {
+            headers: {
+                accept: 'application/json',
+                'Content-Type': 'multipart/form-data',
+            },
+        }
+        ).then((res)=>{
+            if(res?.data?.status ==true){
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: res?.data?.message} })
+                navigation.navigate('PasswordChange',{email:route?.params?.email})
+            }else{
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong'} })
+            }
+        }).catch(err=>{
+            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message} })
+        })
+       }
 
     return (
         <View style={style.SplashSection}>
@@ -30,7 +55,8 @@ const VerifyOtp = ({ navigation }) => {
                         </View>
                     </View>
                     <View style={style.LoginBtnSec}>
-                        <TouchableHighlight style={style.btnLogin} onPress={() => console.log('otpInput',otpInput.state.otpText)} underlayColor='transparent'>
+                        <TouchableHighlight style={style.btnLogin} onPress={() =>onSubmit()
+                          } underlayColor='transparent'>
                             <Text style={style.btnLoginText}>Verify OTP</Text>
                         </TouchableHighlight>
                     </View>

@@ -11,8 +11,6 @@ const PopularPlaceSaga = function* () {
     yield all([
         yield takeEvery(actions.GET_POPULAR_PLACES, getPopularPlaces),
         yield takeEvery(actions.SET_POPULAR_PLACE_DETAILS, getPopularPlacesDetails),
-
-
     ])
 }
 

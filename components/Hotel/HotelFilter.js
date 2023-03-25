@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet, Dimensions, TextInput, TouchableHighlight, Pressable, ScrollView } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import color from '../constants/color';
-import font from '../constants/font';
+import COLORS from '../constants/color';
+import FONTS from '../constants/font';
 import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import hotelActions from '../../redux/Hotel/actions';
@@ -231,7 +231,7 @@ const HotelFilter = (props) => {
                                 selectedTextStyle={style.selectedTextStyle}
                                 inputSearchStyle={style.inputSearchStyle}
                                 iconStyle={style.iconStyle}
-                                containerStyle={{ fontFamily: font.mediam }}
+                                containerStyle={{ fontFamily: FONTS.mediam }}
                                 data={soryByOption}
                                 {...register("soryBy")}
                                 name="soryBy"
@@ -342,9 +342,9 @@ const HotelFilter = (props) => {
                                 // placeholderStyle={style.placeholderStyle}
                                 // selectedTextStyle={style.selectedTextStyle}
                                 // inputSearchStyle={style.inputSearchStyle}
-                                placeholderStyle={{fontFamily:font.mediam}}
-                                inputSearchStyle={{fontFamily:font.mediam}}
-                                selectedTextStyle={{fontFamily:font.mediam}}
+                                placeholderStyle={{fontFamily:FONTS.mediam}}
+                                inputSearchStyle={{fontFamily:FONTS.mediam}}
+                                selectedTextStyle={{fontFamily:FONTS.mediam}}
                                 iconStyle={style.iconStyle}
                                 data={fareTypeOption}
                                 {...register("fareType")}
@@ -440,7 +440,7 @@ const HotelFilter = (props) => {
                                             <View style={style.checkBox}>
                                                 {selectRating.includes(val.value) ?
                                                     // < Fontisto style={style.checkInputIcon} name='checkbox-active' />
-                                                    <View style={[style.custmCheckBox,{backgroundColor:color.colorBtn}]}>
+                                                    <View style={[style.custmCheckBox,{backgroundColor:COLORS.colorBtn}]}>
                                                         <Ionicons name='checkmark' color={'white'}/>
                                                         </View>
                                                     :
@@ -498,8 +498,8 @@ const HotelFilter = (props) => {
                         minimumValue={0}
                         maximumValue={6}
                         step={0.5}
-                        minimumTrackTintColor={color.colorBtn}
-                        thumbTintColor={color.colorBtn}
+                        minimumTrackTintColor={COLORS.colorBtn}
+                        thumbTintColor={COLORS.colorBtn}
                         onValueChange={(val) => {
                             setAdvisorRating(advisorRating = val)
                             // console.log("price Value",val)
@@ -526,7 +526,7 @@ const HotelFilter = (props) => {
                                             <View style={style.checkBox}>
                                                 {selectFecility.includes(val.value) ?
                                                     // < Fontisto style={style.checkInputIcon} name='checkbox-active' />
-                                                    <View style={[style.custmCheckBox,{backgroundColor:color.colorBtn}]}>
+                                                    <View style={[style.custmCheckBox,{backgroundColor:COLORS.colorBtn}]}>
                                                     <Ionicons name='checkmark' color={'white'}/>
                                                     </View>
                                                     :
@@ -575,10 +575,10 @@ const HotelFilter = (props) => {
                 </View>
                 <View style={style.filterBtnGroup}>
                     <TouchableHighlight style={style.filtersubBtn} onPress={(() => setOpenFilter(false))}>
-                        <Text style={{ color: '#fff', fontFamily: font.mediam, }}>Clear Filter</Text>
+                        <Text style={{ color: '#fff', fontFamily: FONTS.mediam, }}>Clear Filter</Text>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={handleSubmit(onSubmit)} style={style.filtersubBtn}>
-                        <Text style={{ color: '#fff', fontFamily: font.mediam, }}>Apply</Text>
+                        <Text style={{ color: '#fff', fontFamily: FONTS.mediam, }}>Apply</Text>
                     </TouchableHighlight>
                 </View>
             </ScrollView>
@@ -594,7 +594,7 @@ const style = StyleSheet.create({
         paddingBottom: 5,
     },
     filtersubBtn: {
-        backgroundColor: color.colorBtn,
+        backgroundColor: COLORS.colorBtn,
         paddingVertical: 10,
         paddingHorizontal: 45,
         borderRadius: 100,
@@ -607,13 +607,13 @@ const style = StyleSheet.create({
         justifyContent: 'space-around',
     },
     checkInputIcon: {
-        // color: color.colorBtn,
+        // color: COLORS.colorBtn,
         color: 'grey',
         borderRadius:2, 
         fontSize: 18,
     },
     checkInputLabel: {
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
         letterSpacing: 0.5,
         fontSize: 13,
         marginLeft: 5,
@@ -626,7 +626,7 @@ const style = StyleSheet.create({
     filterFieldLabel: {
         color: '#333333',
         fontSize: 14,
-        fontFamily: font.fontSemi,
+        fontFamily: FONTS.fontSemi,
         letterSpacing: 0.5,
         textTransform: 'capitalize',
     },
@@ -635,7 +635,7 @@ const style = StyleSheet.create({
         borderWidth: 1,
         paddingLeft: 10,
         fontSize: 14,
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
         marginBottom: 10,
     },
     filterFieldInput: {
@@ -643,19 +643,19 @@ const style = StyleSheet.create({
         borderWidth: 1,
         paddingLeft: 10,
         fontSize: 14,
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
         marginBottom: 10,
         paddingVertical: 5,
     },
     priceRange: {
-        fontFamily: font.fontSemi,
+        fontFamily: FONTS.fontSemi,
         color: '#666666',
         paddingVertical: 1,
         borderRadius: 5,
         fontSize: height * 0.015,
     },
-    priceTitle: { fontFamily: font.fontSemi, color: 'black', fontSize: height * 0.025, paddingTop: 5, paddingLeft: 5 },
-    priceValue: { fontFamily: font.font, color: 'black' },
+    priceTitle: { fontFamily: FONTS.fontSemi, color: 'black', fontSize: height * 0.025, paddingTop: 5, paddingLeft: 5 },
+    priceValue: { fontFamily: FONTS.font, color: 'black' },
     priceContainer: { flexDirection: 'row', paddingLeft: 5, justifyContent: 'space-between', paddingBottom: 5 },
     filterIcon: {
         fontSize: 22,
@@ -690,10 +690,10 @@ const style = StyleSheet.create({
         borderRadius: 10,
     },
     selectedTextStyle: {
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
     },
     inputSearchStyle: {
-        fontFamily: font.mediam,
+        fontFamily: FONTS.mediam,
     },
     sliderOne: {
         flexDirection: 'row',

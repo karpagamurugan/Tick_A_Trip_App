@@ -1,13 +1,13 @@
 /* eslint-disable prettier/prettier */
 import React,{useCallback} from 'react';
 import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight } from 'react-native';
-import FONT_FAMILY from '../constants/font';
 import { useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import userActions from '../../redux/user/actions';
 import FONT from '../constants/font';
 import COLORS from '../constants/color';
 import {debounce} from 'lodash';
+import FONTS from '../constants/font';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -46,14 +46,14 @@ const Login = ({ navigation }) => {
                 <View style={style.LoginForm}>
 
                     <View style={style.FormGroup}>
-                        <Text style={style.FormLabelText}>Email | Phone</Text>
+                        <Text style={style.FormLabelText}>UserName | Email</Text>
                         <Controller
                             control={control}
                             name="userMail"
                             rules={{
                                 required: {
                                     value: true,
-                                    message: 'Enter your user name',
+                                    message: 'Enter your username/Email',
                                 },
                             }}
                             render={({ field: { onChange, value } }) => (
@@ -63,7 +63,7 @@ const Login = ({ navigation }) => {
                                     onChangeText={value => onChange(value)}
                                     keyboardType="default"
                                     style={style.LoginInput}
-                                    placeholder="Enter Your Email | Phone" />
+                                    placeholder="Enter Your Email | Email" />
                             )}
                         />
                         {errors.userMail && (
@@ -72,16 +72,14 @@ const Login = ({ navigation }) => {
                     </View>
 
                     <View style={style.FormGroup}>
-                        <TouchableHighlight onPress={() => navigation.navigate('ForgetVerify')} underlayColor='transparent'>
                             <Text style={style.FormLabelText}>Password</Text>
-                        </TouchableHighlight>
                         <Controller
                             control={control}
                             name="userPassword"
                             rules={{
                                 required: {
                                     value: true,
-                                    message: 'Select your maridal status!',
+                                    message: 'Select your Password!',
                                 },
                             }}
                             render={({ field: { onChange, value } }) => (
@@ -100,7 +98,8 @@ const Login = ({ navigation }) => {
                     </View>
 
                     <View style={style.fogetPassword}>
-                        <TouchableHighlight underlayColor={'transparent'}>
+                        {/* <TouchableHighlight underlayColor={'transparent'} onPress={()=>navigation.navigate('ForgetVerify')}> */}
+                        <TouchableHighlight underlayColor={'transparent'} onPress={()=>navigation.navigate('ForgetVerify')}>
                             <Text style={style.forgetText}>Forgot Password</Text>
                         </TouchableHighlight>
                         {/* <TouchableHighlight underlayColor={'transparent'}>
@@ -141,17 +140,18 @@ const style = StyleSheet.create({
     errorMessage: {
         color: 'red',
         fontSize: 12,
+        fontFamily:FONT.font
     },
     btnSighnUpText: {
         color: COLORS.TextGrey,
         fontSize: 12,
-        fontFamily: FONT_FAMILY.light,
+        fontFamily: FONT.light,
     },
     btnGuestText: {
         color: COLORS.TextGrey,
         fontSize: 12,
         letterSpacing: 1,
-        fontFamily:FONT_FAMILY.mediam
+        fontFamily:FONT.mediam
     },
     continewGuestSec: {
         flexDirection: 'column',
@@ -163,7 +163,7 @@ const style = StyleSheet.create({
         color: '#fff',
         fontWeight: '400',
         fontSize: 15,
-        fontFamily:FONT_FAMILY.light
+        fontFamily:FONT.light
     },
     btnLogin: {
         backgroundColor: COLORS.BtnColor,
@@ -227,7 +227,7 @@ const style = StyleSheet.create({
         position: 'relative',
         marginLeft: 15,
         marginRight: 15,
-        fontFamily:FONT_FAMILY.mediam
+        fontFamily:FONT.mediam
     },
     OrLine: {
         content: '',
@@ -240,7 +240,7 @@ const style = StyleSheet.create({
         fontSize: 15,
         marginBottom: 10,
         marginTop: 10,
-        fontFamily:FONT_FAMILY.mediam
+        fontFamily:FONT.mediam
     },
     LoginForm: {
         width: width,
@@ -262,7 +262,7 @@ const style = StyleSheet.create({
     forgetText: {
         color: COLORS.TextGrey,
         fontSize: 12,
-        fontFamily: FONT_FAMILY.light,
+        fontFamily: FONT.light,
     },
 })
 

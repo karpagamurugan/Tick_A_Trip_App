@@ -64,7 +64,7 @@ const getHotelBookingsCancelRequest = function* (data) {
 }
 const getHotelBookingsCancelVerify = function* (data) {
     const { payload } = data;
-    console.log('VerifyPayload',payload)
+    console.log('VerifyPayload', payload)
     try {
         const result = yield call(() =>
             axios.post(`${API_URL}/user/hotel/cancelbooking`,
@@ -74,19 +74,19 @@ const getHotelBookingsCancelVerify = function* (data) {
                 },
             })
         );
-        console.log('verify resylt',result.data)
+        console.log('verify resylt', result.data)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' }})
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
             yield put({ type: actions.OTP_MODAL_VIEW, payload: false })
             // yield put({ type: actions.GET_UPCOMING_HOTEL_TICKETS })
         } else {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'failed' } })
         }
-        
+
     } catch (err) {
-      console.log('verify err',err)
+        console.log('verify err', err)
 
     }
 }
@@ -119,7 +119,7 @@ const getFlightBookingsCancelRequest = function* (data) {
 }
 const getFlightBookingsCancelVerify = function* (data) {
     const { payload } = data;
-    console.log('VerifyPayload',payload)
+    console.log('VerifyPayload', payload)
     try {
         const result = yield call(() =>
             axios.post(`${API_URL}/user/flight/cancelbooking`,
@@ -129,7 +129,7 @@ const getFlightBookingsCancelVerify = function* (data) {
                 },
             })
         );
-        console.log('verify resylt',result.data)
+        console.log('verify resylt', result.data)
         // if (result?.data?.status === true) {
         //     yield put({ type: CommonAction.COMMON_LOADER, payload: false })
         //     yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
@@ -137,9 +137,9 @@ const getFlightBookingsCancelVerify = function* (data) {
         //     yield put({ type: CommonAction.COMMON_LOADER, payload: false })
         //     yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'failed' } })
         // }
-        
+
     } catch (err) {
-      console.log('verify err',err)
+        console.log('verify err', err)
 
     }
 }
@@ -409,7 +409,8 @@ const getUserRegister = function* (data) {
     console.log(payload)
     try {
         console.log('iff')
-        const result = yield call(() =>
+        const result =
+         yield call(() =>
             axios.post(
                 `${API_URL}/register`,
                 payload, {
@@ -420,72 +421,68 @@ const getUserRegister = function* (data) {
             }
             )
         );
-        if (result?.data?.status === true) {
-            console.log('result', result)
+        console.log('result', result?.data)
+     
+        // if (result?.data?.status === true) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Registered Successfully' } })
-            AsyncStorage.setItem('tickatrip-token', result.data.success.token)
-            yield put({ type: actions.SET_USER_REGISTER, payload: result.data });
-            navigation.navigate('bottomNavigation')
-
-        } else {
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
-        }
+            AsyncStorage.setItem('tickatrip-token', result?.data?.status?.token)
+            yield put({ type: actions.SET_USER_REGISTER, payload: result?.data });
+            navigation.navigate('Login')
+        // } else {
+        //     yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
+        // }
 
     } catch (err) {
-        console.log('register', err.message)
+        console.log('register', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:err.response.data.message}})
         yield put({ type: actions.SET_USER_REGISTER, payload: err.data });
     }
 }
 const userAthentification = function* (data) {
     yield put({ type: CommonAction.COMMON_LOADER, payload: true });
     const { payload, navigation } = data
-    console.log('payloaddhnjsf',payload)
     try {
-        // axiosRetry(axios, {
-        //     retries: 1000,
-        //     retryCondition: (error) => {
-        //       return error.response.status === 429
-        //     },
-        //   })
-        // const globalConfig: RetryConfig = {
-        //     retry: 3,
-        //     retryDelay: 1000,
-        //   };
-        const result = yield call(() =>
-            axios.post(`${API_URL}/login`,
-                payload,
-                {
-                    headers: {
-                    accept: 'application/json',
-                    'Content-Type': 'multipart/form-data',
-                },
-                }
+        const result =
+            yield call(() =>
+                axios.post(`${API_URL}/login`,
+                    payload,
+                    {
+                        headers: {
+                            accept: 'application/json',
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    }
+                ).catch(e => console.log('loggggg', e))
             )
-        )
-        if (result.data.status.token !== null || result.data.status.token !== undefined) {
-            setAuthToken(result.data.status.token)
-            AsyncStorage.setItem('tickatrip-token', result.data.status.token)
-            AsyncStorage.setItem('email', result.data.status.user.email)
-            AsyncStorage.setItem('phone', result.data.status.user.phone)
-            AsyncStorage.setItem('username', result.data.status.user.username)
-            AsyncStorage.setItem('LoggedIn', 'Sucess')
-            yield put({ type: actions.SET_USER_LOGIN, payload: result.data.user })
-            yield put({ type: actions.GET_USER_PROFILE })
-            yield put({ type: CommonAction.COMMON_LOADER, payload: false });
-            navigation.reset({
-                index: 0,
-                routes: [{ name: 'bottomNavigation' }]
-            })
+        if (result !== undefined) {
+            if (result?.data?.status?.token !== null || result?.data?.status?.token !== undefined) {
+                setAuthToken(result?.data?.status?.token)
+                AsyncStorage.setItem('tickatrip-token', result?.data?.status?.token)
+                AsyncStorage.setItem('email', result?.status?.user?.email)
+                AsyncStorage.setItem('phone', result?.data?.status?.user?.phone)
+                AsyncStorage.setItem('username', result?.data?.status?.user?.username)
+                AsyncStorage.setItem('LoggedIn', 'Sucess')
+                yield put({ type: actions.SET_USER_LOGIN, payload: result?.data?.user })
+                yield put({ type: actions.GET_USER_PROFILE })
+                yield put({ type: CommonAction.COMMON_LOADER, payload: false });
+                navigation.reset({
+                    index: 0,
+                    routes: [{ name: 'bottomNavigation' }]
+                })
 
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Login success' } })
+                yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Login success' } })
+            } else {
+                yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong' } })
+                yield put({ type: CommonAction.COMMON_LOADER, payload: false });
+            }
         } else {
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong' } })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Credentials' } })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false });
         }
 
     } catch (err) {
         console.log('userAthentification', err)
-        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:err.response.data.message}})
         yield put({ type: CommonAction.COMMON_LOADER, payload: false });
     }
 }
@@ -511,8 +508,6 @@ const getCompletedFlightTickets = function* (data) {
 
         if (result?.data?.success === true) {
             yield put({ type: actions.SET_COMPLETED_FLIGHT_TICKETS, payload: result.data })
-            // console.log('result data....',result?.data)
-
         } else {
             yield put({ type: actions.SET_COMPLETED_FLIGHT_TICKETS, payload: result.data })
 

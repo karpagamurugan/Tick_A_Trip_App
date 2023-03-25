@@ -12,8 +12,7 @@ import { useForm, Controller } from 'react-hook-form';
 import { useDispatch } from 'react-redux';
 import userAction from '../../redux/user/actions'
 import {debounce} from 'lodash';
-
-
+import Ionicons from 'react-native-vector-icons/Ionicons'
 
 const width = Dimensions.get('window').width;
 const height = Dimensions.get('window').height;
@@ -55,9 +54,9 @@ const SignUp = ({ navigation }) => {
             value: 'Female'
         }
     ]
-    const handleDebugger = useCallback(
-        debounce((e)=>console.log(e), 1000)
-        , []);
+    // const handleDebugger = useCallback(
+    //     debounce((e)=>console.log(e), 1000)
+    //     , []);
     const onSubmit = (data) => {
         dispatch({
             type: userAction.GET_USER_REGISTER, payload: {
@@ -86,20 +85,20 @@ const SignUp = ({ navigation }) => {
             },
             navigation:navigation
         })
-        handleDebugger()
+        // handleDebugger()
     }
 
   
     return (
         // <ScrollView contentInsetAdjustmentBehavior="automatic" showsVerticalScrollIndicator={false} horizontal={false} showsHorizontalScrollIndicator={false}>
-        <View style={{ position: 'relative', width: width, backgroundColor: '#fff', }}>
-            <ImageBackground style={style.signUpImag} source={require('../../Assert/Images/signUp.png')} />
+        <View style={{ position: 'relative', width: width, backgroundColor: 'white', }}>
+            {/* <ImageBackground style={style.signUpImag} source={require('../../Assert/Images/signUp.png')} /> */}
             <ScrollView>
                 <View>
 
                     <Text style={style.headingText}>Sign up to TickaTrip</Text>
                     <View style={style.signUpForm}>
-                        <View style={style.formGroup}>
+                        {/* <View style={style.formGroup}>
                             <Text style={style.label}>Gender *</Text>
                             <Controller
                                 control={control}
@@ -147,8 +146,8 @@ const SignUp = ({ navigation }) => {
                             {errors.gender && (
                                 <Text style={style.errorMessage}>{errors.gender.message}</Text>
                             )}
-                        </View>
-                        <View style={style.formGroup}>
+                        </View> */}
+                        {/* <View style={style.formGroup}>
                             <Text style={style.label}>Maridal Status *</Text>
                             <Controller
                                 control={control}
@@ -195,9 +194,9 @@ const SignUp = ({ navigation }) => {
                             {errors.marriedStatus && (
                                 <Text style={style.errorMessage}>{errors.marriedStatus.message}</Text>
                             )}
-                        </View>
+                        </View> */}
                         <View style={style.formGroup}>
-                            <Text style={style.label}>User name *</Text>
+                            <Text style={style.label}>User name <Text style={{color:'red'}}>*</Text></Text>
                             <Controller
                                 control={control}
                                 name="userName"
@@ -226,7 +225,7 @@ const SignUp = ({ navigation }) => {
                             )}
                         </View>
                         <View style={style.formGroup}>
-                            <Text style={style.label}>First name *</Text>
+                            <Text style={style.label}>First name <Text style={{color:'red'}}>*</Text></Text>
                             <Controller
                                 control={control}
                                 name="firstName"
@@ -254,7 +253,7 @@ const SignUp = ({ navigation }) => {
                             )}
                         </View>
                         <View style={style.formGroup}>
-                            <Text style={style.label}>Last name *</Text>
+                            <Text style={style.label}>Last name <Text style={{color:'red'}}>*</Text></Text>
                             <Controller
                                 control={control}
                                 name="lastName"
@@ -281,7 +280,7 @@ const SignUp = ({ navigation }) => {
                             )}
                         </View>
                         <View style={style.formGroup}>
-                            <Text style={style.label}>Mobile Number *</Text>
+                            <Text style={style.label}>Mobile Number <Text style={{color:'red'}}>*</Text></Text>
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
@@ -303,13 +302,13 @@ const SignUp = ({ navigation }) => {
                             )}
                         </View>
                         <View style={style.formGroup}>
-                            <Text style={style.label}>Email *</Text>
+                            <Text style={style.label}>Email <Text style={{color:'red'}}>*</Text></Text>
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput   {...register("email")} name="email"
                                         onChangeText={value => onChange(value.toLowerCase())}
-                                        value={value} keyboardType='default' placeholder='Enter the email address' style={style.input} />
+                                        value={value} keyboardType='email-address' placeholder='Enter the email address' style={style.input} />
                                 )}
                                 name="email"
                                 rules={{
@@ -326,15 +325,15 @@ const SignUp = ({ navigation }) => {
                         </View>
 
                         <View style={style.formGroup}>
-                            <Text style={style.label}>DOB *</Text>
+                            <Text style={style.label}>DOB <Text style={{color:'red'}}>*</Text></Text>
                             <TouchableOpacity style={style.input} onPress={() => setOpen(!open)}>
-                                <Text style={{ color: 'black', paddingVertical: 5, borderRadius: 5, }}>{moment(dobDate).format('DD/MM/YYYY').toString()}</Text>
+                                <Text style={{ color: 'black', paddingVertical: 5, borderRadius: 5,fontSize:height*0.018 }}>{moment(dobDate).format('DD-MM-YYYY').toString()}</Text>
                             </TouchableOpacity>
                             {errors.dob && (
                                 <Text style={style.errorMessage}>{errors.dob.message}</Text>
                             )}
                         </View>
-                        <View style={style.formGroup}>
+                        {/* <View style={style.formGroup}>
                             <Text style={style.label}>Postal Code *</Text>
                             <Controller
                                 control={control}
@@ -351,9 +350,9 @@ const SignUp = ({ navigation }) => {
                             {errors.postalCode && (
                                 <Text style={style.errorMessage}>{errors.postalCode.message}</Text>
                             )}
-                        </View>
+                        </View> */}
                         <View style={style.formGroup}>
-                            <Text style={style.label}>Password *</Text>
+                            <Text style={style.label}>Password <Text style={{color:'red'}}>*</Text></Text>
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
@@ -377,7 +376,7 @@ const SignUp = ({ navigation }) => {
                             )}
                         </View>
                         <View style={style.formGroup}>
-                            <Text style={style.label}>Confirm Password *</Text>
+                            <Text style={style.label}>Confirm Password <Text style={{color:'red'}}>*</Text></Text>
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
@@ -408,7 +407,7 @@ const SignUp = ({ navigation }) => {
                             <Text style={style.label}>Others (Optinal)</Text>
                             <TouchableOpacity style={style.input} onPress={() => setOtherOption(!otherOption)}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <Text style={{ color: 'black', paddingVertical: 5, borderRadius: 5, }}>Fill the the information</Text>
+                                    <Text style={{ color: 'black', paddingVertical: 5, borderRadius: 5, fontFamily:FONTS.font,fontSize:height*0.018}}>Fill the information</Text>
                                     <MaterialIcon
                                         name="chevron-down-circle-outline"
                                         size={25}
@@ -480,51 +479,54 @@ const SignUp = ({ navigation }) => {
                             :
                             null
                         }
-                        <View style={{ marginTop: 20, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 20 }}>
+                        <View style={{ marginTop: 20, flexDirection: 'row', alignItems: 'center'}}>
                             <View style={{ backgroundColor: '#FFC400', padding: 10, borderRadius: 100, }}>
                                 <Image source={require('../../Assert/Images/mic.png')} />
                             </View>
-                            <Text style={{ marginLeft: 10, color: COLORS.colorText, fontSize: 14, fontWeight: '500', }}>Complete Your Profile And Enjoy 5000 As Joining Bonus</Text>
+                            <Text style={{ width:width*0.75,marginLeft: 10, color: COLORS.colorText, fontSize: height*0.019, fontFamily:FONTS.mediam, }}>Complete Your Profile And Enjoy 5000 As Joining Bonus</Text>
                         </View>
                         <View style={{ marginVertical: 30 }}>
                             <View style={{ flexDirection: 'column' }}>
                                 <TouchableOpacity style={{ flexDirection: 'row', alignItems: 'center', marginBottom: 10 }} onPress={() => setPolicyBox(!policyBox)}>
                                     <View >
                                         {policyBox === true ?
-                                            <Fontisto
-                                                name='checkbox-active'
-                                                size={15}
-                                                style={{ color: COLORS.colorBtn }}
-                                            />
+                                             <View style={[style.custmCheckBox,{backgroundColor:COLORS.colorBtn,paddingVertical:1,paddingHorizontal:2}]}>
+                                             <Ionicons name='checkmark' color={'white'} size={17}/>
+                                             </View>
                                             :
-                                            <Fontisto
-                                                name='checkbox-passive'
-                                                size={15}
-                                                style={{ color: '#000' }}
-                                            />
+                                            <View style={[style.custmCheckBox,{paddingVertical:1,paddingHorizontal:1}]}>
+                                            <Ionicons name='checkmark' color={'white'} size={17}/>
+                                            </View>
                                         }
                                     </View>
-                                    <Text style={{ marginLeft: 10, color: '#666666', fontSize: 14, fontWeight: '500' }}>
+                                    <Text style={{ marginLeft: 10, color: '#666666', fontSize: 14, fontFamily:FONTS.mediam }}>
                                         I have read and accepted the Terms of Use.
                                     </Text>
                                 </TouchableOpacity>
-                                <TouchableOpacity style={{ marginBottom: 10, flexDirection: 'row', alignItems: 'center' }} onPress={() => setPrivacyBox(!privacyBox)}>
+                                <TouchableOpacity style={{flexDirection: 'row', }} onPress={() => setPrivacyBox(!privacyBox)}>
                                     <View >
                                         {privacyBox === true ?
-                                            <Fontisto
-                                                name='checkbox-active'
-                                                size={15}
-                                                style={{ color: COLORS.colorBtn }}
-                                            />
+                                            // <Fontisto
+                                            //     name='checkbox-active'
+                                            //     size={15}
+                                            //     style={{ color: COLORS.colorBtn }}
+                                            // />
+
+                                            <View style={[style.custmCheckBox,{backgroundColor:COLORS.colorBtn,paddingVertical:1,paddingHorizontal:2}]}>
+                                            <Ionicons name='checkmark' color={'white'} size={17}/>
+                                            </View>
                                             :
-                                            <Fontisto
-                                                name='checkbox-passive'
-                                                size={15}
-                                                style={{ color: '#000' }}
-                                            />
+                                            // <Fontisto
+                                            //     name='checkbox-passive'
+                                            //     size={15}
+                                            //     style={{ color: '#000' }}
+                                            // />
+                                            <View style={[style.custmCheckBox,{paddingVertical:1,paddingHorizontal:1}]}>
+                                            <Ionicons name='checkmark' color={'white'} size={17}/>
+                                            </View>
                                         }
                                     </View>
-                                    <Text style={{ marginLeft: 10, color: '#666666', fontSize: 14, fontWeight: '500' }}>
+                                    <Text style={{ marginLeft: 10, color: '#666666', fontSize: height*0.018,  fontFamily:FONTS.mediam  }}>
                                         The Tickatrip may send me promotional offers including emails about products and services.
                                     </Text>
                                 </TouchableOpacity>
@@ -532,7 +534,7 @@ const SignUp = ({ navigation }) => {
                         </View>
                         {/* <Button title='Submit' onPress={handleSubmit(onSubmit)}/> */}
                         <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30 }}>
-                            <TouchableOpacity disabled={(privacyBox !== true) || (policyBox !== true)} style={((privacyBox !== true) || (policyBox !== true)) ? style.buttonError : style.button} onPress={handleSubmit(onSubmit)}><Text style={{ color: '#fff' }} >SING UP</Text></TouchableOpacity>
+                            <TouchableOpacity disabled={(privacyBox !== true) || (policyBox !== true)} style={((privacyBox !== true) || (policyBox !== true)) ? style.buttonError : style.button} onPress={handleSubmit(onSubmit)}><Text style={{ color: '#fff',fontFamily:FONTS.mediam }} >SIGN UP</Text></TouchableOpacity>
                         </View>
                     </View>
                 </View>
@@ -596,7 +598,8 @@ const SignUp = ({ navigation }) => {
 const style = StyleSheet.create({
     errorMessage: {
         color: 'red',
-        fontSize: 12,
+        fontSize: height*0.018,
+        fontFamily:FONTS.mediam
     },
     buttonError: {
         backgroundColor: '#cccccc',
@@ -614,7 +617,7 @@ const style = StyleSheet.create({
         backgroundColor: '#EDF2F7',
         paddingVertical: 10,
         paddingHorizontal: 20,
-        color: '#999999',
+        color: 'black',
         borderRadius: 5,
     },
     signUpForm: {
@@ -622,8 +625,8 @@ const style = StyleSheet.create({
     },
     label: {
         color: '#425466',
-        fontFamily: FONTS.font,
-        fontSize: 14,
+        fontFamily: FONTS.mediam,
+        fontSize: height*0.019,
         fontWeight: '600',
         letterSpacing: 0.5,
         marginBottom: 3,
@@ -633,7 +636,7 @@ const style = StyleSheet.create({
         paddingTop: 50,
         color: '#0083E9',
         fontSize: 22,
-        fontFamily: FONTS.font,
+        fontFamily: FONTS.fontSemi,
         marginBottom: 30,
     },
     signUpImag: {
@@ -645,6 +648,8 @@ const style = StyleSheet.create({
     formGroup: {
         flexDirection: 'column',
         marginBottom: 10,
-    }
+    },
+    custmCheckBox:{borderRadius:2,borderColor:'grey',borderWidth:0.7,alignItems:'center'}
+
 })
 export default SignUp
