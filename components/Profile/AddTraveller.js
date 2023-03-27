@@ -101,7 +101,7 @@ export default function AddTraveller({ navigation }) {
                 <View>
                     {
                         travelers_list?.travelers?.map((item, index) => (
-
+                              
                             <View key={index} style={styles.travellerCard}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
                                     <View style={{ marginRight: 10 }}>

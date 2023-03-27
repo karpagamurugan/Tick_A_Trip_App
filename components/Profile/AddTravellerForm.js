@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, TouchableHighlight, Modal, Pressable, TextInput, Keyboard } from 'react-native';
 import COLORS from '../constants/color';
 import FONTS from '../constants/font';
@@ -15,13 +15,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import userAction from '../../redux/user/actions'
 import Snackbar from 'react-native-snackbar';
 import { debounce } from 'lodash';
-import { useEffect } from 'react';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
 const AddTravellerForm = ({ navigation, route }) => {
-
     const dispatch = useDispatch();
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
     let [dobDate, setDobDate] = useState(new Date());
@@ -32,7 +30,10 @@ const AddTravellerForm = ({ navigation, route }) => {
     const [selectType, setSelectType] = useState();
     const [open, setOpen] = useState(false);
     var [listData, setListData] = useState([]);
-
+    var [placeholderCountryCode, setPlaceholderCountryCode] = useState();
+    var [placeholderIssuing, setPlaceholderIssuing] = useState();
+    var [placeholderNationality, setPlaceholderNationality] = useState();
+    var [travellerId, setTravellerId]=useState();
     const { AddTravaller_form, AddTravaller_country_code, AddTravaller_country_issuing, AddTravaller_nationality } = useSelector((state) => state.userReducer);
     var [travelRec, setTravelRec] = useState({ CountryCode: false, IssuingName: false, Nationality: false })
     var [selectedCountryCode, setSelectedCountryCode] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
@@ -57,8 +58,9 @@ const AddTravellerForm = ({ navigation, route }) => {
         setTravelRec(travelRec = { CountryCode: true, IssuingName: travelRec.IssuingName, Nationality: travelRec.Nationality });
         console.log(travelRec.CountryCode)
         handleDebugger()
-    }
 
+
+    }
     const handleSelectIssuing = (e) => {
         Keyboard.dismiss()
         setSelectedIssuing(selectedIssuing = { CountryCode: selectedIssuing.CountryCode, IssuingName: e.name, Nationality: selectedIssuing.Nationality });
@@ -101,8 +103,7 @@ const AddTravellerForm = ({ navigation, route }) => {
         { name: 'Child', value: 'Child' },
         { name: 'Infant', value: 'Infant' },
     ]
-
-    const SubmitAddBtn = (data, e) => {
+    const SubmitAddBtn = (data) => {
 
         if (route.params != undefined) {
 
@@ -131,7 +132,7 @@ const AddTravellerForm = ({ navigation, route }) => {
             })
             dispatch({
                 type: userAction.GET_ADD_TRAVELLER_VALUE,
-                payload: listData
+                payload: {data:listData,navigation:navigation}
             })
 
 
@@ -163,14 +164,33 @@ const AddTravellerForm = ({ navigation, route }) => {
         }
     }
 
+    const travellerUpdateBtn = (data) => {
+        var updateList = {
+            traveler_id:travellerId,
+            title: data?.nametitle,
+            first_name: data?.firstName,
+            last_name: data?.lastName,
+            gender:data?.selectedgender,
+            type:data?.selectedType,
+            email: data?.email,
+            phone: data?.mobileNumber,
+            dob: data?.dob,
+            area_code: data?.phoneCode,
+            passport:data?.passportNumber,
+            nationality: getSelectId?.Nationality,
+            country_code: getSelectId?.CountryCode,
+            issue_country: getSelectId?.IssuingName,
+            expire_date:data?.exdate,
+        }
+        dispatch({
+            type: userAction.SET_FLIGHT_UPDATE_TRAVELLER,
+            payload:{data:updateList,navigation:navigation}
+        })
+    }
 
     useEffect(() => {
-
         if (route.params != undefined) {
             const data = route.params.data;
-
-            console.log(data)
-
             const firstName = data?.first_name
             const nametitle = data?.title
             const lastName = data?.last_name
@@ -179,16 +199,22 @@ const AddTravellerForm = ({ navigation, route }) => {
             const passNo = data?.passport
             const type = data?.type
             const selectedgender = data?.gender
-            const exdate = data.expire_date
-            const dobDate = new Date (data.dob)
-            console.log('date-of-birth',{dobDate})
-            
+            const exdate = new Date(data.expire_date)
+            const DateDob = new Date(data.dob)
+            const selectedCountryCode = data?.country_code.country_code + '-' + data.country_code.name
+            const selectedIssuing = data.issue_country.name
+            const selectedNationality = data.nationality.name
+            const travellerId =data?.id
             setTitle(nametitle)
             setSelectType(type)
             setGender(selectedgender)
-            setDobDate(dobDate)
-            
-            
+            setDobDate(DateDob)
+            setPassportExDate(exdate)
+            setPlaceholderCountryCode(selectedCountryCode)
+            setPlaceholderIssuing(selectedIssuing);
+            setPlaceholderNationality(selectedNationality);
+            setGetSelectId({ CountryCode:data?.country_code?.id, IssuingName:data?.issue_country?.id, Nationality:data?.nationality?.id,})
+            setTravellerId(travellerId)
             reset({
                 firstName: firstName,
                 nametitle: nametitle,
@@ -199,15 +225,17 @@ const AddTravellerForm = ({ navigation, route }) => {
                 mobileNumber: phone,
                 phoneCode: data?.country_code?.dial_code,
                 passportNumber: passNo,
-                passportExDate: setPassportExDate(new Date(data?.expire_date + " 00:00:00")),
-                dobDate: setDobDate(new Date(data.dob))
-                // (new Date(item.dob)
+                exdate: moment(exdate)?.format('YYYY-MM-DD'),
+                dob: moment(DateDob)?.format('YYYY-MM-DD'),
+                selectedCountryCode: data?.country_code?.country_code + '-' + data?.country_code?.name,
+                selectedIssuing: data?.country_code.name,
+                selectedNationality: data?.country_code.name,
+
             })
-           
-
+            // console.log('qwerttdfdsf',data)
         }
+    }, [])
 
-    }, [route.params])
 
 
     return (
@@ -542,8 +570,8 @@ const AddTravellerForm = ({ navigation, route }) => {
 
                                     <TextInput
                                         keyboardType={'default'}
-                                        placeholder={'Select...'}
-                                        placeholderTextColor="gray"
+                                        placeholder={route.params === undefined ? 'Select...' : placeholderCountryCode}
+                                        placeholderTextColor={placeholderCountryCode ? "#000" : 'gray'}
                                         numberOfLines={1}
                                         name="add_countrycode"
                                         value={selectedCountryCode?.CountryCode}
@@ -664,8 +692,8 @@ const AddTravellerForm = ({ navigation, route }) => {
                                 >
                                     <TextInput
                                         keyboardType={'default'}
-                                        placeholder={'Select...'}
-                                        placeholderTextColor="gray"
+                                        placeholder={route.params === undefined ? 'Select...' : placeholderIssuing}
+                                        placeholderTextColor={placeholderIssuing ? "#000" : 'gray'}
                                         numberOfLines={1}
                                         name="add_issuing"
                                         value={selectedIssuing?.IssuingName}
@@ -788,8 +816,8 @@ const AddTravellerForm = ({ navigation, route }) => {
                                 >
                                     <TextInput
                                         keyboardType={'default'}
-                                        placeholder={'Select...'}
-                                        placeholderTextColor="gray"
+                                        placeholder={route.params === undefined ? 'Select...' : placeholderNationality}
+                                        placeholderTextColor={placeholderNationality ? "#000" : 'gray'}
                                         numberOfLines={1}
                                         name="add_nationality"
                                         value={selectedNationality?.Nationality}
@@ -938,13 +966,16 @@ const AddTravellerForm = ({ navigation, route }) => {
                         </View>
 
                         <View style={styles.updateBtn}>
-                            <TouchableHighlight onPress={
-                                handleSubmit(SubmitAddBtn)
-                            } underlayColor='transparent'>
-                                <Text style={styles.updateText}>
-                                    {route.params != undefined ? "Update" : "Add"}
-                                </Text>
-                            </TouchableHighlight>
+                            {(route.params != undefined) ?
+                                <TouchableHighlight onPress={handleSubmit(travellerUpdateBtn)} underlayColor='transparent'>
+                                    <Text style={styles.updateText}>Update</Text>
+                                </TouchableHighlight>
+                                :
+                                <TouchableHighlight onPress={handleSubmit(SubmitAddBtn)} underlayColor='transparent'>
+                                    <Text style={styles.updateText}>Add</Text>
+                                </TouchableHighlight>
+                            }
+
                         </View>
                     </View>
                 </ScrollView>

@@ -237,7 +237,7 @@ const getAddtoTravellerValue = function* (data) {
         const result = yield call(() =>
             axios.post(
                 `${API_URL}/user/addTraveler`,
-                payload, {
+                payload.data, {
                 headers: {
                     // accept: 'application/json',
                     'Content-Type': 'multipart/form-data',
@@ -245,14 +245,12 @@ const getAddtoTravellerValue = function* (data) {
             }
             )
         );
-        console.log('12334get booking result', result)
 
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully' } })
-            // yield put({ type: userAction.GET_ADD_TRAVELLER_TOKEN, payload: true })
+            yield put({ type: actions.GET_ADD_TRAVELLER_TOKEN, payload: true })
             getData()
-
-
+            payload.navigation.goBack() 
         } else {
             console.log('get', result?.data?.error)
             console.log('get', 'Sometyhing went wrtong')
@@ -307,12 +305,12 @@ const getTraveller = function* (data) {
         const result = yield call(() =>
             axios.post(
                 `${API_URL}/user/getTravelers`,
-                {
-                    headers: {
-                        // 'Content-Type': 'application/json',
-                        'Authorization': `Bearer ${payload}`
-                    },
-                }
+                // {
+                //     headers: {
+                //         // 'Content-Type': 'application/json',
+                //         'Authorization': `Bearer ${payload}`
+                //     },
+                // }
             )
         );
 
@@ -334,27 +332,29 @@ const updateTraveler = function* (data) {
             axios.post(
                 `${API_URL}/user/updateTraveler`,
 
-                payload,
+                payload.data,
                 {
                     headers: {
-                        // accept: 'application/json',
+                        accept: 'application/json',
                         'Content-Type': 'multipart/form-data',
                     },
                 }
 
             )
         );
+        console.log('update result',result.data)
         if (result?.data?.status === true) {
             console.log('update success', 'Add Successfully')
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully Successfully' } })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully' } })
+            payload.navigation.goBack() 
             var token = ''
-            AsyncStorage.getItem('tickatrip-token').then(
-                (res) => {
-                    console.log("update traveler token", res)
-                    token = res
+            // AsyncStorage.getItem('tickatrip-token').then(
+            //     // (res) => {
+            //     //     console.log("update traveler token", res)
+            //     //     token = res
 
-                }
-            ).catch(e => console.log('e', e))
+            //     // }
+            // ).catch(e => console.log('e', e))
 
             if (token !== null) {
                 yield put({ type: actions.GET_ADD_TRAVELLER_TOKEN, payload: token })
@@ -362,8 +362,8 @@ const updateTraveler = function* (data) {
                 yield put({ type: actions.GET_ADD_TRAVELLER_TOKEN, payload: token })
             }
         } else {
-            console.log('update result failed', result?.data?.status?.error)
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.status?.error } })
+            console.log('update result failed')
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveller Updated Failed' } })
         }
 
     } catch (err) {
@@ -456,7 +456,8 @@ const userAthentification = function* (data) {
             )
         if (result !== undefined) {
             if (result?.data?.status?.token !== null || result?.data?.status?.token !== undefined) {
-                setAuthToken(result?.data?.status?.token)            
+                setAuthToken(result?.data?.status?.token) 
+                console.log('login token',result?.data?.status?.token)           
                 AsyncStorage.setItem('tickatrip-token', result?.data?.status?.token)
                 AsyncStorage.setItem('email', result?.data?.status?.user?.email)
                 AsyncStorage.setItem('phone', result?.data?.status?.user?.phone)
