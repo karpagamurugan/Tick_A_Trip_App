@@ -59,24 +59,84 @@ const FlightSearch = function* (data) {
             }
             )
         );
+
+
+        let a = result?.data.message.map(el => {
+            return {
+                ...el, flight_details: el.flight_details.map(el1 => {
+                    return { FareSourceCode: el.FareSourceCode, ...el1 }
+                })
+            }
+        });
+        let b = [], c = [], d = 0;
+        a.forEach((el, i) => {
+            let temp = "";
+            temp = temp + el.flightName;
+            el.flight_details.forEach(val => {
+                val.flights.forEach(el1 => {
+                    temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
+                });
+                temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
+            });
+            if (b.includes(temp)) {
+                let tempIndex;
+                b.forEach((el1, ind) => {
+                    if (el1 === temp) {
+                        tempIndex = ind;
+                    }
+                });
+                c[tempIndex] = [...c[tempIndex], el];
+                c = [...c, c[tempIndex]];
+            } else {
+                c[d] = [el];
+                b = [...b, temp];
+                d = d + 1;
+            }
+        });
+
+
+
+
         if (result?.data?.status === true) {
-            yield put({ type: actions.GET_FLIGHT_SEARCH, payload: result?.data });
-            payload.navigation.navigate('FlightResult',{prefs:payload?.prefs})
+
+            if (payload?.data?.journey_type === "OneWay") {
+                yield put({
+                    type: actions.GET_FLIGHT_SEARCH, payload: c
+                });    
+            } else {
+                yield put({
+                    type: actions.GET_FLIGHT_SEARCH, payload: a
+                });
+            }
+            // yield put({ type: actions.GET_FLIGHT_SEARCH, payload: result?.data });
+            payload.navigation.navigate('FlightResult', { prefs: payload?.prefs,type:payload?.data?.journey_type })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
         } else {
 
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors}})
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
         }
+
+
+
+        // if (result?.data?.status === true) {
+        //     yield put({ type: actions.GET_FLIGHT_SEARCH, payload: result?.data });
+        //     // payload.navigation.navigate('FlightResult',{prefs:payload?.prefs})
+        //     yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+        // } else {
+
+        //     yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+        //     yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors}})
+        // }
     } catch (err) {
-        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err}})
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         console.log('err msg...', err.message)
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
     }
 }
 
 
-const getFareRules = function*(data){
+const getFareRules = function* (data) {
     const { payload } = data
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
 
@@ -93,11 +153,11 @@ const getFareRules = function*(data){
             )
         );
 
-        if(result?.data?.status === true){
+        if (result?.data?.status === true) {
             yield put({ type: actions.GET_FARE_RULES, payload: result?.data });
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
-        }else{
+        } else {
             console.log('fare rulessss failed')
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
@@ -106,10 +166,10 @@ const getFareRules = function*(data){
         console.log('err', err.message)
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
-    }  
+    }
 }
 
-const setRevalidate = function*(data){
+const setRevalidate = function* (data) {
     const { payload } = data
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
 
@@ -125,26 +185,26 @@ const setRevalidate = function*(data){
             }
             )
         );
-        console.log('from saga,...',result?.data?.message)
-        if(result?.data?.status === true){
-            yield put({ type: actions.GET_REVALIDATE, payload: result?.data?.message})
+        console.log('from saga,...', result?.data?.message)
+        if (result?.data?.status === true) {
+            yield put({ type: actions.GET_REVALIDATE, payload: result?.data?.message })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
-        }else{
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Revalidation Failed'}})
+        } else {
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Revalidation Failed' } })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
         }
     } catch (err) {
         console.log('err', err)
-        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err}})
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
-    }  
+    }
 }
 
 
-const setFlightBooking = function*(data){
+const setFlightBooking = function* (data) {
     const { payload } = data
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
 
@@ -160,20 +220,20 @@ const setFlightBooking = function*(data){
             }
             )
         );
-        console.log('from saga,...',result?.data)
-        if(result?.data?.status === true){
+        console.log('from saga,...', result?.data)
+        if (result?.data?.status === true) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-        }else{
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message}})
+        } else {
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
         }
     } catch (err) {
         console.log('err', err)
-        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err}})
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
-    }  
+    }
 }
 
 export default FlightSearchSaga
