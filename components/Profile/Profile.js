@@ -170,7 +170,7 @@ function Profile({ navigation }) {
                                     :
                                     null
                             }
-                            <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                            <TouchableHighlight onPress={() => navigation.navigate('offers')} underlayColor='transparent'>
                                 <View style={styles.navBtn}>
                                     <MaterialCommunityIcons name='brightness-percent' size={22} color='#4C94F2' />
                                     <Text style={styles.navTitle}>Offers</Text>

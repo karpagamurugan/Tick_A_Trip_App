@@ -27,6 +27,8 @@ const initialState = {
     myFlightBookingsCancelRequest:[],
     myFlightBookingsCancelVerify:[],
     otpModalView:false,
+    flight_Coupons:[],
+    hotel_Coupons:[]
 }
 
 const userReducer = (state = initialState, action) => {
@@ -157,6 +159,16 @@ const userReducer = (state = initialState, action) => {
                         ...state,
                         otpModalView: action.payload
                     }
+                    case actions.SET_ALL_FLIGHT_COUPON:
+                    return {
+                        ...state,
+                        flight_Coupons: action.payload
+                    }
+                    case actions.SET_ALL_HOTEL_COUPON:
+                        return {
+                            ...state,
+                            hotel_Coupons: action.payload
+                        }
         default:
             return state;
     }

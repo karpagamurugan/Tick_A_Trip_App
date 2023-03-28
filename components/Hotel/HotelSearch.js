@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
 import { View, Text, Dimensions, TouchableHighlight, Modal, StyleSheet, ScrollView, TextInput, TouchableOpacity, PermissionsAndroid, Keyboard } from 'react-native'
-// import style from '../../common/commonStyle'
 import { SelectList } from 'react-native-dropdown-select-list'
 import DatePicker from 'react-native-date-picker'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
@@ -11,7 +10,6 @@ import Ionicons from 'react-native-vector-icons/Ionicons'
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import moment from 'moment';
-import axios from 'axios'
 import { API_URL } from '../constants/constApi'
 import HotelSelectRoomGuest from './HotelSelectRoomGuest'
 import { useDispatch, useSelector } from 'react-redux'

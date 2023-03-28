@@ -17,11 +17,7 @@ var width = Dimensions.get('window').width;
 function FlightCard (props){
     var item = props?.item;
     var navigation = props.navigation;
-console.log(props,'dkfoefi')
-
-
-
-  
+      
 function timeConvert(n) {
     var num = n;
     var hours = Math.floor(num / 60) > 0 ? Math.floor(num / 60) + "H " : "";

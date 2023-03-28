@@ -26,9 +26,10 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Snackbar from 'react-native-snackbar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import CommonAction from '../../redux/common/actions';
-import {RAZOR_KEY,RAZOR_KEY_SECRET,CURRENCY,TIMEOUT} from '../../components/constants/constApi';
+import {RAZOR_KEY,RAZOR_KEY_SECRET,CURRENCY,TIMEOUT, API_URL} from '../../components/constants/constApi';
 import RazorpayCheckout from "react-native-razorpay";
 import FlightAction from "../../redux/Flight/actions";
+import axios from "axios";
 
 
 let height = Dimensions.get('window').height;
@@ -65,6 +66,11 @@ export default function FlightBooking({ navigation, route }) {
     var[allTravellerList,setAllTravellerList]=useState([]);
     var [editedIndex,setEditedIndex]=useState();
 
+
+    var [couponCode,setCouponCode]=useState('')
+    var [totalFare,setTotaFare]=useState({MainTotalFare:'',SubTotalFare:''})
+    var [discountPrice,setDiscountPrice]=useState('0')
+
     const selectTitleName = [
         { name: 'Mr', value: 'Mr' },
         { name: 'Miss', value: 'Miss' },
@@ -77,6 +83,7 @@ export default function FlightBooking({ navigation, route }) {
         { name: 'Male', value: 'Male' },
         { name: 'Female', value: 'Female' },
     ]
+
 
     useEffect(() => {
         const travel = async () => {
@@ -98,7 +105,38 @@ export default function FlightBooking({ navigation, route }) {
       allTravellerList?.map((val) => console.log('val.dob',moment(val.dob).format('YYYY-MM-DDTHH:mm:ss')))
 
         dispatch({ type: userActions.GET_USER_PROFILE })
+            setTotaFare(totalFare = {MainTotalFare:get_Revalidate?.TotalFareAmount,SubTotalFare:get_Revalidate?.TotalFareAmount})
+            setDiscountPrice(discountPrice = '0')
+
     },[])
+
+    const ApplyCoupon =()=>{
+
+        dispatch({ type: CommonAction.COMMON_LOADER, payload: true });
+        axios.get(
+            `${API_URL}/flight-coupon/${couponCode}`
+        ).then((res)=>{        
+            if(res?.data?.message?.status ==true){
+                var applyCoupon =res?.data?.message?.coupon?.coupon_discount;
+                var disFare =  totalFare?.MainTotalFare/100
+                var finalFare = disFare*applyCoupon
+                setDiscountPrice(discountPrice = finalFare.toFixed(2))
+                setTotaFare(totalFare={MainTotalFare:( totalFare?.MainTotalFare - finalFare).toFixed(2),SubTotalFare:totalFare?.SubTotalFare})
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Coupon Applied'} })
+                dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+    
+            }else{
+
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid CouponCode'} })
+                dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+            }
+        }).catch(err=>{
+            console.log(err)
+            console.log(err?.response?.data)
+            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message} })
+            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+        })
+    }
     
     const TypeDropDownList =()=>{
      
@@ -328,7 +366,7 @@ export default function FlightBooking({ navigation, route }) {
                 var options = {
                     key: RAZOR_KEY,
                     key_secret: RAZOR_KEY_SECRET,
-                    amount: parseFloat(parseFloat(get_Revalidate?.TotalFareAmount) * 100),
+                    amount: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
                     currency: CURRENCY,
                     name: data?.Name,
                     description: "Payment Tick A Trip",
@@ -351,7 +389,7 @@ export default function FlightBooking({ navigation, route }) {
                         var bookingData= { 
                             IsPassportMandatory:  get_Revalidate?.IsPassportMandatory,
                             PostCode:data?.PostalCode,
-                            TotalFare:  get_Revalidate?.TotalFareAmount,
+                            TotalFare: totalFare?.MainTotalFare,
                             adult_flight: adult,
                             area_code: 758,
                             child_flight: child,
@@ -487,8 +525,6 @@ export default function FlightBooking({ navigation, route }) {
             
         }
 
-        // console.log(  'ID'+Math.floor((Math.random() * 10) + 1))
-
         return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             {/* appbar */}
@@ -576,9 +612,31 @@ export default function FlightBooking({ navigation, route }) {
                     <View style={styles.couponCode}>
                         <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
                             <TextInput
+                                style={{ width:width*0.75 }}
                                 placeholder='Add a coupon Code'
+                                onChangeText={e=>{
+                                    if(e?.length === 0){
+                                        setTotaFare(totalFare = {MainTotalFare:get_Revalidate?.TotalFareAmount,SubTotalFare:totalFare?.SubTotalFare})
+                                        setDiscountPrice(discountPrice = '0')
+                                    }
+                                        setCouponCode(couponCode=e)
+                                    
+                                }
+                                }
                             />
-                            <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                            <TouchableHighlight onPress={() =>{
+                                if(couponCode?.length !== 0){
+                                   
+                                   if(totalFare?.MainTotalFare === totalFare?.SubTotalFare){
+                                    ApplyCoupon()
+
+                                   }else{
+                                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Coupon applied'} })
+                                   }
+                                }else{
+                                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Enter Coupon Code'} })
+                                }
+                            }} underlayColor='transparent'>
                                 <Text style={styles.applyCoupon}>APPLY</Text>
                             </TouchableHighlight>
 
@@ -600,7 +658,7 @@ export default function FlightBooking({ navigation, route }) {
 
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Discounts & {'\n'}Adjustments</Text>
-                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>0,00/-</Text></Text>
+                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>{(discountPrice === '0')?discountPrice:- discountPrice}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
@@ -614,7 +672,7 @@ export default function FlightBooking({ navigation, route }) {
                         <View style={styles.total}>
                             <Text style={styles.totalText}>Total</Text>
                             <Text style={{ color: 'white', fontFamily: FONTS.fontBold }}>:</Text>
-                            <Text style={styles.priceTag}> Rs  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{get_Revalidate?.TotalFareAmount}</Text></Text>
+                            <Text style={styles.priceTag}> Rs  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{totalFare?.MainTotalFare}</Text></Text>
 
                         </View>
                     </View>

@@ -16,7 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import userActions from '../../redux/user/actions'
 import RazorpayCheckout from "react-native-razorpay";
-import {RAZOR_KEY,RAZOR_KEY_SECRET,CURRENCY,TIMEOUT} from '../../components/constants/constApi';
+import {RAZOR_KEY,RAZOR_KEY_SECRET,CURRENCY,TIMEOUT, API_URL} from '../../components/constants/constApi';
 import axios from "axios";
 import { Dropdown } from "react-native-element-dropdown";
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -38,7 +38,10 @@ function HotelBooking({ route, navigation }) {
 
     const { userProfileData, } = useSelector((state) => state.userReducer)
     const { RoomGuestPlace,hotelSessionId } = useSelector((state) => state.HotelReducer)
-
+    
+    var [couponCode,setCouponCode]=useState('')
+    var [totalFare,setTotaFare]=useState({MainTotalFare:'',SubTotalFare:''})
+    var [discountPrice,setDiscountPrice]=useState('0')
 
     const [title, setTitle] = useState();
 
@@ -59,7 +62,7 @@ function HotelBooking({ route, navigation }) {
             var options = {
                 key: RAZOR_KEY,
                 key_secret: RAZOR_KEY_SECRET,
-                amount: parseFloat(parseFloat(RoomType?.netPrice) * 100),
+                amount: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
                 currency: CURRENCY,
                 name: userProfileData?.first_name,
                 description: "Payment Tick A Trip",
@@ -127,11 +130,9 @@ function HotelBooking({ route, navigation }) {
                                 hotelCity:HotelDetail?.city,
                                 hotelCountry:HotelDetail?.country,
                                 hotelAddress:HotelDetail?.address,
-                                TotalFare:parseFloat(parseFloat(RoomType?.netPrice) * 100),
+                                TotalFare:parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
                                   }
                       dispatch({type:hotelActions.SET_HOTEL_BOOKING,payload:dataList,navigation:navigation})
-
-
                   }).catch((error) => {
                     dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
                         console.log('error',error)
@@ -139,11 +140,12 @@ function HotelBooking({ route, navigation }) {
             
         }
        
-        // console.log('userProfileData',userProfileData)
-        useEffect((async) => {
+        useEffect(() => {
             // dispatch({ type: commonAction.COMMON_LOADER, payload: true })
             dispatch({ type: userActions.GET_USER_PROFILE })
-        }, [dispatch])
+            setTotaFare(totalFare = {MainTotalFare:RoomType?.netPrice,SubTotalFare:RoomType?.netPrice})
+            setDiscountPrice(discountPrice = '0')
+        }, [])
 
         useEffect(()=>{
             let defaultFirstName = {FirstName:userProfileData?.first_name}
@@ -163,32 +165,6 @@ function HotelBooking({ route, navigation }) {
             return uuid.join('');
         }
 
-
-        const getOrderId=()=>{
- 
-                     axios.post('https://api.razorpay.com/v1/orders',{
-                        "amount":'5000',
-                        "currency": CURRENCY,
-                        "receipt": "Receipt",
-                        "notes": {
-                          "notes_key_1": "From TickATrip",
-                          // "notes_key_2": "Order for $cakeName"
-                        }
-                      },
-                      {
-                        headers :{
-                    'Content-Type': 'application/json',
-                    'Authorization': `Basic ${RAZOR_KEY}:${RAZOR_KEY_SECRET}}`
-                  }}
-                  ).then((res)=>{
-                        console.log('res',res)
-                     })
-        }
-
-
-      
-
-
         const selectTitle = [
             { name: 'Title', value: 'Title' },
             { name: 'Mr', value: 'Mr' },
@@ -197,6 +173,35 @@ function HotelBooking({ route, navigation }) {
             { name: 'Lord', value: 'Lord' },
             { name: 'Lady', value: 'Lady' },
         ]
+
+        const ApplyCoupon =()=>{
+
+            dispatch({ type: CommonAction.COMMON_LOADER, payload: true });
+            axios.get(
+                `${API_URL}/hotel-coupon/${couponCode}`
+            ).then((res)=>{        
+                if(res?.data?.message?.status ==true){
+                    var applyCoupon =res?.data?.message?.coupon?.coupon_discount;
+                    var disFare =  totalFare?.MainTotalFare/100
+                    var finalFare = disFare*applyCoupon
+                    setDiscountPrice(discountPrice = finalFare.toFixed(2))
+                    setTotaFare(totalFare={MainTotalFare:( totalFare?.MainTotalFare - finalFare).toFixed(2),SubTotalFare:totalFare?.SubTotalFare})
+                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Coupon Applied'} })
+                    dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+        
+                }else{
+
+                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid CouponCode'} })
+                    dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                }
+            }).catch(err=>{
+                console.log(err)
+                console.log(err?.response?.data)
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message} })
+                dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+            })
+        }
+
     return (
         <View style={{ height: height * 0.92, backgroundColor: 'transparent' }}>
             {/* <Appbar title={'Hotel Booking'}/> */}
@@ -274,10 +279,31 @@ function HotelBooking({ route, navigation }) {
                     <View style={styles.couponCode}>
                         <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
                             <TextInput
-                                // style={{ height: 35 }}
+                                style={{ width:width*0.75 }}
                                 placeholder='Add a coupon Code'
+                                onChangeText={e=>{
+                                    if(e?.length === 0){
+                                        setTotaFare(totalFare = {MainTotalFare:RoomType?.netPrice,SubTotalFare:totalFare?.SubTotalFare})
+                                        setDiscountPrice(discountPrice = '0')
+                                    }
+                                        setCouponCode(couponCode=e)
+                                    
+                                }
+                                }
                             />
-                            <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                            <TouchableHighlight onPress={() =>{
+                                if(couponCode?.length !== 0){
+                                   
+                                   if(totalFare?.MainTotalFare === totalFare?.SubTotalFare){
+                                    ApplyCoupon()
+
+                                   }else{
+                                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Coupon applied'} })
+                                   }
+                                }else{
+                                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Enter Coupon Code'} })
+                                }
+                            }} underlayColor='transparent'>
                                 <Text style={styles.applyCoupon}>APPLY</Text>
                             </TouchableHighlight>
 
@@ -294,7 +320,7 @@ function HotelBooking({ route, navigation }) {
                         
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Discounts & {'\n'}Adjustments</Text>
-                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>0,00/-</Text></Text>
+                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>{(discountPrice === '0')?discountPrice:- discountPrice}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 1, opacity: 0.2, marginVertical: 7 }} />
 
@@ -302,7 +328,7 @@ function HotelBooking({ route, navigation }) {
                         <View style={styles.total}>
                             <Text style={styles.totalText}>Total</Text>
                             <Text style={{ color: 'white', fontFamily: FONTS.fontBold }}>:</Text>
-                            <Text style={styles.priceTag}> Rs  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{RoomType?.netPrice}</Text></Text>
+                            <Text style={styles.priceTag}> Rs  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{totalFare?.MainTotalFare}</Text></Text>
 
                         </View>
                     </View>
@@ -552,7 +578,6 @@ function HotelBooking({ route, navigation }) {
                 //  onPress={handleSubmit(onSubmit)}
                 onPress={handleSubmit(onSubmit)}
                 //  console.log('TickATrip_'+generateUUID(8))    
-                // getOrderId()                       
                 >
                     <Text style={styles.confirmBook}>Confirm & Book</Text>
                 </TouchableHighlight>

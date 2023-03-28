@@ -33,6 +33,8 @@ const userSaga = function* () {
         yield takeEvery(actions.GET_HOTEL_BOOKINGS_CANCEL_VERIFY, getHotelBookingsCancelVerify),
         yield takeEvery(actions.GET_FLIGHT_BOOKINGS_CANCEL_REQUEST, getFlightBookingsCancelRequest),
         yield takeEvery(actions.GET_FLIGHT_BOOKINGS_CANCEL_VERIFY, getFlightBookingsCancelVerify),
+        yield takeEvery(actions.GET_ALL_FLIGHT_COUPON, getFlightCoupons),
+        yield takeEvery(actions.GET_ALL_HOTEL_COUPON, getHotelCoupons),
     ])
 }
 const getHotelBookingsCancelRequest = function* (data) {
@@ -403,7 +405,6 @@ const getDeleteTraveller = function* (data) {
         yield put({ type: actions.GET_ADD_TRAVELLER_TOKEN });
     }
 };
-
 const getUserRegister = function* (data) {
     const { payload, navigation } = data
     console.log(payload)
@@ -672,4 +673,56 @@ const getUpcomingHotelTickets = function* (data) {
 
     }
 }
+
+const getFlightCoupons = function* (data) {
+    const { payload } = data;
+    yield put({ type: CommonAction.COMMON_LOADER, payload: true })
+
+    try {
+        const result = yield call(() =>
+            axios.get(`${API_URL}/flight-coupons`)
+        )
+console.log('flight....',result?.data)
+        if (result?.data?.success === true) {
+            yield put({ type: actions.SET_ALL_FLIGHT_COUPON, payload: result.data })
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+
+        } else {
+            yield put({ type: actions.SET_ALL_FLIGHT_COUPON, payload: result.data })
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+
+        }
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+    } catch (err) {
+        console.log('error upcoming hotel....', err)
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+    }
+}
+
+const getHotelCoupons = function* (data) {
+    const { payload } = data;
+    yield put({ type: CommonAction.COMMON_LOADER, payload: true })
+
+    try {
+        const result = yield call(() =>
+            axios.get(`${API_URL}/hotel-coupons`)
+        )
+        console.log('hotel....',result?.data)
+
+        if (result?.data?.success === true) {
+            yield put({ type: actions.SET_ALL_HOTEL_COUPON, payload: result.data })
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+
+        } else {
+            yield put({ type: actions.SET_ALL_HOTEL_COUPON, payload: result.data })
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+
+        }
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+    } catch (err) {
+        console.log('error upcoming hotel....', err)
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+    }
+}
+
 export default userSaga
