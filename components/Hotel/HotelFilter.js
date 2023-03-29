@@ -14,7 +14,7 @@ import AntDesign from 'react-native-vector-icons/AntDesign';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 
-const soryByOption = [
+const sortByOption = [
     { label: 'Price low high', value: 'price-low-high' },
     { label: 'Price high low', value: 'price-high-low' },
     { label: 'Rating low high', value: 'rating-low-high' },
@@ -119,25 +119,56 @@ const HotelFilter = (props) => {
         //         tempRating.push(i)
         //     }
         // }
-
-
-
-
-        let tempFilter = {
-            filters: {
-                price: {
-                    min: multiSliderValue[0],
-                    max: multiSliderValue[1],
-                },
-                rating:selectRating?.length !==0?selectRating:'',
-                // tripadvisorRating: tempAdvisorRating.length ? tempAdvisorRating : '',
-                faretype: data?.fareType ? data?.fareType : '',
-                propertyType: data?.propertyType ? data?.propertyType : '',
-                facility: selectFecility.length !== 0 ? selectFecility : '',
-                sorting: data?.soryBy ? data?.soryBy : '',
-                locality: selectLocality.length !== 0 ? selectLocality : '',
+console.log(data)
+console.log(selectRating)
+        // let tempFilter = {
+        //     filters: {
+        //         price: {
+        //             min: multiSliderValue[0],
+        //             max: multiSliderValue[1],
+        //         },
+        //         rating:selectRating?.length !==0?selectRating.toString:'',
+        //         // tripadvisorRating: tempAdvisorRating.length ? tempAdvisorRating : '',
+        //         // faretype: data?.fareType ? data?.fareType : '',
+        //         propertyType: data?.propertyType ? data?.propertyType : '',
+        //         facility: selectFecility.length !== 0 ? selectFecility?.toString : '',
+        //         sorting: data?.sortBy ? data?.sortBy:'' ,
+        //         locality: selectLocality.length !== 0 ? selectLocality : '',
+        //     }
+        // }
+            var tempFilter ={}
+        if(data?.sortBy === undefined ||data?.sortBy === null ||data?.sortBy === '' &&
+        data?.propertyType === undefined ||data?.propertyType === null ||data?.propertyType === '' && selectRating?.length ==0){
+             tempFilter = {
+                filters: {
+                    price: {
+                        min: multiSliderValue[0],
+                        max: multiSliderValue[1],
+                    },
+                    // rating:selectRating.toString(),
+                    facility: selectFecility.length !== 0 ? selectFecility?.toString : '',
+                    // locality: selectLocality.length !== 0 ? selectLocality : '',
+                }
+            }
+        }else{
+             tempFilter = {
+                filters: {
+                    price: {
+                        min: multiSliderValue[0],
+                        max: multiSliderValue[1],
+                    },
+                    rating:selectRating.toString(),
+                    // tripadvisorRating: tempAdvisorRating.length ? tempAdvisorRating : '',
+                    // faretype: data?.fareType ? data?.fareType : '',
+                    propertyType:  data?.propertyType ,
+                    facility: selectFecility.length !== 0 ? selectFecility?.toString : '',
+                    sorting: data?.sortBy,
+                    // locality: selectLocality.length !== 0 ? selectLocality : '',
+                }
             }
         }
+
+        console.log(selectFecility?.toString())
         console.log('selectRating',selectRating)
         // Object.keys(tempFilter.filters).forEach((key) => {
         //     if (tempFilter.filters[key] === '') {
@@ -145,16 +176,14 @@ const HotelFilter = (props) => {
         //     }
         // })
         // dispatch({ type: commonActions.HOTEL_LOADER, payload: true })
-        // dispatch({
-        //     type: hotelActions.GET_HOTEL_FILTER, payload: {
-        //         sessionId: hotelSessionId,
-        //         // maxResult: getHotelSearchResult?.length,
-        //         maxResult: 10000,
-        //         ...tempFilter
-        //     }
-        // })
-
-
+        dispatch({
+            type: hotelActions.GET_HOTEL_FILTER, payload: {
+                sessionId: hotelSessionId,
+                // maxResult: getHotelSearchResult?.length,
+                maxResult: 100000,
+                ...tempFilter
+            }
+        })
         console.log('tempFilter',tempFilter)
     }
     return (
@@ -218,7 +247,7 @@ const HotelFilter = (props) => {
                     <Text style={style.filterFieldLabel}>Sory By</Text>
                     <Controller
                         control={control}
-                        name="soryBy"
+                        name="sortBy"
                         rules={{
                             required: {
                                 value: false,
@@ -233,9 +262,9 @@ const HotelFilter = (props) => {
                                 inputSearchStyle={style.inputSearchStyle}
                                 iconStyle={style.iconStyle}
                                 containerStyle={{ fontFamily: FONTS.mediam }}
-                                data={soryByOption}
-                                {...register("soryBy")}
-                                name="soryBy"
+                                data={sortByOption}
+                                {...register("sortBy")}
+                                name="sortBy"
                                 maxHeight={300}
                                 labelField="label"
                                 valueField="value"
@@ -249,8 +278,8 @@ const HotelFilter = (props) => {
                             />
                         )}
                     />
-                    {/* {errors.soryBy && (
-        <Text style={style.errorMessage}>{errors.soryBy.message}</Text>
+                    {/* {errors.sortBy && (
+        <Text style={style.errorMessage}>{errors.sortBy.message}</Text>
     )} */}
                 </View>
 
@@ -389,7 +418,7 @@ const HotelFilter = (props) => {
                                 maxHeight={300}
                                 labelField="label"
                                 valueField="value"
-                                placeholder="Select sory by"
+                                placeholder="Select Property type"
                                 searchPlaceholder="Search..."
                                 value={propertyType}
                                 onChange={item => {

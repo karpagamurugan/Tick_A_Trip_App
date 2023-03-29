@@ -682,7 +682,6 @@ const getFlightCoupons = function* (data) {
         const result = yield call(() =>
             axios.get(`${API_URL}/flight-coupons`)
         )
-console.log('flight....',result?.data)
         if (result?.data?.success === true) {
             yield put({ type: actions.SET_ALL_FLIGHT_COUPON, payload: result.data })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
@@ -707,8 +706,6 @@ const getHotelCoupons = function* (data) {
         const result = yield call(() =>
             axios.get(`${API_URL}/hotel-coupons`)
         )
-        console.log('hotel....',result?.data)
-
         if (result?.data?.success === true) {
             yield put({ type: actions.SET_ALL_HOTEL_COUPON, payload: result.data })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
