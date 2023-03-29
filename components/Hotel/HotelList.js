@@ -81,7 +81,7 @@ const style = StyleSheet.create({
         // backgroundColor:'white',
         // height:height
         // height:height*0.5,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
     },
     searchPlaceIcon: {
         color: '#FCC40A',

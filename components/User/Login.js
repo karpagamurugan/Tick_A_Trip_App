@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React,{useCallback} from 'react';
+import React,{useCallback, useEffect, useState} from 'react';
 import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
@@ -8,14 +8,20 @@ import FONT from '../constants/font';
 import COLORS from '../constants/color';
 import {debounce} from 'lodash';
 import FONTS from '../constants/font';
+import axios from 'axios';
+import { API_URL } from '../constants/constApi';
+import WebView from 'react-native-webview';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
+
 
 const Login = ({ navigation }) => {
     const dispatch = useDispatch();
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
   
+    var [socialLogin,setSocialLogin] = useState({GoogleLogin:null,FBLogin:null})
+
     const onSubmit = (data) => {
         dispatch({
             type: userActions.GET_USER_LOGIN, payload: {
@@ -24,18 +30,44 @@ const Login = ({ navigation }) => {
             },
             navigation: navigation
         });
-        handleDebugger()
-       
+        handleDebugger()   
     }
     const handleDebugger = useCallback(
         debounce((e)=>console.log(e), 400)
         , []); 
+
+        const handleSocialLogin= async()=>{
+           await axios.get(
+                `${API_URL}/auth/google/url`
+            ).then((res)=>{        
+               console.log('res...',res?.data?.url)
+               setSocialLogin(socialLogin={GoogleLogin:res?.data?.url,FBLogin:socialLogin?.FBLogin})
+            }).catch(err=>{
+                console.log('error,...',err)
+            })
+        }
+
+        useEffect(()=>{
+            handleSocialLogin()
+        },[])
+
     return (
         <View style={style.SplashSection}>
             <ImageBackground source={require('../../Assert/Images/background.png')}  style={style.SplashBgImage} resizeMode="cover">
                 <Image style={style.BrandLogoSplash} source={require('../../Assert/Images/white-logo.png')} />
                 <View style={style.SocialLogin}>
+
+                    <TouchableHighlight underlayColor={'transparent'} 
+                    onPress={()=>{
+                        // socialLogin?.GoogleLogin
+                        console.log('socialLogin?.GoogleLogin',socialLogin?.GoogleLogin)
+                        navigation.navigate('SocialSignIn',{link:socialLogin?.GoogleLogin})
+                        // <WebView source={{ uri: socialLogin?.GoogleLogin }} />
+                    }}
+                    >
                     <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/google.png')} /></View>
+                    </TouchableHighlight>
+
                     <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/facebook.png')} /></View>
                 </View>
                 <View style={style.orDash}>

@@ -49,7 +49,7 @@ const propertyTypeOption = [
 ]
 
 const RatingList =[
-    {label:'Less than 3',value:'Less than 3'},
+    {label:'Less than 3',value:'2,1'},
     {label:'3',value:'3'},
     {label:'4',value:'4'},
     {label:'5',value:'5'},
@@ -63,16 +63,16 @@ const HotelFilter = (props) => {
     const { setOpenFilter } = props
     const { hotelSessionId, getHotelSearchResult } = useSelector((state) => state.HotelReducer)
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
-    const [checkFecility, setCheckFecility] = useState(null);
-    const [selectFecility, setSelectFecility] = useState([])
+    var [checkFecility, setCheckFecility] = useState(null);
+    var [selectFecility, setSelectFecility] = useState([])
     var [selectRating, setSelectRating] = useState([])
     const [checkLocality, setCheckLocality] = useState(null)
     const [selectLocality, setSelectLocality] = useState([])
-    const [shortBy, setShortBy] = useState(null)
+    var [shortBy, setShortBy] = useState(null)
     // const [rating, setRating] = useState()
     // const [advisorRating, setAdvisorRating] = useState(null)
     const [fareType, setfareType] = useState(null)
-    const [propertyType, setPropertyType] = useState(null)
+    var [propertyType, setPropertyType] = useState(null)
     var [priceRange, setPriceRange] = useState();
     var [startRating, setStartRating] = useState();
     var [advisorRating, setAdvisorRating] = useState();
@@ -106,21 +106,21 @@ const HotelFilter = (props) => {
             value: 'region',
         }
     ]
+
+   const  ClearFilter =()=>{
+    setAdvisorRating(advisorRating = 0)
+    setSelectFecility(selectFecility = [])
+    setSelectRating(selectRating=[])
+    setPropertyType(propertyType = '')
+    setShortBy(shortBy = '')
+
+    reset({
+        propertyType: '',
+        sortBy:'',
+    })
+
+    }
     const onSubmit = (data) => {
-        // let tempAdvisorRating = []
-        // if (data?.advisorRating !== '') {
-        //     for (let i = 1; i <= data?.advisorRating; i++) {
-        //         tempAdvisorRating.push(i)
-        //     }
-        // }
-        // let tempRating = []
-        // if (data?.rating !== '') {
-        //     for (let i = 1; i <= data?.rating; i++) {
-        //         tempRating.push(i)
-        //     }
-        // }
-console.log(data)
-console.log(selectRating)
         // let tempFilter = {
         //     filters: {
         //         price: {
@@ -136,54 +136,86 @@ console.log(selectRating)
         //         locality: selectLocality.length !== 0 ? selectLocality : '',
         //     }
         // }
-            var tempFilter ={}
-        if(data?.sortBy === undefined ||data?.sortBy === null ||data?.sortBy === '' &&
-        data?.propertyType === undefined ||data?.propertyType === null ||data?.propertyType === '' && selectRating?.length ==0){
-             tempFilter = {
+            let tempFilter ={
                 filters: {
-                    price: {
-                        min: multiSliderValue[0],
-                        max: multiSliderValue[1],
-                    },
-                    // rating:selectRating.toString(),
-                    facility: selectFecility.length !== 0 ? selectFecility?.toString : '',
-                    // locality: selectLocality.length !== 0 ? selectLocality : '',
-                }
+                            price: {
+                                min: multiSliderValue[0],
+                                max: multiSliderValue[1],
+                            },
+                        }
             }
-        }else{
-             tempFilter = {
-                filters: {
-                    price: {
-                        min: multiSliderValue[0],
-                        max: multiSliderValue[1],
-                    },
-                    rating:selectRating.toString(),
-                    // tripadvisorRating: tempAdvisorRating.length ? tempAdvisorRating : '',
-                    // faretype: data?.fareType ? data?.fareType : '',
-                    propertyType:  data?.propertyType ,
-                    facility: selectFecility.length !== 0 ? selectFecility?.toString : '',
-                    sorting: data?.sortBy,
-                    // locality: selectLocality.length !== 0 ? selectLocality : '',
-                }
-            }
-        }
 
-        console.log(selectFecility?.toString())
-        console.log('selectRating',selectRating)
-        // Object.keys(tempFilter.filters).forEach((key) => {
-        //     if (tempFilter.filters[key] === '') {
-        //         delete tempFilter.filters[key]
-        //     }
-        // })
-        // dispatch({ type: commonActions.HOTEL_LOADER, payload: true })
-        dispatch({
-            type: hotelActions.GET_HOTEL_FILTER, payload: {
-                sessionId: hotelSessionId,
-                // maxResult: getHotelSearchResult?.length,
-                maxResult: 100000,
-                ...tempFilter
-            }
-        })
+                if(advisorRating === 0){
+                    tempFilter =tempFilter
+                }else{
+                    tempFilter = {
+                        ...tempFilter,
+                       filters:{
+                        ...tempFilter?.filters,
+                        tripadvisorRating:advisorRating
+                    }
+                    }
+                }
+
+                if(data?.sortBy === undefined ||data?.sortBy === null ||data?.sortBy === '' ){
+                    tempFilter=tempFilter;
+                }else {
+                    tempFilter = {
+                        ...tempFilter,
+                       filters:{
+                        ...tempFilter?.filters,
+                         sorting: data?.sortBy 
+                       }
+                    }
+                }
+                if(data?.propertyType === undefined ||data?.propertyType === null ||data?.propertyType === '' ){
+                    tempFilter=tempFilter;
+                }else{
+                
+                    tempFilter = {
+                        ...tempFilter,
+                       filters:{
+                        ...tempFilter?.filters,
+                        propertyType: data?.propertyType
+                       }
+                    }
+                }
+                if(selectFecility?.length === 0 ||selectFecility ===undefined ||selectFecility === null){
+                    tempFilter=tempFilter;
+                }else{
+                    tempFilter = {
+                        ...tempFilter,
+                       filters:{
+                        ...tempFilter?.filters,
+                        facility:selectFecility?.toString()
+                       }
+                    }
+                }
+
+                if(selectRating?.length === 0){
+                    tempFilter=tempFilter;
+                }else{
+                    tempFilter = {
+                        ...tempFilter,
+                       filters:{
+                        ...tempFilter?.filters,
+                        rating:selectRating?.toString()
+                       }
+                    }
+                }
+                console.log('selectRating',advisorRating)
+
+        dispatch({ type: commonActions.HOTEL_LOADER, payload: true })
+                dispatch({
+                    type: hotelActions.GET_HOTEL_FILTER, 
+                    payload: {
+                        sessionId: hotelSessionId,
+                        // maxResult: getHotelSearchResult?.length,
+                        maxResult: 100000,
+                        ...tempFilter
+                    },
+                    openFile:setOpenFilter,
+                })
         console.log('tempFilter',tempFilter)
     }
     return (
@@ -606,10 +638,10 @@ console.log(selectRating)
                         </View> */}
                 </View>
                 <View style={style.filterBtnGroup}>
-                    <TouchableHighlight style={style.filtersubBtn} onPress={(() => setOpenFilter(false))}>
+                    <TouchableHighlight underlayColor={'transparent'} style={style.filtersubBtn} onPress={(() =>ClearFilter())}>
                         <Text style={{ color: '#fff', fontFamily: FONTS.mediam, }}>Clear Filter</Text>
                     </TouchableHighlight>
-                    <TouchableHighlight onPress={handleSubmit(onSubmit)} style={style.filtersubBtn}>
+                    <TouchableHighlight underlayColor={'transparent'} onPress={handleSubmit(onSubmit)} style={style.filtersubBtn}>
                         <Text style={{ color: '#fff', fontFamily: FONTS.mediam, }}>Apply</Text>
                     </TouchableHighlight>
                 </View>

@@ -50,8 +50,7 @@ const getHotelSearch = function* (data) {
 }
 
 const getHotelFilter = function* (data) {
-    const { payload } = data
-    console.log('payload...filter....', payload)
+    const { payload,openFile } = data
     try {
         const result = yield call(() =>
             axios.post(
@@ -63,19 +62,19 @@ const getHotelFilter = function* (data) {
                 }
             )
         );
-        console.log('result?.data',result?.data)
-        console.log(' result?.data?.message?.itineraries', result?.data?.message?.itineraries)
-        console.log(' result?.data?.message', result?.data?.message)
         if (result?.data?.status === true) {
-            // yield put({ type: actions.SET_HOTEL_SEARCH, payload: result?.data?.message?.itineraries });
+            // payload?.openFile(false)
+            openFile(false)
+            yield put({ type: actions.SET_HOTEL_SEARCH, payload: result?.data?.message?.itineraries });
             // yield put({ type: actions.SET_HOTEL_FILTER, payload: result?.data?.message?.itineraries ? result?.data?.message?.itineraries : [] })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
-            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'hasgdabsjkb' } })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Filtered Applied' } })
         }else{
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:result?.data?.message?.errors[0]?.errorMessage} })
-
+            openFile(false)
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:result?.data?.message?.errors} })
+            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:result?.data?.message?.errors[0]?.errorMessage} })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         }
-        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
         console.log('err', err)
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
