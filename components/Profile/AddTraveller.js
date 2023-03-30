@@ -197,6 +197,6 @@ const styles = StyleSheet.create({
         paddingVertical: 12,
         borderRadius: 8,
         marginHorizontal: 15,
-        marginVertical: 10
+        marginVertical: 10,
     },
 })
