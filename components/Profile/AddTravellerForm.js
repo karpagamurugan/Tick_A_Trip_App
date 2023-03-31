@@ -110,9 +110,6 @@ const AddTravellerForm = ({ navigation, route }) => {
             console.log('update Data', data)
 
         } else {
-
-            console.log(' update pressed', data)
-
             setListData(listData = {
                 title: data.nametitle,
                 first_name: data.firstName,
@@ -130,11 +127,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                 issue_country: getSelectId?.IssuingName,
                 nationality: getSelectId?.Nationality,
             })
-            dispatch({
-                type: userAction.GET_ADD_TRAVELLER_VALUE,
-                payload: {data:listData,navigation:navigation}
-            })
-
+          
 
             if (AddTravaller_form.find((List) => List?.email === data?.email) && ((List) => List?.mobileNumber === data?.mobileNumber)) {
                 Snackbar.show({
@@ -148,8 +141,13 @@ const AddTravellerForm = ({ navigation, route }) => {
                 })
             } else {
                 dispatch({
-                    type: userAction.GET_ADD_TRAVELLER_FORM, payload: [...listData]
+                    type: userAction.GET_ADD_TRAVELLER_VALUE,
+                    payload: {data:listData,navigation:navigation}
                 })
+    
+                // dispatch({
+                //     type: userAction.GET_ADD_TRAVELLER_FORM, payload: [...listData]
+                // })
                 reset();
                 setTitle("");
                 setGender("");
@@ -471,7 +469,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                                         style={styles.inputeEditor}
                                         placeholder="Email"
                                         {...register("email")}
-                                        onChangeText={value => onChange(value.toLowerCase())}
+                                        onChangeText={value => onChange(value)}
                                         value={value}
                                         keyboardType="default"
                                     />
@@ -504,7 +502,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                                         numberOfLines={1}
                                         maxLength={10}
                                         {...register("mobileNumber")}
-                                        onChangeText={value => onChange(value.toLowerCase())}
+                                        onChangeText={value => onChange(value)}
                                         value={value}
                                     />
                                 )}
@@ -548,7 +546,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                                             keyboardType="numeric"
                                             {...register("phoneCode")}
                                             maxLength={6}
-                                            onChangeText={value => onChange(value.toLowerCase())}
+                                            onChangeText={value => onChange(value)}
                                             value={value}
                                         />
                                     )}
@@ -1064,6 +1062,9 @@ const styles = StyleSheet.create({
         fontSize: 10,
         fontWeight: "500",
         paddingTop: 2,
+    },
+    inputeEditor:{
+        color:'black'
     }
 })
 

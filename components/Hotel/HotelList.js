@@ -150,4 +150,7 @@ const style = StyleSheet.create({
     filterFileld: {
         width: width * 0.2
     },
+    totalHotel:{
+        color:'black'
+    }
 });

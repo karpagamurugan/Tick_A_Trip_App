@@ -71,7 +71,9 @@ const ForgetVerify = ({ navigation }) => {
                                     textContentType="Email"
                                     style={style.LoginInput}
                                     keyboardType='email-address'
-                                    placeholder="Enter the Email" />
+                                    placeholder="Enter the Email"
+                                    placeholderTextColor={'grey'}
+                                    />
                             )}
                         />
                               {errors.Email && <Text  style={style.errorMessage}>Invalid email</Text>}
@@ -197,6 +199,7 @@ const style = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#EDF2F7',
         paddingLeft: 15,
+        color:'black'
     },
     fogetPassword: {
         flexDirection: 'row',

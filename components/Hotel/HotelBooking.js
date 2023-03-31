@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Dimensions, TouchableHighlight, ScrollView, TextInput, Image } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TouchableHighlight, ScrollView, TextInput, Image, KeyboardAvoidingView } from 'react-native'
 import Appbar from "../common/Appbar";
 import HotelAppbar from "../common/HotelAppbar";
 import COLORS from "../constants/color";
@@ -16,7 +16,7 @@ import { useForm, Controller } from "react-hook-form";
 import Fontisto from 'react-native-vector-icons/Fontisto'
 import userActions from '../../redux/user/actions'
 import RazorpayCheckout from "react-native-razorpay";
-import {RAZOR_KEY,RAZOR_KEY_SECRET,CURRENCY,TIMEOUT, API_URL} from '../../components/constants/constApi';
+import { RAZOR_KEY, RAZOR_KEY_SECRET, CURRENCY, TIMEOUT, API_URL } from '../../components/constants/constApi';
 import axios from "axios";
 import { Dropdown } from "react-native-element-dropdown";
 import IoniconsIcon from 'react-native-vector-icons/Ionicons'
@@ -30,190 +30,191 @@ let width = Dimensions.get('window').width;
 
 
 function HotelBooking({ route, navigation }) {
-    const dispatch =useDispatch()
+    const dispatch = useDispatch()
     const [HotelDetail, setHotelDetail] = useState(route?.params?.detail)
     const [RoomType, setRoomType] = useState(route?.params?.value)
     var [policyBox, setPolicyBox] = useState(false);
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
 
     const { userProfileData, } = useSelector((state) => state.userReducer)
-    const { RoomGuestPlace,hotelSessionId } = useSelector((state) => state.HotelReducer)
-    
-    var [couponCode,setCouponCode]=useState('')
-    var [totalFare,setTotaFare]=useState({MainTotalFare:'',SubTotalFare:''})
-    var [discountPrice,setDiscountPrice]=useState('0')
+    const { RoomGuestPlace, hotelSessionId } = useSelector((state) => state.HotelReducer)
+
+    var [couponCode, setCouponCode] = useState('')
+    var [totalFare, setTotaFare] = useState({ MainTotalFare: '', SubTotalFare: '' })
+    var [discountPrice, setDiscountPrice] = useState('0')
 
     const [title, setTitle] = useState();
 
-        const onSubmit =(data)=>{
-            if(policyBox !== true){
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Accept the Privacy Policy' } })
-            }else{
-                // console.log('HotelDetail',HotelDetail)
-                // console.log('RoomType',RoomType)
-                // console.log('RoomType',RoomType?.productId)
-                //   console.log('adadijhfiudeh',data)
-                // console.log(data)
-                PaymentGateWay()
+    const onSubmit = (data) => {
+        if (policyBox !== true) {
+            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Accept the Privacy Policy' } })
+        } else {
+            // console.log('HotelDetail',HotelDetail)
+            // console.log('RoomType',RoomType)
+            // console.log('RoomType',RoomType?.productId)
+            //   console.log('adadijhfiudeh',data)
+            // console.log(data)
+            PaymentGateWay()
+        }
+    }
+    const PaymentGateWay = () => {
+
+        var options = {
+            key: RAZOR_KEY,
+            key_secret: RAZOR_KEY_SECRET,
+            amount: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
+            currency: CURRENCY,
+            name: userProfileData?.first_name,
+            description: "Payment Tick A Trip",
+            timeout: TIMEOUT,
+            // order_id:'TickATrip_'+generateUUID(8),
+            prefill: {
+                email: userProfileData?.email,
+                contact: userProfileData?.phone,
+                name: userProfileData?.first_name
+            },
+            // handler: function (response) {
+            //   if (response.razorpay_payment_id) {
+            //     console.log(response.razorpay_payment_id);
+            //     console.log(response.razorpay_order_id);
+            //     console.log(response.razorpay_signature);
+            //     console.log(response.razorpay_status);
+            //     // bookingData['paymentTransactionId'] = response.razorpay_payment_id;
+            //     // bookingData['TotalFare'] = parseFloat(fareMethod?.TotalFareAmount ? fareMethod?.TotalFareAmount : 0);
+            //     // dispatch({ type: flightActions.SET_FLIGHT_LOADER, payload: true });
+            //     // dispatch({
+            //     //   type: flightActions.GET_BOOKIG_TRAVELLER_DATA,
+            //     //   history: history,
+            //     //   payload: bookingData
+            //     // });
+            //   }
+            // },
+            // prefill: {
+            //   name: paymenterDetails.bphone,
+            //   email: paymenterDetails.bemail,
+            //   conatct: paymenterDetails.bphone,
+            // },
+            notes: {
+                address: "",
+            },
+            theme: {
+                color: "#0543e9",
+            },
+        };
+        RazorpayCheckout.open(options).then((data) => {
+
+            var dataList = {
+                sessionId: hotelSessionId,
+                productId: RoomType?.productId,
+                tokenId: HotelDetail?.tokenId,
+                hotelId: HotelDetail?.hotelId,
+                rateBasisId: RoomType?.rateBasisId,
+                clientRef: RoomType?.productId,
+                customerName: userProfileData?.first_name,
+                customerEmail: userProfileData?.email,
+                customerPhone: userProfileData?.phone,
+                customerGst: "",
+                transactionId: data.razorpay_payment_id,
+                paymentStatus: "true",
+                bookingNote: "Remark",
+                paxDetails: [
+                    {
+                        room_no: 1,
+                        adult: {
+                            "title": ["Mr", "Mr"],
+                            "firstName": [userProfileData?.first_name, userProfileData?.first_name],
+                            "lastName": ["MindMade", "MindMade"]
+                        },
+                        "child": { "title": [], "firstName": [], "lastName": [] }
+                    }],
+                hotelName: HotelDetail?.hotelName,
+                hotelCity: HotelDetail?.city,
+                hotelCountry: HotelDetail?.country,
+                hotelAddress: HotelDetail?.address,
+                TotalFare: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
             }
+            dispatch({ type: hotelActions.SET_HOTEL_BOOKING, payload: dataList, navigation: navigation })
+        }).catch((error) => {
+            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
+            console.log('error', error)
+        });
+
+    }
+
+    useEffect(() => {
+        // dispatch({ type: commonAction.COMMON_LOADER, payload: true })
+        dispatch({ type: userActions.GET_USER_PROFILE })
+        setTotaFare(totalFare = { MainTotalFare: RoomType?.netPrice, SubTotalFare: RoomType?.netPrice })
+        setDiscountPrice(discountPrice = '0')
+    }, [])
+
+    useEffect(() => {
+        let defaultFirstName = { FirstName: userProfileData?.first_name }
+        let defaultLastName = { LastName: userProfileData?.last_name }
+        let defaultEmail = { Email: userProfileData?.email }
+        let defaultPhone = { Phone: userProfileData?.phone }
+        reset({ ...defaultLastName, ...defaultFirstName, ...defaultEmail, ...defaultPhone })
+    }, [])
+
+
+    function generateUUID(digits) {
+        let str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXZ';
+        let uuid = [];
+        for (let i = 0; i < digits; i++) {
+            uuid.push(str[Math.floor(Math.random() * str.length)]);
         }
-        const PaymentGateWay =()=>{
+        return uuid.join('');
+    }
 
-            var options = {
-                key: RAZOR_KEY,
-                key_secret: RAZOR_KEY_SECRET,
-                amount: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
-                currency: CURRENCY,
-                name: userProfileData?.first_name,
-                description: "Payment Tick A Trip",
-                timeout: TIMEOUT,
-                // order_id:'TickATrip_'+generateUUID(8),
-                     prefill: {
-                  email: userProfileData?.email,
-                  contact: userProfileData?.phone,
-                  name: userProfileData?.first_name
-                },
-                // handler: function (response) {
-                //   if (response.razorpay_payment_id) {
-                //     console.log(response.razorpay_payment_id);
-                //     console.log(response.razorpay_order_id);
-                //     console.log(response.razorpay_signature);
-                //     console.log(response.razorpay_status);
-                //     // bookingData['paymentTransactionId'] = response.razorpay_payment_id;
-                //     // bookingData['TotalFare'] = parseFloat(fareMethod?.TotalFareAmount ? fareMethod?.TotalFareAmount : 0);
-                //     // dispatch({ type: flightActions.SET_FLIGHT_LOADER, payload: true });
-                //     // dispatch({
-                //     //   type: flightActions.GET_BOOKIG_TRAVELLER_DATA,
-                //     //   history: history,
-                //     //   payload: bookingData
-                //     // });
-                //   }
-                // },
-                // prefill: {
-                //   name: paymenterDetails.bphone,
-                //   email: paymenterDetails.bemail,
-                //   conatct: paymenterDetails.bphone,
-                // },
-                notes: {
-                  address: "",
-                },
-                theme: {
-                  color: "#0543e9",
-                },
-              };
-                RazorpayCheckout.open(options).then((data) => {
-                  
-                    var dataList= {
-                        sessionId:hotelSessionId,
-                    productId:RoomType?.productId,
-                    tokenId:HotelDetail?.tokenId,
-                    hotelId:HotelDetail?.hotelId,
-                    rateBasisId: RoomType?.rateBasisId,
-                    clientRef:RoomType?.productId,
-                    customerName:userProfileData?.first_name,
-                    customerEmail:userProfileData?.email,
-                    customerPhone:userProfileData?.phone,
-                    customerGst:"",
-                    transactionId:data.razorpay_payment_id,
-                    paymentStatus:"true",
-                    bookingNote:"Remark",
-                    paxDetails:[
-                        {
-                            room_no:1,
-                            adult:{
-                                "title":["Mr","Mr"],
-                                "firstName":[userProfileData?.first_name,userProfileData?.first_name],
-                                "lastName":["MindMade","MindMade"]},
-                                "child":{"title":[],"firstName":[],"lastName":[]}
-                            }],
-                                hotelName:HotelDetail?.hotelName,
-                                hotelCity:HotelDetail?.city,
-                                hotelCountry:HotelDetail?.country,
-                                hotelAddress:HotelDetail?.address,
-                                TotalFare:parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
-                                  }
-                      dispatch({type:hotelActions.SET_HOTEL_BOOKING,payload:dataList,navigation:navigation})
-                  }).catch((error) => {
-                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-                        console.log('error',error)
-                  });
-            
-        }
-       
-        useEffect(() => {
-            // dispatch({ type: commonAction.COMMON_LOADER, payload: true })
-            dispatch({ type: userActions.GET_USER_PROFILE })
-            setTotaFare(totalFare = {MainTotalFare:RoomType?.netPrice,SubTotalFare:RoomType?.netPrice})
-            setDiscountPrice(discountPrice = '0')
-        }, [])
+    const selectTitle = [
+        { name: 'Title', value: 'Title' },
+        { name: 'Mr', value: 'Mr' },
+        { name: 'Miss', value: 'Miss' },
+        { name: 'Mrs', value: 'Mrs' },
+        { name: 'Lord', value: 'Lord' },
+        { name: 'Lady', value: 'Lady' },
+    ]
 
-        useEffect(()=>{
-            let defaultFirstName = {FirstName:userProfileData?.first_name}
-            let defaultLastName = {LastName:userProfileData?.last_name}
-            let defaultEmail = {Email:userProfileData?.email}
-            let defaultPhone = {Phone:userProfileData?.phone}
-            reset({...defaultLastName,...defaultFirstName,...defaultEmail,...defaultPhone})
-        },[])
-       
+    const ApplyCoupon = () => {
 
-        function generateUUID(digits) {
-            let str = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVXZ';
-            let uuid = [];
-            for (let i = 0; i < digits; i++) {
-                uuid.push(str[Math.floor(Math.random() * str.length)]);
-            }
-            return uuid.join('');
-        }
-
-        const selectTitle = [
-            { name: 'Title', value: 'Title' },
-            { name: 'Mr', value: 'Mr' },
-            { name: 'Miss', value: 'Miss' },
-            { name: 'Mrs', value: 'Mrs' },
-            { name: 'Lord', value: 'Lord' },
-            { name: 'Lady', value: 'Lady' },
-        ]
-
-        const ApplyCoupon =()=>{
-
-            dispatch({ type: CommonAction.COMMON_LOADER, payload: true });
-            axios.get(
-                `${API_URL}/hotel-coupon/${couponCode}`
-            ).then((res)=>{        
-                if(res?.data?.message?.status ==true){
-                    var applyCoupon =res?.data?.message?.coupon?.coupon_discount;
-                    var disFare =  totalFare?.MainTotalFare/100
-                    var finalFare = disFare*applyCoupon
-                    setDiscountPrice(discountPrice = finalFare.toFixed(2))
-                    setTotaFare(totalFare={MainTotalFare:( totalFare?.MainTotalFare - finalFare).toFixed(2),SubTotalFare:totalFare?.SubTotalFare})
-                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Coupon Applied'} })
-                    dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-        
-                }else{
-
-                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid CouponCode'} })
-                    dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-                }
-            }).catch(err=>{
-                console.log(err)
-                console.log(err?.response?.data)
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message} })
+        dispatch({ type: CommonAction.COMMON_LOADER, payload: true });
+        axios.get(
+            `${API_URL}/hotel-coupon/${couponCode}`
+        ).then((res) => {
+            if (res?.data?.message?.status == true) {
+                var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
+                var disFare = totalFare?.MainTotalFare / 100
+                var finalFare = disFare * applyCoupon
+                setDiscountPrice(discountPrice = finalFare.toFixed(2))
+                setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(2), SubTotalFare: totalFare?.SubTotalFare })
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
                 dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-            })
-        }
+
+            } else {
+
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid CouponCode' } })
+                dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+            }
+        }).catch(err => {
+            console.log(err)
+            console.log(err?.response?.data)
+            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message } })
+            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+        })
+    }
 
     return (
         <View style={{ height: height * 0.92, backgroundColor: 'transparent' }}>
             {/* <Appbar title={'Hotel Booking'}/> */}
             <HotelAppbar title={'Hotel Booking'} />
-             
-            <ScrollView>
-                {/* <View style={{ height: height * 0.25, backgroundColor: COLORS.BtnColor, marginTop: 10 }} /> */}
+            <KeyboardAvoidingView behavior="height">
+
+            <ScrollView style={{height:height*0.78}}>
                 <Image source={{ uri: HotelDetail?.thumbNailUrl }} style={{ height: height * 0.27, marginTop: 15 }} />
-                <View style={{ marginTop:10,flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 }}>
+                <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 }}>
                     <View>
-                        <Text style={[styles.HotelName,{color:'black'}]}>{HotelDetail?.hotelName}</Text>
-                        <Text style={[styles.HotelName,{color:COLORS.starFill}]}>{HotelDetail?.hotelRating} <AntDesign name="star" color={COLORS.starFill}/> <Text style={[styles.HotelName,{color:'grey'}]}> reviews</Text></Text>
+                        <Text style={[styles.HotelName, { color: 'black' }]}>{HotelDetail?.hotelName}</Text>
+                        <Text style={[styles.HotelName, { color: COLORS.starFill }]}>{HotelDetail?.hotelRating} <AntDesign name="star" color={COLORS.starFill} /> <Text style={[styles.HotelName, { color: 'grey' }]}> reviews</Text></Text>
                     </View>
                     <View>
                         <View style={{ backgroundColor: COLORS.lightGrey }}>
@@ -229,14 +230,14 @@ function HotelBooking({ route, navigation }) {
                         </View>
                     </View>
                 </View>
-               <View style={{flexDirection:'row',marginLeft:10,marginTop:10}}>
-               <IoniconsIcon style={style.searchPlaceIcon} name='location-outline' size={18} color={COLORS.colorTheme}/>
-                <Text style={{width:width*0.9,marginLeft:5,ontSize:height*0.017,color:COLORS.BtnColor,fontFamily:FONTS.font}}>{HotelDetail?.address}</Text>
+                <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
+                    <IoniconsIcon style={style.searchPlaceIcon} name='location-outline' size={18} color={COLORS.colorTheme} />
+                    <Text style={{ width: width * 0.9, marginLeft: 5, ontSize: height * 0.017, color: COLORS.BtnColor, fontFamily: FONTS.font }}>{HotelDetail?.address}</Text>
 
-               </View>
+                </View>
 
                 <View >
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 20,paddingTop:10}}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 20, paddingTop: 10 }}>
                         <View>
                             <Text style={styles.titleStyle}>Depart On</Text>
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
@@ -279,29 +280,30 @@ function HotelBooking({ route, navigation }) {
                     <View style={styles.couponCode}>
                         <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
                             <TextInput
-                                style={{ width:width*0.75 }}
+                                style={{ width: width * 0.75, color: 'black' }}
+                                placeholderTextColor={'grey'}
                                 placeholder='Add a coupon Code'
-                                onChangeText={e=>{
-                                    if(e?.length === 0){
-                                        setTotaFare(totalFare = {MainTotalFare:RoomType?.netPrice,SubTotalFare:totalFare?.SubTotalFare})
+                                onChangeText={e => {
+                                    if (e?.length === 0) {
+                                        setTotaFare(totalFare = { MainTotalFare: RoomType?.netPrice, SubTotalFare: totalFare?.SubTotalFare })
                                         setDiscountPrice(discountPrice = '0')
                                     }
-                                        setCouponCode(couponCode=e)
-                                    
+                                    setCouponCode(couponCode = e)
+
                                 }
                                 }
                             />
-                            <TouchableHighlight onPress={() =>{
-                                if(couponCode?.length !== 0){
-                                   
-                                   if(totalFare?.MainTotalFare === totalFare?.SubTotalFare){
-                                    ApplyCoupon()
+                            <TouchableHighlight onPress={() => {
+                                if (couponCode?.length !== 0) {
 
-                                   }else{
-                                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Coupon applied'} })
-                                   }
-                                }else{
-                                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Enter Coupon Code'} })
+                                    if (totalFare?.MainTotalFare === totalFare?.SubTotalFare) {
+                                        ApplyCoupon()
+
+                                    } else {
+                                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon applied' } })
+                                    }
+                                } else {
+                                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Enter Coupon Code' } })
                                 }
                             }} underlayColor='transparent'>
                                 <Text style={styles.applyCoupon}>APPLY</Text>
@@ -317,10 +319,10 @@ function HotelBooking({ route, navigation }) {
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
-                        
+
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Discounts & {'\n'}Adjustments</Text>
-                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>{(discountPrice === '0')?discountPrice:- discountPrice}/-</Text></Text>
+                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>{(discountPrice === '0') ? discountPrice : - discountPrice}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 1, opacity: 0.2, marginVertical: 7 }} />
 
@@ -338,60 +340,61 @@ function HotelBooking({ route, navigation }) {
 
                         <Text style={{ fontFamily: FONTS.font, color: COLORS.BtnColorDark }}>Fill Billing Details</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                           
-<View style={styles.editTextBorder}>
-                            <Controller
-                                control={control}
-                                name="Title"
-                                rules={{
-                                    required: {
-                                        value: true,
-                                        message: 'Select Your Title',
-                                    }
-                                }}
-                                render={({ field: { onChange, value } }) => (
-                                    <Dropdown
-                                        showsVerticalScrollIndicator={true}
-                                        placeholder="Title"
-                                        data={selectTitle}
-                                        labelField="name"
-                                        valueField="value"
-                                        value={title}
-                                        name="Title"
-                                        {...register("Title")}
-                                        onChange={(item) => {
-                                            onChange(item.value)
-                                            setTitle(item.value)
+
+                            <View style={styles.editTextBorder}>
+                                <Controller
+                                    control={control}
+                                    name="Title"
+                                    rules={{
+                                        required: {
+                                            value: true,
+                                            message: 'Select Your Title',
                                         }
-                                        }
-                                        
-                                        selectedTextProps={{
-                                            style: {
-                                                // fontSize: 13,
-                                                fontWeight: '500',
-                                                fontFamily: FONTS.font,
-                                                letterSpacing: 0.5,
-                                                paddingTop: 10,
-                                                paddingHorizontal:4,
-                                                // width:width*0.1
-                                                color:'black'
-                                            },
-                                        }}
-                                        style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
-                                        renderRightIcon={() => (
-                                            <IoniconsIcon
-                                                name="chevron-down"
-                                                size={25}
-                                                style={{ fontSize: 18, color: COLORS.colorTheme, }}
-                                            />)}
-                                    />
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
+                                        <Dropdown
+                                            showsVerticalScrollIndicator={true}
+                                            placeholder="Title"
+                                            data={selectTitle}
+                                            labelField="name"
+                                            valueField="value"
+                                            value={title}
+                                            name="Title"
+                                            {...register("Title")}
+                                            onChange={(item) => {
+                                                onChange(item.value)
+                                                setTitle(item.value)
+                                            }
+                                            }
+
+                                            selectedTextProps={{
+                                                style: {
+                                                    width: width * 0.12,
+                                                    // fontSize: 13,
+                                                    fontWeight: '500',
+                                                    fontFamily: FONTS.font,
+                                                    letterSpacing: 0.5,
+                                                    paddingTop: 10,
+                                                    paddingHorizontal: 3,
+                                                    // width:width*0.1
+                                                    color: 'black',
+                                                },
+                                            }}
+                                            style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
+                                            renderRightIcon={() => (
+                                                <IoniconsIcon
+                                                    name="chevron-down"
+                                                    size={25}
+                                                    style={{ fontSize: 18, color: COLORS.colorTheme, }}
+                                                />)}
+                                        />
+                                    )}
+                                />
+                                {errors.Title && (
+                                    <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.Title.message}</Text>
                                 )}
-                            />
-                            {errors.Title && (
-                                <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.Title.message}</Text>
-                            )}
-                        </View>
-                        
+                            </View>
+
                             <View style={[styles.editTextBorder, { width: width * 0.70 }]}>
                                 <Controller
                                     control={control}
@@ -497,7 +500,7 @@ function HotelBooking({ route, navigation }) {
                                         // style={styles.inputeEditor}
                                         name='Phone'
                                         placeholder="Phone"
-                                        keyboardType='default'
+                                        keyboardType='phone-pad'
                                         {...register("Phone")}
                                         value={value}
                                         style={{ marginLeft: 10 }}
@@ -567,21 +570,24 @@ function HotelBooking({ route, navigation }) {
 
                 </View>
             </ScrollView>
-           
+            </KeyboardAvoidingView>
+
 
             <View style={styles.ConfirmBtn}>
                 <TouchableHighlight underlayColor={'transparent'}
-                        // onPress={()=>{
-                        //    console.log('TickATrip_'+generateUUID(8))                           
+                    // onPress={()=>{
+                    //    console.log('TickATrip_'+generateUUID(8))                           
 
-                        // }}
-                //  onPress={handleSubmit(onSubmit)}
-                onPress={handleSubmit(onSubmit)}
+                    // }}
+                    //  onPress={handleSubmit(onSubmit)}
+                    onPress={handleSubmit(onSubmit)}
                 //  console.log('TickATrip_'+generateUUID(8))    
                 >
                     <Text style={styles.confirmBook}>Confirm & Book</Text>
                 </TouchableHighlight>
             </View>
+
+
 
         </View>
     )
@@ -640,15 +646,15 @@ const styles = StyleSheet.create({
         width: width * 0.8,
         marginVertical: 10
     },
-    HotelName:{fontFamily:FONTS.font,width:width*0.5},
+    HotelName: { fontFamily: FONTS.font, width: width * 0.5 },
     errormessage: {
         color: "red",
         fontSize: 10,
         fontWeight: "500",
         paddingTop: 2,
     },
-    titleStyle:{
-        fontFamily:FONTS.font,
-        color:COLORS.TextDarkGrey
+    titleStyle: {
+        fontFamily: FONTS.font,
+        color: COLORS.TextDarkGrey
     }
 })

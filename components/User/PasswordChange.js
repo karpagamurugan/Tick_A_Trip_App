@@ -82,7 +82,9 @@ password_confirmation:data?.ConfirmPassword}, {
                                     textContentType="Password"
                                     style={style.LoginInput}
                                     secureTextEntry
-                                    placeholder="Enter the Password" />
+                                    placeholder="Enter the Password" 
+                                    placeholderTextColor={'grey'}
+                                    />
                             )}
                         />
 
@@ -112,6 +114,7 @@ password_confirmation:data?.ConfirmPassword}, {
                                     textContentType="ConfirmPassword"
                                     style={style.LoginInput}
                                     secureTextEntry
+                                    placeholderTextColor={'grey'}
                                     placeholder="Re-enter your password" />
                             )}
                         />
@@ -237,6 +240,7 @@ const style = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: '#EDF2F7',
         paddingLeft: 15,
+        color:'black'
     },
     fogetPassword: {
         flexDirection: 'row',

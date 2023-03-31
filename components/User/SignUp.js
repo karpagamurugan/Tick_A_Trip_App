@@ -217,6 +217,7 @@ const SignUp = ({ navigation }) => {
                                         keyboardType='default'
                                         placeholder='Enter the name'
                                         style={style.input}
+                                        placeholderTextColor={'grey'}
                                     />
                                 )}
                             />
@@ -244,6 +245,7 @@ const SignUp = ({ navigation }) => {
                                         keyboardType='default'
                                         placeholder='Enter your first name'
                                         style={style.input}
+                                        placeholderTextColor={'grey'}
                                     />
                                 )}
 
@@ -272,6 +274,7 @@ const SignUp = ({ navigation }) => {
                                         keyboardType='default'
                                         placeholder='Enter the last name'
                                         style={style.input}
+                                        placeholderTextColor={'grey'}
                                     />
                                 )}
                             />
@@ -286,6 +289,7 @@ const SignUp = ({ navigation }) => {
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput  {...register("mobileNumber")} name="mobileNumber"
                                         onChangeText={value => onChange(value)} maxLength={10}
+                                        placeholderTextColor={'grey'}
                                         value={value} keyboardType='numeric' placeholder='Enter the mobile number' style={style.input} />
                                 )}
                                 name="mobileNumber"
@@ -307,6 +311,7 @@ const SignUp = ({ navigation }) => {
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput   {...register("email")} name="email"
+                                    placeholderTextColor={'grey'}
                                         onChangeText={value => onChange(value.toLowerCase())}
                                         value={value} keyboardType='email-address' placeholder='Enter the email address' style={style.input} />
                                 )}
@@ -356,7 +361,9 @@ const SignUp = ({ navigation }) => {
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
-                                    <TextInput  minLength={8}  {...register("password")} name="password"
+                                    <TextInput  
+                                    placeholderTextColor={'grey'}
+                                    minLength={8}  {...register("password")} name="password"
                                         onChangeText={value => {
                                             setUserPassword(value)
                                             onChange(value)
@@ -380,7 +387,9 @@ const SignUp = ({ navigation }) => {
                             <Controller
                                 control={control}
                                 render={({ field: { onChange, value } }) => (
-                                    <TextInput  minLength={8} {...register("confirmPassword")} name="confirmPassword"
+                                    <TextInput 
+                                    placeholderTextColor={'grey'}
+                                    minLength={8} {...register("confirmPassword")} name="confirmPassword"
                                         onChangeText={value => {
                                             setUserConfirmPassword(value)
                                             onChange(value)
@@ -423,7 +432,9 @@ const SignUp = ({ navigation }) => {
                                     <Controller
                                         control={control}
                                         render={({ field: { onChange, value } }) => (
-                                            <TextInput   {...register("frequentFlyerNumber")} name="frequentFlyerNumber"
+                                            <TextInput  
+                                            placeholderTextColor={'grey'}
+                                            {...register("frequentFlyerNumber")} name="frequentFlyerNumber"
                                                 onChangeText={value => onChange(value)}
                                                 value={value} keyboardType='default' placeholder='Enter the Frequent flyer number' style={style.input} />
                                         )}
@@ -436,7 +447,9 @@ const SignUp = ({ navigation }) => {
                                     <Controller
                                         control={control}
                                         render={({ field: { onChange, value } }) => (
-                                            <TextInput   {...register("passportNumber")} name="passportNumber"
+                                            <TextInput  
+                                            placeholderTextColor={'grey'}
+                                            {...register("passportNumber")} name="passportNumber"
                                                 onChangeText={value => onChange(value)}
                                                 value={value} keyboardType='default' placeholder='Enter the Passport number' style={style.input} />
                                         )}
@@ -449,7 +462,9 @@ const SignUp = ({ navigation }) => {
                                     <Controller
                                         control={control}
                                         render={({ field: { onChange, value } }) => (
-                                            <TextInput   {...register("issuingCountry")} name="issuingCountry"
+                                            <TextInput 
+                                            placeholderTextColor={'grey'}
+                                              {...register("issuingCountry")} name="issuingCountry"
                                                 onChangeText={value => onChange(value)} value={value} keyboardType='default' placeholder='Enter the Issuing country*' style={style.input} />
                                         )}
                                         name="issuingCountry"
@@ -467,9 +482,17 @@ const SignUp = ({ navigation }) => {
                                     <Controller
                                         control={control}
                                         render={({ field: { onChange, value } }) => (
-                                            <TextInput   {...register("pan")} name="pan"
+                                            <TextInput 
+                                            placeholderTextColor={'grey'}
+                                            {...register("pan")} name="pan"
                                                 onChangeText={value => onChange(value)}
-                                                value={value} keyboardType='default' placeholder='Enter the PAN' style={style.input} />
+                                                value={value}
+                                                 keyboardType='default'
+                                                  placeholder='Enter the PAN'
+                                                  placeholderTextColor={'grey'}
+
+                                                   style={style.input} />
+                                                   
                                         )}
                                         name="pan"
                                         rules={{ required: false }}

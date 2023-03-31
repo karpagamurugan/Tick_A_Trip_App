@@ -55,12 +55,12 @@ const PopularPlaceCard = ({navigation}) => {
 
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <FontAwesome5Icon name='hotel' size={height * 0.015} />
+                                        <FontAwesome5Icon name='hotel' size={height * 0.015} color='grey'/>
                                         <Text style={style.PopularPlaceCardStay}>{item?.entry2}</Text>
                                     </View>
 
                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                        <Entypo name='location-pin' size={height * 0.025} />
+                                        <Entypo name='location-pin' size={height * 0.025} color='grey' />
                                         <Text style={style.PopularPlaceCardStay}>{item?.entry1}</Text>
                                     </View>
 
