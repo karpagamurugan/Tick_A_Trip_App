@@ -22,122 +22,79 @@ function Offers() {
     const OFFSET = TEXT_LENGTH / 2 - TEXT_HEIGHT / 2
     const dispatch = useDispatch()
     const { flight_Coupons, hotel_Coupons } = useSelector((state) => state.userReducer)
-    const [selectColor, setSelectColor] = useState([])
-    
 
     useEffect(() => {
         dispatch({ type: userAction.GET_ALL_FLIGHT_COUPON })
         dispatch({ type: userAction.GET_ALL_HOTEL_COUPON })
     }, [])
-    
-    var colorValues = [
-        { color: "#0041f2" },
-        { color: "#71b7e3" },
-        { color: "#0b7d97" },
-        { color: "#10ab87" },
-    ]
-    const selectRandomColor = () => {
-        let selectColor = colorValues
-        // let colorValues = ["#0041f2", "#71b7e3", "#10ab87", "#0b7d97"];
-        // setSelectColor(colorValues)
-        // // let colorValues = ["#0041f2", "#71b7e3", "#10ab87","#0b7d97"];
-        // // return colorValues[Math.floor(Math.random() * colorValues.length).toString(3).padStart(1, '0')];
-        // // const randomColor = Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-        // // return `#${randomColor}`;
-    }
-useEffect(()=>{
 
-    // console.log(flight_Coupons?.message?.length)
-       
-    for(let i=0;i<hotel_Coupons?.message?.length; i++){
-        // console.log(hotel_Coupons?.message[i])2
-        // selectColor.push()
-        for(let j=0;j<colorValues?.length;j++){
-            selectColor.push(colorValues[j])
-
-        }
-
-
-    }
-
-    console.log('selectColor',selectColor)
-
-
-
-},[])
     return (
         <View>
             <View style={style.mainContainer}>
                 <Appbar title={'Offers'} />
                 <View style={{ marginTop: 20 }}>
-
-                    {colorValues.map((val,index) => {
-                        return (
-                            <View key={index} >
-                                {
-                                    flight_Coupons?.message?.map((item, index) => {
-                                        return (
-                                            <View key={index} >
-                                                <View style={style.cardView}>
-                                                    <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-
-                                                        <View style={[style.discountText, { backgroundColor: val.color }]}>
-                                                            <Text style={[style.verticalText]}>t</Text>
-                                                            <Text style={[style.verticalText]}>n</Text>
-                                                            <Text style={[style.verticalText]}>u</Text>
-                                                            <Text style={[style.verticalText]}>o</Text>
-                                                            <Text style={[style.verticalText]}>c</Text>
-                                                            <Text style={[style.verticalText]}>s</Text>
-                                                            <Text style={[style.verticalText]}>i</Text>
-                                                            <Text style={[style.verticalText]}>D</Text>
+                    <View>
+                        {
+                            hotel_Coupons?.message?.map((item, index) => {
+                                return (
+                                    <View key={index} >
+                                        <View style={style.cardView}>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
+                                                <View key={index} style={[style.discountText, { backgroundColor: index % 2 ==0 ? '#0041f2':'#71b7e3' }]}>
+                                                    <Text style={[style.verticalText]}>t</Text>
+                                                    <Text style={[style.verticalText]}>n</Text>
+                                                    <Text style={[style.verticalText]}>u</Text>
+                                                    <Text style={[style.verticalText]}>o</Text>
+                                                    <Text style={[style.verticalText]}>c</Text>
+                                                    <Text style={[style.verticalText]}>s</Text>
+                                                    <Text style={[style.verticalText]}>i</Text>
+                                                    <Text style={[style.verticalText]}>D</Text>
+                                                </View>
+                                                <View style={{ paddingHorizontal: 20, }}>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', }}>
+                                                        <Image source={HotelOffer} style={{ height: 45, width: 45, marginRight: 10 }} />
+                                                        <Text style={style.textBold}> {item?.coupon_description} For Hotel Booking </Text>
+                                                    </View>
+                                                    <View style={style.code}>
+                                                        <View>
+                                                            <Text style={[style.textBold, { fontSize: height * 0.019 }]}> {item?.coupon_code}</Text>
                                                         </View>
-
-                                                        <View style={{ paddingHorizontal: 20, }}>
-                                                            <View style={{ flexDirection: 'row', alignItems: 'flex-start', }}>
-                                                                <Image source={HotelOffer} style={{ height: 45, width: 45, marginRight: 10 }} />
-                                                                <Text style={style.textBold}> {item?.coupon_description} For Hotel Booking </Text>
-                                                            </View>
-                                                            <View style={style.code}>
-                                                                <View>
-                                                                    <Text style={[style.textBold, { fontSize: height * 0.019 }]}> {item?.coupon_code}</Text>
-                                                                </View>
-                                                                <TouchableHighlight
-                                                                    underlayColor={false}
-                                                                    onPress={() => {
-                                                                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Code Copied to Clipboard' } })
-                                                                        Clipboard.setString(item?.coupon_code)
-                                                                    }}>
-                                                                    <FeatherIcon name="copy" size={22} style={{ color: COLORS.textBlue, }} />
-                                                                </TouchableHighlight>
-                                                            </View>
-                                                            <View style={{ flexDirection: 'row', alignItems: 'flex-start', paddingTop: 10 }}>
-                                                                <Text style={{ fontSize: 13, paddingTop: 3, paddingRight: 5, fontFamily: FONTS.fontSemi }}>Expires:</Text>
-                                                                <Text style={{ fontSize: height * 0.02, fontFamily: FONTS.fontSemi, color: COLORS.textBlue, }}>{item?.coupon_valid_upto}</Text>
-                                                            </View>
-                                                        </View>
+                                                        <TouchableHighlight
+                                                            underlayColor={false}
+                                                            onPress={() => {
+                                                                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Code Copied to Clipboard' } })
+                                                                Clipboard.setString(item?.coupon_code)
+                                                            }}>
+                                                            <FeatherIcon name="copy" size={22} style={{ color: COLORS.textBlue, }} />
+                                                        </TouchableHighlight>
+                                                    </View>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'flex-start', paddingTop: 10 }}>
+                                                        <Text style={{ fontSize: 13, paddingTop: 3, paddingRight: 5, fontFamily: FONTS.fontSemi }}>Expires:</Text>
+                                                        <Text style={{ fontSize: height * 0.02, fontFamily: FONTS.fontSemi, color: COLORS.textBlue, }}>{item?.coupon_valid_upto}</Text>
                                                     </View>
                                                 </View>
-                                                <View style={style.designCircle}>
-                                                    <View style={style.circle} />
-                                                </View>
-                                                <View style={[style.designCircle, { marginRight: 20, right: -10 }]}>
-                                                    <View style={[style.circle]} />
-                                                </View>
                                             </View>
-                                        )
-                                    })
-                                }
-                            </View>
-                        )
-                    })}
+                                        </View>
+                                        <View style={style.designCircle}>
+                                            <View style={style.circle} />
+                                        </View>
+                                        <View style={[style.designCircle, { marginRight: 20, right: -10 }]}>
+                                            <View style={[style.circle]} />
+                                        </View>
+                                    </View>
+                                )
+                            })
+                        }
+                    </View>
 
                     {
-                        hotel_Coupons?.message?.map((item, index) => {
+                        flight_Coupons?.message?.map((item, index) => {
                             return (
                                 <View key={index} >
                                     <View style={style.cardView}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                            <View style={[style.discountText, { backgroundColor: selectRandomColor() }]}>
+
+                                            <View key={index} style={[style.discountText, { backgroundColor: index % 2 ==0 ? '#10ab87':'#0b7d97' }]}>
                                                 <Text style={[style.verticalText]}>t</Text>
                                                 <Text style={[style.verticalText]}>n</Text>
                                                 <Text style={[style.verticalText]}>u</Text>
@@ -150,7 +107,7 @@ useEffect(()=>{
                                             <View style={{ paddingHorizontal: 20, }}>
                                                 <View style={{ flexDirection: 'row', alignItems: 'flex-start', }}>
                                                     <Image source={FlightOffer} style={{ height: 45, width: 45, marginRight: 10 }} />
-                                                    <Text style={style.textBold}> {item?.coupon_description} For Hotel Booking </Text>
+                                                    <Text style={style.textBold}> {item?.coupon_description} For Flight Tickets </Text>
                                                 </View>
                                                 <View style={style.code}>
                                                     <View>
