@@ -66,16 +66,14 @@ const HotelFilter = (props) => {
     var [checkFecility, setCheckFecility] = useState(null);
     var [selectFecility, setSelectFecility] = useState([])
     var [selectRating, setSelectRating] = useState([])
+    var [selectAdvisorRating, setSelectAdvisorRating] = useState([])
     const [checkLocality, setCheckLocality] = useState(null)
     const [selectLocality, setSelectLocality] = useState([])
     var [shortBy, setShortBy] = useState(null)
-    // const [rating, setRating] = useState()
-    // const [advisorRating, setAdvisorRating] = useState(null)
     const [fareType, setfareType] = useState(null)
     var [propertyType, setPropertyType] = useState(null)
     var [priceRange, setPriceRange] = useState();
     var [startRating, setStartRating] = useState();
-    var [advisorRating, setAdvisorRating] = useState();
     const [multiSliderValue, setMultiSliderValue] = useState([0, 10000]);
     multiSliderValuesChange = values => setMultiSliderValue(values);
     const CheckFecilityValues = [
@@ -108,11 +106,11 @@ const HotelFilter = (props) => {
     ]
 
    const  ClearFilter =()=>{
-    setAdvisorRating(advisorRating = 0)
     setSelectFecility(selectFecility = [])
     setSelectRating(selectRating=[])
     setPropertyType(propertyType = '')
     setShortBy(shortBy = '')
+    setSelectAdvisorRating(selectAdvisorRating=[])
 
     reset({
         propertyType: '',
@@ -145,17 +143,18 @@ const HotelFilter = (props) => {
                         }
             }
 
-                if(advisorRating === 0){
-                    tempFilter =tempFilter
+                if(selectAdvisorRating?.length === 0){
+                    tempFilter=tempFilter;
                 }else{
                     tempFilter = {
                         ...tempFilter,
                        filters:{
                         ...tempFilter?.filters,
-                        tripadvisorRating:advisorRating
-                    }
+                        tripadvisorRating:selectAdvisorRating?.toString()
+                       }
                     }
                 }
+
 
                 if(data?.sortBy === undefined ||data?.sortBy === null ||data?.sortBy === '' ){
                     tempFilter=tempFilter;
@@ -203,7 +202,7 @@ const HotelFilter = (props) => {
                        }
                     }
                 }
-                console.log('selectRating',advisorRating)
+                console.log('selectRating',selectAdvisorRating)
 
         dispatch({ type: commonActions.HOTEL_LOADER, payload: true })
                 dispatch({
@@ -494,21 +493,17 @@ const HotelFilter = (props) => {
                                     <View style={[style.checkBox,{paddingHorizontal:7}]} key={index}>
                                         <TouchableHighlight underlayColor='transparent' onPress={() => {
                                             if (!selectRating.includes(val.value)) {
-                                                console.log(selectRating,'djcejfdeo')
                                                 setSelectRating(selectRating=[...selectRating, val.value])
                                             } else {
-                                                console.log(selectRating,'djcejfdeo')
                                                 setSelectRating(selectRating.filter((item) => item !== val.value))
                                             }
                                         }}>
                                             <View style={style.checkBox}>
                                                 {selectRating.includes(val.value) ?
-                                                    // < Fontisto style={style.checkInputIcon} name='checkbox-active' />
                                                     <View style={[style.custmCheckBox,{backgroundColor:COLORS.colorBtn}]}>
                                                         <Ionicons name='checkmark' color={'white'}/>
                                                         </View>
                                                     :
-                                                    // <Fontisto style={style.checkInputIcon} name='checkbox-passive' />
                                                     <View style={[style.custmCheckBox,{backgroundColor:'white'}]}/>
                                                 }
                                                 <Text style={[style.checkInputLabel,{paddingLeft:7}]}>{val.label}</Text>
@@ -555,9 +550,9 @@ const HotelFilter = (props) => {
                 <View style={style.filterField}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={style.filterFieldLabel}>Trip Advisor Rating</Text>
-                        <Text style={style.priceRange}>{advisorRating}</Text>
+                        {/* <Text style={style.priceRange}>{advisorRating}</Text> */}
                     </View>
-                    <Slider
+                    {/* <Slider
                         style={{ paddingVertical: 5, width: width*0.85, height: 20 }}
                         minimumValue={0}
                         maximumValue={6}
@@ -569,8 +564,40 @@ const HotelFilter = (props) => {
                             // console.log("price Value",val)
                         }}
 
-                    />
+                    /> */}
+
+
+<View style={[style.checkBoxGrop,{flexDirection:'row'}]}>
+                            {
+                                RatingList.map((val, index) => (
+                                    <View style={[style.checkBox,{paddingHorizontal:7}]} key={index}>
+                                        <TouchableHighlight underlayColor='transparent' onPress={() => {
+                                            if (!selectAdvisorRating.includes(val.value)) {
+                                                setSelectAdvisorRating(selectAdvisorRating=[...selectAdvisorRating, val.value])
+                                            } else {
+                                                setSelectAdvisorRating(selectAdvisorRating.filter((item) => item !== val.value))
+                                            }
+                                        }}>
+                                            <View style={style.checkBox}>
+                                                {selectAdvisorRating.includes(val.value) ?
+                                                    <View style={[style.custmCheckBox,{backgroundColor:COLORS.colorBtn}]}>
+                                                        <Ionicons name='checkmark' color={'white'}/>
+                                                        </View>
+                                                    :
+                                                    <View style={[style.custmCheckBox,{backgroundColor:'white'}]}/>
+                                                }
+                                                <Text style={[style.checkInputLabel,{paddingLeft:7}]}>{val.label}</Text>
+                                            </View>
+                                        </TouchableHighlight>
+
+                                    </View>
+                                ))
+                            }
+
+                        </View>
                 </View>
+
+
                 <View style={{ flexDirection: "row", justifyContent: "space-between", paddingTop: 10 }}>
                     <View style={style.filterField}>
                         <Text style={style.filterFieldLabel}>Facility</Text>
@@ -636,6 +663,8 @@ const HotelFilter = (props) => {
                             </View>
                         </View> */}
                 </View>
+
+
                 <View style={style.filterBtnGroup}>
                     <TouchableHighlight underlayColor={'transparent'} style={style.filtersubBtn} onPress={(() =>ClearFilter())}>
                         <Text style={{ color: '#fff', fontFamily: FONTS.mediam, }}>Clear Filter</Text>

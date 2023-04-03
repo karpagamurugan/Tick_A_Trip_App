@@ -11,6 +11,8 @@ import FONTS from '../constants/font';
 import axios from 'axios';
 import { API_URL } from '../constants/constApi';
 import WebView from 'react-native-webview';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -36,20 +38,31 @@ const Login = ({ navigation }) => {
         debounce((e)=>console.log(e), 400)
         , []); 
 
-        const handleSocialLogin= async()=>{
-           await axios.get(
-                `${API_URL}/auth/google/url`
-            ).then((res)=>{        
-               console.log('res...',res?.data?.url)
-               setSocialLogin(socialLogin={GoogleLogin:res?.data?.url,FBLogin:socialLogin?.FBLogin})
-            }).catch(err=>{
-                console.log('error,...',err)
-            })
-        }
+        GoogleSignin.configure({
+            webClientId:'888882619335-s8p6ecgrcvm4sjsvapjflj4dqvib09h.apps.googleuser',
+            offlineAccess:true
+        })
 
-        useEffect(()=>{
-            handleSocialLogin()
-        },[])
+        async function SignInWithGoogle(){
+            const {isToken} = await GoogleSignin.signIn();
+            const googleCredential = auth.GoogleAuthProvider.credential(isToken);
+            return auth().signInWithCredential(googleCredential);
+
+        }
+        // const handleSocialLogin= async()=>{
+        //    await axios.get(
+        //         `${API_URL}/auth/google/url`
+        //     ).then((res)=>{        
+        //        console.log('res...',res?.data?.url)
+        //        setSocialLogin(socialLogin={GoogleLogin:res?.data?.url,FBLogin:socialLogin?.FBLogin})
+        //     }).catch(err=>{
+        //         console.log('error,...',err)
+        //     })
+        // }
+
+        // useEffect(()=>{
+        //     handleSocialLogin()
+        // },[])
 
     return (
         <View style={style.SplashSection}>
@@ -59,9 +72,10 @@ const Login = ({ navigation }) => {
 
                     <TouchableHighlight underlayColor={'transparent'} 
                     onPress={()=>{
+                        SignInWithGoogle()
                         // socialLogin?.GoogleLogin
-                        console.log('socialLogin?.GoogleLogin',socialLogin?.GoogleLogin)
-                        navigation.navigate('SocialSignIn',{link:socialLogin?.GoogleLogin})
+                        // console.log('socialLogin?.GoogleLogin',socialLogin?.GoogleLogin)
+                        // navigation.navigate('SocialSignIn',{link:socialLogin?.GoogleLogin})
                         // <WebView source={{ uri: socialLogin?.GoogleLogin }} />
                     }}
                     >

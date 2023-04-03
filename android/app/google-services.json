@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "258076381203",
+    "project_id": "tickatrip-8784c",
+    "storage_bucket": "tickatrip-8784c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258076381203:android:0aa9fd1cb1843201546fe6",
+        "android_client_info": {
+          "package_name": "com.tick_a_trip_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258076381203-84shhubi53cjvnof4deinn4dunoc4aal.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDcaMHDZeZRY2ubDW3OcIBodsAmAq3Cn8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258076381203-84shhubi53cjvnof4deinn4dunoc4aal.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
