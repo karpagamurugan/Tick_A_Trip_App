@@ -1,41 +1,50 @@
-import React,{useState} from "react";
-import { View, Text, Pressable, Dimensions, StyleSheet, ImageBackground, TouchableHighlight } from 'react-native';
+import React, { useState } from "react";
+import { View, Text, Pressable, Dimensions, StyleSheet, ImageBackground, TouchableHighlight, FlatList } from 'react-native';
 import Fontisto from 'react-native-vector-icons/Fontisto';
 import Slider from '@react-native-community/slider';
 import FONTS from '../constants/font';
 import COLORS from '../constants/color';
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
-function FlightFilter(props) {
 
+function FlightFilter(props) {
+    const { Flight_search_result } = useSelector((state) => state.FlightSearchReducer)
     const dispatch = useDispatch()
     const { setShowFilter } = props
     var [priceRange, setPriceRange] = useState(); //set price range for filter
 
- 
-    const FilterList = {
-        Airlines: [
-            { value: 'All' },
-            { value: 'Spicejet' },
-            { value: 'Indigo Airlines' },
-            { value: 'Air India' },
-            { value: 'Vistara' },
-        ],
-        Cabin: [
-            { value: 'Business class' },
-            { value: 'Economy class' },
-        ],
-        Stops: [
-            { value: 'Any' },
-            { value: 'Non-stop' },
-            { value: '1 Stop' },
-            { value: '2 Stop' },
-        ],
-    }
 
+    var [FilterList, setFilterList] = useState([
+        { value: 'All', isChecked: true },
+        { value: 'Spicejet', isChecked: false },
+        { value: 'Indigo Airlines', isChecked: false },
+        { value: 'Air India', isChecked: false },
+        { value: 'Vistara', isChecked: false },
+    ])
+    
+    // Cabin: [
+    //     { value: 'Business class' },
+    //     { value: 'Economy class' },
+    // ],
+    // Stops: [
+    //     { value: 'Any' },
+    //     { value: 'Non-stop' },
+    //     { value: '1 Stop' },
+    //     { value: '2 Stop' },
+    // ],
+    // var [checkBoxOne, setCheckBoxOne] = useState(FilterList);
+    // console.log('checkBoxOne', checkBoxOne)
+    const handleChange = (value, index) => {
+        FilterList[index].isChecked = !FilterList[index].isChecked;
+        setFilterList(FilterList = FilterList);
+
+        console.log(FilterList)
+
+    }
 
     return (
         <View style={{ backgroundColor: '#000000ba', width: width, height: height }}>
@@ -80,16 +89,27 @@ function FlightFilter(props) {
 
                         <View style={{ marginTop: 6, paddingLeft: 10 }}>
                             <Text style={styles.FilterTitle}>Airlines</Text>
-                            {
-                                FilterList?.Airlines?.map((item, i) => (
-                                    <View key={i} style={{ paddingTop: 5 }}>
-                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                            <Fontisto name='checkbox-passive' size={15} />
-                                            <Text style={styles.filterText}>{item.value}</Text>
 
+                            {/* <FlatList
+                                data={FilterList}
+                                renderItem={(item,i) => (
+                                   
+                                )}
+                            /> */}
+                            {FilterList.map((item, ind) => {
+                                return (
+                                    <View key={ind} style={{ paddingTop: 5 }}>
+                                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                            <Pressable onPress={() => handleChange(item?.isChecked, ind)}>
+                                                <MaterialIcons style={[styles.checkBoxStyl]} name={item?.isChecked===true ? "check-box" : "check-box-outline-blank"} />
+                                            </Pressable>
+                                            <Text style={styles.filterText}>{item.value}</Text>
+                                            {/* <Text style={styles.filterText}>{item?.item?.value}</Text> */}
                                         </View>
                                     </View>
-                                ))
+                                );
+                            })
+
                             }
 
                             <Text style={styles.FilterTitle}>Cabin</Text>
@@ -99,7 +119,6 @@ function FlightFilter(props) {
                                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                             <Fontisto name='radio-btn-passive' size={15} />
                                             <Text style={styles.filterText}>{item.value}</Text>
-
                                         </View>
                                     </View>
                                 ))
@@ -123,8 +142,8 @@ function FlightFilter(props) {
                         </TouchableHighlight>
                     </View>
                 </ImageBackground>
-            </View>       
-          </View>
+            </View>
+        </View>
     )
 }
 
@@ -140,8 +159,12 @@ const styles = StyleSheet.create({
         borderBottomLeftRadius: 5
     },
     listBtnText: { fontFamily: FONTS.font, fontSize: height * 0.016, },
-    FlightText: { color: 'black', fontFamily: FONTS.fontBold }
-
+    FlightText: { color: 'black', fontFamily: FONTS.fontBold },
+    priceContainer: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    }
 
 })
 

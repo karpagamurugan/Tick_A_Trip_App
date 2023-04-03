@@ -150,15 +150,8 @@ export default function FlightDetails(props) {
                                                                         ?.toUpperCase()}</Text>
                                                                 </View>
                                                             </View>
-
-
-
-
                                                         </View>
-
-
                                                     </View>
-
                                                 </View>
                                             ))
 
