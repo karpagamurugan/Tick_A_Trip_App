@@ -60,45 +60,47 @@ const FlightSearch = function* (data) {
             )
         );
 
+console.log('result?.data',result?.data?.status)
+console.log('payload?.data?.journey_type',payload?.data?.journey_type)
 
-        let a = result?.data.message.map(el => {
-            return {
-                ...el, flight_details: el.flight_details.map(el1 => {
-                    return { FareSourceCode: el.FareSourceCode, ...el1 }
-                })
-            }
-        });
-        let b = [], c = [], d = 0;
-        a.forEach((el, i) => {
-            let temp = "";
-            temp = temp + el.flightName;
-            el.flight_details.forEach(val => {
-                val.flights.forEach(el1 => {
-                    temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
-                });
-                temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
-            });
-            if (b.includes(temp)) {
-                let tempIndex;
-                b.forEach((el1, ind) => {
-                    if (el1 === temp) {
-                        tempIndex = ind;
-                    }
-                });
-                c[tempIndex] = [...c[tempIndex], el];
-                c = [...c, c[tempIndex]];
-            } else {
-                c[d] = [el];
-                b = [...b, temp];
-                d = d + 1;
-            }
-        });
-
+   
 
 
 
         if (result?.data?.status === true) {
-
+            let a = result?.data?.message.map(el => {
+                return {
+                    ...el, flight_details: el.flight_details.map(el1 => {
+                        return { FareSourceCode: el.FareSourceCode, ...el1 }
+                    })
+                }
+            });
+            let b = [], c = [], d = 0;
+            a.forEach((el, i) => {
+                let temp = "";
+                temp = temp + el.flightName;
+                el.flight_details.forEach(val => {
+                    val.flights.forEach(el1 => {
+                        temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
+                    });
+                    temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
+                });
+                if (b.includes(temp)) {
+                    let tempIndex;
+                    b.forEach((el1, ind) => {
+                        if (el1 === temp) {
+                            tempIndex = ind;
+                        }
+                    });
+                    c[tempIndex] = [...c[tempIndex], el];
+                    c = [...c, c[tempIndex]];
+                } else {
+                    c[d] = [el];
+                    b = [...b, temp];
+                    d = d + 1;
+                }
+            });
+    
             if (payload?.data?.journey_type === "OneWay") {
                 yield put({
                     type: actions.GET_FLIGHT_SEARCH, payload: c
@@ -112,6 +114,7 @@ const FlightSearch = function* (data) {
             payload.navigation.navigate('FlightResult', { prefs: payload?.prefs,type:payload?.data?.journey_type })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
         } else {
+            console.log('else....')
 
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })

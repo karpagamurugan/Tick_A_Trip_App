@@ -243,7 +243,6 @@ const HotelSearch = ({ navigation }) => {
     })
   }
   useEffect(() => {
-    console.log('selectAddRoom', selectAddRoom)
     if (selectAddRoom.length !== 0) {
       let tempAdultCount = 0
       for (let i = 0; i < selectAddRoom.length; i++) {
@@ -491,7 +490,7 @@ const HotelSearch = ({ navigation }) => {
                     :
                     <View>
                       <Text style={style.inputFieldText}>Room / Guests </Text>
-                      <Text>{selectAddRoom?.length} Rooms,{adultCount || childCount ? adultCount + childCount : 0} Guests</Text>
+                      <Text style={{color:'grey',fontSize:height*0.02}}>{selectAddRoom?.length} Rooms,{adultCount || childCount ? adultCount + childCount : 0} Guests</Text>
                     </View>
                   }
                 </View>
@@ -550,7 +549,6 @@ const HotelSearch = ({ navigation }) => {
             </View>
             <View>
               <View>
-                {console.log('selectAddRoom search', selectAddRoom)}
                 {selectAddRoom.map((val, index) => (
 
                   <View key={index} style={[style.roomColumn]}>

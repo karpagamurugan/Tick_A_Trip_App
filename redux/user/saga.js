@@ -234,12 +234,11 @@ const getData = async () => {
 const getAddtoTravellerValue = function* (data) {
     // async function* getAddtoTravellerValue(data) {
     const { payload } = data
-    console.log('flight booking payload 12345', payload)
     try {
         const result = yield call(() =>
             axios.post(
                 `${API_URL}/user/addTraveler`,
-                payload.data, {
+                payload?.data, {
                 headers: {
                     // accept: 'application/json',
                     'Content-Type': 'multipart/form-data',
@@ -251,6 +250,7 @@ const getAddtoTravellerValue = function* (data) {
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveler Added Successfully' } })
             yield put({ type: actions.GET_ADD_TRAVELLER_TOKEN, payload: true })
+
             getData()
             payload.navigation.goBack() 
         } else {

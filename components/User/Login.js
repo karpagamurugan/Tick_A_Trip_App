@@ -95,7 +95,9 @@ const Login = ({ navigation }) => {
                                     onChangeText={value => onChange(value)}
                                     keyboardType="default"
                                     style={style.LoginInput}
-                                    placeholder="Enter Your Email | Email" />
+                                    placeholder="Enter Your Email | Phone" 
+                                    placeholderTextColor={'grey'}
+                                    />
                             )}
                         />
                         {errors.userMail && (
@@ -121,7 +123,9 @@ const Login = ({ navigation }) => {
                                     onChangeText={value => onChange(value)}
                                     textContentType="newPassword"
                                     secureTextEntry style={style.LoginInput}
-                                    placeholder="Enter the password" />
+                                    placeholder="Enter the password" 
+                                    placeholderTextColor={'grey'}
+                                    />
                             )}
                         />
                         {errors.userPassword && (
@@ -282,6 +286,7 @@ const style = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: COLORS.TextGrey,
         paddingLeft: 15,
+        color:'black'
     },
     fogetPassword: {
         flexDirection: 'row',

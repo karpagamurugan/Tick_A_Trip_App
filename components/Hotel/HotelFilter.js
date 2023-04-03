@@ -596,7 +596,6 @@ const HotelFilter = (props) => {
                                                     :
                                                     // <Fontisto style={style.checkInputIcon} name='checkbox-passive' />
                                                     <View style={[style.custmCheckBox,{backgroundColor:'white'}]}/>
-
                                                 }
                                                 <Text style={style.checkInputLabel}>{val.label}</Text>
                                             </View>
@@ -659,9 +658,9 @@ const style = StyleSheet.create({
     },
     filtersubBtn: {
         backgroundColor: COLORS.colorBtn,
-        paddingVertical: 10,
-        paddingHorizontal: 45,
-        borderRadius: 100,
+        paddingVertical: 5,
+        paddingHorizontal: 10,
+        borderRadius: 20,
     },
     filterBtnGroup: {
         marginBottom: 20,
@@ -681,6 +680,7 @@ const style = StyleSheet.create({
         letterSpacing: 0.5,
         fontSize: 13,
         marginLeft: 5,
+        color:'black'
     },
     checkBox: {
         flexDirection: 'row',
@@ -763,6 +763,9 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
 
+    },
+    placeholderStyle:{
+        color:'grey'
     },
     custmCheckBox:{height:16,width:16,borderRadius:2,borderColor:'grey',borderWidth:0.6,alignItems:'center'}
 
