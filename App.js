@@ -23,7 +23,6 @@ import HotelLoader from './components/common/hotelLoader';
 import Alert from './components/common/Alert';
 import FlightLoader from './components/common/flightLoader';
 import PasswordChange from './components/User/PasswordChange';
-import SocialSignIn from './components/User/SocialSignIn';
 
 
 function App() {
@@ -52,7 +51,6 @@ function App() {
           <Stack.Screen name='VerifyOtp' component={VerifyOtp} />
           <Stack.Screen name='PasswordChange' component={PasswordChange} />
           <Stack.Screen name='bottomNavigation' component={BottomNavigate} />
-          <Stack.Screen name='SocialSignIn' component={SocialSignIn} />
         </Stack.Navigator>
       </NavigationContainer>
       {/* <View>Dummy Text</View> */}

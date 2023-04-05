@@ -132,7 +132,8 @@ export default function FlightResult({ navigation, route }) {
                                                                 e[0]?.flight_details?.map((data, ind) => (
                                                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} key={ind}>
                                                                         <View style={{ alignItems: 'center' }}>
-                                                                            <Text style={styles.Textlite}> {data.flights[0].departureLocation}(
+                                                                            <Text style={styles.Textlite}>
+                                                                                 {data.flights[0].departureLocation}{'\n'}(
                                                                                 {
                                                                                     data.flights[0].flightList
                                                                                         .DepartureAirportLocationCode
@@ -143,15 +144,15 @@ export default function FlightResult({ navigation, route }) {
                                                                                 data.flights[0].flightList
                                                                                     .DepartureDateTime
                                                                             )
-                                                                                ?.format("hh:mm:ss a")
+                                                                                ?.format("HH:mm:ss a")
                                                                                 .substring(0, 5)}</Text>
-                                                                            <Text style={styles.Textlite}>{moment(
+                                                                            {/* <Text style={styles.Textlite}>{moment(
                                                                                 data.flights[0].flightList
                                                                                     .DepartureDateTime
                                                                             )
-                                                                                ?.format("hh:mm:ss a")
+                                                                                ?.format("HH:mm:ss a")
                                                                                 .substring(9, 11)
-                                                                                ?.toUpperCase()}</Text>
+                                                                                ?.toUpperCase()}</Text> */}
                                                                         </View>
                                                                         <FromArrow />
                                                                         <View style={{ alignItems: 'center' }}>
@@ -182,7 +183,7 @@ export default function FlightResult({ navigation, route }) {
                                                                                 data.flights[
                                                                                     data.flights.length - 1
                                                                                 ].arrivalLocation
-                                                                            } (
+                                                                            } {'\n'} (
                                                                                 {
                                                                                     data.flights[
                                                                                         data.flights.length - 1
@@ -195,16 +196,16 @@ export default function FlightResult({ navigation, route }) {
                                                                                     data.flights.length - 1
                                                                                 ].flightList.ArrivalDateTime
                                                                             )
-                                                                                ?.format("hh:mm:ss a")
+                                                                                ?.format("HH:mm:ss a")
                                                                                 .substring(0, 5)}</Text>
-                                                                            <Text style={styles.Textlite}>{moment(
+                                                                            {/* <Text style={styles.Textlite}>{moment(
                                                                                 data.flights[
                                                                                     data.flights.length - 1
                                                                                 ].flightList.ArrivalDateTime
                                                                             )
                                                                                 ?.format("hh:mm:ss a")
                                                                                 .substring(9, 11)
-                                                                                ?.toUpperCase()}</Text>
+                                                                                ?.toUpperCase()}</Text> */}
                                                                         </View>
                                                                     </View>
                                                                 ))

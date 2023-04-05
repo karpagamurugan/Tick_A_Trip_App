@@ -1,14 +1,16 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, memo, useEffect } from 'react';
-import { View, Text, TouchableHighlight, StyleSheet, Image, FlatList } from 'react-native'
+import { View, Text, TouchableHighlight, StyleSheet, Image, FlatList,Dimensions } from 'react-native'
 import style from '../common/commonStyle'
 import { Dropdown } from 'react-native-element-dropdown';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import FeatherIcon from 'react-native-vector-icons/Feather'
-import font from '../constants/font';
-import color from '../constants/color';
+import FONTS from '../constants/font';
+import COLORS from '../constants/color';
 import AdultIcon from '../../Assert/Icons/adult.png';
 import ChildIcon from '../../Assert/Icons/child.png';
+const width = Dimensions.get('window').width
+const height = Dimensions.get('window').height
 
 const HotelSelectRoomGuest = (props) => {
     const { row, room_no, changeAddRoom, index1, selectAddRoom, removeSelectChild, defAdultVal, defChildVal } = props
@@ -122,9 +124,9 @@ const HotelSelectRoomGuest = (props) => {
         <View>
             <View style={{ paddingTop: 30 }}>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: '100%' }}>
-                    <View style={{ flexDirection: 'row', }}>
+                    <View style={{ flexDirection: 'row',alignItems:'center' }}>
                         <Image source={AdultIcon} style={{ width: 32, height: 32 }} />
-                        <Text style={{ paddingLeft: 10, fontFamily: font.mediam, fontSize: 22, color: '#000', textTransform: 'uppercase' }}>Adults</Text>
+                        <Text style={{ paddingLeft: 10, fontFamily: FONTS.mediam, fontSize:height*0.023 , color: '#000', textTransform: 'uppercase' }}>Adults</Text>
                     </View>
                     <View style={style.AdultQtyList}>
                         {/* {AdultQty.map((val, index) => (
@@ -148,11 +150,11 @@ const HotelSelectRoomGuest = (props) => {
             </View>
             <View style={{ paddingTop: 20, paddingBottom: 10 }}>
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                    <View style={{ flexDirection: 'row', }}>
+                    <View style={{ flexDirection: 'row',alignItems:'center' }}>
                         <Image source={ChildIcon} style={{ width: 38, height: 32 }} />
                         <View style={{ paddingLeft: 5 }}>
-                            <Text style={{ fontFamily: font.mediam, fontSize: 22, color: '#000', textTransform: 'uppercase' }}>CHILDREN</Text>
-                            <Text style={{ marginTop: -10, fontFamily: font.mediam }}>{'(Age: 0-12)'}</Text>
+                            <Text style={{ fontFamily: FONTS.mediam, fontSize:height*0.023 , color: '#000', textTransform: 'uppercase' }}>CHILDREN</Text>
+                            <Text style={{ marginTop: -10, fontFamily: FONTS.mediam }}>{'(Age: 0-12)'}</Text>
                         </View>
                     </View>
 
@@ -249,9 +251,9 @@ const HotelSelectRoomGuest = (props) => {
                             onChange={(item) => OnChildAge(item, index)}
                             selectedTextProps={{
                                 style: {
-                                    fontSize: 13,
+                                    fontSize: height*0.02,
                                     fontWeight: '500',
-                                    fontFamily: font.font,
+                                    fontFamily: FONTS.font,
                                     letterSpacing: 0.5,
                                     padding: 0,
                                     color: '#003AA8',
@@ -282,7 +284,7 @@ const styles = StyleSheet.create({
     },
     countNumber: {
         paddingHorizontal: 10,
-        fontSize: 18,
+        fontSize: height*0.023,
         color: '#000',
     },
 

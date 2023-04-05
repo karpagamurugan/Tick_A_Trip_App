@@ -1,8 +1,8 @@
 apply plugin: "com.android.application"
-apply plugin:'com.google.gms.google-services'
 
 import com.android.build.OutputFile
-import org.apache.tools.ant.taskdefs.condition.Os
+// import org.apache.tools.ant.taskdefs.condition.Os
+apply plugin: "com.google.gms.google-services"
 
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
@@ -260,9 +260,10 @@ dependencies {
 
     implementation 'com.facebook.fresco:fresco:2.0.0'
     implementation 'com.facebook.fresco:animated-gif:2.6.0'
-    
-    implementation platform('com.google.firebase:firebase-bom:31.3.0')
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    implementation platform("com.google.firebase:firebase-bom:26.3.0")
+    implementation 'com.google.firebase:firebase-auth'
+
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'

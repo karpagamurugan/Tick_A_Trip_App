@@ -9,7 +9,6 @@ import { useForm, Controller } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import hotelActions from '../../redux/Hotel/actions';
 import commonActions from '../../redux/common/actions';
-import Slider from '@react-native-community/slider';
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import MultiSlider from '@ptomasroos/react-native-multi-slider';
 import Fontisto from 'react-native-vector-icons/Fontisto';
@@ -486,7 +485,7 @@ const HotelFilter = (props) => {
 
 <View style={{ flexDirection: "row", justifyContent: "space-between", paddingTop: 10 }}>
                     <View style={style.filterField}>
-                        <Text style={style.filterFieldLabel}>Rating</Text>
+                        <Text style={style.filterFieldLabel}>Star Rating</Text>
                         <View style={[style.checkBoxGrop,{flexDirection:'row'}]}>
                             {
                                 RatingList.map((val, index) => (
@@ -506,7 +505,7 @@ const HotelFilter = (props) => {
                                                     :
                                                     <View style={[style.custmCheckBox,{backgroundColor:'white'}]}/>
                                                 }
-                                                <Text style={[style.checkInputLabel,{paddingLeft:7}]}>{val.label}</Text>
+                                                <Text style={[style.checkInputLabel,{paddingLeft:7}]}>{val.label} </Text>
                                             </View>
                                         </TouchableHighlight>
 
