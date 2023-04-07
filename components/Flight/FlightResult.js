@@ -21,16 +21,18 @@ import COLORS from '../constants/color';
 import actions from '../../redux/Flight/actions';
 import FlightFilter from './FlightFilter';
 import FlightCard from './FlightCard';
+import { forEach } from 'lodash';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
 export default function FlightResult({ navigation, route }) {
     const { Flight_search_result } = useSelector((state) => state.FlightSearchReducer)
-
+// console.log('Flight_search_result',Flight_search_result[0])
     const dispatch = useDispatch();
     var [showFilter, setShowFilter] = useState(false); //show filter modal
     const [dropdown, setDropdown] = useState([]);
+    var [mainList, setMainList] = useState(Flight_search_result)
 
     function timeConvert(n) {
         var num = n;
@@ -48,6 +50,81 @@ export default function FlightResult({ navigation, route }) {
         } else {
             setDropdown([...dropdown, index]);
         }
+    }
+
+    const filterApply = (price, Airline, cabin, stops) => {
+        // console.log('Airline',Airline)
+        var tempFilterList = []
+        for (var i = 0; i < Flight_search_result.length; i++) {
+            var temp = Flight_search_result[i].filter(e => parseFloat(e.totalFare) < parseFloat(price))
+            if (price !== undefined || price !== null) {
+                for (let j = 0; j < temp.length; j++) {
+                    if (temp[j]?.length == 0) {
+                    } else {
+                        tempFilterList.push(temp[j])
+                    }
+                }
+            } else{
+                
+            }
+            var temp1 = Flight_search_result.filter(e => e !== Airline)
+            if (Airline !== undefined || Airline !== null) {
+                for (let j = 0; j < temp1.length; j++) {
+                    if (temp1[j]?.length == 0) {
+                        console.log('true')
+                    } else {
+                        console.log('false')
+                        tempFilterList.push(temp1[j])
+                    }
+                }
+            }  
+        }
+        if (tempFilterList) {
+            let a = tempFilterList.map(el => {
+                return {
+                    ...el, flight_details: el.flight_details.map(el1 => {
+                        return { FareSourceCode: el.FareSourceCode, ...el1 }
+                    })
+                }
+            });
+            let b = [], c = [], d = 0;
+            a.forEach((el, i) => {
+                let temp = "";
+                temp = temp + el.flightName;
+                el.flight_details.forEach(val => {
+                    val.flights.forEach(el1 => {
+                        temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
+                    });
+                    temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
+                });
+                if (b.includes(temp)) {
+                    let tempIndex;
+                    b.forEach((el1, ind) => {
+                        if (el1 === temp) {
+                            tempIndex = ind;
+                        }
+                    });
+                    c[tempIndex] = [...c[tempIndex], el];
+                    c = [...c, c[tempIndex]];
+                } else {
+                    c[d] = [el];
+                    b = [...b, temp];
+                    d = d + 1;
+                }
+            });
+
+            if (route?.params?.prefs?.journey_type === "OneWay") {
+                dispatch({
+                    type: actions.GET_FLIGHT_SEARCH, payload: c
+                });
+            } else {
+                dispatch({
+                    type: actions.GET_FLIGHT_SEARCH, payload: a
+                });
+            }
+        }
+
+        // setShowFilter(false)
     }
 
     var listDatA = [[{ 'data': 'value' }, { 'data': 'value1' }, { 'data': 'value3' }], [{ 'data': 'value4' }, { 'data': 'value5' }, { 'data': 'value6' }]]
@@ -87,7 +164,14 @@ export default function FlightResult({ navigation, route }) {
                 visible={showFilter}
             >
                 <View>
-                    <FlightFilter navigation={navigation} setShowFilter={setShowFilter} />
+                    <FlightFilter
+                        navigation={navigation}
+                        route={route}
+                        setShowFilter={setShowFilter}
+                        onApplied={(price, Airline, cabin, stops) => {
+                            filterApply(price, Airline, cabin, stops)
+                        }}
+                    />
                 </View>
             </Modal>
 
@@ -115,7 +199,7 @@ export default function FlightResult({ navigation, route }) {
                             (route?.params?.type === 'OneWay') ?
                                 Flight_search_result?.map((e, index) => {
                                     return (
-                                        <View>
+                                        <View key={index}>
                                             {
                                                 <View style={styles.card} >
                                                     <View style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
@@ -132,6 +216,7 @@ export default function FlightResult({ navigation, route }) {
                                                                 e[0]?.flight_details?.map((data, ind) => (
                                                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} key={ind}>
                                                                         <View style={{ alignItems: 'center' }}>
+
                                                                             <Text style={styles.Textlite}> {data.flights[0].departureLocation}(
                                                                                 {
                                                                                     data.flights[0].flightList
@@ -235,15 +320,15 @@ export default function FlightResult({ navigation, route }) {
 
 
                                                     {
-                                                dropdown?.includes(e[0]?.FareSourceCode) ?
-                                                    e.map((item1, ind) => {
-                                                        return (
-                                                          <View style={{backgroundColor:'white',paddingTop:7}}>
-                                                              <FlightCard prefs={route?.params?.prefs} key={index} item={item1} navigation={navigation} />
-                                                            </View>
-                                                        );
-                                                    }) : <></>
-                                            }
+                                                        dropdown?.includes(e[0]?.FareSourceCode) ?
+                                                            e.map((item1, ind) => {
+                                                                return (
+                                                                    <View style={{ backgroundColor: 'white', paddingTop: 7 }}>
+                                                                        <FlightCard prefs={route?.params?.prefs} key={index} item={item1} navigation={navigation} />
+                                                                    </View>
+                                                                );
+                                                            }) : <></>
+                                                    }
 
                                                 </View>
                                             }
@@ -253,7 +338,7 @@ export default function FlightResult({ navigation, route }) {
                                 })
                                 :
                                 Flight_search_result?.message?.map((item, index) => (
-                                    <FlightCard key={index} item={item}  prefs={route?.params?.prefs} navigation={navigation} />
+                                    <FlightCard key={index} item={item} prefs={route?.params?.prefs} navigation={navigation} />
                                 ))
 
                         }

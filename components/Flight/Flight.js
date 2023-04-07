@@ -147,6 +147,7 @@ useEffect(()=>{
           class: classType,
           departure_date: moment(fromDate).format('YYYY-MM-DD'),
           return_date: (oneTrip === true) ? "" : moment(ToDate).format('YYYY-MM-DD'),
+          journey_type: (oneTrip === true) ? 'OneWay' : 'RoundTrip',
         }
       }
     })
