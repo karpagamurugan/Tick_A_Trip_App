@@ -10,7 +10,8 @@ import {debounce} from 'lodash';
 import FONTS from '../constants/font';
 import axios from 'axios';
 import { API_URL } from '../constants/constApi';
-import WebView from 'react-native-webview';
+import auth from '@react-native-firebase/auth';
+import { GoogleSignin, statusCodes, GoogleSigninButton } from '@react-native-google-signin/google-signin';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -36,20 +37,83 @@ const Login = ({ navigation }) => {
         debounce((e)=>console.log(e), 400)
         , []); 
 
-        const handleSocialLogin= async()=>{
-           await axios.get(
-                `${API_URL}/auth/google/url`
-            ).then((res)=>{        
-               console.log('res...',res?.data?.url)
-               setSocialLogin(socialLogin={GoogleLogin:res?.data?.url,FBLogin:socialLogin?.FBLogin})
-            }).catch(err=>{
-                console.log('error,...',err)
-            })
-        }
+        const webClientId = "258076381203-84shhubi53cjvnof4deinn4dunoc4aal.apps.googleusercontent.com"; 
 
         useEffect(()=>{
-            handleSocialLogin()
+            GoogleSignin.configure({
+                webClientId: webClientId,
+            })
         },[])
+        async function onGoogleButtonPress() {
+
+            const { idToken } = await GoogleSignin.signIn();
+            
+            const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+            auth().onAuthStateChanged((user) => {
+
+                if(user) {
+                    console.log(user)
+                    console.log(user?.providerData)
+                console.log(true);
+                } else {
+                    console.log(false);
+                }
+                }) 
+            
+            return auth().signInWithCredential(googleCredential);
+            
+            }
+    
+        // const googleLogin = async () => {
+        //     try {
+        //         await GoogleSignin.hasPlayServices();
+        //         const userInfo = await GoogleSignin.signIn();
+        //         console.log("userinfo", userInfo);
+        //         if(userInfo?.idToken !== null){
+        //             navigation.reset({
+        //                 index: 0,
+        //                 routes: [{ name: 'bottomNavigation' }]
+        //             })
+
+        //         }
+    
+        //     } catch (error) {
+        //         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
+        //             console.log(error)
+        //         } else if (error.code === statusCodes.IN_PROGRESS) {
+        //             console.log(error)
+        //         } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
+        //             console.log(error)
+        //         } else {
+        //         }
+        //     }
+        //   };
+
+        // GoogleSignin.configure({
+        //     webClientId:'258076381203-84shhubi53cjvnof4deinn4dunoc4aal.apps.googleusercontent.com',
+        //     offlineAccess:true
+        // })
+
+        // async function SignInWithGoogle(){
+        //     const {isToken} = await GoogleSignin.signIn();
+        //     const googleCredential = auth.GoogleAuthProvider.credential(isToken);
+        //     return auth().signInWithCredential(googleCredential);
+
+        // }
+        // const handleSocialLogin= async()=>{
+        //    await axios.get(
+        //         `${API_URL}/auth/google/url`
+        //     ).then((res)=>{        
+        //        console.log('res...',res?.data?.url)
+        //        setSocialLogin(socialLogin={GoogleLogin:res?.data?.url,FBLogin:socialLogin?.FBLogin})
+        //     }).catch(err=>{
+        //         console.log('error,...',err)
+        //     })
+        // }
+
+        // useEffect(()=>{
+        //     handleSocialLogin()
+        // },[])
 
     return (
         <View style={style.SplashSection}>
@@ -58,13 +122,7 @@ const Login = ({ navigation }) => {
                 <View style={style.SocialLogin}>
 
                     <TouchableHighlight underlayColor={'transparent'} 
-                    onPress={()=>{
-                        // socialLogin?.GoogleLogin
-                        console.log('socialLogin?.GoogleLogin',socialLogin?.GoogleLogin)
-                        navigation.navigate('SocialSignIn',{link:socialLogin?.GoogleLogin})
-                        // <WebView source={{ uri: socialLogin?.GoogleLogin }} />
-                    }}
-                    >
+                    onPress={()=>onGoogleButtonPress()}>
                     <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/google.png')} /></View>
                     </TouchableHighlight>
 

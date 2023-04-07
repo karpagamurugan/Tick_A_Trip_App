@@ -60,13 +60,6 @@ const FlightSearch = function* (data) {
             )
         );
 
-console.log('result?.data',result?.data?.status)
-console.log('payload?.data?.journey_type',payload?.data?.journey_type)
-
-   
-
-
-
         if (result?.data?.status === true) {
             let a = result?.data?.message.map(el => {
                 return {

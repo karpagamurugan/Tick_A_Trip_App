@@ -11,19 +11,15 @@ import Appbar from '../common/Appbar'
 import RenderHtml from 'react-native-render-html';
 import { useDispatch, useSelector } from "react-redux";
 import actions from '../../redux/Flight/actions';
-import { WebView } from 'react-native-webview';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
+
 export default function FlightDetails(props) {
     let data = props.route?.params?.item;
     var [selectedTab, setSelectedTab] = useState(0);
     const dispatch = useDispatch()
-
     const { Fare_rules } = useSelector((state) => state.FlightSearchReducer)
-
-
-    // console.log('Fare_rules',Fare_rules)
     function timeConvert(n) {
         var num = n;
         var hours = Math.floor(num / 60) > 0 ? Math.floor(num / 60) + "H " : "";
@@ -41,10 +37,6 @@ export default function FlightDetails(props) {
     const sourceFile = {
         html: `${Fare_rules?.message?.toString()}`
     };
-
-    const htmlContent =  `${Fare_rules?.message?.toString()}`;
-
-    //   console.log('Fare_rules?.message',Fare_rules?.message.toString())
     return (
         <View>
             <Appbar title={'Flight details'} />
@@ -71,115 +63,113 @@ export default function FlightDetails(props) {
                         underlayColor={"#dddddd"}
                         style={[styles.tabBtn, { backgroundColor: selectedTab === 1 ? 'white' : 'transparent', }]}
                     >
-                        <Text style={[styles.tabText, { color: selectedTab === 1 ? 'black' : 'gray' }]}>FARERULES</Text>
+                        <Text style={[styles.tabText, { color: selectedTab === 1 ? 'black' : 'gray' }]}>REFUND RULES</Text>
                     </TouchableHighlight>
                 </View>
 
-                <ScrollView>
-                    <View style={{ marginTop: 10 }}>
+                <View style={{ height: height * 0.75, marginHorizontal: 10 }}>
+                    <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+                        <View style={{ marginTop: 10 }}>
 
-                        {
-                            (selectedTab === 0) ?
-                                <View>
-                                    {
-                                        data?.flight_details?.map((item) => (
-                                            item?.flights?.map((item1, index) => (
-                                                <View style={styles.card} key={index}>
-                                                    <View style={{ paddingHorizontal: 10 }}>
-                                                        <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                            <View style={{ alignItems: 'center' }}>
-                                                                <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={{
-                                                                    uri: API_IMG_URL + '/server/flightimage/' + data?.flightUrl
-                                                                }} />
-                                                                <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.021, width: width * 0.2 }}>{data?.flightName}</Text>
-
-                                                            </View>
+                            {
+                                (selectedTab === 0) ?
+                                    <View>
+                                        {
+                                            data?.flight_details?.map((item) => (
+                                                item?.flights?.map((item1, index) => (
+                                                    <View style={styles.card} key={index}>
+                                                        <View style={{ paddingHorizontal: 10 }}>
                                                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                                                 <View style={{ alignItems: 'center' }}>
-                                                                    <Text style={styles.Textlite}> {item1.departureLocation}(
-                                                                        {
-                                                                            item1.flightList
-                                                                                .DepartureAirportLocationCode
-                                                                        }
-                                                                        )</Text>
+                                                                    <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={{
+                                                                        uri: API_IMG_URL + '/server/flightimage/' + data?.flightUrl
+                                                                    }} />
+                                                                    <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.021, width: width * 0.2 }}>{data?.flightName}</Text>
 
-                                                                    <Text style={styles.Text}>{moment(
-                                                                        item1.flightList
-                                                                            .DepartureDateTime
-                                                                    )
-                                                                        ?.format("hh:mm:ss a")
-                                                                        .substring(0, 5)}</Text>
-                                                                    <Text style={styles.Textlite}>{moment(
+                                                                </View>
+                                                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                                    <View style={{ alignItems: 'center' }}>
+                                                                        <Text style={styles.Textlite}> {item1.departureLocation} {'\n'}(
+                                                                            {
+                                                                                item1.flightList
+                                                                                    .DepartureAirportLocationCode
+                                                                            }
+                                                                            )</Text>
+
+                                                                        <Text style={styles.Text}>{moment(
+                                                                            item1.flightList
+                                                                                .DepartureDateTime
+                                                                        )
+                                                                            ?.format("HH:mm:ss a")
+                                                                            .substring(0, 5)}</Text>
+                                                                        {/* <Text style={styles.Textlite}>{moment(
                                                                         item1.flightList
                                                                             .DepartureDateTime
                                                                     )
                                                                         ?.format("hh:mm:ss a")
                                                                         .substring(9, 11)
-                                                                        ?.toUpperCase()}</Text>
-                                                                </View>
-                                                                <FromArrow />
-                                                                <View style={{ alignItems: 'center' }}>
-                                                                    <Text style={styles.Text}> {timeConvert(
-                                                                        item1.flightList
-                                                                            .JourneyDuration
-                                                                    )}</Text>
-                                                                    <FlightIcon />
-
-
-                                                                </View>
-                                                                <BackArrow />
-                                                                <View style={{ alignItems: 'center' }}>
-                                                                    <Text style={styles.Textlite}>{
-                                                                        item1.arrivalLocation
-                                                                    } (
-                                                                        {
+                                                                        ?.toUpperCase()}</Text> */}
+                                                                    </View>
+                                                                    <FromArrow />
+                                                                    <View style={{ alignItems: 'center' }}>
+                                                                        <Text style={styles.Text}> {timeConvert(
                                                                             item1.flightList
-                                                                                .ArrivalAirportLocationCode
-                                                                        }
-                                                                        )</Text>
-                                                                    <Text style={styles.Text}>{moment(
-                                                                        item1.flightList.ArrivalDateTime
-                                                                    )
-                                                                        ?.format("hh:mm:ss a")
-                                                                        .substring(0, 5)}</Text>
-                                                                    <Text style={styles.Textlite}>{moment(
+                                                                                .JourneyDuration
+                                                                        )}</Text>
+                                                                        <FlightIcon />
+
+
+                                                                    </View>
+                                                                    <BackArrow />
+                                                                    <View style={{ alignItems: 'center' }}>
+                                                                        <Text style={styles.Textlite}>{
+                                                                            item1.arrivalLocation
+                                                                        }{'\n'} (
+                                                                            {
+                                                                                item1.flightList
+                                                                                    .ArrivalAirportLocationCode
+                                                                            }
+                                                                            )</Text>
+                                                                        <Text style={styles.Text}>{moment(
+                                                                            item1.flightList.ArrivalDateTime
+                                                                        )
+                                                                            ?.format("HH:mm:ss a")
+                                                                            .substring(0, 5)}</Text>
+                                                                        {/* <Text style={styles.Textlite}>{moment(
                                                                         item1.flightList.ArrivalDateTime
                                                                     )
                                                                         ?.format("hh:mm:ss a")
                                                                         .substring(9, 11)
-                                                                        ?.toUpperCase()}</Text>
+                                                                        ?.toUpperCase()}</Text> */}
+                                                                    </View>
                                                                 </View>
                                                             </View>
                                                         </View>
                                                     </View>
-                                                </View>
+                                                ))
+
                                             ))
+                                        }
 
-                                        ))
-                                    }
+                                    </View>
+                                    :
 
-                                </View>
-                                :
-                                // <View style={{ flex: 1,}}>
-                                //      <WebView
-                                     
-                                //       style={{height:height,width:width,fontSize:20}}
-                                //       source={sourceFile} />
-                                // </View>
-                                                 <RenderHtml
-                                                //  ignoredDomTags={[]}
-                                                //  enableExperimentalBRCollapsing={true}
-                                               contentWidth={width*0.8}
-                                               source={sourceFile}
-                                             />
+                                    <RenderHtml
+                                        //  ignoredDomTags={[]}
+                                        //  enableExperimentalBRCollapsing={true}
+                                        contentWidth={width * 0.8}
+                                        source={sourceFile}
+                                    />
 
 
-                                     
-  
 
-                        }
-                    </View>
-                </ScrollView>
+
+
+
+                            }
+                        </View>
+                    </ScrollView>
+                </View>
             </ImageBackground>
         </View>
     )
@@ -190,8 +180,6 @@ export default function FlightDetails(props) {
 
 
 const styles = StyleSheet.create({
-
-
     card: {
         backgroundColor: color.AppbarColor,
         marginHorizontal: 15,
@@ -201,7 +189,7 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     Text: { fontFamily: font.fontSemi, color: color.colorText, fontSize: height * 0.012 },
-    Textlite: { fontFamily: font.font, color: 'grey', fontSize: height * 0.0135 },
+    Textlite: { fontFamily: font.font, color: 'grey', fontSize: height * 0.0135, },
     tabBtn: {
         fontFamily: font.font,
         paddingRight: 12,
@@ -209,7 +197,8 @@ const styles = StyleSheet.create({
         paddingTop: 3,
         paddingBottom: 3,
         borderRadius: 15,
-        alignItems: 'center'
+        alignItems: 'center',
+        marginHorizontal: 10
     },
     tabText: { fontSize: 12.5, fontFamily: font.font, alignSelf: 'center' },
     tabsBar: {
@@ -219,7 +208,7 @@ const styles = StyleSheet.create({
         margin: 12,
         borderRadius: 25,
         padding: 8,
-        width: "60%",
+        width: "70%",
         alignSelf: 'center',
     },
 })

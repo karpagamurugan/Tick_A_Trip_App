@@ -2,7 +2,6 @@
 
 import React, { useEffect, useState } from 'react'
 import { View, Text, Image, Dimensions, StyleSheet, ScrollView, Modal, TouchableHighlight, Pressable, ImageBackground, TextInput, Keyboard } from 'react-native';
-import font from '../constants/font';
 import Appbar from '../common/Appbar';
 import Octicons from 'react-native-vector-icons/Octicons';
 import FromIcon from '../../Assert/Images/icon/take-off.svg';
@@ -21,6 +20,7 @@ import FlightAction from '../../redux/Flight/actions';
 import actions from '../../redux/Flight/actions';
 import CommonAction from '../../redux/common/actions';
 import COLORS from '../constants/color';
+import FONTS from '../constants/font';
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
@@ -52,7 +52,7 @@ const Flight = ({ navigation }) => {
   let ChildAndInfant = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }] //child and infant count
   let AdultCount = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }, { value: '7' }, { value: '8' }, { value: '9' }] //adult count
 
-  let classList = [{ value: 'Business' }, { value: 'Economy' }];
+  let classList = [{ value: 'Business' }, { value: 'Economy' }, { value: 'Premium Economy' }];
   const { AddTravaller_nationality, travelers_list } = useSelector((state) => state.userReducer)
  
   var tempList=[]
@@ -60,41 +60,17 @@ useEffect(()=>{
   var adultList = travelers_list?.travelers?.filter((el) => el.type === 'Adult')?.slice(0, 2)
   var childList = travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, 1)
   var infantList = travelers_list?.travelers?.filter((el) => el.type === 'Infant')?.slice(0, 0)
-  // console.log(adultList)
-  // console.log(childList)
-  // console.log(infantList)
   for(let i = 0;i<adultList?.length;i++){
     tempList.push(adultList[i])
   }
   for(let j = 0;j<childList?.length;j++){
     tempList.push(adultList[j])
-
   }
   for(let k = 0;k<childList?.length;k++){
     tempList.push(adultList[k])
 
   }
-  // tempList.push(adultList,childList,infantList)
-  console.log('templist...',tempList)
-
 },[])
-
-
-// useEffect(()=>{
-//  var listDatA =[{'child':'new','child_age':['0',1]}]
-// //  listDatA.map((el)=>{...el,'val':'n','Data':'12'})
-// listDatA.map((e)=>{
-//   e.child !== 'new'?
-//   ''
-//   :
-//   (
-//     e?.Data.push('0987')
-// )
-// })
-
-//  console.log('listDatA',listDatA)
-// },[])
-
 
   const handleSelection = (e) => {
     Keyboard.dismiss()
@@ -187,7 +163,7 @@ useEffect(()=>{
             <View style={{ alignItems: 'center', marginTop: 10 }}>
 
               <View style={style.dropDown}>
-                <Text style={{ fontFamily: font.fontBold }}>Adults (12y+)</Text>
+                <Text style={{ fontFamily: FONTS.fontBold }}>Adults (12y+)</Text>
                 <Dropdown
                   data={AdultCount}
                   labelField="value"
@@ -203,7 +179,7 @@ useEffect(()=>{
                     style: {
                       fontSize: 13,
                       fontWeight: '500',
-                      fontFamily: font.font,
+                      fontFamily: FONTS.font,
                       letterSpacing: 0.5,
                       padding: 0,
                     },
@@ -219,7 +195,7 @@ useEffect(()=>{
               </View>
 
               <View style={style.dropDown}>
-                <Text style={{ fontFamily: font.fontBold }}>Children ( 2y - 12y)</Text>
+                <Text style={{ fontFamily: FONTS.fontBold }}>Children ( 2y - 12y)</Text>
                 <Dropdown
                   data={ChildAndInfant}
                   labelField="value"
@@ -235,7 +211,7 @@ useEffect(()=>{
                     style: {
                       fontSize: 13,
                       fontWeight: '500',
-                      fontFamily: font.font,
+                      fontFamily: FONTS.font,
                       letterSpacing: 0.5,
                       padding: 0,
                     },
@@ -251,7 +227,7 @@ useEffect(()=>{
               </View>
 
               <View style={style.dropDown}>
-                <Text style={{ fontFamily: font.fontBold }}>Infant (below 2y)</Text>
+                <Text style={{ fontFamily: FONTS.fontBold }}>Infant (below 2y)</Text>
                 <Dropdown
                   data={ChildAndInfant}
                   labelField="value"
@@ -267,7 +243,7 @@ useEffect(()=>{
                     style: {
                       fontSize: 13,
                       fontWeight: '500',
-                      fontFamily: font.font,
+                      fontFamily: FONTS.font,
                       letterSpacing: 0.5,
                       padding: 0,
                     },
@@ -292,8 +268,9 @@ useEffect(()=>{
 
       <Appbar title={'Search Flight'} />
 
-      <ScrollView keyboardShouldPersistTaps="handled">
-        <View style={{ height: height, marginBottom: 85 }}>
+      <View style={{height:height*0.86,paddingBottom:10}}>
+      <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+        <View>
           <Image source={require('../../Assert/Images/hotel-bg.png')}
             style={{ width: width, height: height * 0.23 }} resizeMode="cover" />
           <ImageBackground source={require('../../Assert/Images/map.jpg')} style={style.mapbg}>
@@ -381,7 +358,7 @@ useEffect(()=>{
                         }}
                         style={{
                           color: 'black',
-                          fontFamily: font.font,
+                          fontFamily: FONTS.font,
                           width: width * 0.6,
                           paddingTop: -15,
                           paddingBottom: 0,
@@ -425,7 +402,7 @@ useEffect(()=>{
                       elevation: 10,
                       maxHeight: height * 0.35
                     }}>
-                      <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
+                      <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: FONTS.font }}>No Options found</Text>
                     </View> : <View style={{
                       backgroundColor: 'white',
                       width: '90%',
@@ -456,7 +433,7 @@ useEffect(()=>{
                                     color: 'black',
                                     padding: 9,
                                     fontSize: 16,
-                                    fontFamily: font.font
+                                    fontFamily: FONTS.font
                                   }}>{e?.city}-{e?.airport_name} ({e?.airport_code})</Text>
                               </TouchableHighlight>
                             )
@@ -517,7 +494,7 @@ useEffect(()=>{
                         }}
                         style={{
                           color: 'black',
-                          fontFamily: font.font,
+                          fontFamily: FONTS.font,
                           width: width * 0.6,
                           paddingTop: -15,
                           paddingBottom: 0,
@@ -562,7 +539,7 @@ useEffect(()=>{
                       elevation: 10,
                       maxHeight: height * 0.35
                     }}>
-                      <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: font.font }}>No Options found</Text>
+                      <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: FONTS.font }}>No Options found</Text>
                     </View> :
                     <View style={{
                       backgroundColor: 'white',
@@ -595,7 +572,7 @@ useEffect(()=>{
                                     color: 'black',
                                     padding: 9,
                                     fontSize: 16,
-                                    fontFamily: font.font
+                                    fontFamily: FONTS.font
                                   }}>{e?.city}-{e?.airport_name} ({e?.airport_code})</Text>
                               </TouchableHighlight>
                             )
@@ -638,7 +615,7 @@ useEffect(()=>{
                       }}
                       selectedTextProps={{
                         style:{ color: COLORS.colorText,
-                           fontFamily: font.mediam, fontWeight: 'bold',
+                           fontFamily: FONTS.mediam,
                             fontSize: height * 0.019 }
                         // style: style.CommonText
                       }}
@@ -724,6 +701,7 @@ useEffect(()=>{
         />
 
       </ScrollView>
+      </View>
     </View>
 
   )
@@ -748,7 +726,7 @@ const style = StyleSheet.create({
     borderWidth:1
   },
   mapbg: { height: height * 0.7, width: width, paddingTop: 20 },
-  onebtn: { fontFamily: font.fontSemi, paddingLeft: 10, fontSize: height * 0.015 },
+  onebtn: { fontFamily: FONTS.fontSemi, paddingLeft: 10, fontSize: height * 0.015 },
   frombtn: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -757,15 +735,11 @@ const style = StyleSheet.create({
     borderRadius: 5,
     borderColor: '#0050A629',
     justifyContent:'center',
-    // shadowColor: '#0050A629',
-    // shadowOpacity: 0.8,
-    // shadowRadius: 2,
-    // elevation: 1,
     marginTop: 20,
     paddingVertical: 0,
 
   },
-  searchText: { color: 'white', fontFamily: font.mediam, paddingVertical: 10, },
+  searchText: { color: 'white', fontFamily: FONTS.mediam, paddingVertical: 10, },
   searchBtn: {
     alignItems: 'center',
     backgroundColor: COLORS.textBlue,
@@ -774,11 +748,11 @@ const style = StyleSheet.create({
     marginTop: 20,
     borderRadius: 30
   },
-  title: { color: COLORS.textBlue, fontFamily: font.fontSemi, opacity: 0.7,fontSize:height*0.0165 },
+  title: { color: COLORS.textBlue, fontFamily: FONTS.fontSemi, opacity: 0.7,fontSize:height*0.0165 },
   dropDown: { flexDirection: 'row', alignItems: 'center', width: '80%', justifyContent: 'space-between', marginBottom: 15 },
   doneBtn: { alignItems: 'center', marginTop: 10, backgroundColor: COLORS.textBlue, borderRadius: 20, width: width * 0.8 },
   doneText: {
-    fontFamily: font.fontSemi, color: 'white',
+    fontFamily: FONTS.fontSemi, color: 'white',
     paddingVertical: 5, paddingHorizontal: 10, borderRadius: 10
   },
   mainModal: {
@@ -786,9 +760,9 @@ const style = StyleSheet.create({
     alignSelf: 'center', paddingBottom: 20, paddingTop: 15
   },
   subModal: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginLeft: 20 },
-  modalTitle: { fontFamily: font.fontBold, color: COLORS.colorText, fontSize: height * 0.025 },
+  modalTitle: { fontFamily: FONTS.fontBold, color: COLORS.colorText, fontSize: height * 0.025 },
   modalCancel: { alignSelf: 'flex-end', paddingRight: 15, paddingBottom: 10 },
   dropStyle: { backgroundColor: '#EDF2F7', paddingVertical: 5, paddingLeft: 30, paddingRight: 10, borderRadius: 5, },
   dropIcon: { fontSize: 18, color: COLORS.colorTheme, marginLeft: 20 },
-  CommonText: { color: COLORS.colorText, fontFamily: font.mediam, fontWeight: 'bold', fontSize: height * 0.019 }
+  CommonText: { color: COLORS.colorText, fontFamily: FONTS.mediam, fontSize: height * 0.019 }
 })

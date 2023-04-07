@@ -13,8 +13,8 @@ import moment from 'moment';
 import { Controller, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 import userAction from '../../redux/user/actions'
-import Snackbar from 'react-native-snackbar';
 import { debounce } from 'lodash';
+import CommonAction from '../../redux/common/actions'
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
@@ -130,15 +130,9 @@ const AddTravellerForm = ({ navigation, route }) => {
           
 
             if (AddTravaller_form.find((List) => List?.email === data?.email) && ((List) => List?.mobileNumber === data?.mobileNumber)) {
-                Snackbar.show({
-                    text: 'Email already exist',
-                    duration: Snackbar.LENGTH_SHORT,
-                    action: {
-                        text: 'UNDO',
-                        textColor: 'red',
-                        onPress: () => { /* Do something. */ },
-                    },
-                })
+            
+                 dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Email already exist'} })
+
             } else {
                 dispatch({
                     type: userAction.GET_ADD_TRAVELLER_VALUE,

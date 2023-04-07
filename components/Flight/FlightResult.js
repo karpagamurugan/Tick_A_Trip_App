@@ -67,7 +67,7 @@ export default function FlightResult({ navigation, route }) {
             } else{
                 
             }
-            var temp1 = Flight_search_result.filter(e => e !== Airline)
+            var temp1 = Flight_search_result.filter(e => e.flightName === Airline)
             if (Airline !== undefined || Airline !== null) {
                 for (let j = 0; j < temp1.length; j++) {
                     if (temp1[j]?.length == 0) {

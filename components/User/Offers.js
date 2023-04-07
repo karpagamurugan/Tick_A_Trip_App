@@ -5,7 +5,6 @@ import Appbar from "../common/Appbar";
 import userAction from '../../redux/user/actions'
 import COLORS from "../constants/color";
 import FONTS from "../constants/font";
-import LinearGradient from 'react-native-linear-gradient';
 import Clipboard from '@react-native-clipboard/clipboard';
 import CommonAction from '../../redux/common/actions';
 import FeatherIcon from 'react-native-vector-icons/Feather';

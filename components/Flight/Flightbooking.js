@@ -23,7 +23,6 @@ import DeleteIcon from '../../Assert/Images/icon/Delete_Icon.svg';
 import ProfileIcon from '../../Assert/Images/Profile.svg';
 import ContactInfo from "./ContactInfo";
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import Snackbar from 'react-native-snackbar';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import CommonAction from '../../redux/common/actions';
 import {RAZOR_KEY,RAZOR_KEY_SECRET,CURRENCY,TIMEOUT, API_URL} from '../../components/constants/constApi';
@@ -1153,8 +1152,8 @@ export default function FlightBooking({ navigation, route }) {
                             </Pressable>
                             <View style={{ justifyContent: 'center', flex: 1, alignItems: 'center', alignSelf: 'center' }}>
                                 <Text style={{ color: "#333333", fontSize: 14, fontFamily: FONTS.font, flex: 1 }}>By completing this booking your agree to the 
-                                    <TouchableOpacity><Text style={[styles.policystyl]}> booking terms</Text></TouchableOpacity> <Text> &</Text>
-                                    <TouchableOpacity><Text style={[styles.policystyl]}> privacy policy.</Text></TouchableOpacity><Text style={{ color: '#C80505' }}>*</Text></Text>
+                                    <TouchableOpacity><Text style={[styles.policystyl]}> booking terms <Text style={[styles.policystyl]}> privacy policy.</Text></Text> </TouchableOpacity> <Text> &</Text>
+                                    <Text style={{ color: '#C80505' }}>*</Text></Text>
                             </View>
                         </View>
                         {/* <View style={{ flexDirection: 'row', alignItems: "flex-start" }}>
@@ -1266,8 +1265,10 @@ const styles = StyleSheet.create({
     },
     policystyl: {
         color: '#0566C8',
-        borderBottomWidth: 1,
-        borderBottomColor: '#0566C8',
+        // borderBottomWidth: 1,
+        // borderBottomColor: '#0566C8',
+        fontFamily:FONTS.font,
+        fontSize:height*0.015
     },
     travellerDetails: {
         backgroundColor: '#EEEEEE',

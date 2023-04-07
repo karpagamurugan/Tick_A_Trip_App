@@ -7,7 +7,6 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import setAuthToken from '../../components/constants/setAuthToken'
 import { PROFILE_URL } from '../../components/constants/constProfileApi'
 import CommonAction from '../../redux/common/actions';
-import axiosRetry from "axios-retry"
 import { useDispatch } from 'react-redux'
 
 const userSaga = function* () {
@@ -453,7 +452,10 @@ const userAthentification = function* (data) {
                             'Content-Type': 'multipart/form-data',
                         },
                     }
-                ).catch(e => console.log('loggggg', e))
+                ).catch(e => {
+                    // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: e } })
+                    console.log('loggggg', e)
+                })
             )
         if (result !== undefined) {
             if (result?.data?.status?.token !== null || result?.data?.status?.token !== undefined) {

@@ -71,6 +71,13 @@ const HotelCard = (props) => {
                                 navigation:navigation,
                                 detail:val
                             })
+
+                            console.log(  'payload',{
+                                hotelId:val?.hotelId,
+                                productId:val?.productId,
+                                sessionId:hotelSessionId,
+                                tokenId:val?.tokenId
+                            },)
                              }}>
                             <Text style={style.ListHotelBtnText}>BOOK NOW</Text>
                         </TouchableHighlight>

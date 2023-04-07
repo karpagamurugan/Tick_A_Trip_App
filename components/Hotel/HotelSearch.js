@@ -1,7 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
 import { View, Text, Dimensions, TouchableHighlight, Modal, StyleSheet, ScrollView, TextInput, TouchableOpacity, PermissionsAndroid, Keyboard } from 'react-native'
-import { SelectList } from 'react-native-dropdown-select-list'
 import DatePicker from 'react-native-date-picker'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import color from '../constants/color';
@@ -15,8 +14,6 @@ import HotelSelectRoomGuest from './HotelSelectRoomGuest'
 import { useDispatch, useSelector } from 'react-redux'
 import hotelActions from '../../redux/Hotel/actions'
 import commonAction from '../../redux/common/actions'
-import Geocoder from 'react-native-geocoding';
-import Geolocation from '@react-native-community/geolocation';
 import AntIcon from 'react-native-vector-icons/AntDesign';
 
 
