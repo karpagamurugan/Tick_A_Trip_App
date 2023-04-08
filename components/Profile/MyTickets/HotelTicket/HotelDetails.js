@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView, Image, FlatList } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView, Images } from 'react-native';
 import Appbar from '../../../common/Appbar';
 import { useDispatch, useSelector } from 'react-redux';
 import FONTS from '../../../constants/font';
@@ -16,7 +16,6 @@ export default function HotelTicketDetails({ item, navigation }) {
     const hadleClick = (index) => {
         setSelectedTab(index)
     }
-    console.log('Hotel_details', Hotel_details)
 
     return (
         <View style={[style.mainContainer,]}>

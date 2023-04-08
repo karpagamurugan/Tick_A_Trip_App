@@ -134,8 +134,6 @@ function timeConvert(n) {
                 <View style={styles.booknowBtn}>
                     <TouchableHighlight underlayColor={'transparent'} onPress={() =>{
                         dispatch({type:actions.SET_REVALIDATE,payload:{'fare_source_code':item?.FareSourceCode}})
-                        console.log(item?.FareSourceCode)
-
                          navigation.navigate('flightBooking',{flightInfo:props?.prefs,itemInfo: item})
                          }}>
                         <Text style={styles.booknowText}>BOOK NOW</Text>
@@ -147,7 +145,7 @@ function timeConvert(n) {
         <View style={styles.listBottom}>
             <Text style={[styles.listBtnText, { color: COLORS.colorText }]}>{item?.journeytype}</Text>
             <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.navigate('FlightDetails', { item: item })}>
-                <Text style={[styles.listBtnText, { color: COLORS.textBlue }]}>View Flight Details</Text>
+                <Text style={[styles.listBtnText, { color: COLORS.textBlue }]}>Fare details / Rules</Text>
 
             </TouchableHighlight>
         </View>

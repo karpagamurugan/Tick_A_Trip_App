@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, Pressable, Dimensions, StyleSheet, ImageBackground, TouchableHighlight, TouchableOpacity } from 'react-native';
+import { View, Text, Pressable, Dimensions, StyleSheet, ImageBackground, TouchableHighlight, TouchableOpacity, ScrollView } from 'react-native';
 import Slider from '@react-native-community/slider';
 import FONTS from '../constants/font';
 import COLORS from '../constants/color';
@@ -17,7 +17,6 @@ function FlightFilter(props) {
     const { setShowFilter } = props
     const { route } = props
     const { onApplied } = props;
-    console.log('route', route)
     var [priceRange, setPriceRange] = useState(); //set price range for filter
     var [selectAirline, setSelectAirline] = useState([])
     var [selectFlightStops, setSelectFlightStops] = useState([])
@@ -85,7 +84,7 @@ function FlightFilter(props) {
     }
 
     return (
-        <View style={{ backgroundColor: '#000000ba', width: width, height: height }}>
+        <View style={{ backgroundColor: '#000000ba', width: width, height: height,}}>
             <Pressable
                 onPress={() => setShowFilter(false)}
                 style={{
@@ -98,9 +97,9 @@ function FlightFilter(props) {
                     right: 0,
                 }} />
             <View style={styles.modalContainer} >
-                <ImageBackground source={require('../../Assert/Images/map.jpg')}
-                    style={styles.modalBg}>
-                    <View style={{ padding: 10, borderRadius: 20 }}>
+         
+                  <ScrollView>
+                  <View style={{ padding: 10, borderRadius: 20}}>
                         <Text style={styles.modalTitle}>Refine Result</Text>
                         <View style={{ height: 0.5, backgroundColor: 'grey' }} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 10, paddingHorizontal: 5 }}>
@@ -158,7 +157,7 @@ function FlightFilter(props) {
                                 <Text style={styles.FilterTitle}>Cabin</Text>
                                 <View style={{ paddingLeft: 10 }}>
                                     {cabin.map((item, index) => (
-                                        <View style={styles.radioButtonContainer}>
+                                        <View style={styles.radioButtonContainer} key={index}>
                                             <TouchableOpacity onPress={() => onRadioBtnClick(index)} style={styles.radioButton}>
                                                 {/* <View style={styles.radioButtonIcon} /> */}
 
@@ -215,7 +214,7 @@ function FlightFilter(props) {
                             </TouchableHighlight>
                         </View>
                     </View>
-                </ImageBackground>
+                  </ScrollView>
             </View>
         </View>
     )
@@ -224,7 +223,7 @@ function FlightFilter(props) {
 
 
 const styles = StyleSheet.create({
-    modalContainer: { flex: 1, justifyContent: 'center', marginTop: 20, marginHorizontal: 20, borderRadius: 50 },
+    modalContainer: { marginHorizontal: 20, borderRadius: 10 , backgroundColor: '#E9F3FF',marginTop:20},
     modalBg: { width: '100%', flexDirection: 'column', borderRadius: 20, alignSelf: 'center' },
     modalTitle: { fontFamily: FONTS.fontBold, color: COLORS.colorText, fontSize: height * 0.027, },
     listBottom: {

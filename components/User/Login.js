@@ -12,6 +12,7 @@ import axios from 'axios';
 import { API_URL } from '../constants/constApi';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, statusCodes, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import GoogleLogin from './GoogleLogin';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
@@ -44,6 +45,7 @@ const Login = ({ navigation }) => {
                 webClientId: webClientId,
             })
         },[])
+
         async function onGoogleButtonPress() {
 
             const { idToken } = await GoogleSignin.signIn();
@@ -52,47 +54,29 @@ const Login = ({ navigation }) => {
             auth().onAuthStateChanged((user) => {
 
                 if(user) {
-                    console.log(user)
-                    console.log(user?.providerData)
-                console.log(true);
+                    user.getIdToken().then(function(idToken) { 
+                          console.log('Token...',idToken)
+                        //   return idToken;
+                      });
+                    console.log('user credential',user)
+                    console.log('multiFactor',user?.multiFactor?.enrolledFactors)
+                    console.log('providerData',user?.providerData)
+
+
+                // axios.get(`${API_URL}/auth/google/callback?displayName=${user?.displayName}&email=${user?.email}&photoURL=${user?.photoURL}&providerId=${user?.providerData[0]?.providerId}&uid=${user?.providerData[0]?.uid}`,
+                // ).then(result => {
+                //     console.log('result....',result)
+                  
+                // }).catch((error) => {
+                //     console.log('error',error)
+                // });
                 } else {
                     console.log(false);
                 }
                 }) 
             
             return auth().signInWithCredential(googleCredential);
-            
             }
-    
-        // const googleLogin = async () => {
-        //     try {
-        //         await GoogleSignin.hasPlayServices();
-        //         const userInfo = await GoogleSignin.signIn();
-        //         console.log("userinfo", userInfo);
-        //         if(userInfo?.idToken !== null){
-        //             navigation.reset({
-        //                 index: 0,
-        //                 routes: [{ name: 'bottomNavigation' }]
-        //             })
-
-        //         }
-    
-        //     } catch (error) {
-        //         if (error.code === statusCodes.SIGN_IN_CANCELLED) {
-        //             console.log(error)
-        //         } else if (error.code === statusCodes.IN_PROGRESS) {
-        //             console.log(error)
-        //         } else if (error.code === statusCodes.PLAY_SERVICES_NOT_AVAILABLE) {
-        //             console.log(error)
-        //         } else {
-        //         }
-        //     }
-        //   };
-
-        // GoogleSignin.configure({
-        //     webClientId:'258076381203-84shhubi53cjvnof4deinn4dunoc4aal.apps.googleusercontent.com',
-        //     offlineAccess:true
-        // })
 
         // async function SignInWithGoogle(){
         //     const {isToken} = await GoogleSignin.signIn();
@@ -115,6 +99,38 @@ const Login = ({ navigation }) => {
         //     handleSocialLogin()
         // },[])
 
+        
+  const [state, setState] = useState({
+    googleLoginUrl: null,
+    facebookURL: null,
+  });
+
+  const handleGoogle = async () => {
+    let temp = {
+      googleLoginUrl: null,
+      facebookURL: null,
+    };
+    await axios.get(`${API_URL}/auth/google/url`)
+      .then((response) => {
+        temp = ({ googleLoginUrl: response.data.url, facebookURL: temp.facebookURL })
+      })
+      .catch((error) => {
+
+      });
+    await axios.get(`${API_URL}/auth/facebook/url`)
+      .then((response) => {
+        temp = { facebookURL: response.data.url, googleLoginUrl: temp.googleLoginUrl };
+        setState(temp);
+      })
+      .catch((error) => {
+
+      });
+  }
+
+  useEffect(() => {
+    handleGoogle();
+  }, []);
+
     return (
         <View style={style.SplashSection}>
             <ImageBackground source={require('../../Assert/Images/background.png')}  style={style.SplashBgImage} resizeMode="cover">
@@ -122,7 +138,9 @@ const Login = ({ navigation }) => {
                 <View style={style.SocialLogin}>
 
                     <TouchableHighlight underlayColor={'transparent'} 
-                    onPress={()=>onGoogleButtonPress()}>
+                    // onPress={()=>navigation.navigate('google',googleURL=`${state?.googleLoginUrl}`)}
+                    onPress={()=>onGoogleButtonPress()}
+                   >
                     <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/google.png')} /></View>
                     </TouchableHighlight>
 
@@ -134,7 +152,6 @@ const Login = ({ navigation }) => {
                     <Text style={style.OrLine}></Text>
                 </View>
                 <View style={style.LoginForm}>
-
                     <View style={style.FormGroup}>
                         <Text style={style.FormLabelText}>UserName | Email</Text>
                         <Controller
@@ -223,7 +240,7 @@ const Login = ({ navigation }) => {
                     </View>
                 </View>
             </ImageBackground>
-        </View >
+        </View>
     );
 };
 

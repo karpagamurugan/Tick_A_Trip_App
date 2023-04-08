@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react'
-import { View, Text, StyleSheet, Dimensions, ImageBackground, TouchableHighlight } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, ImageBackground, TouchableHighlight, Platform, Linking } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import Stars from 'react-native-stars';
@@ -47,10 +47,23 @@ const HotelCard = (props) => {
                             <FontAwesome5 style={style.hotelListLocIcon} name='hotel' />
                             <Text style={style.hotelListLocName}>{val?.propertyType}</Text>
                         </View>
-                        <View style={style.hotelListCardHotelName}>
+                        
+                        <TouchableHighlight underlayColor={'transparent'} style={[style.hotelListCardHotelName,{paddingVertical:0}]}
+                         onPress={()=>{
+                            const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+                            const latLng = `'11.000658','77.0295709`;
+                            const label = `${val?.hotelName}`;
+                            const url = Platform.select({
+                              ios: `${scheme}${label}@${latLng}`,
+                              android: `${scheme}${latLng}(${label})`
+                            });
+                            Linking.openURL(url);                 
+                                   }}>
+                                    <View style={{flexDirection:'row',paddingVertical:10}}>
                             <Ionicons style={style.hotelListLocIcon} name='location-outline' />
                             <Text style={style.hotelListLocName}>{val?.city}</Text>
-                        </View>
+                            </View>
+                            </TouchableHighlight>
                     </View>
                     <View style={style.hotelDesCont}>
                         <Text style={style.ListHotelName}>{val?.hotelName}</Text>
@@ -71,13 +84,6 @@ const HotelCard = (props) => {
                                 navigation:navigation,
                                 detail:val
                             })
-
-                            console.log(  'payload',{
-                                hotelId:val?.hotelId,
-                                productId:val?.productId,
-                                sessionId:hotelSessionId,
-                                tokenId:val?.tokenId
-                            },)
                              }}>
                             <Text style={style.ListHotelBtnText}>BOOK NOW</Text>
                         </TouchableHighlight>

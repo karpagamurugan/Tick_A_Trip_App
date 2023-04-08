@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState } from 'react'
-import { View, Text, StyleSheet, Dimensions, TextInput, TouchableHighlight, Pressable, ScrollView } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TextInput, TouchableHighlight, Pressable, ScrollView, FlatList } from 'react-native'
 import { Dropdown } from 'react-native-element-dropdown';
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import COLORS from '../constants/color';
@@ -23,6 +23,7 @@ const sortByOption = [
     { label: 'Distance low high', value: 'distance-low-high' },
     { label: 'Distance high low', value: 'distance-high-low' },
 ];
+
 const RatingOption = [
     { label: '1', value: '1' },
     { label: '2', value: '2' },
@@ -37,10 +38,12 @@ const AdvicerRatingOption = [
     { label: '4', value: '4' },
     { label: '5', value: '5' },
 ];
+
 const fareTypeOption = [
     { label: 'Refundable', value: 'Refundable' },
     { label: 'Non-Refundable', value: 'Non-Refundable' },
 ];
+
 const propertyTypeOption = [
     { label: 'HOTELS', value: 'HOTELS' },
     { label: 'RESORTS', value: 'RESORTS' },
@@ -74,7 +77,125 @@ const HotelFilter = (props) => {
     var [priceRange, setPriceRange] = useState();
     var [startRating, setStartRating] = useState();
     const [multiSliderValue, setMultiSliderValue] = useState([0, 10000]);
+    var [facilityShow,setFacilityShow]=useState(false);
+
+
     multiSliderValuesChange = values => setMultiSliderValue(values);
+    const  CheckFecilityAllValues= [
+        {
+            label: 'Internet access',
+            value: 'Internet access',
+        },
+        {
+            label: 'Room Service',
+            value: 'Room Service',
+        },
+        {
+            label: 'Laundry Service',
+            value: 'Laundry Service',
+        },
+        {
+            label: 'Air conditioning',
+            value: 'Air conditioning',
+        },
+        {
+            label: 'Pub',
+            value: 'Pub',
+        },
+        {
+            label: 'Bath',
+            value: 'Bath',
+        },
+        {
+            label: '24-hour check-in',
+            value: '24-hour check-in',
+        },
+        {
+            label: 'Wi-Fi',
+            value: 'Wi-Fi',
+        },
+        {
+            label: 'Medical Assistance',
+            value: 'Medical Assistance',
+        },
+        {
+            label: 'Bar',
+            value: 'Bar',
+        },
+        {
+            label: 'Shower',
+            value: 'Shower',
+        },
+        {
+            label: 'Wheelchair',
+            value: 'Wheelchair',
+        },
+        {
+            label: 'Currency Exchange',
+            value: 'Currency Exchange',
+        },
+        {
+            label: 'Housekeeping',
+            value: 'Housekeeping',
+        },
+        {
+            label: 'TV Room',
+            value: 'TV Room',
+        },
+        {
+            label: 'Car Park',
+            value: 'Car Park',
+        },
+        {
+            label: 'WLAN acces',
+            value: 'WLAN acces',
+        },
+        {
+            label: 'Conference Room',
+            value: 'Conference Room',
+        },
+        {
+            label: 'Restaurant',
+            value: 'Restaurant',
+        },
+        {
+            label: 'Games room',
+            value: 'Games room',
+        },
+        {
+            label: 'Casino',
+            value: 'Casino',
+        },
+        {
+            label: 'Theatre',
+            value: 'Theatre',
+        },
+        {
+            label: 'Nightclub',
+            value: 'Nightclub',
+        },
+        {
+            label: 'Shops',
+            value: 'Shops',
+        },
+        {
+            label: 'Cafe',
+            value: 'Cafe',
+        },
+        {
+            label: 'Lift',
+            value: 'Lift',
+        },
+        {
+            label: 'Cafe',
+            value: 'Cafe',
+        },
+        {
+            label: '24-hour reception',
+            value: '24-hour reception',
+        },
+    ]
+
     const CheckFecilityValues = [
         {
             label: 'Internet access',
@@ -153,7 +274,7 @@ const HotelFilter = (props) => {
                        }
                     }
                 }
-            }
+           
         
 
 
@@ -171,7 +292,6 @@ const HotelFilter = (props) => {
                 if(data?.propertyType === undefined ||data?.propertyType === null ||data?.propertyType === '' ){
                     tempFilter=tempFilter;
                 }else{
-                
                     tempFilter = {
                         ...tempFilter,
                        filters:{
@@ -217,7 +337,8 @@ const HotelFilter = (props) => {
             openFile: setOpenFilter,
         })
         console.log('tempFilter', tempFilter)
-    
+
+    }
     return (
         <View style={{ backgroundColor: '#000000ba', width: width, height: height }}>
             <Pressable
@@ -227,23 +348,6 @@ const HotelFilter = (props) => {
             </Pressable>
             <ScrollView style={style.filterModelSec}>
 
-                {/* <Controller
-                    control={control}
-                    name="min"
-                    rules={{
-                        required: {
-                            value: true,
-                            message: 'Enter min price!',
-                        },
-                    }}
-                    render={({ field: { onChange, value } }) => (
-                        <TextInput {...register("min")}
-                            name="min" onChangeText={value => onChange(value)} value={value} style={style.filterFieldInput} placeholder='Enter min price' />
-                    )}
-                /> */}
-                {errors.min && (
-                    <Text style={style.errorMessage}>{errors.min.message}</Text>
-                )}
                 <View style={style.filterField}>
                     <Text style={style.filterFieldLabel}>Select Price Range</Text>
                     <View style={{ paddingHorizontal: 0 }}>
@@ -603,37 +707,48 @@ const HotelFilter = (props) => {
                     <View style={style.filterField}>
                         <Text style={style.filterFieldLabel}>Facility</Text>
                         <View style={style.checkBoxGrop}>
-                            {
-                                CheckFecilityValues.map((val, index) => (
-                                    <View style={style.checkBox} key={index}>
-                                        <TouchableHighlight underlayColor='transparent' onPress={() => {
-                                            if (!selectFecility.includes(val.value)) {
-                                                setCheckFecility(!val.value)
-                                                setSelectFecility([...selectFecility, val.value])
-                                            } else {
-                                                setCheckFecility(null)
-                                                setSelectFecility(selectFecility.filter((item) => item !== val.value))
-                                            }
-                                        }}>
-                                            <View style={style.checkBox}>
-                                                {selectFecility.includes(val.value) ?
-                                                    // < Fontisto style={style.checkInputIcon} name='checkbox-active' />
-                                                    <View style={[style.custmCheckBox, { backgroundColor: COLORS.colorBtn }]}>
-                                                        <Ionicons name='checkmark' color={'white'} />
-                                                    </View>
-                                                    :
-                                                    // <Fontisto style={style.checkInputIcon} name='checkbox-passive' />
-                                                    <View style={[style.custmCheckBox, { backgroundColor: 'white' }]} />
-                                                }
-                                                <Text style={style.checkInputLabel}>{val.label}</Text>
+                        <FlatList
+                            scrollEnabled={false}
+                            horizontal={false}
+                            data={(facilityShow === true)?CheckFecilityAllValues:CheckFecilityValues}
+                            renderItem={(val)=>
+                          {    
+                             return(
+                            <View style={[style.checkBox,{width:width*0.42}]}>
+                                <TouchableHighlight underlayColor='transparent' onPress={() => {
+                                    if (!selectFecility.includes(val?.item?.value)) {
+                                        setCheckFecility(!val?.item?.value)
+                                        setSelectFecility([...selectFecility, val?.item?.value])
+                                    } else {
+                                        setCheckFecility(null)
+                                        setSelectFecility(selectFecility.filter((item) => item !== val?.item?.value))
+                                    }
+                                }}>
+                                    <View style={style.checkBox}>
+                                        {selectFecility.includes(val?.item?.value) ?
+                                            <View style={[style.custmCheckBox, { backgroundColor: COLORS.colorBtn }]}>
+                                                <Ionicons name='checkmark' color={'white'} />
                                             </View>
-                                        </TouchableHighlight>
-
+                                            :
+                                            <View style={[style.custmCheckBox, { backgroundColor: 'white' }]} />
+                                        }
+                                        <Text style={style.checkInputLabel}>{val?.item?.label}</Text>
                                     </View>
-                                ))
-                            }
+                                </TouchableHighlight>
 
+                            </View>
+                          )}
+                                
+                            }
+                            // keyExtractor={(item,index) => index}
+                            numColumns={2}
+                            />
+                         
                         </View>
+
+                        <TouchableHighlight underlayColor={'transparent'} onPress={()=>setFacilityShow(!facilityShow)}>
+                            <Text style={{fontFamily:FONTS.font,color:COLORS.TextDarkGrey,textDecorationLine:'underline'}}>{(facilityShow === true)?'See Less':'See More'}</Text>
+                        </TouchableHighlight>
                     </View>
                     {/* <View style={style.filterField}>
                             <Text style={style.filterFieldLabel}>Locality</Text>
@@ -715,7 +830,7 @@ const style = StyleSheet.create({
     checkBox: {
         flexDirection: 'row',
         alignItems: 'center',
-        paddingVertical: 2
+        paddingVertical: 2,        
     },
     filterFieldLabel: {
         color: '#333333',
@@ -777,11 +892,11 @@ const style = StyleSheet.create({
         width: width * 0.9,
         alignSelf: 'center',
         top: height * 0.1,
-        // padding: 20,
         paddingHorizontal: 20,
         paddingTop: 20,
-        // height: height * 0.75,
         borderRadius: 10,
+        height:height*0.8,
+        alignContent:'center',
     },
     selectedTextStyle: {
         fontFamily: FONTS.mediam,

@@ -29,6 +29,7 @@ const HotelList = ( {navigation,route}) => {
 
     const { getHotelSearchResult,RoomGuestPlace } = useSelector((state) => state.HotelReducer)
     const [openFilter, setOpenFilter] = useState(false)
+
     return (
         <View>
             <Modal

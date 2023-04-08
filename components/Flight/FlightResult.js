@@ -34,6 +34,8 @@ export default function FlightResult({ navigation, route }) {
     const [dropdown, setDropdown] = useState([]);
     var [mainList, setMainList] = useState(Flight_search_result)
 
+    console.log('Flight__',Flight_search_result?.length)
+
     function timeConvert(n) {
         var num = n;
         var hours = Math.floor(num / 60) > 0 ? Math.floor(num / 60) + "H " : "";
@@ -47,85 +49,217 @@ export default function FlightResult({ navigation, route }) {
     const handleDropdown = (index) => {
         if (dropdown.includes(index)) {
             setDropdown(dropdown.filter(el => el !== index));
-        } else {
+        }else {
             setDropdown([...dropdown, index]);
         }
     }
 
     const filterApply = (price, Airline, cabin, stops) => {
-        // console.log('Airline',Airline)
-        var tempFilterList = []
+        console.log('price',price)
+        console.log('Airline',Airline)
+        console.log('cabin',cabin)
+        console.log('stops',stops)
+        console.log('Flight_search_result.length',Flight_search_result.length)
+        console.log('Flight_search_',Flight_search_result[0])
+
+        if(route?.params?.type.toLowerCase() ==='oneway' ){
+              var tempFilterList = []
         for (var i = 0; i < Flight_search_result.length; i++) {
-            var temp = Flight_search_result[i].filter(e => parseFloat(e.totalFare) < parseFloat(price))
+            var temp = Flight_search_result[i].filter(e =>parseInt(e?.totalFare) > 0 && parseInt(e?.totalFare) <= parseInt(price))
+            // var tempAirLine = Flight_search_result[i].filter(e =>e?.flightName === Airline[0])
+            // var tempCabin = Flight_search_result[i].filter(e =>e?.flightName===Airline[0])
+            var tempStops = Flight_search_result[i].filter(e =>e?.totalStops===stops[0])
+                // console.log('price temp',temp?.length)
             if (price !== undefined || price !== null) {
                 for (let j = 0; j < temp.length; j++) {
                     if (temp[j]?.length == 0) {
-                    } else {
-                        tempFilterList.push(temp[j])
-                    }
-                }
-            } else{
-                
-            }
-            var temp1 = Flight_search_result.filter(e => e.flightName === Airline)
-            if (Airline !== undefined || Airline !== null) {
-                for (let j = 0; j < temp1.length; j++) {
-                    if (temp1[j]?.length == 0) {
-                        console.log('true')
-                    } else {
-                        console.log('false')
-                        tempFilterList.push(temp1[j])
-                    }
-                }
-            }  
-        }
-        if (tempFilterList) {
-            let a = tempFilterList.map(el => {
-                return {
-                    ...el, flight_details: el.flight_details.map(el1 => {
-                        return { FareSourceCode: el.FareSourceCode, ...el1 }
-                    })
-                }
-            });
-            let b = [], c = [], d = 0;
-            a.forEach((el, i) => {
-                let temp = "";
-                temp = temp + el.flightName;
-                el.flight_details.forEach(val => {
-                    val.flights.forEach(el1 => {
-                        temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
-                    });
-                    temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
-                });
-                if (b.includes(temp)) {
-                    let tempIndex;
-                    b.forEach((el1, ind) => {
-                        if (el1 === temp) {
-                            tempIndex = ind;
-                        }
-                    });
-                    c[tempIndex] = [...c[tempIndex], el];
-                    c = [...c, c[tempIndex]];
-                } else {
-                    c[d] = [el];
-                    b = [...b, temp];
-                    d = d + 1;
-                }
-            });
 
-            if (route?.params?.prefs?.journey_type === "OneWay") {
-                dispatch({
-                    type: actions.GET_FLIGHT_SEARCH, payload: c
-                });
-            } else {
-                dispatch({
-                    type: actions.GET_FLIGHT_SEARCH, payload: a
-                });
+                    } else {
+                        // tempFilterList.push(temp[j])
+                    }
+                }
             }
+
+            if(Airline !==undefined || Airline!== null ||Airline?.length){
+                        var tempAir=[]
+                // Flight_search_result[i].forEach(el => {
+                //     if ((Airline.includes(el?.flightName))) {
+                //         tempAir.push(el);
+                //     } 
+                //     // else if (Airline.includes('All')) {
+                //     //     tempAir.push(el);
+                //     // }
+                //   });
+                Flight_search_result[i].filter((el)=>{
+                    if(Airline.includes(el?.flightName)){
+                        tempAir.push(el)
+                    }
+                    console.log('el?.flightName',el?.flightName)
+                    console.log('Airline',Airline.includes(el?.flightName))
+                })
+
+
+                  console.log('temp..airline',tempAir?.length)
+
+                //   for(let a=0;a<tempAir?.length;a++){
+                //     console.log(tempFilterList?.includes((el)=>el !== tempAir[a]))
+                //     if(!tempFilterList?.includes( tempAir[a])){
+                //         tempFilterList.push(tempAir[a])
+                //     }
+                //     // console.log('tempAir',tempAir?.length)
+                //   }
+            }
+             if(cabin !==undefined ||cabin !==null){
+
+
+            }
+
+            // if(stops !==undefined || stops!== null ||stops?.length){
+
+            //     for (let j = 0; j < tempStops.length; j++) {
+            //         if (tempStops[j]?.length == 0) {
+
+            //         } else {
+            //             tempFilterList.push(tempStops[j])
+            //         }
+            //     }
+            // }
         }
+
+        let a = tempFilterList.map(el => {
+            return {
+                ...el, flight_details: el.flight_details.map(el1 => {
+                    return { FareSourceCode: el.FareSourceCode, ...el1 }
+                })
+            }
+        });
+        let b = [], c = [], d = 0;
+        a.forEach((el, i) => {
+            let temp = "";
+            temp = temp + el.flightName;
+            el.flight_details.forEach(val => {
+                val.flights.forEach(el1 => {
+                    temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
+                });
+                temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
+            });
+            if (b.includes(temp)) {
+                let tempIndex;
+                b.forEach((el1, ind) => {
+                    if (el1 === temp) {
+                        tempIndex = ind;
+                    }
+                });
+                c[tempIndex] = [...c[tempIndex], el];
+                c = [...c, c[tempIndex]];
+            } else {
+                c[d] = [el];
+                b = [...b, temp];
+                d = d + 1;
+            }
+        });
+
+
+        console.log('tempFilterList',tempFilterList?.length)
+        }else{
+            console.log('else...')
+        }
+
+        // var tempFilterList = []
+        // for (var i = 0; i < Flight_search_result.length; i++) {
+        //     var temp = Flight_search_result[i].filter(e => parseFloat(e.totalFare) < parseFloat(price))
+        //     if (price !== undefined || price !== null) {
+        //         for (let j = 0; j < temp.length; j++) {
+        //             if (temp[j]?.length == 0) {
+        //             } else {
+        //                 tempFilterList.push(temp[j])
+        //             }
+        //         }
+        //     } else{
+                
+        //     }
+        //     var temp1 = Flight_search_result.filter(e => e.flightName === Airline)
+        //     if (Airline !== undefined || Airline !== null) {
+        //         for (let j = 0; j < temp1.length; j++) {
+        //             if (temp1[j]?.length == 0) {
+        //                 console.log('true')
+        //             } else {
+        //                 console.log('false')
+        //                 tempFilterList.push(temp1[j])
+        //             }
+        //         }
+        //     }  
+        // }
+        // if (tempFilterList) {
+        //     let a = tempFilterList.map(el => {
+        //         return {
+        //             ...el, flight_details: el.flight_details.map(el1 => {
+        //                 return { FareSourceCode: el.FareSourceCode, ...el1 }
+        //             })
+        //         }
+        //     });
+        //     let b = [], c = [], d = 0;
+        //     a.forEach((el, i) => {
+        //         let temp = "";
+        //         temp = temp + el.flightName;
+        //         el.flight_details.forEach(val => {
+        //             val.flights.forEach(el1 => {
+        //                 temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
+        //             });
+        //             temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
+        //         });
+        //         if (b.includes(temp)) {
+        //             let tempIndex;
+        //             b.forEach((el1, ind) => {
+        //                 if (el1 === temp) {
+        //                     tempIndex = ind;
+        //                 }
+        //             });
+        //             c[tempIndex] = [...c[tempIndex], el];
+        //             c = [...c, c[tempIndex]];
+        //         } else {
+        //             c[d] = [el];
+        //             b = [...b, temp];
+        //             d = d + 1;
+        //         }
+        //     });
+
+        //     if (route?.params?.prefs?.journey_type === "OneWay") {
+        //         dispatch({
+        //             type: actions.GET_FLIGHT_SEARCH, payload: c
+        //         });
+        //     } else {
+        //         dispatch({
+        //             type: actions.GET_FLIGHT_SEARCH, payload: a
+        //         });
+        //     }
+        // }
 
         // setShowFilter(false)
     }
+
+
+    const FilterFlight=(price, Airline, cabin, stops)=>{
+        if(Airline !==undefined || Airline!== null ||Airline?.length){
+            var tempAir=[]
+    // Flight_search_result[i].forEach(el => {
+    //     if ((Airline.includes(el?.flightName))) {
+    //         tempAir.push(el);
+    //     } 
+    //     // else if (Airline.includes('All')) {
+    //     //     tempAir.push(el);
+    //     // }
+    //   });
+    Flight_search_result[0].filter((el)=>{
+        if(Airline.includes(el?.flightName)){
+            tempAir.push(el)
+        }
+        console.log('el?.flightName',el?.flightName)
+        console.log('Airline',Airline.includes(el?.flightName))
+    })
+      console.log('temp..airline',tempAir?.length)
+    }
+}
 
     var listDatA = [[{ 'data': 'value' }, { 'data': 'value1' }, { 'data': 'value3' }], [{ 'data': 'value4' }, { 'data': 'value5' }, { 'data': 'value6' }]]
     return (
@@ -169,15 +303,16 @@ export default function FlightResult({ navigation, route }) {
                         route={route}
                         setShowFilter={setShowFilter}
                         onApplied={(price, Airline, cabin, stops) => {
-                            filterApply(price, Airline, cabin, stops)
+                            FilterFlight(price, Airline, cabin, stops)
                         }}
                     />
                 </View>
             </Modal>
 
+
             <View style={styles.filterView}>
                 <View />
-                <Text style={styles.FlightText}>{Flight_search_result?.message?.length}  Flights</Text>
+                <Text style={styles.FlightText}>{Flight_search_result?.length}  Flights</Text>
                 <View style={styles.filter}>
 
                     <TouchableHighlight onPress={() => setShowFilter(!showFilter)} underlayColor='transparent'>
@@ -189,9 +324,9 @@ export default function FlightResult({ navigation, route }) {
 
             <View style={{ backgroundColor: 'grey', height: 0.3 }} />
 
-            <ImageBackground source={require('../../Assert/Images/map.jpg')} style={{ height: height, width: width, paddingBottom: 20 }}>
+            <ImageBackground source={require('../../Assert/Images/map.jpg')} style={{ height: height*0.8, width: width, paddingBottom: 20,marginTop:10, }}>
                 <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-                    <View>
+                    <View style={{paddingBottom:50}}>
 
 
 
@@ -199,7 +334,7 @@ export default function FlightResult({ navigation, route }) {
                             (route?.params?.type === 'OneWay') ?
                                 Flight_search_result?.map((e, index) => {
                                     return (
-                                        <View key={index}>
+                                        <View key={index} >
                                             {
                                                 <View style={styles.card} >
                                                     <View style={{ paddingHorizontal: 10, paddingBottom: 10 }}>
