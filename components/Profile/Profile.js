@@ -20,6 +20,7 @@ import setAuthToken from '../constants/setAuthToken';
 import DatePicker from 'react-native-date-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import commonAction from '../../redux/common/actions'
+import { Controller, useForm } from 'react-hook-form';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -28,17 +29,17 @@ let height = Dimensions.get('window').height;
 function Profile({ navigation }) {
     const dispatch = useDispatch()
     const { userProfileData, isLogin } = useSelector((state) => state.userReducer)
-
+    const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
     var [showPicker, setShowPicker] = useState(false) //show date picker for dob
     var [dob, setDob] = useState(new Date()); //set DOB in profile update
 
     var [ticketShown, setTicketShown] = useState(false) //tickets expanded
 
     var [openModel, setOpenModel] = useState(false) //show profile edit
-
+    var [openFlightModel, setOpenFlightModel] = useState(false) //show Flight cancel
     var [image, setImage] = useState() //set selected profile image
 
-  
+
 
     useEffect((async) => {
         dispatch({ type: commonAction.COMMON_LOADER, payload: true })
@@ -58,11 +59,9 @@ function Profile({ navigation }) {
     }
 
 
-   
+
     return (
         <View style={styles.mainContainer}>
-
-     
             <View style={styles.appbar}>
                 <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
                     <View style={styles.iconBack}>
@@ -72,9 +71,9 @@ function Profile({ navigation }) {
                 <Text style={isLogin ? styles.profileAppText : styles.guestprofileAppText}>Profile</Text>
                 {isLogin &&
                     <TouchableHighlight underlayColor='transparent' style={styles.iconBack}
-                     onPress={() =>{ 
-                        navigation.navigate('updateProfile')
-                        // setOpenModel(true)
+                        onPress={() => {
+                            navigation.navigate('updateProfile')
+                            // setOpenModel(true)
                         }}>
                         <View>
                             <EditIcon height={20} width={20} />
@@ -83,35 +82,29 @@ function Profile({ navigation }) {
                 }
             </View>
 
-
             <ScrollView contentInsetAdjustmentBehavior="automatic" showsVerticalScrollIndicator={false} horizontal={false}>
                 <View style={{ height: height, marginBottom: 35 }}>
                     <View style={styles.subContainer}>
                         {
                             userProfileData &&
-                            <View style={{ alignItems: 'center' }}>
-                                {
-                                    (userProfileData?.profile_image === undefined || userProfileData?.profile_image === null)?
-                                    
-    
-                                    <Image style={styles.profileImage} source={{uri:'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDvb0w_KsktUynzqLWBnQDqXRq-5um4KAtXA&usqp=CAU'}}/>
-                                    :
-                            
-                                      <Image source={{ uri: `${PROFILE_URL}${userProfileData?.profile_image}` }}
-                                    style={styles.profileImage} />
-                                  
-                                    
-                            
-                                }
-                               
+                            <View>
+                                <View style={{ alignItems: 'center' }}>
+                                    {
+                                        (userProfileData?.profile_image === undefined || userProfileData?.profile_image === null) ?
+                                            <Image style={styles.profileImage} source={{ uri: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSDvb0w_KsktUynzqLWBnQDqXRq-5um4KAtXA&usqp=CAU' }} />
+                                            :
+                                            <Image source={{ uri: `${PROFILE_URL}${userProfileData?.profile_image}` }}
+                                                style={styles.profileImage} />
 
-                                <Text style={styles.name}>{userProfileData?.name}</Text>
-                                <Text style={styles.email}>{userProfileData?.email}</Text>
-                                <Text style={styles.number}>{userProfileData?.phone}</Text>
+                                    }
+
+                                    <Text style={styles.name}>{userProfileData?.name}</Text>
+                                    <Text style={styles.email}>{userProfileData?.email}</Text>
+                                    <Text style={styles.number}>{userProfileData?.phone}</Text>
+                                </View>
+                                <View style={styles.divider} />
                             </View>
                         }
-
-                        <View style={styles.divider} />
 
                         <View style={styles.navView}>
                             {isLogin &&
@@ -154,7 +147,7 @@ function Profile({ navigation }) {
                             {
                                 isLogin !== true ?
                                     <View>
-                                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                        <TouchableHighlight onPress={() => setOpenFlightModel(true)} underlayColor='transparent'>
                                             <View style={styles.navBtn}>
                                                 <MaterialIcons name='flight' size={22} color='#4C94F2' />
                                                 <Text style={styles.navTitle}>Flight cancel</Text>
@@ -183,18 +176,11 @@ function Profile({ navigation }) {
                                     <Text style={styles.navTitle}>Share App</Text>
                                 </View>
                             </TouchableHighlight>
-
-
-
                         </View>
-
                         <View style={styles.divider} />
-
-
-
                     </View>
                     {
-                        (isLogin===true)?
+                        (isLogin === true) ?
                             <View style={{ paddingLeft: 35 }}>
                                 <TouchableHighlight onPress={() => LogOut()} underlayColor='transparent'>
                                     <View style={styles.navBtn}>
@@ -213,6 +199,58 @@ function Profile({ navigation }) {
                                 </TouchableHighlight>
                             </View>
                     }
+
+                    <Modal
+                        animationType='fade'
+                        transparent={true}
+                        visible={openFlightModel}
+                        onRequestClose={() => {
+                            setOpenFlightModel(!openFlightModel);
+                        }}>
+                        <View style={styles.modalOuter}>
+                            <View style={styles.modalInner}>
+                                <Pressable
+                                    style={{ right: -10, position: 'absolute', top: -20 }}
+                                    onPress={() => setOpenFlightModel(!openFlightModel)}
+                                >
+                                    <MaterialCommunityIcons name='close-circle' size={33} style={{ color: '#003AA8' }} />
+                                </Pressable>
+                                <Text style={styles.popupTitle}>PNR Number</Text>
+                                <View style={styles.editTextBorder}>
+                                    <Controller
+                                        control={control}
+                                        name="PNR"
+                                        rules={{
+                                            required: {
+                                                value: true,
+                                                message: "Enter Your PNR"
+                                            }
+                                        }}
+                                        render={({ field: { onChange, value } }) => (
+                                            <TextInput
+                                                placeholderTextColor={"gray"}
+                                                style={styles.inputeEditor}
+                                                placeholder="Enter Your PNR"
+                                                keyboardType='default'
+                                                {...register("PNR")}
+                                                // value={value}
+                                                onChangeText={value => onChange(value)}
+                                            />
+                                        )}
+                                    />
+                                    {errors.PNR && (
+                                        <Text style={[styles.errormessage]}>{errors.PNR.message}</Text>
+                                    )}
+                                </View>
+                                <Text style={styles.popupCont}>Enter the ticket PNR no to send otp your register mail i'd</Text>
+                                    <TouchableHighlight
+                                        style={styles.popupOTP}
+                                    >
+                                        <Text style={styles.otpText}>Send OTP</Text>
+                                    </TouchableHighlight>
+                            </View>
+                        </View>
+                    </Modal>
                 </View>
 
                 {/* select dob date  */}
@@ -267,9 +305,54 @@ const styles = StyleSheet.create({
     navView: { paddingTop: 10, width: width * 0.82 },
     navBtn: { flexDirection: 'row', alignItems: 'center', paddingTop: 20, paddingLeft: 25 },
     navTitle: { fontFamily: FONTS.font, color: COLORS.colorText, fontSize: 16, paddingLeft: 15 },
-  
+    modalOuter: {
+        backgroundColor: '#00000073',
+        height: '100%', width: '100%',
+        justifyContent: 'center', alignItems: 'center',
+    },
+    modalInner: {
+        backgroundColor: '#f0f4f7',
+        width: '90%', justifyContent: 'center',
+        borderRadius: 5, padding: 30,
+    },
+    popupTitle: {
+        fontSize: height * 0.025,
+        fontFamily: FONTS.fontSemi,
+        color: '#003AA8',
+    },
+    editTextBorder: {
+        borderWidth: 1, height: 45, borderRadius: 3,
+        borderColor: '#0041F2', marginVertical: 12,
+    },
+    inputeEditor: {
+        color: '#003AA8'
+    },
+    popupCont: {
+        textAlign: 'center',
+        lineHeight: 18,
+        fontSize: height * 0.015,
+        paddingHorizontal: 10,
+        fontFamily: FONTS.mediam,
+        color: '#818181',
+    },
+    popupOTP: {
+        justifyContent: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 10,
+        borderWidth: 1,
+        borderColor: '#003AA8',
+        borderRadius: 5,
+        marginTop: 20,
+        marginHorizontal:40,
+        backgroundColor:'#003AA8'
+    },
+    otpText: {
+        textAlign: 'center',
+        color: '#fff',
+        fontSize: height * 0.018,
+        fontFamily: FONTS.fontSemi,
+    }
 
-   
 })
 
 export default memo(Profile)
