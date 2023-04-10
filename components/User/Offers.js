@@ -89,7 +89,7 @@ function Offers() {
                     {
                         flight_Coupons?.message?.map((item, index) => {
                             return (
-                                <View key={index} >
+                                <View>
                                     <View style={style.cardView}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
 

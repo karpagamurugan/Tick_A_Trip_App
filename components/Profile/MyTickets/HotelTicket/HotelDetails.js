@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView, Images } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView, Image } from 'react-native';
 import Appbar from '../../../common/Appbar';
 import { useDispatch, useSelector } from 'react-redux';
 import FONTS from '../../../constants/font';

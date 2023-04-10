@@ -115,6 +115,8 @@ useEffect(()=>{
         data: payloaddata,  
         navigation: navigation,
         prefs:{
+          airport_from_code: selectedFromVal?.code,
+          airport_to_code: selectedToVal?.code,
           adult_flight: JSON.parse(adult),
           child_flight: JSON.parse(child),
           infant_flight: JSON.parse(infant),

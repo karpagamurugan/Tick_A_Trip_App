@@ -97,7 +97,8 @@ const FlightSearch = function* (data) {
             if (payload?.data?.journey_type === "OneWay") {
                 yield put({
                     type: actions.GET_FLIGHT_SEARCH, payload: c
-                });    
+                });
+                // console.log(c,'final filter')
             } else {
                 yield put({
                     type: actions.GET_FLIGHT_SEARCH, payload: a
@@ -107,26 +108,11 @@ const FlightSearch = function* (data) {
             payload.navigation.navigate('FlightResult', { prefs: payload?.prefs,type:payload?.data?.journey_type })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
         } else {
-            console.log('else....')
-
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
         }
-
-
-
-        // if (result?.data?.status === true) {
-        //     yield put({ type: actions.GET_FLIGHT_SEARCH, payload: result?.data });
-        //     // payload.navigation.navigate('FlightResult',{prefs:payload?.prefs})
-        //     yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-        // } else {
-
-        //     yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-        //     yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors}})
-        // }
     } catch (err) {
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
-        console.log('err msg...', err.message)
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
     }
 }

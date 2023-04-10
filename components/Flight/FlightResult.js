@@ -22,6 +22,7 @@ import actions from '../../redux/Flight/actions';
 import FlightFilter from './FlightFilter';
 import FlightCard from './FlightCard';
 import { forEach } from 'lodash';
+import CommonAction from '../../redux/common/actions';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
@@ -34,6 +35,10 @@ export default function FlightResult({ navigation, route }) {
     const [dropdown, setDropdown] = useState([]);
     var [mainList, setMainList] = useState(Flight_search_result)
 
+
+    var [priceRange, setPriceRange] = useState();
+    var [selectAirline, setSelectAirline] = useState([])
+    var [selectFlightStops, setSelectFlightStops] = useState([])
     console.log('Flight__', Flight_search_result?.length)
 
     function timeConvert(n) {
@@ -54,192 +59,110 @@ export default function FlightResult({ navigation, route }) {
         }
     }
 
-    const filterApply = (price, Airline, cabin, stops) => {
-        console.log('price', price)
-        console.log('Airline', Airline)
-        console.log('cabin', cabin)
-        console.log('stops', stops)
-        console.log('Flight_search_result.length', Flight_search_result.length)
-        console.log('Flight_search_', Flight_search_result[0])
 
-        if (route?.params?.type.toLowerCase() === 'oneway') {
-            var tempFilterList = []
-            for (var i = 0; i < Flight_search_result.length; i++) {
-                var temp = Flight_search_result[i].filter(e => parseInt(e?.totalFare) > 0 && parseInt(e?.totalFare) <= parseInt(price))
-                // var tempAirLine = Flight_search_result[i].filter(e =>e?.flightName === Airline[0])
-                // var tempCabin = Flight_search_result[i].filter(e =>e?.flightName===Airline[0])
-                var tempStops = Flight_search_result[i].filter(e => e?.totalStops === stops[0])
-                // console.log('price temp',temp?.length)
-                if (price !== undefined || price !== null) {
-                    for (let j = 0; j < temp.length; j++) {
-                        if (temp[j]?.length == 0) {
+    const FilterFlight = (price, Airline, cabin, stops) => {
+        var tempAllFilterList = []
+        var tempPriceList=[]
+        var tempAirLineList=[]
+        console.log('price',price)
 
-                        } else {
-                            // tempFilterList.push(temp[j])
-                        }
-                    }
-                }
-
-                if (Airline !== undefined || Airline !== null || Airline?.length) {
-                    var tempAir = []
-                    // Flight_search_result[i].forEach(el => {
-                    //     if ((Airline.includes(el?.flightName))) {
-                    //         tempAir.push(el);
-                    //     } 
-                    //     // else if (Airline.includes('All')) {
-                    //     //     tempAir.push(el);
-                    //     // }
-                    //   });
-                    Flight_search_result[i].filter((el) => {
-                        if (Airline.includes(el?.flightName)) {
-                            tempAir.push(el)
-                        }
-                        console.log('el?.flightName', el?.flightName)
-                        console.log('Airline', Airline.includes(el?.flightName))
-                    })
-
-
-                    console.log('temp..airline', tempAir?.length)
-
-                    //   for(let a=0;a<tempAir?.length;a++){
-                    //     console.log(tempFilterList?.includes((el)=>el !== tempAir[a]))
-                    //     if(!tempFilterList?.includes( tempAir[a])){
-                    //         tempFilterList.push(tempAir[a])
-                    //     }
-                    //     // console.log('tempAir',tempAir?.length)
-                    //   }
-                }
-                if (cabin !== undefined || cabin !== null) {
-
+        if (price !== undefined || price !== null || price?.length) {
+            Flight_search_result.filter((el) => {
+               if(price === 0){
+                tempPriceList.push(el)
+               }else{
+                if (parseInt(el[0]?.totalFare) > 0 && parseInt(el[0]?.totalFare) <= parseInt(price)) {
+                    tempPriceList.push(el)
+                }else{
 
                 }
-
-                // if(stops !==undefined || stops!== null ||stops?.length){
-
-                //     for (let j = 0; j < tempStops.length; j++) {
-                //         if (tempStops[j]?.length == 0) {
-
-                //         } else {
-                //             tempFilterList.push(tempStops[j])
-                //         }
-                //     }
-                // }
-            }
-
-            let a = tempFilterList.map(el => {
-                return {
-                    ...el, flight_details: el.flight_details.map(el1 => {
-                        return { FareSourceCode: el.FareSourceCode, ...el1 }
-                    })
-                }
-            });
-            let b = [], c = [], d = 0;
-            a.forEach((el, i) => {
-                let temp = "";
-                temp = temp + el.flightName;
-                el.flight_details.forEach(val => {
-                    val.flights.forEach(el1 => {
-                        temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
-                    });
-                    temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
-                });
-                if (b.includes(temp)) {
-                    let tempIndex;
-                    b.forEach((el1, ind) => {
-                        if (el1 === temp) {
-                            tempIndex = ind;
-                        }
-                    });
-                    c[tempIndex] = [...c[tempIndex], el];
-                    c = [...c, c[tempIndex]];
-                } else {
-                    c[d] = [el];
-                    b = [...b, temp];
-                    d = d + 1;
-                }
-            });
-
-
-            console.log('tempFilterList', tempFilterList?.length)
-        } else {
-            console.log('else...')
+               }
+       
+            })
         }
+        console.log('tempPriceList',tempPriceList?.length)
 
-        // var tempFilterList = []
-        // for (var i = 0; i < Flight_search_result.length; i++) {
-        //     var temp = Flight_search_result[i].filter(e => parseFloat(e.totalFare) < parseFloat(price))
-        //     if (price !== undefined || price !== null) {
-        //         for (let j = 0; j < temp.length; j++) {
-        //             if (temp[j]?.length == 0) {
-        //             } else {
-        //                 tempFilterList.push(temp[j])
-        //             }
-        //         }
-        //     } else{
+        if (Airline !== undefined || Airline !== null || Airline?.length) {
+            tempPriceList.filter((el) => {
+                if (Airline.includes(el[0]?.flightName)) {
+                    tempAirLineList.push(el)
+                }else if(Airline.includes('All')){
+                    tempAirLineList.push(el)
+                }
+                // else{
+                //     tempAirLineList.push(el) 
+                // }
+            })
+        }
+        console.log('tempAirLineList',tempAirLineList?.length)
 
-        //     }
-        //     var temp1 = Flight_search_result.filter(e => e.flightName === Airline)
-        //     if (Airline !== undefined || Airline !== null) {
-        //         for (let j = 0; j < temp1.length; j++) {
-        //             if (temp1[j]?.length == 0) {
-        //                 console.log('true')
-        //             } else {
-        //                 console.log('false')
-        //                 tempFilterList.push(temp1[j])
-        //             }
-        //         }
-        //     }  
-        // }
-        // if (tempFilterList) {
-        //     let a = tempFilterList.map(el => {
-        //         return {
-        //             ...el, flight_details: el.flight_details.map(el1 => {
-        //                 return { FareSourceCode: el.FareSourceCode, ...el1 }
-        //             })
-        //         }
-        //     });
-        //     let b = [], c = [], d = 0;
-        //     a.forEach((el, i) => {
-        //         let temp = "";
-        //         temp = temp + el.flightName;
-        //         el.flight_details.forEach(val => {
-        //             val.flights.forEach(el1 => {
-        //                 temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
-        //             });
-        //             temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
-        //         });
-        //         if (b.includes(temp)) {
-        //             let tempIndex;
-        //             b.forEach((el1, ind) => {
-        //                 if (el1 === temp) {
-        //                     tempIndex = ind;
-        //                 }
-        //             });
-        //             c[tempIndex] = [...c[tempIndex], el];
-        //             c = [...c, c[tempIndex]];
-        //         } else {
-        //             c[d] = [el];
-        //             b = [...b, temp];
-        //             d = d + 1;
-        //         }
-        //     });
 
-        //     if (route?.params?.prefs?.journey_type === "OneWay") {
-        //         dispatch({
-        //             type: actions.GET_FLIGHT_SEARCH, payload: c
-        //         });
-        //     } else {
-        //         dispatch({
-        //             type: actions.GET_FLIGHT_SEARCH, payload: a
-        //         });
-        //     }
-        // }
+        if(stops!==undefined ||stops!== null ||stops?.length){
+            tempAirLineList.forEach(el => {
+                if ((stops.includes("Nonstop") && el[0]?.flight_details?.every(val => val.totalStops === 0))) {
+                    tempAllFilterList.push(el);
+                } else if ((stops.includes("OneStop") && el[0]?.flight_details?.every(val => val.totalStops === 1))) {
+                    tempAllFilterList.push(el);
+                } else if ((stops.includes("TwoStop") && el[0]?.flight_details?.every(val => val.totalStops === 2))) {
+                    tempAllFilterList.push(el);
+                } else if (stops.includes("Any")) {
+                    tempAllFilterList.push(el);
+                }
+                // else{
+                //     tempAllFilterList.push(el);
+                // }
+              });
+        }
+        console.log('tempAllFilterList',tempAllFilterList?.length)
 
-        // setShowFilter(false)
+        dispatch({
+            type: actions.SET_FLIGHT_FILTERED_LIST, payload: {
+                show:true,
+                data:tempAllFilterList
+            }
+          });
+        setShowFilter(false)
     }
 
 
-
+    const FlightSearch = (price, Airline, cabin, stops) => {
+        dispatch({ type: CommonAction.FLIGHT_LOADER, payload: true });
+        const payloaddata = {
+          journey_type: route?.params?.prefs?.journey_type,
+          airport_from_code: route?.params?.prefs?.airport_from_code,
+          airport_to_code:route?.params?.prefs?.airport_to_code,
+          departure_date: moment(route?.params?.prefs?.departure_date).format('YYYY-MM-DD'),
+                // return_date: (oneTrip === true) ? "" : moment(route?.params?.prefs?.airport_to_code).format('YYYY-MM-DD'),
+          adult_flight: JSON.parse(route?.params?.prefs?.adult_flight),
+          child_flight: JSON.parse(route?.params?.prefs?.child_flight),
+          infant_flight: JSON.parse(route?.params?.prefs?.infant_flight),
+          class:cabin.split(' ')[0] ,
+          target: "Test"
+        }
+        dispatch({
+          type: actions.SET_FLIGHT_SEARCH,
+          payload: {
+            data: payloaddata,  
+            navigation: navigation,
+            prefs:{
+              airport_from_code: route?.params?.prefs?.airport_from_code,
+              airport_to_code: route?.params?.prefs?.airport_to_code,
+              adult_flight:  JSON.parse(route?.params?.prefs?.adult_flight),
+              child_flight: JSON.parse(route?.params?.prefs?.child_flight),
+              infant_flight:JSON.parse(route?.params?.prefs?.infant_flight),
+              fromCity:route?.params?.prefs?.fromCity,
+              toCity:route?.params?.prefs?.toCity,
+              class: cabin.split(' ')[0],
+              departure_date: moment(route?.params?.prefs?.departure_date).format('YYYY-MM-DD'),
+                     //  return_date: (oneTrip === true) ? "" : moment(ToDate).format('YYYY-MM-DD'),
+              journey_type:route?.params?.prefs?.journey_type
+            }
+          }
+        })
+        setShowFilter(false)
+        FilterFlight(price, Airline, cabin, stops)
+      }
+    
 
     return (
         <View style={styles.mainContainer}>
@@ -281,9 +204,33 @@ export default function FlightResult({ navigation, route }) {
                         navigation={navigation}
                         route={route}
                         setShowFilter={setShowFilter}
-                        // onApplied={(price, Airline, cabin, stops) => {
-                        //     FilterFlight(price, Airline, cabin, stops)
-                        // }}
+                        Price={priceRange}
+                        AirLine={selectAirline}
+                        Stops={selectFlightStops}
+                        onApplied={(price, Airline, cabin, stops) => {
+                            console.log(cabin,'cabin....',cabin.split(' ')[0])
+                            console.log(route)
+                            if(route?.params?.prefs?.class !== cabin.split(' ')[0]){
+                                FlightSearch(price, Airline, cabin, stops)
+                            }else{
+                            FilterFlight(price, Airline, cabin, stops)
+                            }
+                            setPriceRange(priceRange=price)
+                            setSelectAirline(selectAirline=Airline)
+                             setSelectFlightStops(selectFlightStops=stops)
+                        }}
+                        onClear={(price, Airline, cabin, stops)=>{
+                                    dispatch({
+                                        type: actions.SET_FLIGHT_FILTERED_LIST, payload: {
+                                            show:false,
+                                            data:[]
+                                        }
+                                        });
+                                    setShowFilter(false)
+                                    setPriceRange(0)
+                                    setSelectAirline([])
+                                    setSelectFlightStops([])
+                        }}
                     />
                 </View>
             </Modal>
@@ -451,7 +398,7 @@ export default function FlightResult({ navigation, route }) {
                                     )
                                 })
                                 :
-                                Flight_search_result?.message?.map((item, index) => (
+                                ((Filtered_List?.show ===true)?Filtered_List?.data:Flight_search_result)?.Flight_search_result?.message?.map((item, index) => (
                                     <FlightCard key={index} item={item} prefs={route?.params?.prefs} navigation={navigation} />
                                 ))
 

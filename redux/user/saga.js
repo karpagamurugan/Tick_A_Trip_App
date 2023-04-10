@@ -8,6 +8,7 @@ import setAuthToken from '../../components/constants/setAuthToken'
 import { PROFILE_URL } from '../../components/constants/constProfileApi'
 import CommonAction from '../../redux/common/actions';
 import { useDispatch } from 'react-redux'
+import { result } from 'lodash'
 
 const userSaga = function* () {
     yield all([
@@ -684,19 +685,22 @@ const getFlightCoupons = function* (data) {
         const result = yield call(() =>
             axios.get(`${API_URL}/flight-coupons`)
         )
-        if (result?.data?.success === true) {
+        console.log(result?.data)
+        if (result?.data?.status === true) {
             yield put({ type: actions.SET_ALL_FLIGHT_COUPON, payload: result.data })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
 
         } else {
-            yield put({ type: actions.SET_ALL_FLIGHT_COUPON, payload: result.data })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:`${result?.data?.message} for Flights`}})
+            yield put({ type: actions.SET_ALL_FLIGHT_COUPON, payload:[]})
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
 
         }
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {
-        console.log('error upcoming hotel....', err)
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:err}})
+
     }
 }
 
@@ -708,19 +712,20 @@ const getHotelCoupons = function* (data) {
         const result = yield call(() =>
             axios.get(`${API_URL}/hotel-coupons`)
         )
-        if (result?.data?.success === true) {
+        if (result?.data?.status === true) {
             yield put({ type: actions.SET_ALL_HOTEL_COUPON, payload: result.data })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
 
         } else {
-            yield put({ type: actions.SET_ALL_HOTEL_COUPON, payload: result.data })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:`${result?.data?.message} for Hotels`}})
+            yield put({ type: actions.SET_ALL_HOTEL_COUPON, payload: [] })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
 
         }
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {
-        console.log('error upcoming hotel....', err)
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:err}})
     }
 }
 
