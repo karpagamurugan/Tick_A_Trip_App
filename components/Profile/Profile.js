@@ -53,6 +53,7 @@ function Profile({ navigation }) {
         AsyncStorage.removeItem('username')
         navigation.navigate('Login')
         dispatch({ type: userActions.SET_USER_PROFILE, payload: null })
+        dispatch({ type: userActions.SET_IS_LOGIN, payload: false })
         setAuthToken(null)
     }
 
@@ -121,7 +122,6 @@ function Profile({ navigation }) {
                                                 <TicketIcon height={22} width={22} />
                                                 <Text style={styles.navTitle}>My Tickets</Text>
                                             </View>
-
                                             {
                                                 (!ticketShown) ?
                                                     <View style={{ paddingLeft: 30 }}>
@@ -194,7 +194,7 @@ function Profile({ navigation }) {
 
                     </View>
                     {
-                        isLogin === true ?
+                        (isLogin===true)?
                             <View style={{ paddingLeft: 35 }}>
                                 <TouchableHighlight onPress={() => LogOut()} underlayColor='transparent'>
                                     <View style={styles.navBtn}>

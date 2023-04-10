@@ -6,7 +6,11 @@ const initialState = {
     Airport_to_Name:{},
     Flight_search_result:[],
     Fare_rules:[],
-    get_Revalidate:{}
+    get_Revalidate:{},
+    Filtered_List:{
+        show:false,
+        data:[]
+    }
 }
 
 const FlightSearchReducer = (state = initialState, action) => {
@@ -36,6 +40,14 @@ const FlightSearchReducer = (state = initialState, action) => {
                         ...state,
                         get_Revalidate:action.payload,
                     }; 
+                    case actions.SET_FLIGHT_FILTERED_LIST:
+                        return {
+                            ...state,
+                            Filtered_List:{
+                                show:action.payload.show,
+                                data:action.payload.data
+                            },
+                        }; 
         default:
             return state;
     }

@@ -6,13 +6,14 @@ import COLORS from '../constants/color';
 import { useDispatch, useSelector } from "react-redux";
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import actions from '../../redux/Flight/actions';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
 
 function FlightFilter(props) {
-    const { Flight_search_result } = useSelector((state) => state.FlightSearchReducer)
+    const { Flight_search_result,Filtered_List } = useSelector((state) => state.FlightSearchReducer)
     const dispatch = useDispatch()
     const { setShowFilter } = props
     const { route } = props
@@ -57,15 +58,15 @@ function FlightFilter(props) {
         },
         {
             label: 'Non-stop',
-            value: 'Non-stop',
+            value: 'Nonstop',
         },
         {
             label: '1 Stop',
-            value: '1 Stop',
+            value: 'OneStop',
         },
         {
             label: '2 Stop',
-            value: '2 Stop',
+            value: 'TwoStop',
         }
     ]
 
@@ -81,6 +82,62 @@ function FlightFilter(props) {
 
     const onAppliedClick = (price , Airline, cabin, stops) => {
         onApplied(price , Airline, cabin, stops);
+    }
+
+    const FilterFlight = (price, Airline, cabin, stops) => {
+        console.log('stops',stops)
+        var tempAllFilterList = []
+        var tempPriceList=[]
+        var tempAirLineList=[]
+
+        if (price !== undefined || price !== null || price?.length) {
+            Flight_search_result.filter((el) => {
+                if (parseInt(el[0]?.totalFare) > 0 && parseInt(el[0]?.totalFare) <= parseInt(price)) {
+                    tempPriceList.push(el)
+                }else{
+                    console.log('price else..')
+                }
+            //    var tempFillPrice= el.filter(val => parseInt(val.totalFare) > 0 && parseInt(val.totalFare) <= parseInt(price))
+            //     tempPriceList.push(tempFillPrice)
+            })
+        }
+        console.log('tempPriceList',tempPriceList?.length)
+
+        if (Airline !== undefined || Airline !== null || Airline?.length) {
+            tempPriceList.filter((el) => {
+                if (Airline.includes(el[0]?.flightName)) {
+                    tempAirLineList.push(el)
+                }else{
+                    // tempAirLineList.push(el)
+                    console.log('AirLine else..')
+                }
+            })
+        }
+        console.log('tempAirLineList',tempAirLineList?.length)
+
+
+        if(stops!==undefined ||stops!== null ||stops?.length){
+            tempAirLineList.forEach(el => {
+                if ((stops.includes("Nonstop") && el[0]?.flight_details?.every(val => val.totalStops === 0))) {
+                    tempAllFilterList.push(el);
+                } else if ((stops.includes("OneStop") && el[0]?.flight_details?.every(val => val.totalStops === 1))) {
+                    tempAllFilterList.push(el);
+                } else if ((stops.includes("TwoStop") && el[0]?.flight_details?.every(val => val.totalStops === 2))) {
+                    tempAllFilterList.push(el);
+                } else if (stops.includes("Any")) {
+                    tempAllFilterList.push(el);
+                }
+              });
+        }
+        console.log('tempAllFilterList',tempAllFilterList?.length)
+
+        dispatch({
+            type: actions.SET_FLIGHT_FILTERED_LIST, payload: {
+                show:true,
+                data:tempAllFilterList
+            }
+          });
+        setShowFilter(false)
     }
 
     return (
@@ -206,10 +263,18 @@ function FlightFilter(props) {
                             </View>
                         </View>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingBottom: 10 }}>
-                            <TouchableHighlight style={styles.filterbtns} onPress={() => null} underlayColor='#BBBBBB66'>
+                            <TouchableHighlight style={styles.filterbtns} onPress={() =>{ 
+                                 dispatch({
+                                    type: actions.SET_FLIGHT_FILTERED_LIST, payload: {
+                                        show:false,
+                                        data:[]
+                                    }
+                                  });
+                                 setShowFilter(false)
+                                 }} underlayColor='#BBBBBB66'>
                                 <Text style={styles.filterbtnText}>Clear</Text>
                             </TouchableHighlight>
-                            <TouchableHighlight style={styles.filterbtns} onPress={() => onAppliedClick(priceRange,selectAirline,cabin[cabinIndex].name,selectFlightStops)} underlayColor='#1B5CB74D'>
+                            <TouchableHighlight style={styles.filterbtns} onPress={() => FilterFlight(priceRange,selectAirline,cabin[cabinIndex].name,selectFlightStops)} underlayColor='#1B5CB74D'>
                                 <Text style={styles.filterbtnText}>Apply</Text>
                             </TouchableHighlight>
                         </View>

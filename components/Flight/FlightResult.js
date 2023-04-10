@@ -27,14 +27,14 @@ var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
 export default function FlightResult({ navigation, route }) {
-    const { Flight_search_result } = useSelector((state) => state.FlightSearchReducer)
-// console.log('Flight_search_result',Flight_search_result[0])
+    const { Flight_search_result,Filtered_List} = useSelector((state) => state.FlightSearchReducer)
+    // console.log('Flight_search_result',Flight_search_result[0])
     const dispatch = useDispatch();
     var [showFilter, setShowFilter] = useState(false); //show filter modal
     const [dropdown, setDropdown] = useState([]);
     var [mainList, setMainList] = useState(Flight_search_result)
 
-    console.log('Flight__',Flight_search_result?.length)
+    console.log('Flight__', Flight_search_result?.length)
 
     function timeConvert(n) {
         var num = n;
@@ -49,119 +49,119 @@ export default function FlightResult({ navigation, route }) {
     const handleDropdown = (index) => {
         if (dropdown.includes(index)) {
             setDropdown(dropdown.filter(el => el !== index));
-        }else {
+        } else {
             setDropdown([...dropdown, index]);
         }
     }
 
     const filterApply = (price, Airline, cabin, stops) => {
-        console.log('price',price)
-        console.log('Airline',Airline)
-        console.log('cabin',cabin)
-        console.log('stops',stops)
-        console.log('Flight_search_result.length',Flight_search_result.length)
-        console.log('Flight_search_',Flight_search_result[0])
+        console.log('price', price)
+        console.log('Airline', Airline)
+        console.log('cabin', cabin)
+        console.log('stops', stops)
+        console.log('Flight_search_result.length', Flight_search_result.length)
+        console.log('Flight_search_', Flight_search_result[0])
 
-        if(route?.params?.type.toLowerCase() ==='oneway' ){
-              var tempFilterList = []
-        for (var i = 0; i < Flight_search_result.length; i++) {
-            var temp = Flight_search_result[i].filter(e =>parseInt(e?.totalFare) > 0 && parseInt(e?.totalFare) <= parseInt(price))
-            // var tempAirLine = Flight_search_result[i].filter(e =>e?.flightName === Airline[0])
-            // var tempCabin = Flight_search_result[i].filter(e =>e?.flightName===Airline[0])
-            var tempStops = Flight_search_result[i].filter(e =>e?.totalStops===stops[0])
+        if (route?.params?.type.toLowerCase() === 'oneway') {
+            var tempFilterList = []
+            for (var i = 0; i < Flight_search_result.length; i++) {
+                var temp = Flight_search_result[i].filter(e => parseInt(e?.totalFare) > 0 && parseInt(e?.totalFare) <= parseInt(price))
+                // var tempAirLine = Flight_search_result[i].filter(e =>e?.flightName === Airline[0])
+                // var tempCabin = Flight_search_result[i].filter(e =>e?.flightName===Airline[0])
+                var tempStops = Flight_search_result[i].filter(e => e?.totalStops === stops[0])
                 // console.log('price temp',temp?.length)
-            if (price !== undefined || price !== null) {
-                for (let j = 0; j < temp.length; j++) {
-                    if (temp[j]?.length == 0) {
+                if (price !== undefined || price !== null) {
+                    for (let j = 0; j < temp.length; j++) {
+                        if (temp[j]?.length == 0) {
 
-                    } else {
-                        // tempFilterList.push(temp[j])
+                        } else {
+                            // tempFilterList.push(temp[j])
+                        }
                     }
                 }
-            }
 
-            if(Airline !==undefined || Airline!== null ||Airline?.length){
-                        var tempAir=[]
-                // Flight_search_result[i].forEach(el => {
-                //     if ((Airline.includes(el?.flightName))) {
-                //         tempAir.push(el);
-                //     } 
-                //     // else if (Airline.includes('All')) {
-                //     //     tempAir.push(el);
-                //     // }
-                //   });
-                Flight_search_result[i].filter((el)=>{
-                    if(Airline.includes(el?.flightName)){
-                        tempAir.push(el)
-                    }
-                    console.log('el?.flightName',el?.flightName)
-                    console.log('Airline',Airline.includes(el?.flightName))
-                })
+                if (Airline !== undefined || Airline !== null || Airline?.length) {
+                    var tempAir = []
+                    // Flight_search_result[i].forEach(el => {
+                    //     if ((Airline.includes(el?.flightName))) {
+                    //         tempAir.push(el);
+                    //     } 
+                    //     // else if (Airline.includes('All')) {
+                    //     //     tempAir.push(el);
+                    //     // }
+                    //   });
+                    Flight_search_result[i].filter((el) => {
+                        if (Airline.includes(el?.flightName)) {
+                            tempAir.push(el)
+                        }
+                        console.log('el?.flightName', el?.flightName)
+                        console.log('Airline', Airline.includes(el?.flightName))
+                    })
 
 
-                  console.log('temp..airline',tempAir?.length)
+                    console.log('temp..airline', tempAir?.length)
 
-                //   for(let a=0;a<tempAir?.length;a++){
-                //     console.log(tempFilterList?.includes((el)=>el !== tempAir[a]))
-                //     if(!tempFilterList?.includes( tempAir[a])){
-                //         tempFilterList.push(tempAir[a])
+                    //   for(let a=0;a<tempAir?.length;a++){
+                    //     console.log(tempFilterList?.includes((el)=>el !== tempAir[a]))
+                    //     if(!tempFilterList?.includes( tempAir[a])){
+                    //         tempFilterList.push(tempAir[a])
+                    //     }
+                    //     // console.log('tempAir',tempAir?.length)
+                    //   }
+                }
+                if (cabin !== undefined || cabin !== null) {
+
+
+                }
+
+                // if(stops !==undefined || stops!== null ||stops?.length){
+
+                //     for (let j = 0; j < tempStops.length; j++) {
+                //         if (tempStops[j]?.length == 0) {
+
+                //         } else {
+                //             tempFilterList.push(tempStops[j])
+                //         }
                 //     }
-                //     // console.log('tempAir',tempAir?.length)
-                //   }
-            }
-             if(cabin !==undefined ||cabin !==null){
-
-
+                // }
             }
 
-            // if(stops !==undefined || stops!== null ||stops?.length){
-
-            //     for (let j = 0; j < tempStops.length; j++) {
-            //         if (tempStops[j]?.length == 0) {
-
-            //         } else {
-            //             tempFilterList.push(tempStops[j])
-            //         }
-            //     }
-            // }
-        }
-
-        let a = tempFilterList.map(el => {
-            return {
-                ...el, flight_details: el.flight_details.map(el1 => {
-                    return { FareSourceCode: el.FareSourceCode, ...el1 }
-                })
-            }
-        });
-        let b = [], c = [], d = 0;
-        a.forEach((el, i) => {
-            let temp = "";
-            temp = temp + el.flightName;
-            el.flight_details.forEach(val => {
-                val.flights.forEach(el1 => {
-                    temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
-                });
-                temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
+            let a = tempFilterList.map(el => {
+                return {
+                    ...el, flight_details: el.flight_details.map(el1 => {
+                        return { FareSourceCode: el.FareSourceCode, ...el1 }
+                    })
+                }
             });
-            if (b.includes(temp)) {
-                let tempIndex;
-                b.forEach((el1, ind) => {
-                    if (el1 === temp) {
-                        tempIndex = ind;
-                    }
+            let b = [], c = [], d = 0;
+            a.forEach((el, i) => {
+                let temp = "";
+                temp = temp + el.flightName;
+                el.flight_details.forEach(val => {
+                    val.flights.forEach(el1 => {
+                        temp = temp + el1.flightList.ArrivalAirportLocationCode + el1.flightList.ArrivalDateTime + el1.flightList.DepartureAirportLocationCode + el1.flightList.DepartureDateTime;
+                    });
+                    temp = temp + val.totalStops + val.flights.map(obj => obj.flightList.OperatingAirline.Code + obj.flightList.OperatingAirline.FlightNumber)?.join(" / ");
                 });
-                c[tempIndex] = [...c[tempIndex], el];
-                c = [...c, c[tempIndex]];
-            } else {
-                c[d] = [el];
-                b = [...b, temp];
-                d = d + 1;
-            }
-        });
+                if (b.includes(temp)) {
+                    let tempIndex;
+                    b.forEach((el1, ind) => {
+                        if (el1 === temp) {
+                            tempIndex = ind;
+                        }
+                    });
+                    c[tempIndex] = [...c[tempIndex], el];
+                    c = [...c, c[tempIndex]];
+                } else {
+                    c[d] = [el];
+                    b = [...b, temp];
+                    d = d + 1;
+                }
+            });
 
 
-        console.log('tempFilterList',tempFilterList?.length)
-        }else{
+            console.log('tempFilterList', tempFilterList?.length)
+        } else {
             console.log('else...')
         }
 
@@ -176,7 +176,7 @@ export default function FlightResult({ navigation, route }) {
         //             }
         //         }
         //     } else{
-                
+
         //     }
         //     var temp1 = Flight_search_result.filter(e => e.flightName === Airline)
         //     if (Airline !== undefined || Airline !== null) {
@@ -239,29 +239,8 @@ export default function FlightResult({ navigation, route }) {
     }
 
 
-    const FilterFlight=(price, Airline, cabin, stops)=>{
-        if(Airline !==undefined || Airline!== null ||Airline?.length){
-            var tempAir=[]
-    // Flight_search_result[i].forEach(el => {
-    //     if ((Airline.includes(el?.flightName))) {
-    //         tempAir.push(el);
-    //     } 
-    //     // else if (Airline.includes('All')) {
-    //     //     tempAir.push(el);
-    //     // }
-    //   });
-    Flight_search_result[0].filter((el)=>{
-        if(Airline.includes(el?.flightName)){
-            tempAir.push(el)
-        }
-        console.log('el?.flightName',el?.flightName)
-        console.log('Airline',Airline.includes(el?.flightName))
-    })
-      console.log('temp..airline',tempAir?.length)
-    }
-}
 
-    var listDatA = [[{ 'data': 'value' }, { 'data': 'value1' }, { 'data': 'value3' }], [{ 'data': 'value4' }, { 'data': 'value5' }, { 'data': 'value6' }]]
+
     return (
         <View style={styles.mainContainer}>
 
@@ -302,9 +281,9 @@ export default function FlightResult({ navigation, route }) {
                         navigation={navigation}
                         route={route}
                         setShowFilter={setShowFilter}
-                        onApplied={(price, Airline, cabin, stops) => {
-                            FilterFlight(price, Airline, cabin, stops)
-                        }}
+                        // onApplied={(price, Airline, cabin, stops) => {
+                        //     FilterFlight(price, Airline, cabin, stops)
+                        // }}
                     />
                 </View>
             </Modal>
@@ -312,7 +291,7 @@ export default function FlightResult({ navigation, route }) {
 
             <View style={styles.filterView}>
                 <View />
-                <Text style={styles.FlightText}>{Flight_search_result?.length}  Flights</Text>
+                <Text style={styles.FlightText}>{(Filtered_List?.show ===true)?Filtered_List?.data?.length:Flight_search_result?.length}  Flights</Text>
                 <View style={styles.filter}>
 
                     <TouchableHighlight onPress={() => setShowFilter(!showFilter)} underlayColor='transparent'>
@@ -324,15 +303,15 @@ export default function FlightResult({ navigation, route }) {
 
             <View style={{ backgroundColor: 'grey', height: 0.3 }} />
 
-            <ImageBackground source={require('../../Assert/Images/map.jpg')} style={{ height: height*0.8, width: width, paddingBottom: 20,marginTop:10, }}>
+            <ImageBackground source={require('../../Assert/Images/map.jpg')} style={{ height: height * 0.8, width: width, paddingBottom: 20, marginTop: 10, }}>
                 <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-                    <View style={{paddingBottom:50}}>
+                    <View style={{ paddingBottom: 50 }}>
 
 
 
                         {
                             (route?.params?.type === 'OneWay') ?
-                                Flight_search_result?.map((e, index) => {
+                            ((Filtered_List?.show ===true)?Filtered_List?.data:Flight_search_result)?.map((e, index) => {
                                     return (
                                         <View key={index} >
                                             {
@@ -363,15 +342,15 @@ export default function FlightResult({ navigation, route }) {
                                                                                 data.flights[0].flightList
                                                                                     .DepartureDateTime
                                                                             )
-                                                                                ?.format("hh:mm:ss a")
+                                                                                ?.format("HH:mm:ss a")
                                                                                 .substring(0, 5)}</Text>
-                                                                            <Text style={styles.Textlite}>{moment(
+                                                                            {/* <Text style={styles.Textlite}>{moment(
                                                                                 data.flights[0].flightList
                                                                                     .DepartureDateTime
                                                                             )
-                                                                                ?.format("hh:mm:ss a")
+                                                                                ?.format("HH:mm:ss a")
                                                                                 .substring(9, 11)
-                                                                                ?.toUpperCase()}</Text>
+                                                                                ?.toUpperCase()}</Text> */}
                                                                         </View>
                                                                         <FromArrow />
                                                                         <View style={{ alignItems: 'center' }}>
@@ -415,16 +394,16 @@ export default function FlightResult({ navigation, route }) {
                                                                                     data.flights.length - 1
                                                                                 ].flightList.ArrivalDateTime
                                                                             )
-                                                                                ?.format("hh:mm:ss a")
+                                                                                ?.format("HH:mm:ss a")
                                                                                 .substring(0, 5)}</Text>
-                                                                            <Text style={styles.Textlite}>{moment(
+                                                                            {/* <Text style={styles.Textlite}>{moment(
                                                                                 data.flights[
                                                                                     data.flights.length - 1
                                                                                 ].flightList.ArrivalDateTime
                                                                             )
-                                                                                ?.format("hh:mm:ss a")
+                                                                                ?.format("HH:mm:ss a")
                                                                                 .substring(9, 11)
-                                                                                ?.toUpperCase()}</Text>
+                                                                                ?.toUpperCase()}</Text> */}
                                                                         </View>
                                                                     </View>
                                                                 ))
