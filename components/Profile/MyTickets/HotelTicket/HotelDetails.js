@@ -17,6 +17,7 @@ export default function HotelTicketDetails({ item, navigation }) {
         setSelectedTab(index)
     }
 
+
     return (
         <View style={[style.mainContainer,]}>
             <Appbar title={'Booking Details'} />
@@ -49,7 +50,7 @@ export default function HotelTicketDetails({ item, navigation }) {
                                             <Text style={{ fontSize: 15, color: "#003AA8", fontFamily: FONTS.mediam, }}>Your Supplier Confirmation No :</Text>
                                             <Text style={{ fontFamily: FONTS.mediam, }}> {Hotel_details?.message?.supplierConfirmationNum}</Text>
                                         </View>
-                                        <Image style={{ height: 180, width: 350, resizeMode: 'cover', marginTop: 15, borderRadius: 5 }} source={{ uri: Hotel_details?.message?.image }} />
+                                        <Image style={{ height: 180, width: 350, resizeMode: 'cover', marginTop: 15, borderRadius: 5 }} source={{ uri: Hotel_details?.message?.roomBookDetails?.image }} />
                                     </View>
 
                                     <Text style={[style.bookingDetailStyl]}>BOOKING DETAILS</Text>
@@ -94,8 +95,8 @@ export default function HotelTicketDetails({ item, navigation }) {
                                                 <Text style={[style.bookingTitle,]}>Hotel Address</Text>
                                                 <Text style={[style.bookingListContent,]}>{Hotel_details?.message?.roomBookDetails?.address}</Text>
                                             </View>
-                                            <View style={{ flexDirection: "row", paddingBottom: 10 }}>
-                                                <View style={{ width: "60%" }}>
+                                            <View style={{ flexDirection: "row", paddingBottom: 10,justifyContent:'space-between' }}>
+                                                <View>
                                                     <Text style={style.bookingTitle}>City</Text>
                                                     <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.city}</Text>
                                                 </View>

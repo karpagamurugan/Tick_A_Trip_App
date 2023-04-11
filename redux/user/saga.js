@@ -213,7 +213,6 @@ const getHotelDetails = function* (data) {
             }
             )
         );
-        console.log('Hotelresult', result)
         yield put({ type: actions.GET_HOTEL_TICKETS_DETAILS, payload: result.data });
 
     } catch (err) {

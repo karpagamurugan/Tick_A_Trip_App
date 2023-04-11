@@ -146,8 +146,8 @@ const getHotelRoomType = function* (data) {
 
 const setHotelBooking = function* (data) {
     yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
-    const { payload,navigation } = data   
-    console.log(navigation,'nav....')
+    const { payload,navigation } = data 
+    console.log('payload',payload)  
     try {
         const result = yield call(() =>
             axios.post(
@@ -169,7 +169,6 @@ const setHotelBooking = function* (data) {
                 referenceNum: result?.data?.log?.referenceNum
               } });
               navigation.navigate('BookingConfirm')
-        
         }else{
             console.log('resulr....',result)
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
@@ -178,6 +177,7 @@ const setHotelBooking = function* (data) {
         }
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
+        console.log('errr',err)
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: err.data });
     }
