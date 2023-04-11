@@ -20,11 +20,15 @@ function Offers() {
     const TEXT_HEIGHT = 14
     const OFFSET = TEXT_LENGTH / 2 - TEXT_HEIGHT / 2
     const dispatch = useDispatch()
-    const { flight_Coupons, hotel_Coupons } = useSelector((state) => state.userReducer)
+    const { flight_Coupons, hotel_Coupons,isLogin } = useSelector((state) => state.userReducer)
 
     useEffect(() => {
-        dispatch({ type: userAction.GET_ALL_FLIGHT_COUPON })
-        dispatch({ type: userAction.GET_ALL_HOTEL_COUPON })
+        if(isLogin){
+            dispatch({ type: userAction.GET_ALL_FLIGHT_COUPON })
+            dispatch({ type: userAction.GET_ALL_HOTEL_COUPON })
+        }else{
+
+        }
     }, [])
 
     return (

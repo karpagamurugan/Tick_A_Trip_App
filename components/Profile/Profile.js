@@ -38,6 +38,7 @@ function Profile({ navigation }) {
     var [openModel, setOpenModel] = useState(false) //show profile edit
     var [openFlightModel, setOpenFlightModel] = useState(false) //show Flight cancel
     var [image, setImage] = useState() //set selected profile image
+    var [showLogin,setShowLogin]=useState(false)
 
 
 
@@ -190,14 +191,37 @@ function Profile({ navigation }) {
                                 </TouchableHighlight>
                             </View>
                             :
-                            <View style={{ paddingLeft: 35 }}>
+                            
+
+<View style={{paddingLeft:30}}>
+<TouchableHighlight onPress={() => setShowLogin(!showLogin)} underlayColor='transparent'>
+    <Animated.View>
+        <View style={styles.navBtn}>
+        <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} />
+            <Text style={styles.navTitle}>Sign In/ Register</Text>
+        </View>
+        {
+            (!showLogin) ?
+                <View style={{ paddingLeft: 30 }}>
                                 <TouchableHighlight onPress={() => navigation.navigate('Login')} underlayColor='transparent'>
                                     <View style={styles.navBtn}>
-                                        <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} />
+                                        {/* <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} /> */}
                                         <Text style={styles.navTitle}>Login</Text>
                                     </View>
                                 </TouchableHighlight>
-                            </View>
+                    <TouchableHighlight onPress={() => navigation.navigate('SignUp')} underlayColor='transparent'>
+                        <View style={styles.navBtn}>
+                            {/* <FontAwesome name='hotel' size={22} color='#4C94F2' /> */}
+                            <Text style={styles.navTitle}>Register</Text>
+                        </View>
+                    </TouchableHighlight>
+                </View>
+                : <View />
+        }
+    </Animated.View>
+</TouchableHighlight>
+    </View>
+
                     }
 
                     <Modal

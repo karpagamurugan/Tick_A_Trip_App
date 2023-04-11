@@ -138,7 +138,7 @@ const BottomNavigate = ({ navigation }) => {
                     }
                 })}
             />
-            <Tab.Screen name="Search" component={SearchTab}
+            {/* <Tab.Screen name="Search" component={SearchTab}
                 options={{
                     tabBarLabel: 'Flight',
                     tabBarIcon: ({ focused, color, size }) => (
@@ -156,27 +156,6 @@ const BottomNavigate = ({ navigation }) => {
                 listeners={({ navigation }) => ({
                     tabPress: (e) => {
                         navigation.navigate('search')
-                    }
-                })}
-            />
-            {/* <Tab.Screen name="HotelTab" component={HotelTab}
-                options={{
-                    tabBarLabel: 'Hotel',
-                    tabBarIcon: ({ focused, color, size }) => (
-                        focused ?
-                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                <FontAwesome color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='hotel' />
-                                <View>
-                                    <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')} />
-                                </View>
-                            </View>
-                            :
-                            <FontAwesome color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='hotel' />
-                    ),
-                }}
-                listeners={({ navigation }) => ({
-                    tabPress: (e) => {
-                        navigation.navigate('HotelTab')
                     }
                 })}
             /> */}

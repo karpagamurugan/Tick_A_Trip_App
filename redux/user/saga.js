@@ -685,7 +685,8 @@ const getFlightCoupons = function* (data) {
         const result = yield call(() =>
             axios.get(`${API_URL}/flight-coupons`)
         )
-        console.log(result?.data)
+        console.log('result...',result?.data)
+
         if (result?.data?.status === true) {
             yield put({ type: actions.SET_ALL_FLIGHT_COUPON, payload: result.data })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
@@ -698,6 +699,7 @@ const getFlightCoupons = function* (data) {
         }
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {
+        console.log('result..flight',err?.response?.message)
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:err}})
 
@@ -712,18 +714,19 @@ const getHotelCoupons = function* (data) {
         const result = yield call(() =>
             axios.get(`${API_URL}/hotel-coupons`)
         )
+        console.log(result?.data)
+
         if (result?.data?.status === true) {
             yield put({ type: actions.SET_ALL_HOTEL_COUPON, payload: result.data })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-
         } else {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:`${result?.data?.message} for Hotels`}})
             yield put({ type: actions.SET_ALL_HOTEL_COUPON, payload: [] })
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-
         }
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {
+        console.log('result..hotel',err?.response?.data)
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:err}})
     }
