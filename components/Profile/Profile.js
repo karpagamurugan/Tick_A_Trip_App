@@ -37,8 +37,9 @@ function Profile({ navigation }) {
 
     var [openModel, setOpenModel] = useState(false) //show profile edit
     var [openFlightModel, setOpenFlightModel] = useState(false) //show Flight cancel
+    var [openHotelModel, setOpenHotelModel] = useState(false) //show Hotel cancel
     var [image, setImage] = useState() //set selected profile image
-    var [showLogin,setShowLogin]=useState(false)
+    var [showLogin, setShowLogin] = useState(false)
 
 
 
@@ -154,7 +155,7 @@ function Profile({ navigation }) {
                                                 <Text style={styles.navTitle}>Flight cancel</Text>
                                             </View>
                                         </TouchableHighlight>
-                                        <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                                        <TouchableHighlight onPress={() => setOpenHotelModel(true)} underlayColor='transparent'>
                                             <View style={styles.navBtn}>
                                                 <FontAwesome5 name='hotel' size={22} color='#4C94F2' />
                                                 <Text style={styles.navTitle}>Hotel cancel</Text>
@@ -191,36 +192,36 @@ function Profile({ navigation }) {
                                 </TouchableHighlight>
                             </View>
                             :
-                            
 
-<View style={{paddingLeft:30}}>
-<TouchableHighlight onPress={() => setShowLogin(!showLogin)} underlayColor='transparent'>
-    <Animated.View>
-        <View style={styles.navBtn}>
-        <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} />
-            <Text style={styles.navTitle}>Sign In/ Register</Text>
-        </View>
-        {
-            (!showLogin) ?
-                <View style={{ paddingLeft: 30 }}>
-                                <TouchableHighlight onPress={() => navigation.navigate('Login')} underlayColor='transparent'>
-                                    <View style={styles.navBtn}>
-                                        {/* <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} /> */}
-                                        <Text style={styles.navTitle}>Login</Text>
-                                    </View>
+
+                            <View style={{ paddingLeft: 30 }}>
+                                <TouchableHighlight onPress={() => setShowLogin(!showLogin)} underlayColor='transparent'>
+                                    <Animated.View>
+                                        <View style={styles.navBtn}>
+                                            <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} />
+                                            <Text style={styles.navTitle}>Sign In/ Register</Text>
+                                        </View>
+                                        {
+                                            (!showLogin) ?
+                                                <View style={{ paddingLeft: 30 }}>
+                                                    <TouchableHighlight onPress={() => navigation.navigate('Login')} underlayColor='transparent'>
+                                                        <View style={styles.navBtn}>
+                                                            {/* <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} /> */}
+                                                            <Text style={styles.navTitle}>Login</Text>
+                                                        </View>
+                                                    </TouchableHighlight>
+                                                    <TouchableHighlight onPress={() => navigation.navigate('SignUp')} underlayColor='transparent'>
+                                                        <View style={styles.navBtn}>
+                                                            {/* <FontAwesome name='hotel' size={22} color='#4C94F2' /> */}
+                                                            <Text style={styles.navTitle}>Register</Text>
+                                                        </View>
+                                                    </TouchableHighlight>
+                                                </View>
+                                                : <View />
+                                        }
+                                    </Animated.View>
                                 </TouchableHighlight>
-                    <TouchableHighlight onPress={() => navigation.navigate('SignUp')} underlayColor='transparent'>
-                        <View style={styles.navBtn}>
-                            {/* <FontAwesome name='hotel' size={22} color='#4C94F2' /> */}
-                            <Text style={styles.navTitle}>Register</Text>
-                        </View>
-                    </TouchableHighlight>
-                </View>
-                : <View />
-        }
-    </Animated.View>
-</TouchableHighlight>
-    </View>
+                            </View>
 
                     }
 
@@ -267,11 +268,63 @@ function Profile({ navigation }) {
                                     )}
                                 </View>
                                 <Text style={styles.popupCont}>Enter the ticket PNR no to send otp your register mail i'd</Text>
-                                    <TouchableHighlight
-                                        style={styles.popupOTP}
-                                    >
+                                <TouchableHighlight
+                                    style={styles.popupOTP}
+                                >
+                                    <Text style={styles.otpText}>Send OTP</Text>
+                                </TouchableHighlight>
+                            </View>
+                        </View>
+                    </Modal>
+                    <Modal
+                        animationType='fade'
+                        transparent={true}
+                        visible={openHotelModel}
+                        onRequestClose={() => {
+                            setOpenHotelModel(!openHotelModel);
+                        }}>
+                        <View style={styles.modalOuter}>
+                            <View style={styles.modalInner}>
+                                <Pressable
+                                    style={{ right: -10, position: 'absolute', top: -20 }}
+                                    onPress={() => setOpenHotelModel(!openHotelModel)}
+                                >
+                                    <MaterialCommunityIcons name='close-circle' size={33} style={{ color: '#003AA8' }} />
+                                </Pressable>
+                               
+                                <View>
+                                    <Text style={styles.popupTitle}>Supplier Confirmation Number</Text>
+                                    <View style={styles.editTextBorder}>
+                                        <Controller
+                                            control={control}
+                                            name="SCN"
+                                            rules={{
+                                                required: {
+                                                    value: true,
+                                                    message: "Enter Your SCN"
+                                                }
+                                            }}
+                                            render={({ field: { onChange, value } }) => (
+                                                <TextInput
+                                                    placeholderTextColor={"gray"}
+                                                    style={styles.inputeEditor}
+                                                    placeholder="Enter Your SCN"
+                                                    keyboardType='default'
+                                                    {...register("SCN")}
+                                                    // value={value}
+                                                    onChangeText={value => onChange(value)}
+                                                />
+                                            )}
+                                        />
+                                        {errors.SCN && (
+                                            <Text style={[styles.errormessage]}>{errors.SCN.message}</Text>
+                                        )}
+                                    </View>
+                                    <Text style={styles.popupCont}>Enter the ticket SCN to send otp your register mail i'd</Text>
+                                    <TouchableHighlight style={styles.popupOTP}>
                                         <Text style={styles.otpText}>Send OTP</Text>
                                     </TouchableHighlight>
+                                </View>
                             </View>
                         </View>
                     </Modal>
@@ -367,8 +420,8 @@ const styles = StyleSheet.create({
         borderColor: '#003AA8',
         borderRadius: 5,
         marginTop: 20,
-        marginHorizontal:40,
-        backgroundColor:'#003AA8'
+        marginHorizontal: 40,
+        backgroundColor: '#003AA8'
     },
     otpText: {
         textAlign: 'center',
