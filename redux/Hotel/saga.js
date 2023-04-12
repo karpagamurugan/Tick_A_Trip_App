@@ -171,7 +171,7 @@ const setHotelBooking = function* (data) {
               navigation.navigate('BookingConfirm')
         }else{
             console.log('resulr....',result)
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
 
         }

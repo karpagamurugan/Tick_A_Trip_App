@@ -169,6 +169,16 @@ const userReducer = (state = initialState, action) => {
                             ...state,
                             hotel_Coupons: action.payload
                         }
+                        case actions.SHOW_CANCELL_GUEST_HOTEL_OTP_MODAL:
+                            return {
+                                ...state,
+                                showHotelOtp: action.payload
+                            }
+                            case actions.SHOW_CANCELL_GUEST_FLIGHT_OTP_MODAL:
+                                return {
+                                    ...state,
+                                    showFlightOtp: action.payload
+                                }
         default:
             return state;
     }

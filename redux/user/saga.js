@@ -35,8 +35,140 @@ const userSaga = function* () {
         yield takeEvery(actions.GET_FLIGHT_BOOKINGS_CANCEL_VERIFY, getFlightBookingsCancelVerify),
         yield takeEvery(actions.GET_ALL_FLIGHT_COUPON, getFlightCoupons),
         yield takeEvery(actions.GET_ALL_HOTEL_COUPON, getHotelCoupons),
+        yield takeEvery(actions.SET_GUEST_HOTEL_CANCELL_REQ, setGuestHotelCancellReq),
+        yield takeEvery(actions.SET_GUEST_HOTEL_CANCELL_VERIFY, setGuestHotelCancellVerify),
+        yield takeEvery(actions.SET_GUEST_FLIGHT_CANCELL_REQ, setGuestFlightCancellReq),
+        yield takeEvery(actions.SET_GUEST_FLIGHT_CANCELL_VERIFY, setGuestFlightCancellVerify),
     ])
 }
+
+
+const setGuestHotelCancellReq = function* (data) {
+    const { payload } = data;
+    var form_data = new FormData();
+    for (var key in payload) {
+        form_data.append(key, payload[key]);
+    }
+    try {
+        const result = yield call(() =>
+            axios.post(`${API_URL}/guest/hotel/requestcancellation`,
+                form_data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
+        console.log('BookingsCancelResult', result.data)
+        if (result?.data?.status === true) {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type:actions.SHOW_CANCELL_GUEST_HOTEL_OTP_MODAL, payload: true })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:  result?.data?.message } })
+        } else {
+            yield put({ type:actions.SHOW_CANCELL_GUEST_HOTEL_OTP_MODAL, payload: false })
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:  result?.data?.message } })
+        }
+    } catch (err) {
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type:actions.SHOW_CANCELL_GUEST_HOTEL_OTP_MODAL, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
+    }
+}
+
+const setGuestHotelCancellVerify = function* (data) {
+    const { payload } = data;
+    try {
+        const result = yield call(() =>
+            axios.post(`${API_URL}/guest/hotel/cancelbooking`,
+                JSON.stringify(payload), {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
+        console.log('verify resylt', result.data)
+        if (result?.data?.status === true) {
+             yield put({ type:actions.SHOW_CANCELL_GUEST_HOTEL_OTP_MODAL, payload: false })
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
+        } else {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
+            yield put({ type:actions.SHOW_CANCELL_GUEST_HOTEL_OTP_MODAL, payload: false })
+        }
+
+    } catch (err) {
+        console.log('verify err', err)
+        yield put({ type:actions.SHOW_CANCELL_GUEST_HOTEL_OTP_MODAL, payload: false })
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response } })
+
+    }
+}
+
+const setGuestFlightCancellReq = function* (data) {
+    const { payload } = data;
+    var form_data = new FormData();
+    for (var key in payload) {
+        form_data.append(key, payload[key]);
+    }
+    try {
+        const result = yield call(() =>
+            axios.post(`${API_URL}/guest/flight/requestcancellation`,
+                form_data, {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
+        console.log('BookingsCancelResult', result.data)
+        if (result?.data?.status === true) {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type:actions.SHOW_CANCELL_GUEST_FLIGHT_OTP_MODAL, payload: true })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:  result?.data?.message } })
+        } else {
+            yield put({ type:actions.SHOW_CANCELL_GUEST_FLIGHT_OTP_MODAL, payload: false })
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:  result?.data?.message } })
+        }
+    } catch (err) {
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type:actions.SHOW_CANCELL_GUEST_FLIGHT_OTP_MODAL, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
+    }
+}
+
+const setGuestFlightCancellVerify = function* (data) {
+    const { payload } = data;
+    try {
+        const result = yield call(() =>
+            axios.post(`${API_URL}/guest/flight/cancelbooking`,
+                JSON.stringify(payload), {
+                headers: {
+                    "Content-Type": "multipart/form-data",
+                },
+            })
+        );
+        console.log('verify resylt', result.data)
+        if (result?.data?.status === true) {
+             yield put({ type:actions.SHOW_CANCELL_GUEST_FLIGHT_OTP_MODAL, payload: false })
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
+        } else {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
+            yield put({ type:actions.SHOW_CANCELL_GUEST_FLIGHT_OTP_MODAL, payload: false })
+        }
+
+    } catch (err) {
+        console.log('verify err', err)
+        yield put({ type:actions.SHOW_CANCELL_GUEST_FLIGHT_OTP_MODAL, payload: false })
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response } })
+
+    }
+}
+
 const getHotelBookingsCancelRequest = function* (data) {
     const { payload } = data;
     var form_data = new FormData();
@@ -55,12 +187,14 @@ const getHotelBookingsCancelRequest = function* (data) {
         console.log('BookingsCancelResult', result.data)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'success' } })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
         } else {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'failed' } })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:  result?.data?.message } })
         }
     } catch (err) {
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
 
     }
 }
@@ -81,15 +215,15 @@ const getHotelBookingsCancelVerify = function* (data) {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
             yield put({ type: actions.OTP_MODAL_VIEW, payload: false })
-            // yield put({ type: actions.GET_UPCOMING_HOTEL_TICKETS })
         } else {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'failed' } })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result.data?.messgae } })
         }
 
     } catch (err) {
         console.log('verify err', err)
-
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err} })
     }
 }
 const getFlightBookingsCancelRequest = function* (data) {
@@ -110,12 +244,14 @@ const getFlightBookingsCancelRequest = function* (data) {
         console.log('BookingsCancelResult', result.data)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'success' } })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message} })
         } else {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-            // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'failed' } })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message} })
         }
     } catch (err) {
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
 
     }
 }
@@ -132,17 +268,17 @@ const getFlightBookingsCancelVerify = function* (data) {
             })
         );
         console.log('verify resylt', result.data)
-        // if (result?.data?.status === true) {
-        //     yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-        //     yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
-        // } else {
-        //     yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-        //     yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'failed' } })
-        // }
+        if (result?.data?.status === true) {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
+        } else {
+            yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
+        }
 
     } catch (err) {
-        console.log('verify err', err)
-
+        yield put({ type: CommonAction.COMMON_LOADER, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err} })
     }
 }
 
@@ -230,6 +366,7 @@ const getData = async () => {
         }
     )
 }
+
 const getAddtoTravellerValue = function* (data) {
     // async function* getAddtoTravellerValue(data) {
     const { payload } = data

@@ -49,15 +49,70 @@ function HotelBooking({ route, navigation }) {
         if (policyBox !== true) {
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Accept the Privacy Policy' } })
         } else {
-            // console.log('HotelDetail',HotelDetail)
-            // console.log('RoomType',RoomType)
-            // console.log('RoomType',RoomType?.productId)
-            //   console.log('adadijhfiudeh',data)
-            // console.log(data)
-            PaymentGateWay()
+            // PaymentGateWay()
+
+            var options = {
+                key: RAZOR_KEY,
+                key_secret: RAZOR_KEY_SECRET,
+                amount: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
+                currency: CURRENCY,
+                name:  data?.FirstName,
+                description: "Payment Tick A Trip",
+                timeout: TIMEOUT,
+                // order_id:'TickATrip_'+generateUUID(8),
+                prefill: {
+                    email:  data?.Email,
+                    contact:  data?.Phone,
+                    name:  data?.FirstName
+                },
+                notes: {
+                    address: "",
+                },
+                theme: {
+                    color: "#0543e9",
+                },
+            };
+            RazorpayCheckout.open(options).then((res) => {
+    
+                var dataList = {
+                    sessionId: hotelSessionId,
+                    productId: RoomType?.productId,
+                    tokenId: HotelDetail?.tokenId,
+                    hotelId: HotelDetail?.hotelId,
+                    rateBasisId: RoomType?.rateBasisId,
+                    clientRef: RoomType?.productId,
+                    customerName: data?.FirstName,
+                    customerEmail: data?.Email,
+                    customerPhone:data?.Phone,
+                    customerGst: "",
+                    transactionId: res?.razorpay_payment_id,
+                    paymentStatus: "true",
+                    bookingNote: "Remark",
+                    paxDetails: [
+                        {
+                            room_no: 1,
+                            adult: {
+                                "title": ["Mr", "Mr"],
+                                "firstName": [data?.FirstName, data?.FirstName],
+                                "lastName": ["MindMade", "MindMade"]
+                            },
+                            "child": { "title": [], "firstName": [], "lastName": [] }
+                        }],
+                    hotelName: HotelDetail?.hotelName,
+                    hotelCity: HotelDetail?.city,
+                    hotelCountry: HotelDetail?.country,
+                    hotelAddress: HotelDetail?.address,
+                    TotalFare: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
+                }
+                dispatch({ type: hotelActions.SET_HOTEL_BOOKING, payload: dataList, navigation: navigation })
+            }).catch((error) => {
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
+                console.log('error', error)
+            });
         }
     }
     const PaymentGateWay = () => {
+
 
         var options = {
             key: RAZOR_KEY,
@@ -471,7 +526,7 @@ function HotelBooking({ route, navigation }) {
                                         // style={styles.inputeEditor}
                                         name='Email'
                                         placeholder="Email"
-                                        keyboardType='default'
+                                        keyboardType='email-address'
                                         {...register("Email")}
                                         value={value}
                                         style={{ marginLeft: 10 }}
@@ -503,6 +558,7 @@ function HotelBooking({ route, navigation }) {
                                         keyboardType='phone-pad'
                                         {...register("Phone")}
                                         value={value}
+                                        maxLength={10}
                                         style={{ marginLeft: 10 }}
                                         onChangeText={value => onChange(value.toLowerCase())}
                                     />

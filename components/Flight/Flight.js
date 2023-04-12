@@ -49,28 +49,30 @@ const Flight = ({ navigation }) => {
   var [selectedFromVal, setSelectedFromVal] = useState(selectedFromVal = { city: '', code: '' }) //select from Place
   var [selectedToVal, setSelectedToVal] = useState(selectedToVal = { city: '', code: '' }) //select to place
 
+  var[swapCity,setSwapCity]=useState({to:'',from:''})
+
   let ChildAndInfant = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }] //child and infant count
   let AdultCount = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }, { value: '7' }, { value: '8' }, { value: '9' }] //adult count
 
   let classList = [{ value: 'Business' }, { value: 'Economy' }, { value: 'Premium Economy' }];
   const { AddTravaller_nationality, travelers_list } = useSelector((state) => state.userReducer)
- 
-  var tempList=[]
-useEffect(()=>{
-  var adultList = travelers_list?.travelers?.filter((el) => el.type === 'Adult')?.slice(0, 2)
-  var childList = travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, 1)
-  var infantList = travelers_list?.travelers?.filter((el) => el.type === 'Infant')?.slice(0, 0)
-  for(let i = 0;i<adultList?.length;i++){
-    tempList.push(adultList[i])
-  }
-  for(let j = 0;j<childList?.length;j++){
-    tempList.push(adultList[j])
-  }
-  for(let k = 0;k<childList?.length;k++){
-    tempList.push(adultList[k])
 
-  }
-},[])
+  var tempList = []
+  useEffect(() => {
+    var adultList = travelers_list?.travelers?.filter((el) => el.type === 'Adult')?.slice(0, 2)
+    var childList = travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, 1)
+    var infantList = travelers_list?.travelers?.filter((el) => el.type === 'Infant')?.slice(0, 0)
+    for (let i = 0; i < adultList?.length; i++) {
+      tempList.push(adultList[i])
+    }
+    for (let j = 0; j < childList?.length; j++) {
+      tempList.push(adultList[j])
+    }
+    for (let k = 0; k < childList?.length; k++) {
+      tempList.push(adultList[k])
+
+    }
+  }, [])
 
   const handleSelection = (e) => {
     Keyboard.dismiss()
@@ -79,6 +81,7 @@ useEffect(()=>{
       payload: []
     })
     setSelectedFromVal(selectedFromVal = { city: e.city, code: e.airport_code });
+    setSwapCity({from:e?.city,to:swapCity?.to})
     setNoRecord(noRecord = { from: false, to: noRecord.to })
 
   }
@@ -90,6 +93,7 @@ useEffect(()=>{
       payload: []
     })
     setSelectedToVal(selectedToVal = { city: e.city, code: e.airport_code });
+    setSwapCity({from:swapCity?.from,to: e?.city})
     setNoRecord(noRecord = { to: false, from: noRecord.from })
 
   }
@@ -112,16 +116,16 @@ useEffect(()=>{
     dispatch({
       type: actions.SET_FLIGHT_SEARCH,
       payload: {
-        data: payloaddata,  
+        data: payloaddata,
         navigation: navigation,
-        prefs:{
+        prefs: {
           airport_from_code: selectedFromVal?.code,
           airport_to_code: selectedToVal?.code,
           adult_flight: JSON.parse(adult),
           child_flight: JSON.parse(child),
           infant_flight: JSON.parse(infant),
-          fromCity:selectedFromVal?.city,
-          toCity:selectedToVal?.city,
+          fromCity: selectedFromVal?.city,
+          toCity: selectedToVal?.city,
           class: classType,
           departure_date: moment(fromDate).format('YYYY-MM-DD'),
           return_date: (oneTrip === true) ? "" : moment(ToDate).format('YYYY-MM-DD'),
@@ -259,9 +263,9 @@ useEffect(()=>{
                     />)}
                 />
               </View>
-                <TouchableHighlight style={style.doneBtn} underlayColor={'transparent'} onPress={() => setShowTraveller(!showTraveller)}>
-                  <Text style={style.doneText}>DONE</Text>
-                </TouchableHighlight>
+              <TouchableHighlight style={style.doneBtn} underlayColor={'transparent'} onPress={() => setShowTraveller(!showTraveller)}>
+                <Text style={style.doneText}>DONE</Text>
+              </TouchableHighlight>
             </View>
           </View>
         </View>
@@ -270,439 +274,455 @@ useEffect(()=>{
 
       <Appbar title={'Search Flight'} />
 
-      <View style={{height:height*0.86,paddingBottom:10}}>
-      <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
-        <View>
-          <Image source={require('../../Assert/Images/hotel-bg.png')}
-            style={{ width: width, height: height * 0.23 }} resizeMode="cover" />
-          <ImageBackground source={require('../../Assert/Images/map.jpg')} style={style.mapbg}>
+      <View style={{ height: height * 0.86, paddingBottom: 10 }}>
+        <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
+          <View>
+            <Image source={require('../../Assert/Images/hotel-bg.png')}
+              style={{ width: width, height: height * 0.23 }} resizeMode="cover" />
+            <ImageBackground source={require('../../Assert/Images/map.jpg')} style={style.mapbg}>
 
-            <View style={{ position: 'absolute', alignSelf: 'center', top: -20 }}>
-              <View style={style.btn}>
-                <TouchableHighlight underlayColor={'transparent'}
-                  onPress={() => {
-                    if (oneTrip) {
-                      setOneTrip(!oneTrip)
-                      setRoundTrip(!roundTrip)
-                    } else {
-                      setOneTrip(!oneTrip)
-                      setRoundTrip(!roundTrip)
-                    }
-                  }}>
-                  <View style={[style.btnView, { backgroundColor: oneTrip ? COLORS.textBlue : 'white' }]}>
-                    <Octicons name='arrow-right' size={22} color={oneTrip ? 'white' : COLORS.textBlue} />
-                    <Text style={[style.onebtn, { color: oneTrip ? 'white' : COLORS.textBlue }]}>ONE WAY</Text>
-                  </View>
-                </TouchableHighlight>
-                <TouchableHighlight underlayColor={'transparent'}
-                  onPress={() => {
-                    if (roundTrip) {
-                      setRoundTrip(!roundTrip)
-                      setOneTrip(!oneTrip)
-                    } else {
-                      setRoundTrip(!roundTrip)
-                      setOneTrip(!oneTrip)
-                    }
-                  }}>
-                  <View style={[style.btnView, { backgroundColor: roundTrip ? COLORS.textBlue : 'white' }]}>
-                    <Octicons name='arrow-switch' size={22} color={roundTrip ? 'white' : COLORS.textBlue} />
-                    <Text style={[style.onebtn, { color: roundTrip ? 'white' : COLORS.textBlue }]}>ROUND TRIP</Text>
-                  </View>
-                </TouchableHighlight>
-              </View>
-
-
-              <View style={{ flexDirection: 'column' }}>
+              <View style={{ position: 'absolute', alignSelf: 'center', top: -20 }}>
+                <View style={style.btn}>
+                  <TouchableHighlight underlayColor={'transparent'}
+                    onPress={() => {
+                      if (oneTrip) {
+                        setOneTrip(!oneTrip)
+                        setRoundTrip(!roundTrip)
+                      } else {
+                        setOneTrip(!oneTrip)
+                        setRoundTrip(!roundTrip)
+                      }
+                    }}>
+                    <View style={[style.btnView, { backgroundColor: oneTrip ? COLORS.textBlue : 'white' }]}>
+                      <Octicons name='arrow-right' size={22} color={oneTrip ? 'white' : COLORS.textBlue} />
+                      <Text style={[style.onebtn, { color: oneTrip ? 'white' : COLORS.textBlue }]}>ONE WAY</Text>
+                    </View>
+                  </TouchableHighlight>
+                  <TouchableHighlight underlayColor={'transparent'}
+                    onPress={() => {
+                      if (roundTrip) {
+                        setRoundTrip(!roundTrip)
+                        setOneTrip(!oneTrip)
+                      } else {
+                        setRoundTrip(!roundTrip)
+                        setOneTrip(!oneTrip)
+                      }
+                    }}>
+                    <View style={[style.btnView, { backgroundColor: roundTrip ? COLORS.textBlue : 'white' }]}>
+                      <Octicons name='arrow-switch' size={22} color={roundTrip ? 'white' : COLORS.textBlue} />
+                      <Text style={[style.onebtn, { color: roundTrip ? 'white' : COLORS.textBlue }]}>ROUND TRIP</Text>
+                    </View>
+                  </TouchableHighlight>
+                </View>
 
 
-                <View style={[style.frombtn, { marginHorizontal: 20, paddingLeft: 20, width: width * 0.9,justifyContent:'flex-start',paddingVertical:2 }]}>
+                <View>
+                  <View>
+                    <View style={{ flexDirection: 'column' }}>
 
-                  <FromIcon height={22} width={22} />
-                  <View style={{ paddingLeft: 15 }}>
-                    <Text style={style.title}>FROM</Text>
 
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        height: 35,
-                        width: '100%',
-                        alignItems: 'center',
-                      }}
-                    >
+                      <View style={[style.frombtn, { marginHorizontal: 20, paddingLeft: 20, width: width * 0.9, justifyContent: 'flex-start', paddingVertical: 2 }]}>
 
-                      <TextInput
-                        keyboardType={'default'}
-                        placeholder={'Select ...'}
-                        placeholderTextColor="gray"
-                        numberOfLines={1}
-                        value={selectedFromVal?.city}
-                        onChangeText={(e) => {
-                          if (e === '') {
-                            setNoRecord(noRecord = { from: true, to: noRecord.to })
-                          }
-                          if (e?.length >= 3) {
-                            dispatch({
-                              type: FlightAction.SET_FLIGHT_SEARCH_BY_NAME,
-                              payload: {
-                                name: e,
-                                type: 'from'
-                              }
-                            })
+                        <FromIcon height={22} width={22} />
+                        <View style={{ paddingLeft: 15 }}>
+                          <Text style={style.title}>FROM</Text>
 
-                            setSelectedFromVal(selectedFromVal = { city: e })
-                          } else {
-                            setSelectedFromVal(selectedFromVal = { city: e })
-                            dispatch({
-                              type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
-                              payload: []
-                            })
-                          }
-                        }}
-                        style={{
-                          color: 'black',
-                          fontFamily: FONTS.font,
-                          width: width * 0.6,
-                          paddingTop: -15,
-                          paddingBottom: 0,
-                        }}
-                      />
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              height: 35,
+                              // width: '50%',
+                              alignItems: 'center',
+                              // backgroundColor:'red'
+                            }}
+                          >
+
+                            <TextInput
+                              keyboardType={'default'}
+                              placeholder={'Select ...'}
+                              placeholderTextColor="gray"
+                              numberOfLines={1}
+                              value={selectedFromVal?.city}
+                              onChangeText={(e) => {
+                                if (e === '') {
+                                  setNoRecord(noRecord = { from: true, to: noRecord.to })
+                                }
+                                if (e?.length >= 3) {
+                                  dispatch({
+                                    type: FlightAction.SET_FLIGHT_SEARCH_BY_NAME,
+                                    payload: {
+                                      name: e,
+                                      type: 'from'
+                                    }
+                                  })
+
+                                  setSelectedFromVal(selectedFromVal = { city: e })
+                                } else {
+                                  setSelectedFromVal(selectedFromVal = { city: e })
+                                  dispatch({
+                                    type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
+                                    payload: []
+                                  })
+                                }
+                              }}
+                              style={{
+                                color: 'black',
+                                fontFamily: FONTS.font,
+                                width: width * 0.5,
+                                paddingTop: -15,
+                                paddingBottom: 0,
+                              }}
+                            />
+
+
+                            {
+                              selectedFromVal?.city !== "" ?
+                                <TouchableHighlight
+                                  underlayColor={'transparent'}
+                                  onPress={() => {
+                                    setSelectedFromVal(selectedFromVal = { city: '' })
+                                    dispatch({
+                                      type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
+                                      payload: []
+                                    })
+                                    setNoRecord(noRecord = { from: true, to: noRecord.to })
+
+                                  }}
+                                >
+                                  <AntIcon name="closecircle" size={15} color="gray" style={{
+                                    marginLeft: 10, marginRight: 10,
+                                  }} />
+                                </TouchableHighlight> : <></>
+                            }
+                          </View>
+                        </View>
+                      </View>
 
 
                       {
-                        selectedFromVal?.city !== "" ?
-                          <TouchableHighlight
-                            underlayColor={'transparent'}
-                            onPress={() => {
-                              setSelectedFromVal(selectedFromVal = { city: '' })
-                              dispatch({
-                                type: FlightAction.GET_FLIGHT_SEARCH_FROM_BY_NAME,
-                                payload: []
-                              })
-                              setNoRecord(noRecord = { from: true, to: noRecord.to })
+                        (Airport_Name?.message === undefined && selectedFromVal?.city !== '' && noRecord?.from !== false) ?
+                          <View style={{
+                            backgroundColor: 'white',
+                            width: '90%',
+                            alignSelf: 'center',
+                            position: 'relative',
+                            zIndex: 2,
+                            borderRadius: 5,
+                            elevation: 10,
+                            maxHeight: height * 0.35
+                          }}>
+                            <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: FONTS.font }}>No Options found</Text>
+                          </View> : <View style={{
+                            backgroundColor: 'white',
+                            width: '90%',
+                            alignSelf: 'center',
+                            position: 'relative',
+                            zIndex: 2,
+                            borderRadius: 10,
+                            elevation: 10,
+                            maxHeight: height * 0.35
+                          }}>
 
-                            }}
-                          >
-                            <AntIcon name="closecircle" size={15} color="gray" style={{
-                              marginLeft: 10, marginRight: 10,
-                            }} />
-                          </TouchableHighlight> : <></>
-                      }
-                    </View>
-                  </View>
-                </View>
-
-
-                {
-                  (Airport_Name?.message === undefined && selectedFromVal?.city !== '' && noRecord?.from !== false) ?
-                    <View style={{
-                      backgroundColor: 'white',
-                      width: '90%',
-                      alignSelf: 'center',
-                      position: 'relative',
-                      zIndex: 2,
-                      borderRadius: 5,
-                      elevation: 10,
-                      maxHeight: height * 0.35
-                    }}>
-                      <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: FONTS.font }}>No Options found</Text>
-                    </View> : <View style={{
-                      backgroundColor: 'white',
-                      width: '90%',
-                      alignSelf: 'center',
-                      position: 'relative',
-                      zIndex: 2,
-                      borderRadius: 10,
-                      elevation: 10,
-                      maxHeight: height * 0.35
-                    }}>
-
-                      <ScrollView
-                        showsVerticalScrollIndicator={true}
-                        nestedScrollEnabled
-                        keyboardShouldPersistTaps='handled'
-                      >
-                        {
-                          Airport_Name?.message?.filter((item) => item?.city !== selectedToVal?.city)?.map((e, i) => {
-                            return (
-                              <TouchableHighlight
-                                underlayColor={"transparent"}
-                                onPress={() => {
-                                  handleSelection(e)
-                                }}
-                                key={i}>
-                                <Text
-                                  style={{
-                                    color: 'black',
-                                    padding: 9,
-                                    fontSize: 16,
-                                    fontFamily: FONTS.font
-                                  }}>{e?.city}-{e?.airport_name} ({e?.airport_code})</Text>
-                              </TouchableHighlight>
-                            )
-                          })
-                        }
-                      </ScrollView>
-
-                    </View>
-                }
-              </View>
-
-
-              <View style={{ flexDirection: 'column' }}>
-
-
-                <View style={[style.frombtn, { marginHorizontal: 20, paddingLeft: 20, width: width * 0.9,justifyContent:'flex-start',paddingVertical:2 }]}>
-
-                  <FromIcon height={22} width={22} />
-                  <View style={{ paddingLeft: 15 }}>
-                    <Text style={style.title}>To</Text>
-
-                    <View
-                      style={{
-                        flexDirection: 'row',
-                        height: 35,
-                        width: '100%',
-                        alignItems: 'center',
-                      }}
-                    >
-
-                      <TextInput
-                        keyboardType={'default'}
-                        placeholder={'Select ...'}
-                        placeholderTextColor="gray"
-                        numberOfLines={1}
-                        value={selectedToVal?.city}
-                        onChangeText={(e) => {
-                          if (e === '') {
-                            setNoRecord(noRecord = { from: noRecord.from, to: true })
-                          }
-                          if (e?.length >= 3) {
-                            dispatch({
-                              type: FlightAction.SET_FLIGHT_SEARCH_BY_NAME,
-                              payload: {
-                                name: e,
-                                type: 'to'
+                            <ScrollView
+                              showsVerticalScrollIndicator={true}
+                              nestedScrollEnabled
+                              keyboardShouldPersistTaps='handled'
+                            >
+                              {
+                                Airport_Name?.message?.filter((item) => item?.city !== selectedToVal?.city)?.map((e, i) => {
+                                  return (
+                                    <TouchableHighlight
+                                      underlayColor={"transparent"}
+                                      onPress={() => {
+                                        handleSelection(e)
+                                      }}
+                                      key={i}>
+                                      <Text
+                                        style={{
+                                          color: 'black',
+                                          padding: 9,
+                                          fontSize: 16,
+                                          fontFamily: FONTS.font
+                                        }}>{e?.city}-{e?.airport_name} ({e?.airport_code})</Text>
+                                    </TouchableHighlight>
+                                  )
+                                })
                               }
-                            })
+                            </ScrollView>
 
-                            setSelectedToVal(selectedToVal = { city: e })
-                          } else {
-                            setSelectedToVal(selectedToVal = { city: e })
-                            dispatch({
-                              type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,
-                              payload: []
-                            })
-                          }
-                        }}
-                        style={{
-                          color: 'black',
-                          fontFamily: FONTS.font,
-                          width: width * 0.6,
-                          paddingTop: -15,
-                          paddingBottom: 0,
-                          // backgroundColor:'red'
-                        }}
-                      />
+                          </View>
+                      }
+                    </View>
 
 
-                      {
-                        selectedToVal?.city !== "" ?
-                          <TouchableHighlight
-                            underlayColor={'transparent'}
-                            onPress={() => {
-                              setSelectedToVal(selectedToVal = { city: '' })
-                              dispatch({
-                                type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,
-                                payload: []
-                              })
-                              setNoRecord(noRecord = { from: noRecord.from, to: true })
+                    <View style={{ flexDirection: 'column' }}>
+                      <View style={[style.frombtn, { marginHorizontal: 20, paddingLeft: 20, width: width * 0.9, justifyContent: 'flex-start', paddingVertical: 2 }]}>
 
+                        <ToIcon height={28} width={28} />
+                        <View style={{ paddingLeft: 15 }}>
+                          <Text style={style.title}>To</Text>
+
+                          <View
+                            style={{
+                              flexDirection: 'row',
+                              height: 35,
+                              width: '100%',
+                              alignItems: 'center',
                             }}
                           >
-                            <AntIcon name="closecircle" size={15} color="gray" style={{
-                              marginLeft: 10, marginRight: 10,
-                            }} />
-                          </TouchableHighlight> : <></>
+
+                            <TextInput
+                              keyboardType={'default'}
+                              placeholder={'Select ...'}
+                              placeholderTextColor="gray"
+                              numberOfLines={1}
+                              value={selectedToVal?.city}
+                              onChangeText={(e) => {
+                                if (e === '') {
+                                  setNoRecord(noRecord = { from: noRecord.from, to: true })
+                                }
+                                if (e?.length >= 3) {
+                                  dispatch({
+                                    type: FlightAction.SET_FLIGHT_SEARCH_BY_NAME,
+                                    payload: {
+                                      name: e,
+                                      type: 'to'
+                                    }
+                                  })
+
+                                  setSelectedToVal(selectedToVal = { city: e })
+                                } else {
+                                  setSelectedToVal(selectedToVal = { city: e })
+                                  dispatch({
+                                    type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,
+                                    payload: []
+                                  })
+                                }
+                              }}
+                              style={{
+                                color: 'black',
+                                fontFamily: FONTS.font,
+                                width: width * 0.6,
+                                paddingTop: -15,
+                                paddingBottom: 0,
+                                // backgroundColor:'red'
+                              }}
+                            />
+
+
+                            {
+                              selectedToVal?.city !== "" ?
+                                <TouchableHighlight
+                                  underlayColor={'transparent'}
+                                  onPress={() => {
+                                    setSelectedToVal(selectedToVal = { city: '' })
+                                    dispatch({
+                                      type: FlightAction.GET_FLIGHT_SEARCH_TO_BY_NAME,
+                                      payload: []
+                                    })
+                                    setNoRecord(noRecord = { from: noRecord.from, to: true })
+
+                                  }}
+                                >
+                                  <AntIcon name="closecircle" size={15} color="gray" style={{
+                                    marginLeft: 10, marginRight: 10,
+                                  }} />
+                                </TouchableHighlight> : <></>
+                            }
+                          </View>
+                        </View>
+                      </View>
+                      {
+                        (Airport_to_Name?.message === undefined && selectedToVal?.city !== '' && noRecord?.to !== false) ?
+                          <View style={{
+                            backgroundColor: 'white',
+                            width: '90%',
+                            alignSelf: 'center',
+                            position: 'relative',
+                            zIndex: 2,
+                            borderRadius: 5,
+                            elevation: 10,
+                            maxHeight: height * 0.35
+                          }}>
+                            <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: FONTS.font }}>No Options found</Text>
+                          </View> :
+                          <View style={{
+                            backgroundColor: 'white',
+                            width: '90%',
+                            alignSelf: 'center',
+                            position: 'relative',
+                            zIndex: 2,
+                            borderRadius: 10,
+                            elevation: 10,
+                            maxHeight: height * 0.35
+                          }}>
+
+                            <ScrollView
+                              style={{ height: 'auto' }}
+                              showsVerticalScrollIndicator={true}
+                              nestedScrollEnabled
+                              keyboardShouldPersistTaps='handled'
+                            >
+                              {
+                                Airport_to_Name?.message?.filter((item) => item?.city !== selectedFromVal?.city)?.map((e, i) => {
+                                  return (
+                                    <TouchableHighlight
+                                      underlayColor={"transparent"}
+                                      onPress={() => {
+                                        handleSelectionTo(e)
+                                      }}
+                                      key={i}>
+                                      <Text
+                                        style={{
+                                          color: 'black',
+                                          padding: 9,
+                                          fontSize: 16,
+                                          fontFamily: FONTS.font
+                                        }}>{e?.city}-{e?.airport_name} ({e?.airport_code})</Text>
+                                    </TouchableHighlight>
+                                  )
+                                })
+                              }
+                            </ScrollView>
+
+                          </View>
                       }
                     </View>
                   </View>
+
+
+                  <View style={style.swapBackground}>
+                    <TouchableHighlight underlayColor={'transparent'}
+                     onPress={()=>{
+                      console.log(swapCity?.from)
+                      console.log(swapCity?.to)
+                      setSelectedToVal(selectedToVal = { city: swapCity?.from })
+                      setSelectedFromVal(selectedFromVal = { city: swapCity?.to})
+                    }}>
+                    <View style={{backgroundColor:COLORS.AppbarColor,borderRadius:100,padding:8,top:height*0.009}}>
+                      <Ionicons name='ios-swap-vertical' size={23} color={COLORS.textBlue}/>
+                    </View>
+                    </TouchableHighlight>
+                  </View>
                 </View>
 
 
-                {
-                  (Airport_to_Name?.message === undefined && selectedToVal?.city !== '' && noRecord?.to !== false) ?
-                    <View style={{
-                      backgroundColor: 'white',
-                      width: '90%',
-                      alignSelf: 'center',
-                      position: 'relative',
-                      zIndex: 2,
-                      borderRadius: 5,
-                      elevation: 10,
-                      maxHeight: height * 0.35
-                    }}>
-                      <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, fontFamily: FONTS.font }}>No Options found</Text>
-                    </View> :
-                    <View style={{
-                      backgroundColor: 'white',
-                      width: '90%',
-                      alignSelf: 'center',
-                      position: 'relative',
-                      zIndex: 2,
-                      borderRadius: 10,
-                      elevation: 10,
-                      maxHeight: height * 0.35
-                    }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                  <TouchableHighlight onPress={() => setShowTraveller(!showTraveller)} underlayColor='transparent' style={{ marginRight: 10 }}>
+                    <View style={[style.frombtn, { paddingVertical: 10, paddingHorizontal: 10 }]}>
+                      <Ionicons name='md-person-outline' size={22} color={COLORS.textBlue} />
+                      <View style={{ paddingLeft: 15 }}>
+                        <Text style={style.title}>TRAVELLERS</Text>
+                        <Text style={style.CommonText}>{adult} Adult,{child} Child,{'\n'} {infant} Infant</Text>
+                      </View>
+                    </View>
+                  </TouchableHighlight>
 
-                      <ScrollView
-                        style={{ height: 'auto' }}
+
+                  <View style={[style.frombtn, { paddingVertical: 7, paddingHorizontal: 7 }]}>
+                    <ChairIcon height={25} width={25} />
+                    <View style={{ paddingLeft: 15, flexDirection: 'column', }}>
+                      <Text style={style.title}>CLASS</Text>
+                      <Dropdown
+                        data={classList}
+                        labelField="value"
+                        valueField="value"
+                        value={classType}
                         showsVerticalScrollIndicator={true}
-                        nestedScrollEnabled
-                        keyboardShouldPersistTaps='handled'
-                      >
-                        {
-                          Airport_to_Name?.message?.filter((item) => item?.city !== selectedFromVal?.city)?.map((e, i) => {
-                            return (
-                              <TouchableHighlight
-                                underlayColor={"transparent"}
-                                onPress={() => {
-                                  handleSelectionTo(e)
-                                }}
-                                key={i}>
-                                <Text
-                                  style={{
-                                    color: 'black',
-                                    padding: 9,
-                                    fontSize: 16,
-                                    fontFamily: FONTS.font
-                                  }}>{e?.city}-{e?.airport_name} ({e?.airport_code})</Text>
-                              </TouchableHighlight>
-                            )
-                          })
-                        }
-                      </ScrollView>
-
+                        name="class"
+                        onChange={(item) => {
+                          setClassType(item.value)
+                        }}
+                        selectedTextProps={{
+                          style: {
+                            color: COLORS.colorText,
+                            fontFamily: FONTS.mediam,
+                            fontSize: height * 0.019
+                          }
+                          // style: style.CommonText
+                        }}
+                        style={{ paddingRight: 15, paddingLeft: 10 }}
+                      />
                     </View>
-                }
-              </View>
-
-
-
-
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                <TouchableHighlight onPress={() => setShowTraveller(!showTraveller)} underlayColor='transparent' style={{ marginRight: 10 }}>
-                  <View style={[style.frombtn, { paddingVertical:10,paddingHorizontal:10}]}>
-                    <Ionicons name='md-person-outline' size={22} color={COLORS.textBlue} />
-                    <View style={{ paddingLeft: 15 }}>
-                      <Text style={style.title}>TRAVELLERS</Text>
-                      <Text style={style.CommonText}>{adult} Adult,{child} Child,{'\n'} {infant} Infant</Text>
-                    </View>
-                  </View>
-                </TouchableHighlight>
-
-
-                <View style={[style.frombtn, { paddingVertical:7,paddingHorizontal:7}]}>
-                  <ChairIcon height={25} width={25} />
-                  <View style={{ paddingLeft: 15,flexDirection:'column', }}>
-                    <Text style={style.title}>CLASS</Text>
-                    <Dropdown
-                      data={classList}
-                      labelField="value"
-                      valueField="value"
-                      value={classType}
-                      showsVerticalScrollIndicator={true}
-                      name="class"
-                      onChange={(item) => {
-                        setClassType(item.value)
-                      }}
-                      selectedTextProps={{
-                        style:{ color: COLORS.colorText,
-                           fontFamily: FONTS.mediam,
-                            fontSize: height * 0.019 }
-                        // style: style.CommonText
-                      }}
-                      style={{ paddingRight: 15, paddingLeft: 10 }}
-                    />
                   </View>
                 </View>
-              </View>
 
-              <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                <TouchableHighlight onPress={() => setFromPicker(!fromPicker)} underlayColor='transparent'>
-                  <View style={[style.frombtn, { paddingVertical:10,paddingHorizontal:10}]}>
-                    <CalendarIcon height={22} width={22} />
-                    <View style={{ paddingLeft: 15 }}>
-                      <Text style={style.title}>DEPARTURE ON</Text>
-                      <Text style={style.CommonText}>{moment(fromDate).format('DD/MM/YYYY')}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                  <TouchableHighlight onPress={() => setFromPicker(!fromPicker)} underlayColor='transparent'>
+                    <View style={[style.frombtn, { paddingVertical: 10, paddingHorizontal: 10 }]}>
+                      <CalendarIcon height={22} width={22} />
+                      <View style={{ paddingLeft: 15 }}>
+                        <Text style={style.title}>DEPARTURE ON</Text>
+                        <Text style={style.CommonText}>{moment(fromDate).format('DD/MM/YYYY')}</Text>
+                      </View>
                     </View>
-                  </View>
-                </TouchableHighlight>
-                <TouchableHighlight onPress={() => (roundTrip === true) ? setToPicker(!toPicker) : null} underlayColor='transparent' style={{ opacity: (roundTrip === true) ? 1 : 0.6 }}>
-                  <View style={[style.frombtn, { paddingVertical:10,paddingHorizontal:10}]}>
-                    <CalendarIcon height={22} width={22} />
-                    <View style={{ paddingLeft: 15 }}>
-                      <Text style={style.title}>RETURN ON</Text>
-                      <Text style={style.CommonText}>{moment(ToDate).format('DD/MM/YYYY')}</Text>
+                  </TouchableHighlight>
+                  <TouchableHighlight onPress={() => (roundTrip === true) ? setToPicker(!toPicker) : null} underlayColor='transparent' style={{ opacity: (roundTrip === true) ? 1 : 0.6 }}>
+                    <View style={[style.frombtn, { paddingVertical: 10, paddingHorizontal: 10 }]}>
+                      <CalendarIcon height={22} width={22} />
+                      <View style={{ paddingLeft: 15 }}>
+                        <Text style={style.title}>RETURN ON</Text>
+                        <Text style={style.CommonText}>{moment(ToDate).format('DD/MM/YYYY')}</Text>
+                      </View>
                     </View>
-                  </View>
-                </TouchableHighlight>
+                  </TouchableHighlight>
+                </View>
+
+
+
+                <View >
+                  <TouchableHighlight style={style.searchBtn} underlayColor={'transparent'}
+                    onPress={() => {
+                      if (selectedFromVal?.code === undefined || selectedFromVal?.code === '' || selectedFromVal?.code == null && selectedToVal?.code === undefined || selectedToVal?.code === '' || selectedToVal?.code == null) {
+                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Select a Place for search' } })
+                      } else if (adult === 0 && child === 0 && infant === 0) {
+                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Select atleast one traveller' } })
+                      } else {
+                        FlightSearch()
+                      }
+
+                    }}>
+                    <Text style={style.searchText}>SEARCH FLIGHT</Text>
+                  </TouchableHighlight>
+                </View>
+
               </View>
+            </ImageBackground>
+          </View>
 
+          {/* select departure date */}
+          <DatePicker
+            modal
+            open={fromPicker}
+            date={fromDate}
+            mode="date"
+            minimumDate={new Date()}
+            onConfirm={(date) => {
+              setFromPicker(!fromPicker)
+              setFromDate(fromDate = date)
+            }}
+            onCancel={() => {
+              setFromPicker(!fromPicker)
+            }}
+          />
 
+          {/* select return date */}
+          <DatePicker
+            modal
+            open={toPicker}
+            date={fromDate}
+            mode="date"
+            minimumDate={new Date()}
+            onConfirm={(date) => {
+              setToPicker(!toPicker)
+              setTodate(ToDate = date)
+            }}
+            onCancel={() => {
+              setToPicker(!toPicker)
+            }}
+          />
 
-              <View >
-                <TouchableHighlight style={style.searchBtn} underlayColor={'transparent'}
-                  onPress={() => {
-                    if (selectedFromVal?.code === undefined || selectedFromVal?.code === '' || selectedFromVal?.code == null && selectedToVal?.code === undefined || selectedToVal?.code === '' || selectedToVal?.code == null) {
-                      dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Select a Place for search' } })
-                    } else if (adult === 0 && child === 0 && infant === 0) {
-                      dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Select atleast one traveller' } })
-                    } else {
-                      FlightSearch()
-                    }
-
-                  }}>
-                  <Text style={style.searchText}>SEARCH FLIGHT</Text>
-                </TouchableHighlight>
-              </View>
-
-            </View>
-          </ImageBackground>
-        </View>
-
-        {/* select departure date */}
-        <DatePicker
-          modal
-          open={fromPicker}
-          date={fromDate}
-          mode="date"
-          minimumDate={new Date()}
-          onConfirm={(date) => {
-            setFromPicker(!fromPicker)
-            setFromDate(fromDate = date)
-          }}
-          onCancel={() => {
-            setFromPicker(!fromPicker)
-          }}
-        />
-
-        {/* select return date */}
-        <DatePicker
-          modal
-          open={toPicker}
-          date={fromDate}
-          mode="date"
-          minimumDate={new Date()}
-          onConfirm={(date) => {
-            setToPicker(!toPicker)
-            setTodate(ToDate = date)
-          }}
-          onCancel={() => {
-            setToPicker(!toPicker)
-          }}
-        />
-
-      </ScrollView>
+        </ScrollView>
       </View>
     </View>
 
@@ -724,8 +744,8 @@ const style = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     elevation: 0,
-    borderColor:'#0050A629',
-    borderWidth:1
+    borderColor: '#0050A629',
+    borderWidth: 1
   },
   mapbg: { height: height * 0.7, width: width, paddingTop: 20 },
   onebtn: { fontFamily: FONTS.fontSemi, paddingLeft: 10, fontSize: height * 0.015 },
@@ -733,10 +753,10 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: COLORS.bgColor,
-    borderWidth: 0.5,
+    borderWidth: 1,
     borderRadius: 5,
-    borderColor: '#0050A629',
-    justifyContent:'center',
+    borderColor: COLORS.AppbarColor,
+    justifyContent: 'center',
     marginTop: 20,
     paddingVertical: 0,
 
@@ -750,7 +770,7 @@ const style = StyleSheet.create({
     marginTop: 20,
     borderRadius: 30
   },
-  title: { color: COLORS.textBlue, fontFamily: FONTS.fontSemi, opacity: 0.7,fontSize:height*0.0165 },
+  title: { color: COLORS.textBlue, fontFamily: FONTS.fontSemi, opacity: 0.7, fontSize: height * 0.0165 },
   dropDown: { flexDirection: 'row', alignItems: 'center', width: '80%', justifyContent: 'space-between', marginBottom: 15 },
   doneBtn: { alignItems: 'center', marginTop: 10, backgroundColor: COLORS.textBlue, borderRadius: 20, width: width * 0.8 },
   doneText: {
@@ -766,5 +786,7 @@ const style = StyleSheet.create({
   modalCancel: { alignSelf: 'flex-end', paddingRight: 15, paddingBottom: 10 },
   dropStyle: { backgroundColor: '#EDF2F7', paddingVertical: 5, paddingLeft: 30, paddingRight: 10, borderRadius: 5, },
   dropIcon: { fontSize: 18, color: COLORS.colorTheme, marginLeft: 20 },
-  CommonText: { color: COLORS.colorText, fontFamily: FONTS.mediam, fontSize: height * 0.019 }
+  CommonText: { color: COLORS.colorText, fontFamily: FONTS.mediam, fontSize: height * 0.019 },
+  swapBackground:{
+    height:55,width:55,borderRadius:100,backgroundColor:'#f1f1f1',position:'absolute',right:width*0.1,top:height*0.08,alignItems:'center'}
 })

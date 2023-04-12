@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useEffect, useState, memo } from 'react';
+import React, { useEffect, useState, memo, useRef } from 'react';
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable, ActivityIndicator, Animated, TextInput } from 'react-native';
 import COLORS from '../constants/color';
 import FONTS from '../constants/font';
@@ -21,6 +21,7 @@ import DatePicker from 'react-native-date-picker';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
 import commonAction from '../../redux/common/actions'
 import { Controller, useForm } from 'react-hook-form';
+import OTPTextInput from 'react-native-otp-textinput'
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -28,7 +29,7 @@ let height = Dimensions.get('window').height;
 
 function Profile({ navigation }) {
     const dispatch = useDispatch()
-    const { userProfileData, isLogin } = useSelector((state) => state.userReducer)
+    const { userProfileData, isLogin, showHotelOtp,showFlightOtp } = useSelector((state) => state.userReducer)
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
     var [showPicker, setShowPicker] = useState(false) //show date picker for dob
     var [dob, setDob] = useState(new Date()); //set DOB in profile update
@@ -41,6 +42,10 @@ function Profile({ navigation }) {
     var [image, setImage] = useState() //set selected profile image
     var [showLogin, setShowLogin] = useState(false)
 
+    let otpInput = useRef(null);
+    const [otp, setOtp] = useState("");
+    var [scnNumber, setScnNumber] = useState()
+    var [pnrNumber, setPnrNumber] = useState()
 
 
     useEffect((async) => {
@@ -60,6 +65,42 @@ function Profile({ navigation }) {
         setAuthToken(null)
     }
 
+    const onHotelCancell = (data) => {
+        dispatch({
+            type: userActions.SET_GUEST_HOTEL_CANCELL_REQ, payload: {
+                supplierConfirmationNum: data?.SCN
+            },
+        })
+        setScnNumber(scnNumber = data?.SCN)
+    }
+    const onHotelCancellConfirm = () => {
+        console.log('otpInput', otpInput?.state?.otpText?.toString()?.replaceAll(",", ""))
+        console.log('data.supplierConfirmationNum', 'data?.SCN')
+        dispatch({
+            type: userActions.SET_GUEST_HOTEL_CANCELL_VERIFY, payload: {
+                supplierConfirmationNum: scnNumber,
+                OTP: otpInput?.state?.otpText?.toString()?.replaceAll(",", "")
+            }
+        })
+    }
+
+
+    const onFlightCancell = (data) => {
+        dispatch({
+            type: userActions.SET_GUEST_FLIGHT_CANCELL_REQ, payload: {
+                AirlinePNR: data?.PNR
+            },
+        })
+        setPnrNumber(pnrNumber = data?.PNR)
+    }
+    const onFlightCancellConfirm = () => {
+        dispatch({
+            type: userActions.SET_GUEST_FLIGHT_CANCELL_VERIFY, payload: {
+                AirlinePNR: pnrNumber,
+                OTP: otpInput?.state?.otpText?.toString()?.replaceAll(",", "")
+            }
+        })
+    }
 
 
     return (
@@ -240,8 +281,12 @@ function Profile({ navigation }) {
                                 >
                                     <MaterialCommunityIcons name='close-circle' size={33} style={{ color: '#003AA8' }} />
                                 </Pressable>
+                                
+                                {(showFlightOtp !== true) ?
                                 <Text style={styles.popupTitle}>PNR Number</Text>
-                                <View style={styles.editTextBorder}>
+                                :  <Text style={styles.popupTitle}>Enter Your OTP</Text>
+                                }
+                                {(showFlightOtp !== true) ?  <View style={styles.editTextBorder}>
                                     <Controller
                                         control={control}
                                         name="PNR"
@@ -266,13 +311,32 @@ function Profile({ navigation }) {
                                     {errors.PNR && (
                                         <Text style={[styles.errormessage]}>{errors.PNR.message}</Text>
                                     )}
-                                </View>
-                                <Text style={styles.popupCont}>Enter the ticket PNR no to send otp your register mail i'd</Text>
-                                <TouchableHighlight
-                                    style={styles.popupOTP}
-                                >
-                                    <Text style={styles.otpText}>Send OTP</Text>
-                                </TouchableHighlight>
+                                </View>:
+                                 <View>
+                                 <Text style={styles.OtpText}>Enter Your OTP</Text>
+                                 <OTPTextInput
+                                     value={otp}
+                                     onChange={v => setOtp(v)}
+                                     inputCount={6}
+                                     textInputStyle={{ width: 40, color: '#0040f0' }}
+                                     ref={e => (otpInput = e)}
+                                     tintColor='#0040f0'
+                                 />
+                             </View>
+                                
+                                }
+                                {(showFlightOtp !== true) ?
+                                        <Text style={styles.popupCont}>Enter the ticket PNR no to send otp your register mail i'd</Text>
+                                        : <View />
+                                    }
+                                {
+                                        (showFlightOtp !== true) ? <TouchableHighlight style={styles.popupOTP} onPress={handleSubmit(onFlightCancell)}>
+                                            <Text style={styles.otpText}>Send OTP</Text>
+                                        </TouchableHighlight>
+                                            :
+                                            <TouchableHighlight style={styles.popupOTP} onPress={() => onFlightCancellConfirm()}>
+                                                <Text style={styles.otpText}>Submit</Text>
+                                            </TouchableHighlight>}
                             </View>
                         </View>
                     </Modal>
@@ -291,9 +355,13 @@ function Profile({ navigation }) {
                                 >
                                     <MaterialCommunityIcons name='close-circle' size={33} style={{ color: '#003AA8' }} />
                                 </Pressable>
-                               
+
                                 <View>
-                                    <Text style={styles.popupTitle}>Supplier Confirmation Number</Text>
+                                {(showHotelOtp !== true) ?
+                                <Text style={styles.popupTitle}>Supplier Confirmation Number (SCN)</Text>
+                                :  <Text style={styles.popupTitle}>Enter Your OTP</Text>
+                                }
+                                    {(showHotelOtp !== true) ? 
                                     <View style={styles.editTextBorder}>
                                         <Controller
                                             control={control}
@@ -319,11 +387,29 @@ function Profile({ navigation }) {
                                         {errors.SCN && (
                                             <Text style={[styles.errormessage]}>{errors.SCN.message}</Text>
                                         )}
-                                    </View>
-                                    <Text style={styles.popupCont}>Enter the ticket SCN to send otp your register mail i'd</Text>
-                                    <TouchableHighlight style={styles.popupOTP}>
-                                        <Text style={styles.otpText}>Send OTP</Text>
-                                    </TouchableHighlight>
+                                    </View> :
+                                        <View>
+                                            <OTPTextInput
+                                                value={otp}
+                                                onChange={v => setOtp(v)}
+                                                inputCount={6}
+                                                textInputStyle={{ width: 40, color: '#0040f0' }}
+                                                ref={e => (otpInput = e)}
+                                                tintColor='#0040f0'
+                                            />
+                                        </View>}
+                                    {(showHotelOtp !== true) ?
+                                        <Text style={styles.popupCont}>Enter the ticket SCN to send otp your register mail i'd</Text>
+                                        : <View />
+                                    }
+                                    {
+                                        (showHotelOtp !== true) ? <TouchableHighlight style={styles.popupOTP} onPress={handleSubmit(onHotelCancell)}>
+                                            <Text style={styles.otpText}>Send OTP</Text>
+                                        </TouchableHighlight>
+                                            :
+                                            <TouchableHighlight style={styles.popupOTP} onPress={() => onHotelCancellConfirm()}>
+                                                <Text style={styles.otpText}>Submit</Text>
+                                            </TouchableHighlight>}
                                 </View>
                             </View>
                         </View>
@@ -400,9 +486,10 @@ const styles = StyleSheet.create({
     editTextBorder: {
         borderWidth: 1, height: 45, borderRadius: 3,
         borderColor: '#0041F2', marginVertical: 12,
+        marginBottom: 20
     },
     inputeEditor: {
-        color: '#003AA8'
+        color: 'black'
     },
     popupCont: {
         textAlign: 'center',
@@ -428,7 +515,19 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: height * 0.018,
         fontFamily: FONTS.fontSemi,
-    }
+    },
+    errormessage: {
+        color: 'red',
+        fontFamily: FONTS.font,
+        fontSize: 12
+    },
+    OtpText: {
+        textAlign: 'center',
+        paddingTop: 30,
+        fontSize: 18,
+        color: '#000',
+        fontFamily: FONTS.mediam
+    },
 
 })
 
