@@ -1,9 +1,12 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableOpacity, Pressable } from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableOpacity, Pressable, Animated } from 'react-native';
 import Appbar from "../../../common/Appbar";
 import FONTS from "../../../constants/font";
-import TakeOn from "../../../../Assert/Icons/take-on.svg";
-import TakeOff from "../../../../Assert/Icons/take-off.svg";
+import TakeOn from "../../../../Assert/Icons/take_1.svg";
+import TakeOff from "../../../../Assert/Icons/take_2.svg";
+import FlightStopArch from '../../../../Assert/Icons/flight_stop_arch.svg';
+import FlightStopIcon from '../../../../Assert/Icons/flight_stop.svg';
+import FlightStopDownIcon from '../../../../Assert/Icons/Flight_down_Icon.svg';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
@@ -16,12 +19,24 @@ const height = Dimensions.get('window').height
 
 export default function FlightTicketDetails({ navigation }) {
     var [stopTab, setStopTab] = useState(0)
-    const [PassengerList, setPassengerList] = useState(false)
+    const [PassengerList, setPassengerList] = useState(false);
+    const [rotateStart, setRotateStart] = useState(false);
+    var [rotateAnimation, setRotateAnimation] = useState(new Animated.Value(0));
     // const { get_Revalidate } = useSelector((state) => state.FlightSearchReducer)
     const { flight_tickets_details } = useSelector((state) => state.userReducer)
 
     const stopHandleClick = (index) => {
         setStopTab(index)
+    }
+    function timeConvert(n) {
+        var num = n;
+        console.log('n', n)
+        var hours = Math.floor(num / 60) > 0 ? Math.floor(num / 60) + "H " : "";
+        var rminutes =
+            n - Math.floor(num / 60) * 60 > 0
+                ? n - Math.floor(num / 60) * 60 + "M"
+                : "";
+        return hours + rminutes;
     }
 
     return (
@@ -29,141 +44,161 @@ export default function FlightTicketDetails({ navigation }) {
             <Appbar title={'Flight Details'} />
             <ScrollView style={{ height: height * 0.83 }}>
                 <View style={{ paddingHorizontal: 15 }}>
-                    {flight_tickets_details?.flightTripDetails?.map((item, index) => {
-                        return (
-                            <View key={index}>
-                                <View style={{
-                                    flexDirection: "row",
-                                    justifyContent: 'space-around',
-                                    alignItems: 'center',
-                                    paddingVertical: 30,
-                                }}>
-                                    <View style={{ width: "40%" }}>
-                                        <Text style={[style.CountryShortName, { flex: 1 }]}>{item?.DepartureAirportLocationCode}</Text>
-                                        <Text style={[style.CountryNameTitle, { flex: 1 }]}>{item?.DepartureAirportCity}</Text>
+
+                    {/* {flight_tickets_details?.flightTripDetails?.map((item, index) => {
+                        return ( */}
+                    <View>
+                        <View style={{
+                            flexDirection: "row",
+                            justifyContent: 'space-around',
+                            alignItems: 'center',
+                            paddingVertical: 30,
+                        }}>
+                            {/* {console.log('asddsds',flight_tickets_details.flightTripDetails.length)} */}
+                            {/* {console.log('flight_details_item333',item)} */}
+                            <View style={{ width: "40%" }}>
+                                <Text style={[style.CountryShortName, { flex: 1 }]}>{flight_tickets_details.flightTripDetails[0]?.DepartureAirportLocationCode}</Text>
+                                <Text style={[style.CountryNameTitle, { flex: 1 }]}>{flight_tickets_details.flightTripDetails[0]?.DepartureAirportCity}</Text>
+                            </View>
+                            <Text style={[style.ToName, { width: "10%" }]}>To</Text>
+                            <View style={{ width: "40%" }}>
+                                <Text style={[style.CountryShortName, { flex: 1 }]}>{flight_tickets_details.flightTripDetails[flight_tickets_details.flightTripDetails.length - 1]?.ArrivalAirportLocationCode}</Text>
+                                <Text style={[style.CountryNameTitle, { flex: 1 }]}>{flight_tickets_details.flightTripDetails[flight_tickets_details.flightTripDetails.length - 1]?.ArrivalAirportCity}</Text>
+                            </View>
+                        </View>
+                        <View style={[style.FlightBannerSec]}>
+                            <Image style={{ width: 350, height: 200 }} source={require('../../../../Assert/Images/Asset5.png')} />
+                            <View style={[style.cartBackgroundDesign, { marginTop: 10 }]}>
+                                <View style={[style.LeftCircle]} />
+                                <View style={[style.RightCircle]} />
+                                <View style={{ flexDirection: "row", justifyContent: 'space-between', }}>
+                                    <View>
+                                        <View style={[style.cartPaddingSpace]}>
+                                            <Text style={[style.cartTitle]}>PNR No</Text>
+                                            <Text style={[style.cartContent]}>{flight_tickets_details.flightTripDetails[0]?.AirlinePNR}</Text>
+                                        </View>
+                                        <View style={[style.cartPaddingSpace]}>
+                                            <Text style={[style.cartTitle]}>DEPARTURE</Text>
+                                            <Text style={[style.cartContent]}>{moment(flight_tickets_details.flightTripDetails[0]?.DepartureDateTime)?.format('DD-MM-YYYY')}</Text>
+                                        </View>
+                                        <View style={[style.cartPaddingSpace]}>
+                                            <Text style={[style.cartTitle]}>PAYMENT ID</Text>
+                                            <Text style={[style.cartContent]}>{flight_tickets_details?.bookingDetails?.paymentTransactionId}</Text>
+                                        </View>
                                     </View>
-                                    <Text style={[style.ToName, { width: "10%" }]}>To</Text>
-                                    <View style={{ width: "40%" }}>
-                                        <Text style={[style.CountryShortName, { flex: 1 }]}>{item?.ArrivalAirportLocationCode}</Text>
-                                        <Text style={[style.CountryNameTitle, { flex: 1 }]}>{item?.ArrivalAirportCity}</Text>
-                                    </View>
-                                </View>
-                                <View style={[style.FlightBannerSec]}>
-                                    <Image style={{ width: 350, height: 200 }} source={require('../../../../Assert/Images/Asset5.png')} />
-                                    <View style={[style.cartBackgroundDesign, { marginTop: 10 }]}>
-                                        <View style={[style.LeftCircle]} />
-                                        <View style={[style.RightCircle]} />
-                                        <View style={{ flexDirection: "row", justifyContent: 'space-between', }}>
-                                            <View>
-                                                <View style={[style.cartPaddingSpace]}>
-                                                    <Text style={[style.cartTitle]}>PNR No</Text>
-                                                    <Text style={[style.cartContent]}>{item?.AirlinePNR}</Text>
-                                                </View>
-                                                <View style={[style.cartPaddingSpace]}>
-                                                    <Text style={[style.cartTitle]}>DEPARTURE</Text>
-                                                    <Text style={[style.cartContent]}>{moment(item?.DepartureDateTime)?.format('DD-MM-YYYY')}</Text>
-                                                </View>
-                                                <View style={[style.cartPaddingSpace]}>
-                                                    <Text style={[style.cartTitle]}>PAYMENT ID</Text>
-                                                    <Text style={[style.cartContent]}>{flight_tickets_details?.bookingDetails?.paymentTransactionId}</Text>
-                                                </View>
-                                            </View>
-                                            <View>
-                                                <View style={[style.cartPaddingSpace]}>
-                                                    <Text style={[style.cartTitle]}>STATUS</Text>
-                                                    <Text style={[style.cartContent]}>{flight_tickets_details?.bookingDetails?.status}</Text>
-                                                </View>
-                                                <View style={[style.cartPaddingSpace]}>
-                                                    <Text style={[style.cartTitle]}>ARRIVAL</Text>
-                                                    <Text style={[style.cartContent]}>{moment(item?.ArrivalDateTime)?.format('DD-MM-YYYY')}</Text>
-                                                </View>
-                                            </View>
+                                    <View>
+                                        <View style={[style.cartPaddingSpace]}>
+                                            <Text style={[style.cartTitle]}>STATUS</Text>
+                                            <Text style={[style.cartContent]}>{flight_tickets_details?.bookingDetails?.status}</Text>
+                                        </View>
+                                        <View style={[style.cartPaddingSpace]}>
+                                            <Text style={[style.cartTitle]}>ARRIVAL</Text>
+                                            <Text style={[style.cartContent]}>{moment(flight_tickets_details.flightTripDetails[flight_tickets_details.flightTripDetails.length - 1]?.ArrivalDateTime)?.format('DD-MM-YYYY')}</Text>
                                         </View>
                                     </View>
                                 </View>
                             </View>
-                        );
+                        </View>
+                    </View>
+                    {/* ); */}
 
-                    })}
+                    {/* })} */}
 
                     <View style={{ paddingVertical: 25 }}>
                         <View>
                             <Text style={[style.commonTitle]}>Flight Detail</Text>
                         </View>
-                        { }
-                        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', paddingHorizontal: 35, paddingVertical: 20, }}>
-                            <TouchableOpacity style={[style.FlightTakeOnIcon]}>
-                                <TakeOn height={30} width={30} fill='red' />
-                            </TouchableOpacity>
-                            <View style={[style.backBorder]} />
-                            <TouchableOpacity>
-                                <Text style={[style.flightCount]}>0</Text>
-                            </TouchableOpacity>
-                            <View style={[style.backBorder]} />
-                            <TouchableOpacity style={[style.FlightTakeOnIcon]}>
-                                <TakeOff height={30} width={30} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', paddingHorizontal: 45, paddingVertical: 20, }}>
-                            <TouchableOpacity style={[style.FlightTakeOnIcon]}>
-                                <TakeOn height={30} width={30} fill='red' />
-                            </TouchableOpacity>
-                            <View style={[style.backBorder]} />
-                            <TouchableOpacity>
-                                <Text style={[style.flightCount]}>1</Text>
-                            </TouchableOpacity>
-                            <View style={[style.backBorder]} />
-                            <TouchableOpacity>
-                                <Text style={[style.flightCount]}>2</Text>
-                            </TouchableOpacity>
-                            <View style={[style.backBorder]} />
-                            <TouchableOpacity style={[style.FlightTakeOnIcon]}>
-                                <TakeOff height={30} width={30} />
-                            </TouchableOpacity>
-                        </View>
-                        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', paddingHorizontal: 55, paddingVertical: 20, }}>
-                            <TouchableOpacity style={[style.FlightTakeOnIcon]}>
-                                <TakeOn height={30} width={30} fill='red' />
-                            </TouchableOpacity>
-                            <View style={[style.backBorder]} />
-                            <TouchableOpacity>
-                                <Text style={[style.flightCount]}>1</Text>
-                            </TouchableOpacity>
-                            <View style={[style.backBorder]} />
-                            <TouchableOpacity>
-                                <Text style={[style.flightCount]}>2</Text>
-                            </TouchableOpacity>
-                            <View style={[style.backBorder]} />
-                            <TouchableOpacity>
-                                <Text style={[style.flightCount]}>3</Text>
-                            </TouchableOpacity>
-                            <View style={[style.backBorder]} />
-                            <TouchableOpacity>
-                                <Text style={[style.flightCount]}>4</Text>
-                            </TouchableOpacity>
-                            <View style={[style.backBorder]} />
-                            <TouchableOpacity style={[style.FlightTakeOnIcon]}>
-                                <TakeOff height={30} width={30} />
-                            </TouchableOpacity>
-                        </View>
+                        <View>
+                            <FlightStopArch style={{ width: width * 0.90, height: height * 0.06, alignSelf: 'center', }} />
 
-                        <View style={[style.FlightStopingCart]} >
-                            <Text style={{ fontSize: height * 0.021, fontFamily: FONTS.mediam, color: '#000' }}>Dubai International Airport - DXB</Text>
-                            <View style={{}}>
-                                <Text style={[style.FlightStopingList]}>Baggage -</Text>
-                                <Text style={[style.FlightStopingList]}>Flight Number - <Text style={[style.FlightStopingListDark]}>6902</Text></Text>
-                                <Text style={[style.FlightStopingList]}>Journey Duration - <Text style={[style.FlightStopingListDark]}>9H 5M</Text></Text>
-                                <Text style={[style.FlightStopingList]}>Marketing Airline Code - <Text style={[style.FlightStopingListDark]}>Transavia Airlines</Text></Text>
-                                <Text style={[style.FlightStopingList]}>Operating Airline Code - <Text style={[style.FlightStopingListDark]}>Transavia Airlines</Text></Text>
-                            </View>
-                            <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between', }}>
-                                <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between', }}>
-                                    <Text style={[style.timeAnddate]}>5:30 PM</Text>
-                                    <Text style={{ fontFamily: FONTS.mediam, color: '#000' }}>Jan 9, 2023</Text>
+                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
+                                <View style={{ position: 'absolute', bottom: -20 }}>
+                                    {(rotateStart === false) ?
+                                        <FlightStopIcon width={35} style={{}} />
+                                        :
+                                        <FlightStopDownIcon width={35} />
+                                    }
                                 </View>
-                                <Text style={{ fontFamily: FONTS.mediam, color: '#000' }}>Dubai</Text>
+                                <Pressable style={{ justifyContent: 'center', alignItems: 'center' }} onPress={() => setRotateStart(!rotateStart)}>
+                                    <Text style={style.stopTitle}>{(rotateStart === true) ? 'Close Details' : 'View Details'} </Text>
+                                </Pressable>
                             </View>
                         </View>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                            <Text style={style.LocationTitle}>
+                                {flight_tickets_details.flightTripDetails[0]?.DepartureAirportLocationCode}
+                            </Text>
+                            <Text style={style.LocationTitle}>
+                                {flight_tickets_details.flightTripDetails[flight_tickets_details.flightTripDetails.length - 1]?.ArrivalAirportLocationCode}
+                            </Text>
+                        </View>
+                        {/* {(rotateStart === true) ?
+                            <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', paddingHorizontal: 45, paddingVertical: 20, }}>
+                                <TouchableOpacity style={[style.FlightTakeOnIcon]}>
+                                    <TakeOn height={30} width={30} fill='red' />
+                                </TouchableOpacity>
+                                <View style={[style.backBorder]} />
+                                <TouchableOpacity>
+                                    <Text style={[style.flightCount]}>1</Text>
+                                </TouchableOpacity>
+                                <View style={[style.backBorder]} />
+                                <TouchableOpacity>
+                                    <Text style={[style.flightCount]}>2</Text>
+                                </TouchableOpacity>
+                                <View style={[style.backBorder]} />
+                                <TouchableOpacity style={[style.FlightTakeOnIcon]}>
+                                    <TakeOff height={30} width={30} />
+                                </TouchableOpacity>
+                            </View> : <></>
+                        } */}
+                        {(rotateStart === true) ?
+                            <View>
+                                <View style={[style.FlightStopingCart]}>
+                                    {flight_tickets_details?.flightTripDetails?.map((item, index) => {
+                                        return (
+                                            <View>
+                                                <View>
+                                                    <View style={style.FlightVerticalLeftLine}></View>
+                                                    <View style={{ justifyContent: 'center', top: '50%' }}>
+                                                        <TakeOn width={45} height={45} style={{ position: 'absolute', left: -20, backgroundColor: '#fff', borderRadius: 50 }} />
+                                                    </View>
+                                                    <View style={{ paddingVertical: 20, paddingHorizontal: 20, width: "100%", paddingLeft: 40 }}>
+                                                        <Text style={{ fontSize: height * 0.021, fontFamily: FONTS.mediam, color: '#000' }}>{item.DepartureAirportLocation} - {item.DepartureAirportLocationCode}</Text>
+                                                        <Text style={[style.FlightStopingList]}>Flight Number - <Text style={[style.FlightStopingListDark]}>{item.FlightNumber}</Text></Text>
+                                                        <Text style={[style.FlightStopingList]}>Journey Duration - <Text style={[style.FlightStopingListDark]}>
+                                                            {timeConvert(item.JourneyDuration)}</Text></Text>
+                                                            <Text style={[style.FlightStopingList]}>Airport City - <Text style={[style.FlightStopingListDark]}>{item.ArrivalAirportCity}</Text></Text>
+                                                            <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between', }}>
+                                                                <Text style={[style.timeAnddate]}>{moment(item.DepartureDateTime).format('HH:mm')}</Text>
+                                                                <Text style={{ fontFamily: FONTS.mediam, color: '#000' }}>{moment(item.DepartureDateTime).format('DD-MM-YYYY')}</Text>
+                                                            </View>
+                                                    </View>
+                                                    <View style={style.FlightHorizontalLine}></View>
+                                                </View>
+                                                <View >
+                                                    <View style={style.FlightVerticalRightLine}></View>
+                                                    <View style={{ justifyContent: 'center', top: '50%' }}>
+                                                        <TakeOff width={45} height={45} style={{ position: 'absolute', right: -20, backgroundColor: '#fff', borderRadius: 50 }} />
+                                                    </View>
+                                                    <View style={{ paddingVertical: 20, paddingHorizontal: 20, width: "100%", paddingRight: 20 }}>
+                                                        <Text style={{ fontSize: height * 0.021, fontFamily: FONTS.mediam, color: '#000' }}>{item.ArrivalAirportLocation} - {item.ArrivalAirportLocationCode}</Text>
+                                                        <Text style={[style.FlightStopingList]}>Flight Number - <Text style={[style.FlightStopingListDark]}>{item.FlightNumber}</Text></Text>
+                                                        <Text style={[style.FlightStopingList]}>Journey Duration - <Text style={[style.FlightStopingListDark]}>{timeConvert(item.JourneyDuration)}</Text></Text>
+                                                        <Text style={[style.FlightStopingList]}>Airport City - <Text style={[style.FlightStopingListDark]}>{item.ArrivalAirportCity}</Text></Text>
+                                                        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between', }}>
+                                                            <Text style={[style.timeAnddate]}>{moment(item.ArrivalDateTime).format('HH:mm')} </Text>
+                                                            <Text style={{ fontFamily: FONTS.mediam, color: '#000' }}>{moment(item.ArrivalDateTime).format('DD-MM-YYYY')}</Text>
+                                                        </View>
+                                                    </View>
+                                                    <View style={style.FlightHorizontalLine}></View>
+                                                </View>
+                                            </View>
+                                        );
+                                    })}
+                                </View>
+                            </View> : <></>
+                        }
+
                     </View>
 
                     <View>
@@ -349,9 +384,9 @@ const style = StyleSheet.create({
         zIndex: -1,
     },
     FlightStopingCart: {
-        backgroundColor: '#eee',
+        // backgroundColor: '#eee',
         paddingVertical: 10,
-        paddingHorizontal: 15,
+        paddingHorizontal: 10,
         borderRadius: 20,
         marginVertical: 15,
     },
@@ -398,4 +433,40 @@ const style = StyleSheet.create({
         paddingHorizontal: 15, paddingVertical: 3, borderRadius: 22, alignItems: 'center'
     },
     totalText: { fontFamily: FONTS.fontBold, color: 'white', fontSize: height * 0.022 },
+    LocationTitle: {
+        fontSize: height * 0.026,
+        fontWeight: '900',
+        color: '#003AA8',
+    },
+    stopTitle: {
+        fontSize: height * 0.018,
+        color: '#000',
+        fontFamily: FONTS.fontSemi,
+        position: 'absolute',
+        top: -30
+    },
+    FlightVerticalLeftLine: {
+        width: 3,
+        height: '100%',
+        position: 'absolute',
+        backgroundColor: '#3D8EFF91',
+        left: 0,
+        borderRadius: 10
+    },
+    FlightHorizontalLine: {
+        height: 3,
+        width: '100%',
+        position: 'absolute',
+        backgroundColor: '#3D8EFF91',
+        bottom: 0,
+        borderRadius: 10
+    },
+    FlightVerticalRightLine: {
+        width: 3,
+        height: '100%',
+        position: 'absolute',
+        backgroundColor: '#3D8EFF91',
+        right: -1,
+        borderRadius: 10
+    }
 })
