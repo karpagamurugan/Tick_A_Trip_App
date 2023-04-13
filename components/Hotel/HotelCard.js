@@ -13,16 +13,16 @@ import moment from 'moment';
 
 const HotelCard = (props) => {
     const { val } = props
-    const { hotelSessionId ,RoomGuestPlace} = useSelector((state) => state.HotelReducer)
+    const { hotelSessionId, RoomGuestPlace } = useSelector((state) => state.HotelReducer)
 
-    var navigation =props?.navigation
-    const dispatch =useDispatch()
+    var navigation = props?.navigation
+    const dispatch = useDispatch()
 
     return (
         <View style={style.hotelListCardSec}>
             <View style={styles.hotelListCard}>
                 <View style={styles.hotelListCardImage}>
-                    <ImageBackground resizeMode='cover'  style={style.hotelListCardImageBg} source={ val?.thumbNailUrl !== '' ? { uri: val?.thumbNailUrl } : require('../../Assert/Images/imageNotFound.jpg')}>
+                    <ImageBackground resizeMode='cover' style={style.hotelListCardImageBg} source={val?.thumbNailUrl !== '' ? { uri: val?.thumbNailUrl } : require('../../Assert/Images/imageNotFound.jpg')}>
                         <View style={style.hotelListCardReview}>
                             <View>
                                 <Stars
@@ -47,44 +47,44 @@ const HotelCard = (props) => {
                             <FontAwesome5 style={style.hotelListLocIcon} name='hotel' />
                             <Text style={style.hotelListLocName}>{val?.propertyType}</Text>
                         </View>
-                        
-                        <TouchableHighlight underlayColor={'transparent'} style={[style.hotelListCardHotelName,{paddingVertical:0}]}
-                         onPress={()=>{
-                            const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
-                            const latLng = `'11.000658','77.0295709`;
-                            const label = `${val?.hotelName}`;
-                            const url = Platform.select({
-                              ios: `${scheme}${label}@${latLng}`,
-                              android: `${scheme}${latLng}(${label})`
-                            });
-                            Linking.openURL(url);                 
-                                   }}>
-                                    <View style={{flexDirection:'row',paddingVertical:10}}>
-                            <Ionicons style={style.hotelListLocIcon} name='location-outline' />
-                            <Text style={style.hotelListLocName}>{val?.city}</Text>
+
+                        <TouchableHighlight underlayColor={'transparent'} style={[style.hotelListCardHotelName, { paddingVertical: 0 }]}
+                            onPress={() => {
+                                const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+                                const latLng = `${val.latitude},${val.longitude}`;
+                                const label = `${val?.hotelName}`;
+                                const url = Platform.select({
+                                    ios: `${scheme}${label}@${latLng}`,
+                                    android: `${scheme}${latLng}(${label})`
+                                });
+                                Linking.openURL(url);
+                            }}>
+                            <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
+                                <Ionicons style={style.hotelListLocIcon} name='location-outline' />
+                                <Text style={style.hotelListLocName}>{val?.city}</Text>
                             </View>
-                            </TouchableHighlight>
+                        </TouchableHighlight>
                     </View>
                     <View style={style.hotelDesCont}>
                         <Text style={style.ListHotelName}>{val?.hotelName}</Text>
                         <Text style={style.ListHotelPrice}>{val?.currency} {val?.total} <Text style={style.taxTect}></Text></Text>
-                        <Text style={style.ListHotelDescription}>{(parseInt(moment.duration(moment(RoomGuestPlace?.arrivalDate, "YYYY-MM-DD").diff(moment(RoomGuestPlace?.depatureDate, "YYYY-MM-DD"))).asDays()) === 1)?
-                        parseInt(moment.duration(moment(RoomGuestPlace?.arrivalDate, "YYYY-MM-DD").diff(moment(RoomGuestPlace?.depatureDate, "YYYY-MM-DD"))).asDays()):
-                        parseInt(moment.duration(moment(RoomGuestPlace?.arrivalDate, "YYYY-MM-DD").diff(moment(RoomGuestPlace?.depatureDate, "YYYY-MM-DD"))).asDays())+1} night { RoomGuestPlace?.Guest} All inclusive price {val?.currency} {val?.total}</Text>
+                        <Text style={style.ListHotelDescription}>{(parseInt(moment.duration(moment(RoomGuestPlace?.arrivalDate, "YYYY-MM-DD").diff(moment(RoomGuestPlace?.depatureDate, "YYYY-MM-DD"))).asDays()) === 1) ?
+                            parseInt(moment.duration(moment(RoomGuestPlace?.arrivalDate, "YYYY-MM-DD").diff(moment(RoomGuestPlace?.depatureDate, "YYYY-MM-DD"))).asDays()) :
+                            parseInt(moment.duration(moment(RoomGuestPlace?.arrivalDate, "YYYY-MM-DD").diff(moment(RoomGuestPlace?.depatureDate, "YYYY-MM-DD"))).asDays()) + 1} night {RoomGuestPlace?.Guest} All inclusive price {val?.currency} {val?.total}</Text>
                         <TouchableHighlight style={style.ListHotelBtn}
-                         onPress={() =>{
-                            dispatch({
-                                type:hotelActions.GET_HOTEL_ROOM_TYPE,
-                                payload:{
-                                    hotelId:val?.hotelId,
-                                    productId:val?.productId,
-                                    sessionId:hotelSessionId,
-                                    tokenId:val?.tokenId
-                                },
-                                navigation:navigation,
-                                detail:val
-                            })
-                             }}>
+                            onPress={() => {
+                                dispatch({
+                                    type: hotelActions.GET_HOTEL_ROOM_TYPE,
+                                    payload: {
+                                        hotelId: val?.hotelId,
+                                        productId: val?.productId,
+                                        sessionId: hotelSessionId,
+                                        tokenId: val?.tokenId
+                                    },
+                                    navigation: navigation,
+                                    detail: val
+                                })
+                            }}>
                             <Text style={style.ListHotelBtnText}>BOOK NOW</Text>
                         </TouchableHighlight>
                     </View>
@@ -95,8 +95,8 @@ const HotelCard = (props) => {
     )
 }
 const styles = StyleSheet.create({
-    hotelListCardImage:{
-        backgroundColor:'#fff',
+    hotelListCardImage: {
+        backgroundColor: '#fff',
     },
     myStarStyle: {
         color: '#F3BB00',
@@ -109,11 +109,11 @@ const styles = StyleSheet.create({
     myEmptyStarStyle: {
         color: 'white',
     },
-    hotelListCardImageBg:{
+    hotelListCardImageBg: {
         // borderTopLeftRadius:10,
         // borderTopRightRadius:10
         // borderRadius:20
-        height:200
+        height: 200
     }
 });
 export default HotelCard
