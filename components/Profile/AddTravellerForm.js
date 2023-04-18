@@ -47,7 +47,6 @@ const AddTravellerForm = ({ navigation, route }) => {
         , []);
 
     const handleSelectionCode = (e) => {
-        console.log('value', e)
         Keyboard.dismiss()
         setSelectedCountryCode(selectedCountryCode = { CountryCode: e.dial_code + "-" + e.name, IssuingName: '', Nationality: '', });
         setGetSelectId(getSelectId = { CountryCode: e.id, IssuingName: getSelectId.IssuingName, Nationality: getSelectId.Nationality, });
@@ -56,7 +55,6 @@ const AddTravellerForm = ({ navigation, route }) => {
             payload: []
         })
         setTravelRec(travelRec = { CountryCode: true, IssuingName: travelRec.IssuingName, Nationality: travelRec.Nationality });
-        console.log(travelRec.CountryCode)
         handleDebugger()
 
 
@@ -106,8 +104,6 @@ const AddTravellerForm = ({ navigation, route }) => {
     const SubmitAddBtn = (data) => {
 
         if (route.params != undefined) {
-
-            console.log('update Data', data)
 
         } else {
             setListData(listData = {
@@ -224,7 +220,6 @@ const AddTravellerForm = ({ navigation, route }) => {
                 selectedNationality: data?.country_code.name,
 
             })
-            // console.log('qwerttdfdsf',data)
         }
     }, [])
 

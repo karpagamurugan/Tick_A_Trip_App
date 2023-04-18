@@ -42,8 +42,6 @@ const ContactInfo = (props) => {
 
     const handleSelectionCode = (e) => {
         Keyboard.dismiss()
-
-        console.log(e,'jnswkhnfuewh')
         let defaultName = { Name: userProfileData?.name }
         let defaultEmail = { Email: userProfileData?.email }
         let defaultPhone = { Phone: userProfileData?.phone }

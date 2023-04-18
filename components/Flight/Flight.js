@@ -594,8 +594,6 @@ const Flight = ({ navigation }) => {
                   <View style={style.swapBackground}>
                     <TouchableHighlight underlayColor={'transparent'}
                      onPress={()=>{
-                      console.log(swapCity?.from)
-                      console.log(swapCity?.to)
                       setSelectedToVal(selectedToVal = { city: swapCity?.from })
                       setSelectedFromVal(selectedFromVal = { city: swapCity?.to})
                     }}>

@@ -7,6 +7,9 @@ import { useDispatch, useSelector } from "react-redux";
 import FontistoIcon from 'react-native-vector-icons/Fontisto';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import actions from '../../redux/Flight/actions';
+import MultiSlider from '@ptomasroos/react-native-multi-slider';
+import { API_URL } from '../constants/constApi';
+import axios from 'axios';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
@@ -19,7 +22,7 @@ function FlightFilter(props) {
     const { route } = props
     const { onApplied } = props;
     const { onClear } = props;
-    var [priceRange, setPriceRange] = useState((props?.Price ==='')?'0':props?.Price); //set price range for filter
+    var [priceRange, setPriceRange] = useState({min:(props?.Price?.min ==='')?'0':props?.Price.min,max:(props?.Price.max ==='')?'0':props?.Price.max}); //set price range for filter
     var [selectAirline, setSelectAirline] = useState(props?.AirLine)
     var [selectFlightStops, setSelectFlightStops] = useState(props?.Stops)
     const [cabin, setCabin] = useState([
@@ -29,6 +32,10 @@ function FlightFilter(props) {
     ]);
 
     var [cabinIndex, setCabinIndex] = useState(0);
+
+    var [multiSliderValue, setMultiSliderValue] = useState([0, 0]);
+    var[minMaxSlider,setMinMaxSlider] =useState({MinItem:'',MaxItem:''})
+    multiSliderValuesChange = values => setMultiSliderValue(values);
 
     const CheckAirlineName = [
         {
@@ -52,6 +59,22 @@ function FlightFilter(props) {
             value: 'Vistara',
         }
     ]
+
+    useEffect(() => {
+        axios.post(
+            `${API_URL}/filter`,{'filter_type':'flight'}, {
+            headers: {
+                accept: 'application/json',
+                'Content-Type': 'multipart/form-data',
+            },
+        }
+        ).then((res) => {
+          setMinMaxSlider(minMaxSlider = { MinItem: res.data.filter.min, MaxItem: res.data.filter.max })
+          setMultiSliderValue([res.data.filter.min, res.data.filter.max])
+        }).catch(err => {
+           
+        })
+    }, []);
 
     const CheckFlightStopsName = [
         {
@@ -82,16 +105,16 @@ function FlightFilter(props) {
         setCabinIndex(cabinIndex = i)
     };
 
-    const onAppliedClick = (price, Airline, cabin, stops) => {
-        onApplied(price , Airline, cabin, stops);
+    const onAppliedClick = (min,max, Airline, cabin, stops) => {
+        onApplied(min,max , Airline, cabin, stops);
     }
 
 
-    const ClearFilter=(price, Airline, cabin, stops)=>{
-        onClear(price, Airline, cabin, stops)
+    const ClearFilter=(min,max, Airline, cabin, stops)=>{
+        onClear(min,max, Airline, cabin, stops)
     
     }
- 
+
     return (
         <View style={{ backgroundColor: '#000000ba', width: width, height: height,}}>
             <Pressable
@@ -113,22 +136,32 @@ function FlightFilter(props) {
                         <View style={{ height: 0.5, backgroundColor: 'grey' }} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 10, paddingHorizontal: 5 }}>
                             <Text style={styles.FilterTitle}>Price</Text>
-                            <Text style={styles.priceRangeText}>{priceRange}</Text>
+                            {/* <Text style={styles.priceRangeText}>{priceRange?.min}</Text> */}
                         </View>
-                        <Slider
-                        value={priceRange}
-                            minimumValue={0}
-                            maximumValue={100000}
-                            minimumTrackTintColor={COLORS.colorBtn}
-                            thumbTintColor={COLORS.colorBtn}
-                            onValueChange={(val) => {
-                                setPriceRange(priceRange = val)
-                            }}
-
-                        />
+                        <View style={{ alignItems: 'center' }}>
+                            <MultiSlider
+                                values={[multiSliderValue[0], multiSliderValue[1]]}
+                                sliderLength={width * 0.75}
+                                onValuesChange={multiSliderValuesChange}
+                                min={parseInt(minMaxSlider.MinItem)}
+                                max={parseInt(minMaxSlider.MaxItem)}
+                                step={20}
+                                allowOverlap
+                                snapped
+                                customMarkerLeft={{ color: { bg: 'red', color: 'red' } }}
+                                selectedStyle={{
+                                    backgroundColor: '#0041F2',
+                                }}
+                                unselectedStyle={{
+                                    backgroundColor: '#d0d7de',
+                                }}
+                                color={'#009385'}
+                            />
+                        </View>
+                      
                         <View style={styles.priceContainer}>
-                            <Text style={styles.priceValue}>0</Text>
-                            <Text style={styles.priceValue}>100000</Text>
+                            <Text style={styles.priceValue}>{multiSliderValue[0]} </Text>
+                            <Text style={styles.priceValue}>{multiSliderValue[1]}</Text>
                         </View>
 
                         <View style={{ height: 0.5, backgroundColor: 'grey' }} />
@@ -219,7 +252,7 @@ function FlightFilter(props) {
                             <TouchableHighlight style={styles.filterbtns} onPress={() =>ClearFilter()} underlayColor='#BBBBBB66'>
                                 <Text style={styles.filterbtnText}>Clear</Text>
                             </TouchableHighlight>
-                            <TouchableHighlight style={styles.filterbtns} onPress={() => onAppliedClick(priceRange,selectAirline,cabin[cabinIndex].name,selectFlightStops)} underlayColor='#1B5CB74D'>
+                            <TouchableHighlight style={styles.filterbtns} onPress={() => onAppliedClick(multiSliderValue[0],multiSliderValue[1],selectAirline,cabin[cabinIndex].name,selectFlightStops)} underlayColor='#1B5CB74D'>
                                 <Text style={styles.filterbtnText}>Apply</Text>
                             </TouchableHighlight>
                         </View>
@@ -290,7 +323,18 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
         fontSize: height * 0.017,
         lineHeight: 25,
-    }
+    },
+    sliderOne: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+
+    },
+    priceRange: {
+        fontFamily: FONTS.fontSemi,
+        color: '#666666',
+        paddingVertical: 1,
+        fontSize: height * 0.015,
+    },
 
 })
 

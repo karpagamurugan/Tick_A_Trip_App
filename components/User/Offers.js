@@ -23,12 +23,9 @@ function Offers() {
     const { flight_Coupons, hotel_Coupons,isLogin } = useSelector((state) => state.userReducer)
 
     useEffect(() => {
-        if(isLogin){
             dispatch({ type: userAction.GET_ALL_FLIGHT_COUPON })
             dispatch({ type: userAction.GET_ALL_HOTEL_COUPON })
-        }else{
-
-        }
+       
     }, [])
 
     return (
@@ -56,7 +53,7 @@ function Offers() {
                                                 <View style={{ paddingHorizontal: 20, }}>
                                                     <View style={{ flexDirection: 'row', alignItems: 'flex-start', }}>
                                                         <Image source={HotelOffer} style={{ height: 45, width: 45, marginRight: 10 }} />
-                                                        <Text style={style.textBold}> {item?.coupon_description} For Hotel Booking </Text>
+                                                        <Text style={style.textBold}> {item?.coupon_discount}% For Hotel Booking </Text>
                                                     </View>
                                                     <View style={style.code}>
                                                         <View>
@@ -93,7 +90,7 @@ function Offers() {
                     {
                         flight_Coupons?.message?.map((item, index) => {
                             return (
-                                <View>
+                                <View key={index}>
                                     <View style={style.cardView}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
 
@@ -110,7 +107,7 @@ function Offers() {
                                             <View style={{ paddingHorizontal: 20, }}>
                                                 <View style={{ flexDirection: 'row', alignItems: 'flex-start', }}>
                                                     <Image source={FlightOffer} style={{ height: 45, width: 45, marginRight: 10 }} />
-                                                    <Text style={style.textBold}> {item?.coupon_description} For Flight Tickets </Text>
+                                                    <Text style={style.textBold}> {item?.coupon_discount}% For Flight Tickets </Text>
                                                 </View>
                                                 <View style={style.code}>
                                                     <View>

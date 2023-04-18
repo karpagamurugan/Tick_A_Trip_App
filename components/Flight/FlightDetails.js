@@ -50,7 +50,6 @@ export default function FlightDetails(props) {
                         <Text style={[styles.tabText, { color: selectedTab === 0 ? 'black' : 'gray' }]}>FLIGHT DETAILS</Text>
                     </TouchableHighlight>
                     <TouchableHighlight onPress={() => {
-                        console.log(data?.FareSourceCode)
                         dispatch({
                             type: actions.SET_FARE_RULES,
                             payload: {

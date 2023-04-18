@@ -326,7 +326,6 @@ const HotelFilter = (props) => {
                 }
             }
         }
-        console.log('selectRating', selectAdvisorRating)
 
         dispatch({ type: commonActions.HOTEL_LOADER, payload: true })
         dispatch({
@@ -339,19 +338,18 @@ const HotelFilter = (props) => {
             },
             openFile: setOpenFilter,
         })
-        console.log('tempFilter', tempFilter)
 
     }
     useEffect(() => {
         axios.post(
-            `${API_URL}/filter`, {
+            `${API_URL}/filter`,{'filter_type':'hotel'}, {
             headers: {
                 accept: 'application/json',
-                'Content-Type': 'multipart/form-data',
+                // 'Content-Type': 'multipart/form-data',
             },
         }
         ).then((res) => {
-            console.log('akjdsbf',res.data.filter.min)
+       
         //    setMinMaxSlider(res.data.filter.max)
          
           setMinMaxSlider(minMaxSlider = { MinItem: res.data.filter.min, MaxItem: res.data.filter.max })
@@ -361,9 +359,7 @@ const HotelFilter = (props) => {
         })
 
     }, []);
-    console.log('mindandmax',minMaxSlider)
-    console.log('minitem',minMaxSlider.MinItem)
-    console.log('maxitem',minMaxSlider.MaxItem)
+
     return (
         <View style={{ backgroundColor: '#000000ba', width: width, height: height }}>
             <Pressable
@@ -606,7 +602,6 @@ const HotelFilter = (props) => {
                         thumbTintColor={color.colorBtn}
                         onValueChange={(val) => {
                             setStartRating(startRating = val)
-                            // console.log("price Value",val)
                         }}
 
                     />
@@ -691,7 +686,6 @@ const HotelFilter = (props) => {
                         thumbTintColor={COLORS.colorBtn}
                         onValueChange={(val) => {
                             setAdvisorRating(advisorRating = val)
-                            // console.log("price Value",val)
                         }}
 
                     /> */}

@@ -18,7 +18,6 @@ const HotelSelectRoomGuest = (props) => {
     const [isFocus, setIsFocus] = useState(false);
     var [adultCount, setAdultCount] = useState(2);
     var [childCount, setChildCount] = useState(0);
-    console.log('selectAddRoom', selectAddRoom)
 
     // const AdultQty = [1, 2, 3, 4, 5, 6]
     // const ChildQty = [1, 2, 3, 4, 5, 6]
@@ -106,8 +105,6 @@ const HotelSelectRoomGuest = (props) => {
         ]
         arry[ind] = parseInt(item.value)
 
-        console.log('arry',arry)
-        console.log('arry[ind]',arry[ind])
 
         tempdata[index1] = {
             ...tempdata[index1],

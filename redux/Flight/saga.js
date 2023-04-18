@@ -140,7 +140,6 @@ const getFareRules = function* (data) {
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
         } else {
-            console.log('fare rulessss failed')
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
         }
@@ -167,7 +166,6 @@ const setRevalidate = function* (data) {
             }
             )
         );
-        console.log('from saga,...', result?.data?.message)
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_REVALIDATE, payload: result?.data?.message })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
@@ -202,7 +200,7 @@ const setFlightBooking = function* (data) {
             }
             )
         );
-        console.log('from saga,...', result?.data)
+        console.log('flight booking result...',result?.data?.message)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })

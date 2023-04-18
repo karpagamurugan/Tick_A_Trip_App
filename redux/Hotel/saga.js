@@ -138,7 +138,6 @@ const getHotelRoomType = function* (data) {
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
-        console.log('err', err.message.map((val) => val))
         yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: err.data });
     }
 }
@@ -147,7 +146,6 @@ const getHotelRoomType = function* (data) {
 const setHotelBooking = function* (data) {
     yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
     const { payload,navigation } = data 
-    console.log('payload',payload)  
     try {
         const result = yield call(() =>
             axios.post(
@@ -170,15 +168,14 @@ const setHotelBooking = function* (data) {
               } });
               navigation.navigate('BookingConfirm')
         }else{
-            console.log('resulr....',result)
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
 
         }
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
-        console.log('errr',err)
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: err.data });
     }
 }
@@ -200,7 +197,6 @@ const getHotelBookingDetail = function* (data) {
                 }
             )
         );
-        console.log('sxirkdtouykoi6u',result?.data)
         if (result.data.status === true) {
             yield put({ type: actions.SET_HOTEL_BOOKING_DETAIL, payload: result.data.message });
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
@@ -212,7 +208,8 @@ const getHotelBookingDetail = function* (data) {
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
-        console.log('err', err.message.map((val) => val))
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:err} })
+
     }
 }
 

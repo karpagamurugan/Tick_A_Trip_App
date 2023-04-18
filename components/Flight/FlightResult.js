@@ -29,17 +29,15 @@ var width = Dimensions.get('window').width;
 
 export default function FlightResult({ navigation, route }) {
     const { Flight_search_result,Filtered_List} = useSelector((state) => state.FlightSearchReducer)
-    // console.log('Flight_search_result',Flight_search_result[0])
     const dispatch = useDispatch();
     var [showFilter, setShowFilter] = useState(false); //show filter modal
     const [dropdown, setDropdown] = useState([]);
     var [mainList, setMainList] = useState(Flight_search_result)
 
 
-    var [priceRange, setPriceRange] = useState();
+    var [priceRange, setPriceRange] = useState({min:'',max:''});
     var [selectAirline, setSelectAirline] = useState([])
     var [selectFlightStops, setSelectFlightStops] = useState([])
-    console.log('Flight__', Flight_search_result?.length)
 
     function timeConvert(n) {
         var num = n;
@@ -60,27 +58,30 @@ export default function FlightResult({ navigation, route }) {
     }
 
 
-    const FilterFlight = (price, Airline, cabin, stops) => {
+    const FilterFlight = (min,max, Airline, cabin, stops) => {
         var tempAllFilterList = []
         var tempPriceList=[]
         var tempAirLineList=[]
-        console.log('price',price)
+        console.log('price',min,max)
 
-        if (price !== undefined || price !== null || price?.length) {
-            Flight_search_result.filter((el) => {
-               if(price === 0){
-                tempPriceList.push(el)
-               }else{
-                if (parseInt(el[0]?.totalFare) > 0 && parseInt(el[0]?.totalFare) <= parseInt(price)) {
-                    tempPriceList.push(el)
-                }else{
+        // if (price !== undefined || price !== null || price?.length) {
+        //     Flight_search_result.filter((el) => {
+        //        if(price === 0){
+        //         tempPriceList.push(el)
+        //        }else{
+        //         if (parseInt(el[0]?.totalFare) > 0 && parseInt(el[0]?.totalFare) <= parseInt(price)) {
+        //             tempPriceList.push(el)
+        //         }else{
 
-                }
-               }
+        //         }
+        //        }
        
-            })
-        }
-        console.log('tempPriceList',tempPriceList?.length)
+        //     })
+        // }
+
+
+
+
 
         if (Airline !== undefined || Airline !== null || Airline?.length) {
             tempPriceList.filter((el) => {
@@ -94,7 +95,6 @@ export default function FlightResult({ navigation, route }) {
                 // }
             })
         }
-        console.log('tempAirLineList',tempAirLineList?.length)
 
 
         if(stops!==undefined ||stops!== null ||stops?.length){
@@ -113,7 +113,6 @@ export default function FlightResult({ navigation, route }) {
                 // }
               });
         }
-        console.log('tempAllFilterList',tempAllFilterList?.length)
 
         dispatch({
             type: actions.SET_FLIGHT_FILTERED_LIST, payload: {
@@ -125,7 +124,7 @@ export default function FlightResult({ navigation, route }) {
     }
 
 
-    const FlightSearch = (price, Airline, cabin, stops) => {
+    const FlightSearch = (min,max, Airline, cabin, stops) => {
         dispatch({ type: CommonAction.FLIGHT_LOADER, payload: true });
         const payloaddata = {
           journey_type: route?.params?.prefs?.journey_type,
@@ -160,7 +159,7 @@ export default function FlightResult({ navigation, route }) {
           }
         })
         setShowFilter(false)
-        FilterFlight(price, Airline, cabin, stops)
+        FilterFlight(min,max, Airline, cabin, stops)
       }
     
 
@@ -207,19 +206,17 @@ export default function FlightResult({ navigation, route }) {
                         Price={priceRange}
                         AirLine={selectAirline}
                         Stops={selectFlightStops}
-                        onApplied={(price, Airline, cabin, stops) => {
-                            console.log(cabin,'cabin....',cabin.split(' ')[0])
-                            console.log(route)
+                        onApplied={(min,max, Airline, cabin, stops) => {
                             if(route?.params?.prefs?.class !== cabin.split(' ')[0]){
-                                FlightSearch(price, Airline, cabin, stops)
+                                FlightSearch(min,max, Airline, cabin, stops)
                             }else{
-                            FilterFlight(price, Airline, cabin, stops)
+                            FilterFlight(min,max, Airline, cabin, stops)
                             }
-                            setPriceRange(priceRange=price)
+                            setPriceRange(priceRange={min:min,max:max})
                             setSelectAirline(selectAirline=Airline)
                              setSelectFlightStops(selectFlightStops=stops)
                         }}
-                        onClear={(price, Airline, cabin, stops)=>{
+                        onClear={(min,max,Airline, cabin, stops)=>{
                                     dispatch({
                                         type: actions.SET_FLIGHT_FILTERED_LIST, payload: {
                                             show:false,
@@ -227,7 +224,7 @@ export default function FlightResult({ navigation, route }) {
                                         }
                                         });
                                     setShowFilter(false)
-                                    setPriceRange(0)
+                                    setPriceRange({min:0,max:0})
                                     setSelectAirline([])
                                     setSelectFlightStops([])
                         }}
@@ -367,7 +364,6 @@ export default function FlightResult({ navigation, route }) {
                                                             <View style={styles.booknowBtn}>
                                                                 <TouchableHighlight underlayColor={'transparent'} onPress={() => {
                                                                     // dispatch({type:actions.SET_REVALIDATE,payload:{'fare_source_code':e[0]?.FareSourceCode}})
-                                                                    // console.log(e[0]?.FareSourceCode)
 
                                                                     //  navigation.navigate('flightBooking',{flightInfo:route?.params?.prefs,itemInfo: e[0]})
                                                                     handleDropdown(e[0]?.FareSourceCode)
@@ -384,7 +380,7 @@ export default function FlightResult({ navigation, route }) {
                                                         dropdown?.includes(e[0]?.FareSourceCode) ?
                                                             e.map((item1, ind) => {
                                                                 return (
-                                                                    <View style={{ backgroundColor: 'white', paddingTop: 7 }}>
+                                                                    <View style={{ backgroundColor: 'white', paddingTop: 7 }} key={ind}>
                                                                         <FlightCard prefs={route?.params?.prefs} key={index} item={item1} navigation={navigation} />
                                                                     </View>
                                                                 );

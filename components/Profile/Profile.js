@@ -248,7 +248,7 @@ function Profile({ navigation }) {
                                                     <TouchableHighlight onPress={() => navigation.navigate('Login')} underlayColor='transparent'>
                                                         <View style={styles.navBtn}>
                                                             {/* <MaterialIcons style={styles.loginIcon} name='login' height={22} width={22} /> */}
-                                                            <Text style={styles.navTitle}>Login</Text>
+                                                            <Text style={styles.navTitle}>Sign In</Text>
                                                         </View>
                                                     </TouchableHighlight>
                                                     <TouchableHighlight onPress={() => navigation.navigate('SignUp')} underlayColor='transparent'>

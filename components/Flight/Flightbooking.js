@@ -15,7 +15,7 @@ import userAction from '../../redux/user/actions'
 import moment from "moment";
 import { useForm, Controller } from "react-hook-form";
 import userActions from '../../redux/user/actions'
-import { debounce, filter } from "lodash";
+import { debounce, filter, result } from "lodash";
 import { Dropdown } from 'react-native-element-dropdown';
 import DatePicker from 'react-native-date-picker';
 import EditIcon from '../../Assert/Images/icon/Edit_Icon.svg';
@@ -65,7 +65,6 @@ export default function FlightBooking({ navigation, route }) {
     var [allTravellerList, setAllTravellerList] = useState([]);
     var [editedIndex, setEditedIndex] = useState();
 
-console.log('isLogin',isLogin)
     var [couponCode, setCouponCode] = useState('')
     var [totalFare, setTotaFare] = useState({ MainTotalFare: '', SubTotalFare: '' })
     var [discountPrice, setDiscountPrice] = useState('0')
@@ -82,12 +81,10 @@ console.log('isLogin',isLogin)
         { name: 'Male', value: 'Male' },
         { name: 'Female', value: 'Female' },
     ]
-
     useEffect(() => {
         const travel = async () => {
             await AsyncStorage.getItem('tickatrip-token').then(
                 (res) => {
-                    console.log('token..', res)
                     if (res !== null) {
                         dispatch({ type: userAction.GET_ADD_TRAVELLER_TOKEN, payload: res })
                     } else {
@@ -100,8 +97,6 @@ console.log('isLogin',isLogin)
     }, []);
 
     useEffect(() => {
-        allTravellerList?.map((val) => console.log('val.dob', moment(val.dob).format('YYYY-MM-DDTHH:mm:ss')))
-
         dispatch({ type: userActions.GET_USER_PROFILE })
         setTotaFare(totalFare = { MainTotalFare: get_Revalidate?.TotalFareAmount, SubTotalFare: get_Revalidate?.TotalFareAmount })
         setDiscountPrice(discountPrice = '0')
@@ -114,23 +109,58 @@ console.log('isLogin',isLogin)
         axios.get(
             `${API_URL}/flight-coupon/${couponCode}`
         ).then((res) => {
-            if (res?.data?.message?.status == true) {
-                var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
-                var disFare = totalFare?.MainTotalFare / 100
-                var finalFare = disFare * applyCoupon
-                setDiscountPrice(discountPrice = finalFare.toFixed(2))
-                setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(2), SubTotalFare: totalFare?.SubTotalFare })
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
-                dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+          if(res?.data?.message?.status == true){
+            if(isLogin === true){
+                if(res?.data?.message?.coupon?.for_guest === 0){
+                        var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
+                        var disFare = totalFare?.MainTotalFare / 100
+                        var finalFare = disFare * applyCoupon
+                        setDiscountPrice(discountPrice = finalFare.toFixed(0))
+                        if(parseInt(totalFare?.MainTotalFare) === parseInt(discountPrice)){
+                            setDiscountPrice(discountPrice = 0)
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
+                        }else{
+                            setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                        }
+                }else{
+                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not Found' } })
+                    dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                }
 
-            } else {
-
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid CouponCode' } })
+            }else if(isLogin ===false){
+                if(res?.data?.message?.coupon?.for_guest === 1){
+                        var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
+                        var disFare = totalFare?.MainTotalFare / 100
+                        var finalFare = disFare * applyCoupon
+                        setDiscountPrice(discountPrice = finalFare.toFixed(0))
+                        if(parseInt(totalFare?.MainTotalFare) === parseInt(discountPrice)){
+                            setDiscountPrice(discountPrice = 0)
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
+        
+                        }else{
+                            setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                        }
+                }else{
+                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
+                    dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                }
+            }else{
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not Found' } })
                 dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
             }
+          }else{
+            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
+            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+          }
+          
         }).catch(err => {
-            console.log(err)
-            console.log(err?.response?.data)
+            console.log('errrr',err)
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message } })
             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
         })
@@ -144,14 +174,12 @@ console.log('isLogin',isLogin)
         var filteredInfantList = allTravellerList.filter((item) => item?.type.toLowerCase() === 'infant')
 
         if (filteredAdultList?.length !== parseInt(adult)) {
-            console.log('if....')
             list.push({ name: 'Adult', value: 'Adult' },)
         } else {
             console.log('else...')
         }
 
         if (filteredChildList?.length !== parseInt(child)) {
-            console.log('if....')
             list.push({ name: 'Child', value: 'Child' },)
 
         } else {
@@ -159,7 +187,6 @@ console.log('isLogin',isLogin)
         }
 
         if (filteredInfantList?.length !== parseInt(infant)) {
-            console.log('if....')
             list.push({ name: 'Infant', value: 'Infant' },)
 
         } else {
@@ -190,9 +217,6 @@ console.log('isLogin',isLogin)
 
         }
         setAllTravellerList(allTravellerList = tempList)
-        console.log(tempList, 'tempList')
-
-        console.log('travellerEdit', travellerEdit)
         setFlightInfoType(flightInfoType = { flightAdultList: adultList?.length, flightChildList: childList?.length, flightInfantList: infantList?.length })
         TypeDropDownList()
     }
@@ -241,8 +265,6 @@ console.log('isLogin',isLogin)
 
 
     const updateBtn = (data) => {
-        console.log('dob....', data?.dobDate)
-        console.log('dob....', data?.dob)
         allTravellerList[editedIndex] = {
             type: data?.selectedType,
             title: data?.nametitle,
@@ -276,13 +298,9 @@ console.log('isLogin',isLogin)
 
     const SubmitAddBtn = (data) => {
 
-        console.log(data?.dob)
         const currentYear = new Date().getFullYear();
-        console.log('currentYear', currentYear)
         var dobDate = data?.dob?.getFullYear()
-        console.log('selected year', data?.dob?.getFullYear())
         var age = currentYear - dobDate
-        console.log('age..', age)
 
 
         if (data?.selectedType.toLowerCase() === 'adult') {
@@ -313,9 +331,7 @@ console.log('isLogin',isLogin)
     }
 
     const TravellerAddBtn = (data) => {
-        console.log('adult...', data)
-        console.log('dob....', data?.dobDate)
-        console.log('dob....', data?.dob)
+    
         var AddedAdult = {
             type: data?.selectedType,
             title: data?.nametitle,
@@ -330,7 +346,6 @@ console.log('isLogin',isLogin)
 
         }
         setAllTravellerList(allTravellerList = [...allTravellerList, AddedAdult])
-        console.log('allTravellerList...:)', allTravellerList)
 
         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveller added Successfully' } })
 
@@ -348,8 +363,6 @@ console.log('isLogin',isLogin)
     }
 
     const ConfirmBooking = (data) => {
-        console.log('data', data)
-
         var filteredAdultList = allTravellerList.filter((item) => item?.type.toLowerCase() === 'adult')
         var filteredChildList = allTravellerList.filter((item) => item?.type.toLowerCase() === 'child')
         var filteredInfantList = allTravellerList.filter((item) => item?.type.toLowerCase() === 'infant')
@@ -383,7 +396,6 @@ console.log('isLogin',isLogin)
                 },
             };
             RazorpayCheckout.open(options).then((val) => {
-                console.log('paymentid..', val)
                 var bookingData = {
                     IsPassportMandatory: get_Revalidate?.IsPassportMandatory,
                     PostCode: data?.PostalCode,
@@ -431,9 +443,6 @@ console.log('isLogin',isLogin)
                     type: get_Revalidate?.FareType
                 }
 
-                console.log('allTravellerList', allTravellerList)
-
-                console.log('bookingData', bookingData)
                 dispatch({ type: FlightAction.SET_FLIGHT_BOOKING, payload: bookingData, navigation: navigation })
 
             }).catch((error) => {
@@ -467,7 +476,6 @@ console.log('isLogin',isLogin)
             },
         };
         RazorpayCheckout.open(options).then((data) => {
-            console.log('paymentid..', data)
             // var bookingData= { 
             //     IsPassportMandatory:  get_Revalidate?.IsPassportMandatory,
             //     PostCode:value?.PostalCode,
@@ -513,7 +521,6 @@ console.log('isLogin',isLogin)
             //     paymentTransactionId: "pay_LUqKPqqPIMoDhr",
             //     type: get_Revalidate?.FareType}
 
-            //     console.log('bookingData',bookingData) 
             //   dispatch({type:hotelActions.SET_HOTEL_BOOKING,payload:dataList,navigation:navigation})
 
 
@@ -625,7 +632,6 @@ console.log('isLogin',isLogin)
                             />
                             <TouchableHighlight onPress={() => {
                                 if (couponCode?.length !== 0) {
-
                                     if (totalFare?.MainTotalFare === totalFare?.SubTotalFare) {
                                         ApplyCoupon()
 

@@ -36,7 +36,7 @@ function HotelBooking({ route, navigation }) {
     var [policyBox, setPolicyBox] = useState(false);
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
 
-    const { userProfileData, } = useSelector((state) => state.userReducer)
+    const { userProfileData,isLogin } = useSelector((state) => state.userReducer)
     const { RoomGuestPlace, hotelSessionId } = useSelector((state) => state.HotelReducer)
 
     var [couponCode, setCouponCode] = useState('')
@@ -107,7 +107,6 @@ function HotelBooking({ route, navigation }) {
                 dispatch({ type: hotelActions.SET_HOTEL_BOOKING, payload: dataList, navigation: navigation })
             }).catch((error) => {
                 dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-                console.log('error', error)
             });
         }
     }
@@ -130,10 +129,6 @@ function HotelBooking({ route, navigation }) {
             },
             // handler: function (response) {
             //   if (response.razorpay_payment_id) {
-            //     console.log(response.razorpay_payment_id);
-            //     console.log(response.razorpay_order_id);
-            //     console.log(response.razorpay_signature);
-            //     console.log(response.razorpay_status);
             //     // bookingData['paymentTransactionId'] = response.razorpay_payment_id;
             //     // bookingData['TotalFare'] = parseFloat(fareMethod?.TotalFareAmount ? fareMethod?.TotalFareAmount : 0);
             //     // dispatch({ type: flightActions.SET_FLIGHT_LOADER, payload: true });
@@ -236,23 +231,59 @@ function HotelBooking({ route, navigation }) {
         axios.get(
             `${API_URL}/hotel-coupon/${couponCode}`
         ).then((res) => {
-            if (res?.data?.message?.status == true) {
-                var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
-                var disFare = totalFare?.MainTotalFare / 100
-                var finalFare = disFare * applyCoupon
-                setDiscountPrice(discountPrice = finalFare.toFixed(2))
-                setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(2), SubTotalFare: totalFare?.SubTotalFare })
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
-                dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+          if(res?.data?.message?.status == true){
+            if(isLogin === true){
+                if(res?.data?.message?.coupon?.coupon_discount?.for_guest === 0){
+                        var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
+                        var disFare = totalFare?.MainTotalFare / 100
+                        var finalFare = disFare * applyCoupon
+                        setDiscountPrice(discountPrice = finalFare.toFixed(0))
+                        if(parseInt(RoomType?.netPrice) === parseInt(discountPrice)){
+                            setDiscountPrice(discountPrice = 0)
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
+    
+                        }else{
 
-            } else {
+                            setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                        }
+                }else{
+                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not Found' } })
+                    dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                }
 
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid CouponCode' } })
+            }else if(isLogin ===false){
+                if(res?.data?.message?.coupon?.coupon_discount?.for_guest === 1){
+                        var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
+                        var disFare = totalFare?.MainTotalFare / 100
+                        var finalFare = disFare * applyCoupon
+                        setDiscountPrice(discountPrice = finalFare.toFixed(0))
+                        if(parseInt(RoomType?.netPrice) === parseInt(discountPrice)){
+                            setDiscountPrice(discountPrice = 0)
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
+                        }else{
+                            setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                        }
+                 
+                }else{
+                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
+                    dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                }
+            }else{
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not Found' } })
                 dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
             }
+          }else{
+            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
+            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+          }
+            
         }).catch(err => {
-            console.log(err)
-            console.log(err?.response?.data)
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message } })
             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
         })
@@ -331,7 +362,6 @@ function HotelBooking({ route, navigation }) {
                 </View>
 
                 <View style={{ backgroundColor: 'white' }}>
-
                     <View style={styles.couponCode}>
                         <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
                             <TextInput
@@ -344,16 +374,13 @@ function HotelBooking({ route, navigation }) {
                                         setDiscountPrice(discountPrice = '0')
                                     }
                                     setCouponCode(couponCode = e)
-
                                 }
                                 }
                             />
                             <TouchableHighlight onPress={() => {
                                 if (couponCode?.length !== 0) {
-
                                     if (totalFare?.MainTotalFare === totalFare?.SubTotalFare) {
                                         ApplyCoupon()
-
                                     } else {
                                         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon applied' } })
                                     }
@@ -631,13 +658,7 @@ function HotelBooking({ route, navigation }) {
 
             <View style={styles.ConfirmBtn}>
                 <TouchableHighlight underlayColor={'transparent'}
-                    // onPress={()=>{
-                    //    console.log('TickATrip_'+generateUUID(8))                           
-
-                    // }}
-                    //  onPress={handleSubmit(onSubmit)}
                     onPress={handleSubmit(onSubmit)}
-                //  console.log('TickATrip_'+generateUUID(8))    
                 >
                     <Text style={styles.confirmBook}>Confirm & Book</Text>
                 </TouchableHighlight>

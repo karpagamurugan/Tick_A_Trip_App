@@ -17,7 +17,6 @@ const Otp = ({ item, navigation, type }) => {
 
     const confirmOtp = (item) => {  
        if(type==='hotel'){
-        console.log('otp.....',otpInput?.state?.otpText?.toString()?.replaceAll(",", ""))
         // dispatch({
         //     type: userActions.GET_HOTEL_BOOKINGS_CANCEL_VERIFY, payload: {
         //         supplierConfirmationNum: item.supplierConfirmationNum,
@@ -34,9 +33,6 @@ const Otp = ({ item, navigation, type }) => {
             }
         })
        }
-        // console.log('confirmOtp1',item.supplierConfirmationNum)
-        // console.log('confirmOtp2',item.referenceNum)
-        console.log('confirmOtp3',)
         setOtp("");
     }
 

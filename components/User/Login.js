@@ -78,27 +78,10 @@ const Login = ({ navigation }) => {
             return auth().signInWithCredential(googleCredential);
             }
 
-        // async function SignInWithGoogle(){
-        //     const {isToken} = await GoogleSignin.signIn();
-        //     const googleCredential = auth.GoogleAuthProvider.credential(isToken);
-        //     return auth().signInWithCredential(googleCredential);
 
-        // }
-        // const handleSocialLogin= async()=>{
-        //    await axios.get(
-        //         `${API_URL}/auth/google/url`
-        //     ).then((res)=>{        
-        //        console.log('res...',res?.data?.url)
-        //        setSocialLogin(socialLogin={GoogleLogin:res?.data?.url,FBLogin:socialLogin?.FBLogin})
-        //     }).catch(err=>{
-        //         console.log('error,...',err)
-        //     })
-        // }
-
-        // useEffect(()=>{
-        //     handleSocialLogin()
-        // },[])
-
+            const onFBButtonPress=()=>{
+                console.log('fb....')
+            }
         
   const [state, setState] = useState({
     googleLoginUrl: null,
@@ -144,7 +127,10 @@ const Login = ({ navigation }) => {
                     <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/google.png')} /></View>
                     </TouchableHighlight>
 
+                    <TouchableHighlight underlayColor={'transparent'} onPress={()=>onFBButtonPress()}>
                     <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/facebook.png')} /></View>
+                    </TouchableHighlight>
+
                 </View>
                 <View style={style.orDash}>
                     <Text style={style.OrLine}></Text>

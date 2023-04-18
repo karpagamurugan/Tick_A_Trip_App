@@ -62,8 +62,6 @@ const HotelSearch = ({ navigation }) => {
   //         JSON.stringify(position.coords.longitude);
   //       const currentLatitude =
   //         JSON.stringify(position.coords.latitude);
-  //         console.log('CurrentLocation', currentLatitude)
-  //         console.log('CurrentLocation', currentLongitude)
   //         apiReverseLocation(currentLatitude,currentLongitude)
 
   //     }, (error) => alert(error.message), {
@@ -86,7 +84,6 @@ const HotelSearch = ({ navigation }) => {
 
   //       });
   //   };
-  // console.log('CurrentLocation', CurrentLocation)
 
 
   // useEffect(() => {
@@ -107,9 +104,7 @@ const HotelSearch = ({ navigation }) => {
   //           //To Check, If Permission is granted
   //           getOneTimeLocation();
   //           subscribeLocationLocation();
-  //           console.log('permission granted')
   //         } else {
-  //           console.log('permission not granted')
   //           setLocationStatus('Permission Denied');
   //         }
   //       } catch (err) {
@@ -160,7 +155,6 @@ const HotelSearch = ({ navigation }) => {
   //       //Will give you the location on location change
 
   //       setLocationStatus('You are Here');
-  //       console.log('position',position);
 
   //       //getting the Longitude from the location json        
   //       const currentLongitude =

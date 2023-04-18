@@ -22,7 +22,6 @@ const PopularPlaceCard = ({navigation}) => {
 
     useEffect(() => {
         dispatch({ type: popularAction.GET_POPULAR_PLACES })
-        console.log('run use effect')
     }, []);
 
     const { Popular_Places } = useSelector((state) => state.PopularPlacesReducer);

@@ -167,9 +167,6 @@ function FlightList1(props) {
         }
     }
 
-    console.log(props.selectedFlightList);
-    console.log(SearchFlight);
-
     return (
         <>
             <Box className="flight_payment_pop">
