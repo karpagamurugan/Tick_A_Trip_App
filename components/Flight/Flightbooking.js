@@ -116,7 +116,7 @@ export default function FlightBooking({ navigation, route }) {
                         var disFare = totalFare?.MainTotalFare / 100
                         var finalFare = disFare * applyCoupon
                         setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                        if(parseInt(totalFare?.MainTotalFare) === parseInt(discountPrice)){
+                        if(parseInt(totalFare?.MainTotalFare) >= parseInt(discountPrice)){
                             setDiscountPrice(discountPrice = 0)
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
@@ -136,7 +136,7 @@ export default function FlightBooking({ navigation, route }) {
                         var disFare = totalFare?.MainTotalFare / 100
                         var finalFare = disFare * applyCoupon
                         setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                        if(parseInt(totalFare?.MainTotalFare) === parseInt(discountPrice)){
+                        if(parseInt(totalFare?.MainTotalFare) >= parseInt(discountPrice)){
                             setDiscountPrice(discountPrice = 0)
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })

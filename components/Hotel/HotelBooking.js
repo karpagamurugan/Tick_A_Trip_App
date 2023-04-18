@@ -233,12 +233,12 @@ function HotelBooking({ route, navigation }) {
         ).then((res) => {
           if(res?.data?.message?.status == true){
             if(isLogin === true){
-                if(res?.data?.message?.coupon?.coupon_discount?.for_guest === 0){
+                if(res?.data?.message?.coupon?.for_guest === 0){
                         var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
                         var disFare = totalFare?.MainTotalFare / 100
                         var finalFare = disFare * applyCoupon
                         setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                        if(parseInt(RoomType?.netPrice) === parseInt(discountPrice)){
+                        if(parseInt(RoomType?.netPrice) >= parseInt(discountPrice)){
                             setDiscountPrice(discountPrice = 0)
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
@@ -255,12 +255,17 @@ function HotelBooking({ route, navigation }) {
                 }
 
             }else if(isLogin ===false){
-                if(res?.data?.message?.coupon?.coupon_discount?.for_guest === 1){
+                console.log('res?.data?.message?.coupon',res?.data?.message?.coupon)
+                if(res?.data?.message?.coupon?.for_guest === 1){
                         var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
                         var disFare = totalFare?.MainTotalFare / 100
                         var finalFare = disFare * applyCoupon
                         setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                        if(parseInt(RoomType?.netPrice) === parseInt(discountPrice)){
+                        console.log('parseInt(RoomType?.netPrice)',parseInt(RoomType?.netPrice))
+                        console.log('parseInt(discountPrice))',parseInt(discountPrice))
+                        console.log(parseInt(RoomType?.netPrice) > parseInt(discountPrice))
+                    
+                        if(parseInt(RoomType?.netPrice) >= parseInt(discountPrice)){
                             setDiscountPrice(discountPrice = 0)
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
