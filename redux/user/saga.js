@@ -271,7 +271,7 @@ const getFlightBookingsCancelVerify = function* (data) {
 
 const handleProfileUpdate = function* (data) {
 
-    yield put({ type: CommonAction.COMMON_LOADER, payload: true })
+    // yield put({ type: CommonAction.COMMON_LOADER, payload: true })
 
     const { payload } = data
     const { navigation } = data
@@ -279,13 +279,17 @@ const handleProfileUpdate = function* (data) {
     const body = payload.data
     let formData = new FormData()
 
+    console.log('.....',body)
+
     if (body?.file != undefined) {
         formData.append('profile_image', {
             uri: body?.file?.image?.URL,
             type: body?.file?.image?.type,
             name: body?.file?.image?.name,
         })
+        console.log('if...')
     }
+
     formData.append('dob', body?.dob)
     formData.append('first_name', body?.first_name)
     formData.append('gender', body?.gender)
@@ -305,6 +309,7 @@ const handleProfileUpdate = function* (data) {
         }))
 
         if (result?.data?.status === true) {
+            console.log('result..',result?.data)
             yield put({ type: actions.GET_USER_PROFILE });
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Profile Updated Successfully!' } })

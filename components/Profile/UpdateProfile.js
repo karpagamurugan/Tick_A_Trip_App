@@ -115,9 +115,9 @@ function UpdateProfile({ navigation }) {
                     }>
                         <MaterialIcons name='cancel' size={23} color='red' />
                     </TouchableHighlight> */}
-            <Appbar title={'Edit Profile'} />
             <KeyboardAvoidingView behavior="height">
                 <View style={styles.modalMainContainer}>
+                <Appbar title={'Edit Profile'} />
                     <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
                         <View>
                             {/* <Text style={styles.modalTitle}>Profile Edit</Text> */}
@@ -477,11 +477,11 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     modalMainContainer: {
-        borderRadius: 10,
-        backgroundColor: 'white',
+        // borderRadius: 10,
+        // backgroundColor: 'white',
         flexDirection: 'column',
-        alignItems: 'center',
-        alignSelf: 'center',
+        // alignItems: 'center',
+        // alignSelf: 'center',
     },
     modalTitle: {
         fontFamily: FONTS.fontBold,

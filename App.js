@@ -18,7 +18,7 @@ import setAuthToken from './components/constants/setAuthToken';
 
 import Loader from './components/common/Loader';
 import Hotel from './components/Hotel/Hotel';
-import { View } from 'react-native';
+import { View,SafeAreaView } from 'react-native';
 import HotelLoader from './components/common/hotelLoader';
 import Alert from './components/common/Alert';
 import FlightLoader from './components/common/flightLoader';
@@ -36,10 +36,12 @@ function App() {
   
   return (
     <Provider store={store}>
+      
       <Loader/>
       <HotelLoader/>
       <FlightLoader/>
       <Alert/>
+      <SafeAreaView/>
       <NavigationContainer>
         <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName='Splash'>
           <Stack.Screen name="Splash" component={Splash} />
@@ -56,6 +58,7 @@ function App() {
       </NavigationContainer>
       {/* <View>Dummy Text</View> */}
     </Provider>
+
 
   );
 }
