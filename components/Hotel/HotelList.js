@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState,memo } from 'react'
+import React, { useState, memo } from 'react'
 import { View, Modal, Text, StyleSheet, Dimensions, ScrollView, TouchableHighlight, TextInput } from 'react-native'
 import Appbar from '../common/Appbar'
 import AntDesign from 'react-native-vector-icons/AntDesign'
@@ -24,30 +24,37 @@ const data = [
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const HotelList = ( {navigation,route}) => {
+const HotelList = ({ navigation, route }) => {
     // const {Room,Guest,navigation} =props
 
-    const { getHotelSearchResult,RoomGuestPlace } = useSelector((state) => state.HotelReducer)
+    const { getHotelSearchResult, RoomGuestPlace } = useSelector((state) => state.HotelReducer)
     const [openFilter, setOpenFilter] = useState(false)
 
     return (
         <View>
             <Modal
-                
+
                 visible={openFilter}
                 transparent={true}
                 animationType="fade"
             >
                 <View>
-                    <HotelFilter navigation={navigation} setOpenFilter={setOpenFilter} />
+                    <HotelFilter navigation={navigation} setOpenFilter={setOpenFilter} openFilter={openFilter} />
                 </View>
             </Modal>
             <ScrollView>
-                <HotelAppbar title='Hotel Detail'/>
+                <HotelAppbar title='Hotel Detail' />
                 <View style={style.hotelDetailSec}>
                     <View style={style.HotelDetailFilterSec}>
-                        <View style={style.filterFileld}>
-                            <Text style={style.totalHotel}>{getHotelSearchResult.length ? getHotelSearchResult.length : 0} Hotels</Text>
+                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                            <View style={style.searchPlace}>
+                                <Ionicons style={style.searchPlaceIcon} name='location-outline' />
+                                <Text style={style.searchPlaceText}>{RoomGuestPlace?.Place}</Text>
+                            </View>
+                            <View style={{ width: 1, height: 20, backgroundColor: '#ababab', marginLeft: 15 }} />
+                            <View style={[style.filterFileld, { paddingLeft: 15 }]}>
+                                <Text style={style.totalHotel}>{getHotelSearchResult.length ? getHotelSearchResult.length : 0} Hotels</Text>
+                            </View>
                         </View>
                         <View style={style.filterFileldIcon}>
                             <TouchableHighlight onPress={() => setOpenFilter(true)} underlayColor='transparent'>
@@ -55,10 +62,7 @@ const HotelList = ( {navigation,route}) => {
                             </TouchableHighlight>
                         </View>
                     </View>
-                    <View style={style.searchPlace}>
-                        <Ionicons style={style.searchPlaceIcon} name='location-outline' />
-                        <Text style={style.searchPlaceText}>{RoomGuestPlace?.Place}</Text>
-                    </View>
+
                     <View style={style.hotelSearchList}>
                         {
                             getHotelSearchResult?.map((val, index) => (
@@ -123,6 +127,7 @@ const style = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         paddingVertical: 10,
+
     },
     dropdown: {
         margin: 16,
@@ -148,10 +153,10 @@ const style = StyleSheet.create({
         height: 40,
         fontSize: 16,
     },
-    filterFileld: {
-        width: width * 0.2
-    },
-    totalHotel:{
-        color:'black'
+    // filterFileld: {
+    //     width: width * 0.5
+    // },
+    totalHotel: {
+        color: 'black'
     }
 });

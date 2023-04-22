@@ -1,43 +1,12 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<svg id="Layer_2" data-name="Layer 2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 56.02">
-  <defs>
-    <style>
-      .cls-1 {
-        stroke: #777;
-      }
-
-      .cls-1, .cls-2 {
-        fill: none;
-        stroke-miterlimit: 10;
-      }
-
-      .cls-3 {
-        fill: #fff;
-      }
-
-      .cls-4 {
-        fill: #2173b9;
-      }
-
-      .cls-5 {
-        fill: #f6a247;
-      }
-
-      .cls-2 {
-        stroke: #2173b9;
-        stroke-linecap: round;
-        stroke-width: 2px;
-      }
-    </style>
-  </defs>
-  <g id="Layer_1-2" data-name="Layer 1">
-    <g>
-      <path class="cls-1" d="m4.44,50.96s175.09-112.41,390.5,0"/>
-      <path class="cls-2" d="m4.44,50.96S83.03.5,199.69,1"/>
-      <circle class="cls-3" cx="394.94" cy="50.96" r="5.06"/>
-      <circle class="cls-5" cx="394.94" cy="50.96" r="3.26"/>
-      <circle class="cls-3" cx="4.44" cy="50.96" r="4.44"/>
-      <circle class="cls-4" cx="4.44" cy="50.96" r="3.26"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="405.494" height="58.97" viewBox="0 0 405.494 58.97">
+  <g id="Layer_1" data-name="Layer 1" transform="translate(3.054 0.504)">
+    <g id="Group_194" data-name="Group 194">
+      <path id="Path_92" data-name="Path 92" d="M4.44,50.96s175.09-112.41,390.5,0" fill="none" stroke="#777" stroke-miterlimit="10" stroke-width="1.5"/>
+      <path id="Path_93" data-name="Path 93" d="M4.44,50.96S83.03.5,199.69,1" fill="none" stroke="#2173b9" stroke-linecap="round" stroke-miterlimit="10" stroke-width="3"/>
+      <circle id="Ellipse_35" data-name="Ellipse 35" cx="7.5" cy="7.5" r="7.5" transform="translate(387.44 43.46)" fill="#fff"/>
+      <circle id="Ellipse_36" data-name="Ellipse 36" cx="5" cy="5" r="5" transform="translate(389.94 45.96)" fill="#f6a247"/>
+      <ellipse id="Ellipse_37" data-name="Ellipse 37" cx="7.5" cy="7.5" rx="7.5" ry="7.5" transform="translate(-3.054 43.466)" fill="#fff"/>
+      <ellipse id="Ellipse_38" data-name="Ellipse 38" cx="5" cy="5" rx="5" ry="5" transform="translate(-0.56 45.965)" fill="#2173b9"/>
     </g>
   </g>
 </svg>

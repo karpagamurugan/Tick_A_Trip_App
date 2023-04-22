@@ -481,7 +481,7 @@ const HotelSearch = ({ navigation }) => {
                     :
                     <View>
                       <Text style={style.inputFieldText}>Room / Guests </Text>
-                      <Text style={{color:'grey',fontSize:height*0.02}}>{selectAddRoom?.length} Rooms,{adultCount || childCount ? adultCount + childCount : 0} Guests</Text>
+                      <Text style={{ color: 'grey', fontSize: height * 0.02 }}>{selectAddRoom?.length} Rooms,{adultCount || childCount ? adultCount + childCount : 0} Guests</Text>
                     </View>
                   }
                 </View>
@@ -526,30 +526,30 @@ const HotelSearch = ({ navigation }) => {
       >
         <View style={[style.GuestModel]}>
           <ScrollView>
-          <TouchableHighlight style={style.closeGuestModel} onPress={() => setShowGuestModal(false)}>
-            <Ionicons style={{ color: '#2B64FF', fontSize: 20, }} name='close' />
-          </TouchableHighlight>
-          <View style={style.GuestModelInner}>
-            <View style={[style.GuestsRooms]}>
-              <View style={style.GuestModelInnerHead}>
-                <View><Text style={{ color: '#000', fontFamily: font.fontBold, fontSize: 18 }}>Rooms & Guests</Text></View>
+            <TouchableHighlight style={style.closeGuestModel} onPress={() => setShowGuestModal(false)}>
+              <Ionicons style={{ color: '#2B64FF', fontSize: 20, }} name='close' />
+            </TouchableHighlight>
+            <View style={style.GuestModelInner}>
+              <View style={[style.GuestsRooms]}>
+                <View style={style.GuestModelInnerHead}>
+                  <View><Text style={{ color: '#000', fontFamily: font.fontBold, fontSize: 18 }}>Rooms & Guests</Text></View>
+                </View>
+                <TouchableHighlight underlayColor='transparent' onPress={() => AddRoom()}>
+                  <Text style={{ color: '#1B5CB7', fontFamily: font.fontBold, fontSize: 17 }}>+ Add Room</Text>
+                </TouchableHighlight>
               </View>
-              <TouchableHighlight underlayColor='transparent' onPress={() => AddRoom()}>
-                <Text style={{ color: '#1B5CB7', fontFamily: font.fontBold, fontSize: 17 }}>+ Add Room</Text>
-              </TouchableHighlight>
-            </View>
-            <View>
               <View>
-                {selectAddRoom.map((val, index) => (
+                <View>
+                  {selectAddRoom.map((val, index) => (
 
-                  <View key={index} style={[style.roomColumn]}>
-                    <View style={[style.deleteGrid]}>
-                      <Text style={style.roomNoTxt}>Room No : {index + 1}</Text>
-                      <TouchableHighlight underlayColor='transparent' onPress={() => OnRemoveRoom(val, index)}>
-                        <Text style={{ color: 'red', }}> <MaterialCommunityIcons name='delete' size={30} /></Text>
-                      </TouchableHighlight>
-                    </View>
-                    <View style={style.selectGuestColumn}>
+                    <View key={index} style={[style.roomColumn]}>
+                      <View style={[style.deleteGrid]}>
+                        <Text style={style.roomNoTxt}>Room No : {index + 1}</Text>
+                        <TouchableHighlight underlayColor='transparent' onPress={() => OnRemoveRoom(val, index)}>
+                          <Text style={{ color: 'red', }}> <MaterialCommunityIcons name='delete' size={30} /></Text>
+                        </TouchableHighlight>
+                      </View>
+                      <View style={style.selectGuestColumn}>
                         <HotelSelectRoomGuest
                           // adult={adultCount}
                           // child={childCount}
@@ -569,18 +569,18 @@ const HotelSearch = ({ navigation }) => {
 
                           }}
                         />
+                      </View>
                     </View>
-                  </View>
-                ))}
+                  ))}
+                </View>
+                <View style={style.GuestAddBtns}>
+                  <TouchableHighlight style={style.GuestSubmitBtn} underlayColor='transparent' onPress={() => setShowGuestModal(false)}>
+                    <Text style={{ color: '#003AA8', fontFamily: font.mediam }}>Done</Text>
+                  </TouchableHighlight>
+                </View>
               </View>
-              <View style={style.GuestAddBtns}>
-                <TouchableHighlight style={style.GuestSubmitBtn} underlayColor='transparent' onPress={() => setShowGuestModal(false)}>
-                  <Text style={{ color: '#003AA8', fontFamily: font.mediam }}>Done</Text>
-                </TouchableHighlight>
-              </View>
-            </View>
 
-          </View>
+            </View>
           </ScrollView>
         </View>
 
@@ -671,8 +671,8 @@ const style = StyleSheet.create({
   inputFieldText: {
     color: '#000000',
     fontFamily: font.font,
-    letterSpacing: 0.8,
-    fontSize: 15,
+    // letterSpacing: 0.8,
+    fontSize: height * 0.019,
   },
   hotelSearchFieldGroupHalf: {
     flexDirection: 'row',

@@ -9,6 +9,7 @@ import FlightStopIcon from '../../../../Assert/Icons/flight_stop.svg';
 import FlightStopDownIcon from '../../../../Assert/Icons/Flight_down_Icon.svg';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
+import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import { useSelector } from "react-redux";
 import COLORS from "../../../constants/color";
@@ -105,26 +106,24 @@ export default function FlightTicketDetails({ navigation }) {
                     {/* })} */}
 
                     <View style={{ paddingVertical: 25 }}>
-                        <View>
+                        <View style={{paddingBottom:10}}>
                             <Text style={[style.commonTitle]}>Flight Detail</Text>
                         </View>
-                        <View>
-                            <FlightStopArch style={{ width: width * 0.90, height: height * 0.06, alignSelf: 'center', }} />
-
-                            <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-                                <View style={{ position: 'absolute', bottom: -20 }}>
-                                    {(rotateStart === false) ?
-                                        <FlightStopIcon width={35} style={{}} />
-                                        :
-                                        <FlightStopDownIcon width={35} />
-                                    }
-                                </View>
-                                <Pressable style={{ justifyContent: 'center', alignItems: 'center' }} onPress={() => setRotateStart(!rotateStart)}>
-                                    <Text style={style.stopTitle}>{(rotateStart === true) ? 'Close Details' : 'View Details'} </Text>
-                                </Pressable>
-                            </View>
+                        <View style={{ position: 'absolute', top: 1, alignSelf: 'center', zIndex: 1 }}>
+                            {(rotateStart === false) ?
+                                <FlightStopIcon width={35} style={{}} />
+                                :
+                                <FlightStopDownIcon width={35} />
+                            }
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <View>
+                            <FlightStopArch style={{ width: width * 0.90, height: height * 0.05, alignSelf: 'center', }} />
+                            <TouchableOpacity style={{ justifyContent: 'center', alignSelf: 'center',flexDirection:'row',top:15,position:'absolute',padding:10 }} onPress={() => setRotateStart(!rotateStart)}>
+                                <Text style={style.stopTitle}>{(rotateStart === true) ? 'Close Details' : 'View Details'}</Text>
+                                <FeatherIcon name={(rotateStart === true) ? "chevron-up" : "chevron-down"} size={25} color={'#000'} />
+                            </TouchableOpacity>
+                        </View>
+                        <View style={{ flexDirection: 'row', justifyContent:'space-between', alignItems: 'center' }}>
                             <Text style={style.LocationTitle}>
                                 {flight_tickets_details.flightTripDetails[0]?.DepartureAirportLocationCode}
                             </Text>
@@ -167,11 +166,11 @@ export default function FlightTicketDetails({ navigation }) {
                                                         <Text style={[style.FlightStopingList]}>Flight Number - <Text style={[style.FlightStopingListDark]}>{item.FlightNumber}</Text></Text>
                                                         <Text style={[style.FlightStopingList]}>Journey Duration - <Text style={[style.FlightStopingListDark]}>
                                                             {timeConvert(item.JourneyDuration)}</Text></Text>
-                                                            <Text style={[style.FlightStopingList]}>Airport City - <Text style={[style.FlightStopingListDark]}>{item.ArrivalAirportCity}</Text></Text>
-                                                            <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between', }}>
-                                                                <Text style={[style.timeAnddate]}>{moment(item.DepartureDateTime).format('HH:mm')}</Text>
-                                                                <Text style={{ fontFamily: FONTS.mediam, color: '#000' }}>{moment(item.DepartureDateTime).format('DD-MM-YYYY')}</Text>
-                                                            </View>
+                                                        <Text style={[style.FlightStopingList]}>Airport City - <Text style={[style.FlightStopingListDark]}>{item.ArrivalAirportCity}</Text></Text>
+                                                        <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-between', }}>
+                                                            <Text style={[style.timeAnddate]}>{moment(item.DepartureDateTime).format('HH:mm')}</Text>
+                                                            <Text style={{ fontFamily: FONTS.mediam, color: '#000' }}>{moment(item.DepartureDateTime).format('DD-MM-YYYY')}</Text>
+                                                        </View>
                                                     </View>
                                                     <View style={style.FlightHorizontalLine}></View>
                                                 </View>
@@ -439,11 +438,9 @@ const style = StyleSheet.create({
         color: '#003AA8',
     },
     stopTitle: {
-        fontSize: height * 0.018,
+        fontSize: height * 0.020,
         color: '#000',
         fontFamily: FONTS.fontSemi,
-        position: 'absolute',
-        top: -30
     },
     FlightVerticalLeftLine: {
         width: 3,
@@ -451,7 +448,7 @@ const style = StyleSheet.create({
         position: 'absolute',
         backgroundColor: '#3D8EFF91',
         left: 0,
-        borderRadius: 10
+        // borderRadius: 5
     },
     FlightHorizontalLine: {
         height: 3,
@@ -459,14 +456,14 @@ const style = StyleSheet.create({
         position: 'absolute',
         backgroundColor: '#3D8EFF91',
         bottom: 0,
-        borderRadius: 10
+        // borderRadius:5
     },
     FlightVerticalRightLine: {
         width: 3,
         height: '100%',
         position: 'absolute',
         backgroundColor: '#3D8EFF91',
-        right: -1,
-        borderRadius: 10
+        right: 0,
+        // borderRadius: 5
     }
 })

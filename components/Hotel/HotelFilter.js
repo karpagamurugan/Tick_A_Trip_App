@@ -64,7 +64,7 @@ const height = Dimensions.get('window').height
 const HotelFilter = (props) => {
 
     const dispatch = useDispatch()
-    const { setOpenFilter } = props
+    const { setOpenFilter,openFilter } = props
     const { hotelSessionId, getHotelSearchResult } = useSelector((state) => state.HotelReducer)
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
     var [checkFecility, setCheckFecility] = useState(null);
@@ -803,6 +803,9 @@ const HotelFilter = (props) => {
                 <View style={style.filterBtnGroup}>
                     <TouchableHighlight underlayColor={'transparent'} style={style.filtersubBtn} onPress={(() => ClearFilter())}>
                         <Text style={{ color: '#fff', fontFamily: FONTS.mediam, }}>Clear Filter</Text>
+                    </TouchableHighlight>
+                    <TouchableHighlight underlayColor={'transparent'} style={style.filtersubBtn} onPress={(() => setOpenFilter(!openFilter) )}>
+                        <Text style={{ color: '#fff', fontFamily: FONTS.mediam, }}>Close</Text>
                     </TouchableHighlight>
                     <TouchableHighlight underlayColor={'transparent'} onPress={handleSubmit(onSubmit)} style={style.filtersubBtn}>
                         <Text style={{ color: '#fff', fontFamily: FONTS.mediam, }}>Apply</Text>

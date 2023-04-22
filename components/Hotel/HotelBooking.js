@@ -682,9 +682,9 @@ const styles = StyleSheet.create({
         backgroundColor: COLORS.borderColor,
         marginHorizontal: 20,
         marginBottom: 10,
-        // marginTop: 20,
+        marginTop: 20,
         borderRadius: 30,
-        paddingVertical: 10
+        paddingVertical: 10,
     },
     confirmBook: { fontFamily: FONTS.mediam, color: 'white', fontSize: height * 0.027 },
     HotelDetailHotelPrice: {
