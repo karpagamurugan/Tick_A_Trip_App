@@ -1,2 +1,2 @@
 /* eslint-disable prettier/prettier */
-export const PROFILE_URL = 'https://harvalnigeria.com/server/user/'
+export const PROFILE_URL = 'https://test.tickatrip.travel/server/user/'
