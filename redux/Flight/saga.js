@@ -36,7 +36,7 @@ const getAirportnameList = function* (data) {
 
         if (payload?.type === 'from') {
             yield put({ type: actions.GET_FLIGHT_SEARCH_FROM_BY_NAME, payload: result?.data });
-        } else {
+         } else {
             yield put({ type: actions.GET_FLIGHT_SEARCH_TO_BY_NAME, payload: result?.data });
         }
 

@@ -16,7 +16,7 @@ export default function Alert() {
 
     useEffect(() => {
         if (setAlert.status === true) {
-            setTimeout(() => dispatch({ type: CommonAction.SET_ALERT, payload: { status: false, message: '' } }), 3000)
+            setTimeout(() => dispatch({ type: CommonAction.SET_ALERT, payload: { status: false, message: '' } }), 2000)
         }
     }, [setAlert,dispatch])
 
@@ -27,12 +27,11 @@ export default function Alert() {
             transparent={true}
         >
             <View style={style.AlertBox}>
-                {/* <Text style={style.AlertBoxHead}>Tick a Trip says</Text> */}
                 <Ant name="infocirlce" size={22} color={COLORS.BtnColor}/>
                 <Text style={style.AlertBoxCon}>{setAlert?.message}</Text>
             </View>
         </Modal>
-    )
+        )
 }
 
 const style = StyleSheet.create({

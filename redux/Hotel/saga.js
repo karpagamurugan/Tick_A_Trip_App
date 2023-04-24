@@ -158,15 +158,14 @@ const setHotelBooking = function* (data) {
                 }
             )
         );
-        console.log('ghhhehfiuikh',result?.data)
         if (result?.data?.status === true) {
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
-            // yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
             yield put({ type: actions.GET_HOTEL_BOOKING_DETAIL, payload:  {
                 supplierConfirmationNum:result.data?.log?.supplierConfirmationNum,
                 referenceNum: result?.data?.log?.referenceNum
-              } });
-              navigation.navigate('BookingConfirm')
+              },
+              navigation:navigation
+             });
+              yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
         }else{
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
@@ -183,7 +182,7 @@ const setHotelBooking = function* (data) {
 
 const getHotelBookingDetail = function* (data) {
     // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
-    const { payload} = data
+    const { payload,navigation} = data
     try {
         const result = yield call(() =>
             axios.post(
@@ -197,7 +196,9 @@ const getHotelBookingDetail = function* (data) {
                 }
             )
         );
+        console.log('result.data.message',result.data.message)
         if (result.data.status === true) {
+            navigation.navigate('BookingConfirm')
             yield put({ type: actions.SET_HOTEL_BOOKING_DETAIL, payload: result.data.message });
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         }else{

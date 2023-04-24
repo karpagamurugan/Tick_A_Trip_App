@@ -141,7 +141,7 @@ function Profile({ navigation }) {
 
                                     }
 
-                                    <Text style={styles.name}>{userProfileData?.name}</Text>
+                                    <Text style={styles.name}>{userProfileData?.username}</Text>
                                     <Text style={styles.email}>{userProfileData?.email}</Text>
                                     <Text style={styles.number}>{userProfileData?.phone}</Text>
                                 </View>

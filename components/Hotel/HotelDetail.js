@@ -186,7 +186,7 @@ const HotelDetail = ({ navigation }) => {
                             animationType='slide'
                             transparent={true}
                             visible={moreVisible}
-                            onRequestClose={() => {
+                            onRequestClose={() => { 
                                 setMoreVisible(!moreVisible)
                             }}
                         >

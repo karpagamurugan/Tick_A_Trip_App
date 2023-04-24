@@ -153,7 +153,7 @@ export default function HotelTicketDetails({ item, navigation }) {
                             </ScrollView> : (selectedTab === 1) ?
                                 <ScrollView style={{ marginHorizontal: 10, marginTop: 20, }}>
                                     {Hotel_details?.message?.roomBookDetails?.rooms?.map((val, index) => (
-                                        <View style={{ borderRadius: 10, padding: 10, borderWidth: 1, borderColor: '#D6E6F9', }}>
+                                        <View style={{ borderRadius: 10, padding: 10, borderWidth: 1, borderColor: '#D6E6F9', }} key={index}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                 <View style={{ paddingRight: 10 }}>
 

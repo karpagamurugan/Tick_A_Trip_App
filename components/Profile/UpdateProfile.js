@@ -66,7 +66,7 @@ function UpdateProfile({ navigation }) {
 
     useEffect(() => {
         reset({
-            userName: profileData?.name.toString(),
+            userName: profileData?.username.toString(),
             firstName: profileData?.first_name.toString(),
             lastName: profileData?.last_name.toString(),
             mobileNumber: profileData?.phone.toString(),
@@ -118,8 +118,9 @@ function UpdateProfile({ navigation }) {
             <KeyboardAvoidingView behavior="height">
                 <View style={styles.modalMainContainer}>
                 <Appbar title={'Edit Profile'} />
-                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-                        <View>
+                <View style={{height:height*0.85}}>
+                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+                        <View >
                             {/* <Text style={styles.modalTitle}>Profile Edit</Text> */}
                             <View style={{ height: 20 }} />
                             <View style={styles.modalSubContainer}>
@@ -296,12 +297,12 @@ function UpdateProfile({ navigation }) {
                                 {/* DOB */}
                                 <View style={styles.editTextBorder}>
                                     <Text style={styles.placeHolderText}>Date-Of-Birth</Text>
+                                    <TouchableHighlight onPress={() => setShowDatePick(true)} underlayColor='transparent' style={{ paddingRight: 5 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <Text style={{ fontFamily: FONTS.font, color: 'black', paddingVertical: 10, paddingLeft: 7 }}>{moment(dob).format('YYYY-MM-DD')}</Text>
-                                        <TouchableHighlight onPress={() => setShowDatePick(true)} underlayColor='transparent' style={{ paddingRight: 5 }}>
                                             <CalendarIcon name="calendar-month-outline" size={25} color="#000" style={{marginRight:3}} />
-                                        </TouchableHighlight>
                                     </View>
+                                    </TouchableHighlight>
                                 </View>
 
                                 {/* personal maritial status */}
@@ -410,6 +411,7 @@ function UpdateProfile({ navigation }) {
                             <View style={{ height: 20 }} />
                         </View>
                     </ScrollView>
+                </View>
                     <DatePicker
                         modal
                         mode="date"

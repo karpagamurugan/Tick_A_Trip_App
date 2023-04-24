@@ -9,7 +9,7 @@ import userAction from '../../../../redux/user/actions';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import Ionicons from 'react-native-vector-icons/Ionicons'
-import HotelTicketView from '../HotelTicket/HotelCard';
+import HotelTicketView from './HotelTicketView';
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
@@ -31,7 +31,7 @@ export default function Hotel({navigation}) {
         dispatch({
             type: userAction.GET_COMPLETED_HOTEL_TICKETS
         })
-    }, [])
+    }, [dispatch])
 
     const { Completed_hotel, Cancelled_hotel, Upcoming_hotel } = useSelector((state) => state.userReducer)
 
@@ -40,7 +40,7 @@ export default function Hotel({navigation}) {
 
         setSelectedTab(index)
     }
-
+console.log('Completed_hotel?.bookings?.length',Completed_hotel?.bookings?.length)
     return (
         <View style={style.mainContainer}>
             <Appbar title={'HOTEL BOOKINGS'} />
@@ -77,7 +77,7 @@ export default function Hotel({navigation}) {
                     {
                         (selectedTab === 0) ?
                             <ScrollView>
-                                <View style={style.listView}>
+                                <View >
                                     {(Upcoming_hotel?.bookings?.length === 0) ?
                                         <View style={{ alignSelf: 'center', marginTop: 50 }}>
                                             <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
@@ -87,17 +87,6 @@ export default function Hotel({navigation}) {
                                             </TouchableHighlight>
                                         </View>
                                         :
-                                        
-                                    //     <FlatList 
-                                    //     keyExtractor={(index) => index.toString()}
-                                    //     // horizontal 
-                                    //     data={Upcoming_hotel?.bookings}  
-                                    //     renderItem={({item}) =>  
-                                    //     <HotelTicketView item={item} navigation={navigation} type={'upcoming'}/>
-                                    //             }         
-                                    // />  
-
-
                                     Upcoming_hotel?.bookings?.map((item, index) => (
                                         <HotelTicketView key={index} item={item} navigation={navigation} type={'upcoming'}/>
                                         ))
@@ -105,7 +94,7 @@ export default function Hotel({navigation}) {
                                 </View>
                             </ScrollView> : (selectedTab === 1) ?
                                 <ScrollView>
-                                    <View style={style.listView}>
+                                    <View>
                                         {(Cancelled_hotel?.bookings?.length === 0) ?
                                             <View style={{ alignSelf: 'center', marginTop: 50 }}>
                                                 <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
@@ -122,10 +111,10 @@ export default function Hotel({navigation}) {
                                     </View>
                                 </ScrollView> :
                                 selectedTab === 2 ?
-                                    <ScrollView>
-                                        <View style={style.listView}>
+                                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+                                <View >
                                             {(Completed_hotel?.bookings?.length === 0) ?
-                                                <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                                <View style={{ alignSelf: 'center', }}>
                                                     <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
                                                     <Text style={style.EmptyText}>You Don't have any bookings</Text>
                                                     <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
@@ -138,7 +127,8 @@ export default function Hotel({navigation}) {
                                                     ))
                                             }
                                         </View>
-                                    </ScrollView> : <View />
+                                    </ScrollView> 
+                                  : <View />
                     }
 
                 </View>
@@ -150,7 +140,7 @@ export default function Hotel({navigation}) {
 
 const style = StyleSheet.create({
     mainContainer: { height: height, width: width, backgroundColor: 'white' },
-    listView: { height: height, marginBottom: 50 },
+    listView: { height: height*0.9 },
     tabsBar: {
         flexDirection: 'row',
         justifyContent: "space-around",

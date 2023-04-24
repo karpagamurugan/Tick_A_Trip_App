@@ -31,26 +31,17 @@ export default function HotelTicketView({ item, navigation, type }) {
             navigation:navigation
         })
     }
-    // useEffect(() => {
-    //     dispatch({
-    //         type: userAction.GET_UPCOMING_HOTEL_TICKETS
-    //     })
-    // }, [])
+   
     return (
         <View style={style.card} >
             <View style={style.cardView}>
                 <View style={style.cardText}>
                     <Text style={style.title}>{item?.hotel_name}</Text>
-                    <Text style={style.title}>{item?.supplierConfirmationNum}</Text>
 
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between',alignItems:'center' }}>
                         <View>
-                            <View style={{ flexDirection: 'row' }}>
-                                <Text style={{ fontFamily: FONTS.font, fontSize: height * 0.015, color: '#898989' }}>{item?.checkIn}  - {item?.checkOut}</Text>
-
-                            </View>
-                            <Text style={{ fontFamily: FONTS.font, color: '#FE712A', fontSize: height * 0.017 }}>No of Days :  {item?.days}</Text>
-
+                            <Text style={style.title}>{item?.supplierConfirmationNum}</Text>
+                            <Text style={{ fontFamily: FONTS.font, fontSize: height * 0.015, color: '#898989' }}>{item?.checkIn}  to {item?.checkOut}</Text>
                         </View>
                         {
                             (type === 'upcoming') ?
@@ -59,7 +50,8 @@ export default function HotelTicketView({ item, navigation, type }) {
                                 </TouchableHighlight> : <View />
                         }
                     </View>
-                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ flexDirection: 'row',justifyContent:'space-between',marginTop:5  }}>
+                    <Text style={{ fontFamily: FONTS.font, color: '#FE712A', fontSize: height * 0.017 }}>No of Days :  {item?.days}</Text>
                         <TouchableHighlight underlayColor='transparent' onPress={() => {
 
                             dispatch({
@@ -72,7 +64,6 @@ export default function HotelTicketView({ item, navigation, type }) {
                         }}>
                             <Text style={style.viewDetail}>View Booking Details</Text>
                         </TouchableHighlight>
-                        <ArrowIcon name='down' size={12} color='#0041F2' />
                     </View>
                 </View>
             </View>
@@ -87,7 +78,8 @@ export default function HotelTicketView({ item, navigation, type }) {
                             <View style={style.modalFlex}>
                                 <Text style={style.ModalLabelText}>Hotel Booking Cancel</Text>
                                 <Pressable
-                                    onPress={() =>   dispatch({
+                                    onPress={() => 
+                                          dispatch({
                                         type:userAction.OTP_MODAL_VIEW, payload:false
                                     })}>
                                     <IoniconsIcon name='close' size={35} color='#7c7c7c' />
