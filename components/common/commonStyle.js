@@ -12,14 +12,16 @@ const style = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         backgroundColor: '#fff',
+        paddingHorizontal:10,
+        borderColor: '#babab8',
+        borderWidth: 1,
+        
     },
     hotelListCardHotelName: {
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        borderColor: '#babab8',
-        borderWidth: 1,
-        width: '50%',
+        // borderColor: '#babab8',
         paddingVertical: 10,
     },
     HotelPopularList: {
@@ -57,7 +59,7 @@ const style = StyleSheet.create({
     hotelListLocName: {
         fontFamily: FONTS.mediam,
         fontSize: 13,
-        flex:1
+        // flex:1
     },
     ListHotelName: {
         fontFamily: FONTS.fontSemi,
@@ -111,7 +113,6 @@ const style = StyleSheet.create({
     },
     hotelListCardSec: {
         marginHorizontal: 10,
-        marginTop: 20,
         borderRadius: 10,
         shadowColor: "#000",
         shadowOffset: {

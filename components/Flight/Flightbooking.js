@@ -109,58 +109,58 @@ export default function FlightBooking({ navigation, route }) {
         axios.get(
             `${API_URL}/flight-coupon/${couponCode}`
         ).then((res) => {
-          if(res?.data?.message?.status == true){
-            if(isLogin === true){
-                if(res?.data?.message?.coupon?.for_guest === 0){
+            if (res?.data?.message?.status == true) {
+                if (isLogin === true) {
+                    if (res?.data?.message?.coupon?.for_guest === 0) {
                         var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
                         var disFare = totalFare?.MainTotalFare / 100
                         var finalFare = disFare * applyCoupon
                         setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                        if(parseInt(totalFare?.MainTotalFare) >= parseInt(discountPrice)){
+                        if (parseInt(totalFare?.MainTotalFare) >= parseInt(discountPrice)) {
                             setDiscountPrice(discountPrice = 0)
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
-                        }else{
+                        } else {
                             setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                         }
-                }else{
+                    } else {
+                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not Found' } })
+                        dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                    }
+
+                } else if (isLogin === false) {
+                    if (res?.data?.message?.coupon?.for_guest === 1) {
+                        var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
+                        var disFare = totalFare?.MainTotalFare / 100
+                        var finalFare = disFare * applyCoupon
+                        setDiscountPrice(discountPrice = finalFare.toFixed(0))
+                        if (parseInt(totalFare?.MainTotalFare) >= parseInt(discountPrice)) {
+                            setDiscountPrice(discountPrice = 0)
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
+
+                        } else {
+                            setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                        }
+                    } else {
+                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
+                        dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                    }
+                } else {
                     dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not Found' } })
                     dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                 }
-
-            }else if(isLogin ===false){
-                if(res?.data?.message?.coupon?.for_guest === 1){
-                        var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
-                        var disFare = totalFare?.MainTotalFare / 100
-                        var finalFare = disFare * applyCoupon
-                        setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                        if(parseInt(totalFare?.MainTotalFare) >= parseInt(discountPrice)){
-                            setDiscountPrice(discountPrice = 0)
-                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
-        
-                        }else{
-                            setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
-                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
-                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-                        }
-                }else{
-                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
-                    dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-                }
-            }else{
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not Found' } })
+            } else {
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
                 dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
             }
-          }else{
-            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
-            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-          }
-          
+
         }).catch(err => {
-            console.log('errrr',err)
+            console.log('errrr', err)
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message } })
             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
         })
@@ -204,7 +204,6 @@ export default function FlightBooking({ navigation, route }) {
         var childList = travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, route?.params?.flightInfo?.child_flight)
         var infantList = travelers_list?.travelers?.filter((el) => el.type === 'Infant')?.slice(0, route?.params?.flightInfo?.infant_flight)
         var tempList = [];
-
         for (let i = 0; i < adultList?.length; i++) {
             tempList.push(adultList[i])
         }
@@ -331,7 +330,7 @@ export default function FlightBooking({ navigation, route }) {
     }
 
     const TravellerAddBtn = (data) => {
-    
+
         var AddedAdult = {
             type: data?.selectedType,
             title: data?.nametitle,
@@ -694,372 +693,378 @@ export default function FlightBooking({ navigation, route }) {
                         errors2={errors2} reset2={reset2} setValue2={setValue2} />
                 }
 
-                <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Text style={[styles.formTitle]}>Add Traveller Details *</Text>
-                        {isLogin &&
-                            <TouchableOpacity onPress={() => setShowAddTraveller(!showAddTraveller)}>
-                                <AntDesign name={showAddTraveller ? 'upcircleo' : 'downcircleo'} style={{ color: '#2B64FF', fontSize: height * 0.022, paddingRight: 15 }} />
-                            </TouchableOpacity>
-                        }
-                    </View>
-                    {(showAddTraveller === true  ) ?
-                        <View>
-                            <View style={[styles.editTextBorder]}>
-                                <Controller
-                                    control={control}
-                                    name="selectedType"
-                                    rules={{
-                                        required: {
-                                            value: true,
-                                            message: "Select Your Type"
-                                        }
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <Dropdown
-                                            showsVerticalScrollIndicator={true}
-                                            placeholder="Type"
-                                            labelField="name"
-                                            valueField="value"
+                {
+                    (allTravellerList.length !== parseInt(adult) + parseInt(child) + parseInt(infant)) ?
+                        <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                <Text style={[styles.formTitle]}>Add Traveller Details *</Text>
+                                {/* {isLogin &&
+                                    <TouchableOpacity onPress={() => setShowAddTraveller(!showAddTraveller)}>
+                                        <AntDesign name={showAddTraveller ? 'upcircleo' : 'downcircleo'} style={{ color: '#2B64FF', fontSize: height * 0.022, paddingRight: 15 }} />
+                                    </TouchableOpacity>
+                                } */}
+                            </View>
+                            {/* {(showAddTraveller === true) ? */}
+                                <View>
+                                    <View style={[styles.editTextBorder]}>
+                                        <Controller
+                                            control={control}
                                             name="selectedType"
-                                            data={travellerSelectType}
-                                            value={selectType}
-                                            {...register('selectedType')}
-                                            onChange={(item) => {
-                                                onChange(item.value)
-                                                setSelectType(item.value)
-                                            }}
-                                            selectedTextProps={{
-                                                style: {
-                                                    fontSize: 13,
-                                                    fontWeight: '500',
-                                                    letterSpacing: 0.5,
-                                                    padding: 0,
-                                                },
-                                            }}
-                                            style={[styles.inputeEditor, { paddingHorizontal: 5, }]}
-                                            renderRightIcon={() => (
-                                                <IoniconsIcon
-                                                    name="chevron-down"
-                                                    size={25}
-                                                    style={{ fontSize: 18, }}
-                                                />)}
-                                        />
-                                    )}
-                                />
-                                {errors.selectedType && (
-                                    <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.selectedType.message}</Text>
-                                )}
-                            </View>
-                            <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                <View style={[styles.editTextBorder, { width: "20%" }]}>
-                                    <Controller
-                                        control={control}
-                                        name="nametitle"
-                                        rules={{
-                                            required: {
-                                                value: true,
-                                                message: 'Select Title',
-                                            }
-                                        }}
-                                        render={({ field: { onChange, value } }) => (
-                                            <Dropdown
-                                                showsVerticalScrollIndicator={true}
-                                                placeholder="Title"
-                                                data={selectTitleName}
-                                                labelField="name"
-                                                valueField="value"
-                                                value={title}
-                                                name="nametitle"
-                                                {...register("nametitle")}
-                                                onChange={(item) => {
-                                                    onChange(item.value)
-                                                    setTitle(item.value)
-                                                }}
-                                                selectedTextProps={{
-                                                    style: {
-                                                        fontSize: 13,
-                                                        fontWeight: '500',
-                                                        letterSpacing: 0.5,
-                                                        paddingTop: 10,
-                                                    },
-                                                }}
-                                                style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
-                                                renderRightIcon={() => (
-                                                    <IoniconsIcon
-                                                        name="chevron-down"
-                                                        size={25}
-                                                        style={{ fontSize: 18 }}
-                                                    />)}
-                                            />
-                                        )}
-                                    />
-                                    {errors.nametitle && (
-                                        <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.nametitle.message}</Text>
-                                    )}
-                                </View>
-                                <View style={[styles.editTextBorder, { width: "78%" }]}>
-                                    <Controller
-                                        control={control}
-                                        name="firstName"
-                                        rules={{
-                                            required: {
-                                                value: true,
-                                                message: "Enter Your First Name"
-                                            }
-                                        }}
-                                        render={({ field: { onChange, value } }) => (
-                                            <TextInput
-                                                placeholderTextColor={"gray"}
-                                                style={styles.inputeEditor}
-                                                placeholder="First Name"
-                                                keyboardType='default'
-                                                {...register("firstName")}
-                                                value={value}
-                                                onChangeText={value => {
-                                                    onChange(value)
-                                                }}
-                                            />
-                                        )}
-                                    />
-                                    {errors.firstName && (
-                                        <Text style={[styles.errormessage]}>{errors.firstName.message}</Text>
-                                    )}
-                                </View>
-                            </View>
-                            <View style={styles.editTextBorder}>
-                                <Controller
-                                    control={control}
-                                    name='lastName'
-                                    rules={{
-                                        required: {
-                                            value: true,
-                                            message: "Enter Your Last Name!"
-                                        }
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <TextInput
-                                            placeholderTextColor={"gray"}
-                                            style={styles.inputeEditor}
-                                            placeholder="Last Name"
-                                            keyboardType='default'
-                                            value={value}
-                                            {...register('lastName')}
-                                            onChangeText={value => {
-                                                onChange(value.toLowerCase())
-                                            }
-                                            }
-                                        />
-                                    )}
-                                />
-                                {errors.lastName && (
-                                    <Text style={[styles.errormessage]}>{errors.lastName.message}</Text>
-                                )}
-                            </View>
-                            <View style={styles.editTextBorder}>
-                                <Controller
-                                    control={control}
-                                    name="selectedgender"
-                                    rules={{
-                                        required: {
-                                            value: true,
-                                            message: "Select Your Gender"
-                                        }
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <Dropdown
-                                            showsVerticalScrollIndicator={true}
-                                            placeholder="Gender"
-                                            labelField="name"
-                                            valueField="value"
-                                            name="selectedgender"
-                                            data={selectGender}
-                                            value={gender}
-                                            {...register('selectedgender')}
-                                            onChange={(item) => {
-                                                onChange(item.value)
-                                                setGender(item.value)
-                                            }}
-                                            selectedTextProps={{
-                                                style: {
-                                                    fontSize: 13,
-                                                    fontWeight: '500',
-                                                    letterSpacing: 0.5,
-                                                    paddingTop: 10,
-                                                },
-                                            }}
-                                            style={[styles.inputeEditor, { paddingHorizontal: 5, }]}
-                                            renderRightIcon={() => (
-                                                <IoniconsIcon
-                                                    name="chevron-down"
-                                                    size={25}
-                                                    style={{ fontSize: 18 }}
-                                                />)}
-                                        />
-                                    )}
-                                />
-                                {errors.selectedgender && (
-                                    <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.selectedgender.message}</Text>
-                                )}
-                            </View>
-                            <View style={[styles.editTextBorder]}>
-                                <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowDatePicker(!showDatePicker)} style={{ paddingRight: 5 }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text style={{ color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
-                                            {moment(dobDate).format('DD/MM/YYYY').toString()}
-                                        </Text>
-                                        <AntDesign Icon name="calendar" size={25} color="gray" />
-                                    </View>
-                                </TouchableHighlight>
-                                {errors.dob && (
-                                    <Text style={[styles.errormessage]}>{errors.dob.message}</Text>
-                                )}
-                            </View>
-                            <View>
-                                <View style={[styles.editTextBorder]}>
-                                    <View
-                                        style={{
-                                            flexDirection: 'row',
-                                            height: 35,
-                                            width: '100%',
-                                            alignItems: 'center',
-                                        }}
-                                    >
-                                        <TextInput
-                                            keyboardType={'default'}
-                                            placeholder={'Nationality'}
-                                            placeholderTextColor="gray"
-                                            numberOfLines={1}
-                                            name="add_nationality"
-                                            value={selectedNationality?.Nationality}
-                                            onChangeText={(e) => {
-                                                if (e === '') {
-                                                    setTravelRec(travelRec = { Nationality: true })
-                                                }
-                                                if (e?.length >= 3) {
-                                                    dispatch({
-                                                        type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
-                                                        payload: {
-                                                            name: e,
-                                                            type: 'nationality',
-                                                        }
-                                                    })
-                                                    setSelectedNationality(selectedNationality = { Nationality: e })
-                                                } else {
-                                                    setSelectedNationality(selectedNationality = { Nationality: e })
-                                                    dispatch({
-                                                        type: userAction.GET_ADD_TRAVELLER_NATIONALITY,
-                                                        payload: []
-                                                    })
+                                            rules={{
+                                                required: {
+                                                    value: true,
+                                                    message: "Select Your Type"
                                                 }
                                             }}
-                                            style={{
-                                                color: 'black',
-                                                width: width * 0.9,
-                                                paddingTop: 5,
-                                                paddingBottom: 0,
-                                            }}
-                                        />
-                                        {
-                                            selectedNationality?.Nationality !== "" ?
-                                                <TouchableHighlight
-                                                    underlayColor={'transparent'}
-                                                    onPress={() => {
-                                                        setSelectedNationality(selectedNationality = { Nationality: '' })
-                                                        dispatch({
-                                                            type: userAction.GET_ADD_TRAVELLER_NATIONALITY,
-                                                            payload: []
-                                                        })
-                                                        setTravelRec(travelRec = { Nationality: false });
+                                            render={({ field: { onChange, value } }) => (
+                                                <Dropdown
+                                                    showsVerticalScrollIndicator={true}
+                                                    placeholder="Type"
+                                                    labelField="name"
+                                                    valueField="value"
+                                                    name="selectedType"
+                                                    data={travellerSelectType}
+                                                    value={selectType}
+                                                    {...register('selectedType')}
+                                                    onChange={(item) => {
+                                                        onChange(item.value)
+                                                        setSelectType(item.value)
                                                     }}
+                                                    selectedTextProps={{
+                                                        style: {
+                                                            fontSize: 13,
+                                                            fontWeight: '500',
+                                                            letterSpacing: 0.5,
+                                                            padding: 0,
+                                                        },
+                                                    }}
+                                                    style={[styles.inputeEditor, { paddingHorizontal: 5, }]}
+                                                    renderRightIcon={() => (
+                                                        <IoniconsIcon
+                                                            name="chevron-down"
+                                                            size={25}
+                                                            style={{ fontSize: 18, }}
+                                                        />)}
+                                                />
+                                            )}
+                                        />
+                                        {errors.selectedType && (
+                                            <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.selectedType.message}</Text>
+                                        )}
+                                    </View>
+                                    <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
+                                        <View style={[styles.editTextBorder, { width: "20%" }]}>
+                                            <Controller
+                                                control={control}
+                                                name="nametitle"
+                                                rules={{
+                                                    required: {
+                                                        value: true,
+                                                        message: 'Select Title',
+                                                    }
+                                                }}
+                                                render={({ field: { onChange, value } }) => (
+                                                    <Dropdown
+                                                        showsVerticalScrollIndicator={true}
+                                                        placeholder="Title"
+                                                        data={selectTitleName}
+                                                        labelField="name"
+                                                        valueField="value"
+                                                        value={title}
+                                                        name="nametitle"
+                                                        {...register("nametitle")}
+                                                        onChange={(item) => {
+                                                            onChange(item.value)
+                                                            setTitle(item.value)
+                                                        }}
+                                                        selectedTextProps={{
+                                                            style: {
+                                                                fontSize: 13,
+                                                                fontWeight: '500',
+                                                                letterSpacing: 0.5,
+                                                                paddingTop: 10,
+                                                            },
+                                                        }}
+                                                        style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
+                                                        renderRightIcon={() => (
+                                                            <IoniconsIcon
+                                                                name="chevron-down"
+                                                                size={25}
+                                                                style={{ fontSize: 18 }}
+                                                            />)}
+                                                    />
+                                                )}
+                                            />
+                                            {errors.nametitle && (
+                                                <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.nametitle.message}</Text>
+                                            )}
+                                        </View>
+                                        <View style={[styles.editTextBorder, { width: "78%" }]}>
+                                            <Controller
+                                                control={control}
+                                                name="firstName"
+                                                rules={{
+                                                    required: {
+                                                        value: true,
+                                                        message: "Enter Your First Name"
+                                                    }
+                                                }}
+                                                render={({ field: { onChange, value } }) => (
+                                                    <TextInput
+                                                        placeholderTextColor={"gray"}
+                                                        style={styles.inputeEditor}
+                                                        placeholder="First Name"
+                                                        keyboardType='default'
+                                                        {...register("firstName")}
+                                                        value={value}
+                                                        onChangeText={value => {
+                                                            onChange(value)
+                                                        }}
+                                                    />
+                                                )}
+                                            />
+                                            {errors.firstName && (
+                                                <Text style={[styles.errormessage]}>{errors.firstName.message}</Text>
+                                            )}
+                                        </View>
+                                    </View>
+                                    <View style={styles.editTextBorder}>
+                                        <Controller
+                                            control={control}
+                                            name='lastName'
+                                            rules={{
+                                                required: {
+                                                    value: true,
+                                                    message: "Enter Your Last Name!"
+                                                }
+                                            }}
+                                            render={({ field: { onChange, value } }) => (
+                                                <TextInput
+                                                    placeholderTextColor={"gray"}
+                                                    style={styles.inputeEditor}
+                                                    placeholder="Last Name"
+                                                    keyboardType='default'
+                                                    value={value}
+                                                    {...register('lastName')}
+                                                    onChangeText={value => {
+                                                        onChange(value.toLowerCase())
+                                                    }
+                                                    }
+                                                />
+                                            )}
+                                        />
+                                        {errors.lastName && (
+                                            <Text style={[styles.errormessage]}>{errors.lastName.message}</Text>
+                                        )}
+                                    </View>
+                                    <View style={styles.editTextBorder}>
+                                        <Controller
+                                            control={control}
+                                            name="selectedgender"
+                                            rules={{
+                                                required: {
+                                                    value: true,
+                                                    message: "Select Your Gender"
+                                                }
+                                            }}
+                                            render={({ field: { onChange, value } }) => (
+                                                <Dropdown
+                                                    showsVerticalScrollIndicator={true}
+                                                    placeholder="Gender"
+                                                    labelField="name"
+                                                    valueField="value"
+                                                    name="selectedgender"
+                                                    data={selectGender}
+                                                    value={gender}
+                                                    {...register('selectedgender')}
+                                                    onChange={(item) => {
+                                                        onChange(item.value)
+                                                        setGender(item.value)
+                                                    }}
+                                                    selectedTextProps={{
+                                                        style: {
+                                                            fontSize: 13,
+                                                            fontWeight: '500',
+                                                            letterSpacing: 0.5,
+                                                            paddingTop: 10,
+                                                        },
+                                                    }}
+                                                    style={[styles.inputeEditor, { paddingHorizontal: 5, }]}
+                                                    renderRightIcon={() => (
+                                                        <IoniconsIcon
+                                                            name="chevron-down"
+                                                            size={25}
+                                                            style={{ fontSize: 18 }}
+                                                        />)}
+                                                />
+                                            )}
+                                        />
+                                        {errors.selectedgender && (
+                                            <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.selectedgender.message}</Text>
+                                        )}
+                                    </View>
+                                    <View style={[styles.editTextBorder]}>
+                                        <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowDatePicker(!showDatePicker)} style={{ paddingRight: 5 }}>
+                                            <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                <Text style={{ color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
+                                                    {moment(dobDate).format('DD/MM/YYYY').toString()}
+                                                </Text>
+                                                <AntDesign Icon name="calendar" size={25} color="gray" />
+                                            </View>
+                                        </TouchableHighlight>
+                                        {errors.dob && (
+                                            <Text style={[styles.errormessage]}>{errors.dob.message}</Text>
+                                        )}
+                                    </View>
+                                    <View>
+                                        <View style={[styles.editTextBorder]}>
+                                            <View
+                                                style={{
+                                                    flexDirection: 'row',
+                                                    height: 35,
+                                                    width: '100%',
+                                                    alignItems: 'center',
+                                                }}
+                                            >
+                                                <TextInput
+                                                    keyboardType={'default'}
+                                                    placeholder={'Nationality'}
+                                                    placeholderTextColor="gray"
+                                                    numberOfLines={1}
+                                                    name="add_nationality"
+                                                    value={selectedNationality?.Nationality}
+                                                    onChangeText={(e) => {
+                                                        if (e === '') {
+                                                            setTravelRec(travelRec = { Nationality: true })
+                                                        }
+                                                        if (e?.length >= 3) {
+                                                            dispatch({
+                                                                type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
+                                                                payload: {
+                                                                    name: e,
+                                                                    type: 'nationality',
+                                                                }
+                                                            })
+                                                            setSelectedNationality(selectedNationality = { Nationality: e })
+                                                        } else {
+                                                            setSelectedNationality(selectedNationality = { Nationality: e })
+                                                            dispatch({
+                                                                type: userAction.GET_ADD_TRAVELLER_NATIONALITY,
+                                                                payload: []
+                                                            })
+                                                        }
+                                                    }}
+                                                    style={{
+                                                        color: 'black',
+                                                        width: width * 0.9,
+                                                        paddingTop: 5,
+                                                        paddingBottom: 0,
+                                                    }}
+                                                />
+                                                {
+                                                    selectedNationality?.Nationality !== "" ?
+                                                        <TouchableHighlight
+                                                            underlayColor={'transparent'}
+                                                            onPress={() => {
+                                                                setSelectedNationality(selectedNationality = { Nationality: '' })
+                                                                dispatch({
+                                                                    type: userAction.GET_ADD_TRAVELLER_NATIONALITY,
+                                                                    payload: []
+                                                                })
+                                                                setTravelRec(travelRec = { Nationality: false });
+                                                            }}
+                                                        >
+                                                            <AntDesign name="closecircle" size={18} color="gray" style={{
+                                                                marginLeft: 10, marginRight: 10, position: 'absolute', right: 20, top: -4
+                                                            }} />
+                                                        </TouchableHighlight> : <></>
+                                                }
+                                            </View>
+                                        </View>
+                                        {(AddTravaller_nationality?.message === undefined && selectedNationality?.Nationality !== '' && travelRec?.Nationality === false) ?
+                                            <View style={{
+                                                backgroundColor: 'white',
+                                                width: '100%',
+                                                alignSelf: 'center',
+                                                position: 'relative',
+                                                zIndex: 2,
+                                                borderRadius: 5,
+                                                elevation: 10,
+                                                maxHeight: height * 0.35
+                                            }}>
+                                                <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, }}>No Options found</Text>
+                                            </View> : <View style={{
+                                                backgroundColor: 'white',
+                                                width: '100%',
+                                                alignSelf: 'center',
+                                                position: 'relative',
+                                                zIndex: 2,
+                                                borderRadius: 10,
+                                                elevation: 10,
+                                                maxHeight: height * 0.35
+                                            }}>
+
+                                                <ScrollView
+                                                    showsVerticalScrollIndicator={true}
+                                                    nestedScrollEnabled
+                                                    keyboardShouldPersistTaps='handled'
                                                 >
-                                                    <AntDesign name="closecircle" size={18} color="gray" style={{
-                                                        marginLeft: 10, marginRight: 10, position: 'absolute', right: 20, top: -4
-                                                    }} />
-                                                </TouchableHighlight> : <></>
+                                                    {
+                                                        AddTravaller_nationality?.message?.map((e, i) => {
+                                                            return (
+                                                                <TouchableHighlight
+                                                                    underlayColor={"transparent"}
+                                                                    key={i}
+                                                                    onPress={() => handleSelectNationality(e)}
+                                                                >
+                                                                    <Text
+                                                                        style={{
+                                                                            color: 'black',
+                                                                            paddingHorizontal: 9,
+                                                                            fontSize: 13,
+                                                                            paddingVertical: 2,
+                                                                        }}>{e?.name}</Text>
+                                                                </TouchableHighlight>
+                                                            )
+                                                        })
+                                                    }
+                                                </ScrollView>
+                                            </View>
+                                        }
+                                    </View>
+                                    <View style={{ marginVertical: 20, width: '90%', alignSelf: 'center' }}>
+                                        {(travellerEdit === false) ?
+
+                                            (allTravellerList.filter((item) => item?.type.toLowerCase() === 'adult')?.length === parseInt(adult) &&
+                                                allTravellerList.filter((item) => item?.type.toLowerCase() === 'child')?.length === parseInt(child) &&
+                                                allTravellerList.filter((item) => item?.type.toLowerCase() === 'infant')?.length === parseInt(infant)) ?
+                                                <TouchableOpacity
+                                                    disabled={true}
+                                                    style={[styles.clickBtn, { opacity: 0.75 }]}>
+                                                    <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, opacity: 0.5 }}>Disabled</Text>
+                                                </TouchableOpacity> :
+                                                <TouchableOpacity
+                                                    onPress={handleSubmit(SubmitAddBtn)}
+                                                    style={[styles.clickBtn]}>
+                                                    <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
+                                                </TouchableOpacity>
+                                            :
+                                            <TouchableHighlight
+                                                underlayColor='transparent'
+                                                onPress={handleSubmit(updateBtn)}
+                                                style={[styles.clickBtn]}>
+                                                <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Update</Text>
+                                            </TouchableHighlight>
                                         }
                                     </View>
                                 </View>
-                                {(AddTravaller_nationality?.message === undefined && selectedNationality?.Nationality !== '' && travelRec?.Nationality === false) ?
-                                    <View style={{
-                                        backgroundColor: 'white',
-                                        width: '100%',
-                                        alignSelf: 'center',
-                                        position: 'relative',
-                                        zIndex: 2,
-                                        borderRadius: 5,
-                                        elevation: 10,
-                                        maxHeight: height * 0.35
-                                    }}>
-                                        <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, }}>No Options found</Text>
-                                    </View> : <View style={{
-                                        backgroundColor: 'white',
-                                        width: '100%',
-                                        alignSelf: 'center',
-                                        position: 'relative',
-                                        zIndex: 2,
-                                        borderRadius: 10,
-                                        elevation: 10,
-                                        maxHeight: height * 0.35
-                                    }}>
 
-                                        <ScrollView
-                                            showsVerticalScrollIndicator={true}
-                                            nestedScrollEnabled
-                                            keyboardShouldPersistTaps='handled'
-                                        >
-                                            {
-                                                AddTravaller_nationality?.message?.map((e, i) => {
-                                                    return (
-                                                        <TouchableHighlight
-                                                            underlayColor={"transparent"}
-                                                            key={i}
-                                                            onPress={() => handleSelectNationality(e)}
-                                                        >
-                                                            <Text
-                                                                style={{
-                                                                    color: 'black',
-                                                                    paddingHorizontal: 9,
-                                                                    fontSize: 13,
-                                                                    paddingVertical: 2,
-                                                                }}>{e?.name}</Text>
-                                                        </TouchableHighlight>
-                                                    )
-                                                })
-                                            }
-                                        </ScrollView>
-                                    </View>
-                                }
-                            </View>
-                            <View style={{ marginVertical: 20, width: '90%', alignSelf: 'center' }}>
-                                {(travellerEdit === false) ?
+                        </View>
+                        :
+                        <></>
+                }
 
-                                    (allTravellerList.filter((item) => item?.type.toLowerCase() === 'adult')?.length === parseInt(adult) &&
-                                        allTravellerList.filter((item) => item?.type.toLowerCase() === 'child')?.length === parseInt(child) &&
-                                        allTravellerList.filter((item) => item?.type.toLowerCase() === 'infant')?.length === parseInt(infant)) ?
-                                        <TouchableOpacity
-                                            disabled={true}
-                                            style={[styles.clickBtn, { opacity: 0.75 }]}>
-                                            <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, opacity: 0.5 }}>Disabled</Text>
-                                        </TouchableOpacity> :
-                                        <TouchableOpacity
-                                            onPress={handleSubmit(SubmitAddBtn)}
-                                            style={[styles.clickBtn]}>
-                                            <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
-                                        </TouchableOpacity>
-                                    :
-                                    <TouchableHighlight
-                                        underlayColor='transparent'
-                                        onPress={handleSubmit(updateBtn)}
-                                        style={[styles.clickBtn]}>
-                                        <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Update</Text>
-                                    </TouchableHighlight>
-                                }
-                            </View>
-                        </View> : <></>
-                    }
 
-                </View>
                 <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
                     {allTravellerList?.map((item, index) => {
                         return (

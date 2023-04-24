@@ -43,27 +43,31 @@ const HotelCard = (props) => {
                 </View>
                 <View style={style.hotelListCardCon}>
                     <View style={style.hotelListCardHotelLocat}>
-                        <View style={style.hotelListCardHotelName}>
-                            <FontAwesome5 style={style.hotelListLocIcon} name='hotel' />
-                            <Text style={style.hotelListLocName}>{val?.propertyType}</Text>
-                        </View>
-
-                        <TouchableHighlight underlayColor={'transparent'} style={[style.hotelListCardHotelName, { paddingVertical: 0 }]}
-                            onPress={() => {
-                                const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
-                                const latLng = `${val.latitude},${val.longitude}`;
-                                const label = `${val?.hotelName}`;
-                                const url = Platform.select({
-                                    ios: `${scheme}${label}@${latLng}`,
-                                    android: `${scheme}${latLng}(${label})`
-                                });
-                                Linking.openURL(url);
-                            }}>
-                            <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
-                                <Ionicons style={style.hotelListLocIcon} name='location-outline' />
-                                <Text style={style.hotelListLocName}>{val?.city}</Text>
+                        <View style={{width:'48%',flex:1,paddingHorizontal:10}}>
+                            <View style={style.hotelListCardHotelName}>
+                                <FontAwesome5 style={style.hotelListLocIcon} name='hotel' />
+                                <Text style={style.hotelListLocName}>{val?.propertyType}</Text>
                             </View>
-                        </TouchableHighlight>
+                        </View>
+                        <View style={styles.GridVerticalLine}></View>
+                        <View style={{width:'48%',flex:1,paddingHorizontal:10}}>
+                            <TouchableHighlight underlayColor={'transparent'} style={[style.hotelListCardHotelName, { paddingVertical: 0 }]}
+                                onPress={() => {
+                                    const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
+                                    const latLng = `${val.latitude},${val.longitude}`;
+                                    const label = `${val?.hotelName}`;
+                                    const url = Platform.select({
+                                        ios: `${scheme}${label}@${latLng}`,
+                                        android: `${scheme}${latLng}(${label})`
+                                    });
+                                    Linking.openURL(url);
+                                }}>
+                                <View style={{ flexDirection: 'row', paddingVertical: 10 }}>
+                                    <Ionicons style={style.hotelListLocIcon} name='location-outline' />
+                                    <Text style={style.hotelListLocName}>{val?.city}</Text>
+                                </View>
+                            </TouchableHighlight>
+                        </View>
                     </View>
                     <View style={style.hotelDesCont}>
                         <Text style={style.ListHotelName}>{val?.hotelName}</Text>
@@ -114,6 +118,14 @@ const styles = StyleSheet.create({
         // borderTopRightRadius:10
         // borderRadius:20
         height: 200
+    },
+    hotelListCardCon: {
+        paddingHorizontal: 10,
+    },
+    GridVerticalLine:{
+        height: '100%',
+        width:2,
+        backgroundColor:'#babab8',
     }
 });
 export default HotelCard
