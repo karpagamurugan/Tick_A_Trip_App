@@ -60,6 +60,8 @@ const FlightSearch = function* (data) {
             )
         );
 
+        // console.log('result....',result?.data)
+        // console.log('payload....',payload)
         if (result?.data?.status === true) {
             let a = result?.data?.message.map(el => {
                 return {
@@ -100,6 +102,7 @@ const FlightSearch = function* (data) {
                 });
                 // console.log(c,'final filter')
             } else {
+                console.log('round trip...:))',a)
                 yield put({
                     type: actions.GET_FLIGHT_SEARCH, payload: a
                 });
@@ -166,6 +169,7 @@ const setRevalidate = function* (data) {
             }
             )
         );
+        console.log('Revalidation',result?.data)
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_REVALIDATE, payload: result?.data?.message })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
@@ -179,7 +183,6 @@ const setRevalidate = function* (data) {
         console.log('err', err)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-
     }
 }
 

@@ -17,7 +17,8 @@ var width = Dimensions.get('window').width;
 function FlightCard (props){
     var item = props?.item;
     var navigation = props.navigation;
-      
+    const dispatch =useDispatch()
+
 function timeConvert(n) {
     var num = n;
     var hours = Math.floor(num / 60) > 0 ? Math.floor(num / 60) + "H " : "";
@@ -28,7 +29,6 @@ function timeConvert(n) {
     return hours + rminutes;
 }
 
-    const dispatch =useDispatch()
     return(
         <View style={styles.card} >
         <View style={{ paddingHorizontal: 2 }}>
@@ -146,11 +146,9 @@ function timeConvert(n) {
             <Text style={[styles.listBtnText, { color: COLORS.colorText }]}>{item?.journeytype}</Text>
             <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.navigate('FlightDetails', { item: item })}>
                 <Text style={[styles.listBtnText, { color: COLORS.textBlue }]}>Fare details / Rules</Text>
-
             </TouchableHighlight>
         </View>
     </View>
-
     )
 }
 const styles = StyleSheet.create({

@@ -38,18 +38,20 @@ const Flight = ({ navigation }) => {
 
   var [showTraveller, setShowTraveller] = useState(false) //show traveller modal
   var [fromDate, setFromDate] = useState(new Date()); //depart date
-  var [ToDate, setTodate] = useState(moment(new Date()).add(1, 'day')); //return date
+  // var [ToDate, setTodate] = useState(moment(new Date()).add(1, 'day')); //return date
+  var [ToDate, setTodate] = useState(new Date()); //return date
   var [fromPicker, setFromPicker] = useState(false) //show depart date picker
   var [toPicker, setToPicker] = useState(false) //show retuen date picker
   var [adult, setAdult] = useState(1) //set adult count
   var [child, setchild] = useState(0) //set child count
   var [infant, setInfant] = useState(0) //set infant count
   var [classType, setClassType] = useState('Economy'); //select class type
+  var [tempPlace,setTempPlace]=useState({from:'',to:''});
+  var[swapCity,setSwapCity]=useState({to:{city:'',code:''},from:{city:'',code:''}})
 
   var [selectedFromVal, setSelectedFromVal] = useState(selectedFromVal = { city: '', code: '' }) //select from Place
   var [selectedToVal, setSelectedToVal] = useState(selectedToVal = { city: '', code: '' }) //select to place
 
-  var[swapCity,setSwapCity]=useState({to:'',from:''})
 
   let ChildAndInfant = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }] //child and infant count
   let AdultCount = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }, { value: '7' }, { value: '8' }, { value: '9' }] //adult count
@@ -81,10 +83,10 @@ const Flight = ({ navigation }) => {
       payload: []
     })
     setSelectedFromVal(selectedFromVal = { city: e.city, code: e.airport_code });
-    setSwapCity({from:e?.city,to:swapCity?.to})
+    setSwapCity({from:{city:e?.city,code:e.airport_code},to:{city:swapCity?.to.city,code:swapCity?.to?.code}})
     setNoRecord(noRecord = { from: false, to: noRecord.to })
-
   }
+
 
   const handleSelectionTo = (e) => {
     Keyboard.dismiss()
@@ -93,7 +95,7 @@ const Flight = ({ navigation }) => {
       payload: []
     })
     setSelectedToVal(selectedToVal = { city: e.city, code: e.airport_code });
-    setSwapCity({from:swapCity?.from,to: e?.city})
+    setSwapCity({from:{city:swapCity?.from.city,code:swapCity?.from?.code},to: {city:e?.city,code: e.airport_code }})
     setNoRecord(noRecord = { to: false, from: noRecord.from })
 
   }
@@ -591,8 +593,9 @@ const Flight = ({ navigation }) => {
                   <View style={style.swapBackground}>
                     <TouchableHighlight underlayColor={'transparent'}
                      onPress={()=>{
-                      setSelectedToVal(selectedToVal = { city: swapCity?.from })
-                      setSelectedFromVal(selectedFromVal = { city: swapCity?.to})
+                      setSelectedToVal(selectedToVal = { city: swapCity?.from.city,code:swapCity?.from.code })
+                      setSelectedFromVal(selectedFromVal = { city: swapCity?.to.city,code:swapCity?.to.code})
+                      setSwapCity({from:{city:selectedFromVal?.city,code:selectedFromVal?.code},to:{city:selectedToVal?.city,code:selectedToVal?.code}})
                     }}>
                     <View style={{backgroundColor:COLORS.AppbarColor,borderRadius:100,padding:8,top:height*0.009}}>
                       <Ionicons name='ios-swap-vertical' size={23} color={COLORS.textBlue}/>
@@ -658,7 +661,7 @@ const Flight = ({ navigation }) => {
                       <CalendarIcon height={22} width={22} />
                       <View style={{ paddingLeft: 15 }}>
                         <Text style={style.title}>RETURN ON</Text>
-                        <Text style={style.CommonText}>{moment(ToDate).format('DD/MM/YYYY')}</Text>
+                        <Text style={style.CommonText}>{(ToDate.toDateString() === new Date().toDateString())?moment(ToDate).add(1, 'day').format('DD/MM/YYYY'):moment(ToDate).format('DD/MM/YYYY')}</Text>
                       </View>
                     </View>
                   </TouchableHighlight>
@@ -676,7 +679,6 @@ const Flight = ({ navigation }) => {
                       } else {
                         FlightSearch()
                       }
-
                     }}>
                     <Text style={style.searchText}>SEARCH FLIGHT</Text>
                   </TouchableHighlight>
@@ -696,6 +698,7 @@ const Flight = ({ navigation }) => {
             onConfirm={(date) => {
               setFromPicker(!fromPicker)
               setFromDate(fromDate = date)
+              setTodate(ToDate=moment(fromDate).add(1, 'day'))
             }}
             onCancel={() => {
               setFromPicker(!fromPicker)
@@ -708,7 +711,7 @@ const Flight = ({ navigation }) => {
             open={toPicker}
             date={fromDate}
             mode="date"
-            minimumDate={new Date()}
+            minimumDate={moment(ToDate)}
             onConfirm={(date) => {
               setToPicker(!toPicker)
               setTodate(ToDate = date)

@@ -23,8 +23,8 @@ function FlightFilter(props) {
     const { onApplied } = props;
     const { onClear } = props;
     var [priceRange, setPriceRange] = useState({min:(props?.Price?.min ==='')?'0':props?.Price.min,max:(props?.Price.max ==='')?'0':props?.Price.max}); //set price range for filter
-    var [selectAirline, setSelectAirline] = useState(props?.AirLine)
-    var [selectFlightStops, setSelectFlightStops] = useState(props?.Stops)
+    var [selectAirline, setSelectAirline] = useState(["All"])
+    var [selectFlightStops, setSelectFlightStops] = useState(["Any"])
     const [cabin, setCabin] = useState([
         { id: 2, value: false, name: "Economy Class", selected: false },
         { id: 1, value: true, name: "Business Class", selected: false },
@@ -173,6 +173,7 @@ function FlightFilter(props) {
                                     CheckAirlineName.map((val, index) => (
                                         <View style={[styles.checkBox]} key={index}>
                                             <TouchableHighlight underlayColor='transparent' onPress={() => {
+                                                console.log(selectAirline)
                                                 if (!selectAirline.includes(val.value)) {
                                                     setSelectAirline(selectAirline = [...selectAirline, val.value])
                                                 } else {
