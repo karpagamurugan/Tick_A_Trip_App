@@ -36,7 +36,7 @@ function HotelBooking({ route, navigation }) {
     var [policyBox, setPolicyBox] = useState(false);
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
 
-    const { userProfileData,isLogin } = useSelector((state) => state.userReducer)
+    const { userProfileData, isLogin } = useSelector((state) => state.userReducer)
     const { RoomGuestPlace, hotelSessionId } = useSelector((state) => state.HotelReducer)
 
     var [couponCode, setCouponCode] = useState('')
@@ -56,14 +56,14 @@ function HotelBooking({ route, navigation }) {
                 key_secret: RAZOR_KEY_SECRET,
                 amount: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
                 currency: CURRENCY,
-                name:  data?.FirstName,
+                name: data?.FirstName,
                 description: "Payment Tick A Trip",
                 timeout: TIMEOUT,
                 // order_id:'TickATrip_'+generateUUID(8),
                 prefill: {
-                    email:  data?.Email,
-                    contact:  data?.Phone,
-                    name:  data?.FirstName
+                    email: data?.Email,
+                    contact: data?.Phone,
+                    name: data?.FirstName
                 },
                 notes: {
                     address: "",
@@ -73,7 +73,7 @@ function HotelBooking({ route, navigation }) {
                 },
             };
             RazorpayCheckout.open(options).then((res) => {
-    
+
                 var dataList = {
                     sessionId: hotelSessionId,
                     productId: RoomType?.productId,
@@ -83,7 +83,7 @@ function HotelBooking({ route, navigation }) {
                     clientRef: RoomType?.productId,
                     customerName: data?.FirstName,
                     customerEmail: data?.Email,
-                    customerPhone:data?.Phone,
+                    customerPhone: data?.Phone,
                     customerGst: "",
                     transactionId: res?.razorpay_payment_id,
                     paymentStatus: "true",
@@ -231,63 +231,63 @@ function HotelBooking({ route, navigation }) {
         axios.get(
             `${API_URL}/hotel-coupon/${couponCode}`
         ).then((res) => {
-          if(res?.data?.message?.status == true){
-            if(isLogin === true){
-                if(res?.data?.message?.coupon?.for_guest === 0){
+            if (res?.data?.message?.status == true) {
+                if (isLogin === true) {
+                    if (res?.data?.message?.coupon?.for_guest === 0) {
                         var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
                         var disFare = totalFare?.MainTotalFare / 100
                         var finalFare = disFare * applyCoupon
                         setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                        if(parseInt(RoomType?.netPrice) >= parseInt(discountPrice)){
+                        if (parseInt(RoomType?.netPrice) >= parseInt(discountPrice)) {
                             setDiscountPrice(discountPrice = 0)
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
-    
-                        }else{
+
+                        } else {
 
                             setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                         }
-                }else{
+                    } else {
+                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not Found' } })
+                        dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                    }
+
+                } else if (isLogin === false) {
+                    console.log('res?.data?.message?.coupon', res?.data?.message?.coupon)
+                    if (res?.data?.message?.coupon?.for_guest === 1) {
+                        var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
+                        var disFare = totalFare?.MainTotalFare / 100
+                        var finalFare = disFare * applyCoupon
+                        setDiscountPrice(discountPrice = finalFare.toFixed(0))
+                        console.log('parseInt(RoomType?.netPrice)', parseInt(RoomType?.netPrice))
+                        console.log('parseInt(discountPrice))', parseInt(discountPrice))
+                        console.log(parseInt(RoomType?.netPrice) > parseInt(discountPrice))
+
+                        if (parseInt(RoomType?.netPrice) >= parseInt(discountPrice)) {
+                            setDiscountPrice(discountPrice = 0)
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
+                        } else {
+                            setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
+                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
+                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                        }
+
+                    } else {
+                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
+                        dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
+                    }
+                } else {
                     dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not Found' } })
                     dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                 }
-
-            }else if(isLogin ===false){
-                console.log('res?.data?.message?.coupon',res?.data?.message?.coupon)
-                if(res?.data?.message?.coupon?.for_guest === 1){
-                        var applyCoupon = res?.data?.message?.coupon?.coupon_discount;
-                        var disFare = totalFare?.MainTotalFare / 100
-                        var finalFare = disFare * applyCoupon
-                        setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                        console.log('parseInt(RoomType?.netPrice)',parseInt(RoomType?.netPrice))
-                        console.log('parseInt(discountPrice))',parseInt(discountPrice))
-                        console.log(parseInt(RoomType?.netPrice) > parseInt(discountPrice))
-                    
-                        if(parseInt(RoomType?.netPrice) >= parseInt(discountPrice)){
-                            setDiscountPrice(discountPrice = 0)
-                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
-                        }else{
-                            setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
-                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
-                            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-                        }
-                 
-                }else{
-                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
-                    dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-                }
-            }else{
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not Found' } })
+            } else {
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
                 dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
             }
-          }else{
-            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Invalid Coupon Code' } })
-            dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
-          }
-            
+
         }).catch(err => {
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: err?.response?.data?.message } })
             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
@@ -300,353 +300,353 @@ function HotelBooking({ route, navigation }) {
             <HotelAppbar title={'Hotel Booking'} />
             <KeyboardAvoidingView behavior="height">
 
-            <ScrollView style={{height:height*0.78}}>
-                <Image source={{ uri: HotelDetail?.thumbNailUrl }} style={{ height: height * 0.27, marginTop: 15 }} />
-                <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 }}>
-                    <View>
-                        <Text style={[styles.HotelName, { color: 'black' }]}>{HotelDetail?.hotelName}</Text>
-                        <Text style={[styles.HotelName, { color: COLORS.starFill }]}>{HotelDetail?.hotelRating} <AntDesign name="star" color={COLORS.starFill} /> <Text style={[styles.HotelName, { color: 'grey' }]}> reviews</Text></Text>
-                    </View>
-                    <View>
-                        <View style={{ backgroundColor: COLORS.lightGrey }}>
-                            <View style={{ flexDirection: "row", alignItems: 'center', }}>
-                                <Text style={styles.HotelDetailHotelPrice}>{RoomType?.netPrice}</Text>
-                                {/* <View style={{ paddingHorizontal: 5 }}>
+                <ScrollView style={{ height: height * 0.74 }}>
+                    <Image source={{ uri: HotelDetail?.thumbNailUrl }} style={{ height: height * 0.27, marginTop: 15 }} />
+                    <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 }}>
+                        <View>
+                            <Text style={[styles.HotelName, { color: 'black' }]}>{HotelDetail?.hotelName}</Text>
+                            <Text style={[styles.HotelName, { color: COLORS.starFill }]}>{HotelDetail?.hotelRating} <AntDesign name="star" color={COLORS.starFill} /> <Text style={[styles.HotelName, { color: 'grey' }]}> reviews</Text></Text>
+                        </View>
+                        <View>
+                            <View style={{ backgroundColor: COLORS.lightGrey }}>
+                                <View style={{ flexDirection: "row", alignItems: 'center', }}>
+                                    <Text style={styles.HotelDetailHotelPrice}>{RoomType?.netPrice}</Text>
+                                    {/* <View style={{ paddingHorizontal: 5 }}>
                                     <Text style={styles.HotelPriceList}>Rs</Text>
                                     <Text style={styles.HotelPriceList}>Per Day</Text>
                                 </View> */}
-                            </View>
-                            <Text style={styles.HotelDetailHotelTax}>including tax {RoomType?.netPrice}</Text>
+                                </View>
+                                <Text style={styles.HotelDetailHotelTax}>including tax {RoomType?.netPrice}</Text>
 
-                        </View>
-                    </View>
-                </View>
-                <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
-                    <IoniconsIcon style={style.searchPlaceIcon} name='location-outline' size={18} color={COLORS.colorTheme} />
-                    <Text style={{ width: width * 0.9, marginLeft: 5, ontSize: height * 0.017, color: COLORS.BtnColor, fontFamily: FONTS.font }}>{HotelDetail?.address}</Text>
-
-                </View>
-
-                <View >
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 20, paddingTop: 10 }}>
-                        <View>
-                            <Text style={styles.titleStyle}>Depart On</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <SimpleLineIcons name="calendar" color={COLORS.colorBtn} size={20} />
-                                <Text style={styles.text}>{moment(RoomGuestPlace?.depatureDate).format('YYYY-MM-DD')}</Text>
-                                {/* <AntDesign name="down" style={{paddingLeft:5}}/> */}
-                            </View>
-                        </View>
-                        <View>
-                            <Text style={styles.titleStyle}>Return</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <SimpleLineIcons name="calendar" color={COLORS.colorBtn} size={20} />
-                                <Text style={styles.text}>{moment(RoomGuestPlace?.arrivalDate).format('YYYY-MM-DD')}</Text>
                             </View>
                         </View>
                     </View>
-
-
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 25 }}>
-                        <View>
-                            <Text style={styles.titleStyle}>Rooms</Text>
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                <Text style={styles.text}>{RoomGuestPlace?.room}</Text>
-                            </View>
-                        </View>
-                        <View>
-                            <Text style={styles.titleStyle}>Guest</Text>
-                            <View style={{ flexDirection: 'row' }}>
-                                <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
-                                <Text style={styles.text}>{RoomGuestPlace?.Guest}</Text>
-                            </View>
-                        </View>
+                    <View style={{ flexDirection: 'row', marginLeft: 10, marginTop: 10 }}>
+                        <IoniconsIcon style={style.searchPlaceIcon} name='location-outline' size={18} color={COLORS.colorTheme} />
+                        <Text style={{ width: width * 0.9, marginLeft: 5, ontSize: height * 0.017, color: COLORS.BtnColor, fontFamily: FONTS.font }}>{HotelDetail?.address}</Text>
 
                     </View>
-                </View>
 
-                <View style={{ backgroundColor: 'white' }}>
-                    <View style={styles.couponCode}>
-                        <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
-                            <TextInput
-                                style={{ width: width * 0.75, color: 'black' }}
-                                placeholderTextColor={'grey'}
-                                placeholder='Add a coupon Code'
-                                onChangeText={e => {
-                                    if (e?.length === 0) {
-                                        setTotaFare(totalFare = { MainTotalFare: RoomType?.netPrice, SubTotalFare: totalFare?.SubTotalFare })
-                                        setDiscountPrice(discountPrice = '0')
+                    <View >
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 20, paddingTop: 10 }}>
+                            <View>
+                                <Text style={styles.titleStyle}>Depart On</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <SimpleLineIcons name="calendar" color={COLORS.colorBtn} size={20} />
+                                    <Text style={styles.text}>{moment(RoomGuestPlace?.depatureDate).format('YYYY-MM-DD')}</Text>
+                                    {/* <AntDesign name="down" style={{paddingLeft:5}}/> */}
+                                </View>
+                            </View>
+                            <View>
+                                <Text style={styles.titleStyle}>Return</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <SimpleLineIcons name="calendar" color={COLORS.colorBtn} size={20} />
+                                    <Text style={styles.text}>{moment(RoomGuestPlace?.arrivalDate).format('YYYY-MM-DD')}</Text>
+                                </View>
+                            </View>
+                        </View>
+
+
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingBottom: 25 }}>
+                            <View>
+                                <Text style={styles.titleStyle}>Rooms</Text>
+                                <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                    <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
+                                    <Text style={styles.text}>{RoomGuestPlace?.room}</Text>
+                                </View>
+                            </View>
+                            <View>
+                                <Text style={styles.titleStyle}>Guest</Text>
+                                <View style={{ flexDirection: 'row' }}>
+                                    <AntDesign name="addusergroup" size={20} color={COLORS.colorBtn} />
+                                    <Text style={styles.text}>{RoomGuestPlace?.Guest}</Text>
+                                </View>
+                            </View>
+
+                        </View>
+                    </View>
+
+                    <View style={{ backgroundColor: 'white' }}>
+                        <View style={styles.couponCode}>
+                            <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
+                                <TextInput
+                                    style={{ width: width * 0.75, color: 'black' }}
+                                    placeholderTextColor={'grey'}
+                                    placeholder='Add a coupon Code'
+                                    onChangeText={e => {
+                                        if (e?.length === 0) {
+                                            setTotaFare(totalFare = { MainTotalFare: RoomType?.netPrice, SubTotalFare: totalFare?.SubTotalFare })
+                                            setDiscountPrice(discountPrice = '0')
+                                        }
+                                        setCouponCode(couponCode = e)
                                     }
-                                    setCouponCode(couponCode = e)
-                                }
-                                }
-                            />
-                            <TouchableHighlight onPress={() => {
-                                if (couponCode?.length !== 0) {
-                                    if (totalFare?.MainTotalFare === totalFare?.SubTotalFare) {
-                                        ApplyCoupon()
+                                    }
+                                />
+                                <TouchableHighlight onPress={() => {
+                                    if (couponCode?.length !== 0) {
+                                        if (totalFare?.MainTotalFare === totalFare?.SubTotalFare) {
+                                            ApplyCoupon()
+                                        } else {
+                                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon applied' } })
+                                        }
                                     } else {
-                                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon applied' } })
+                                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Enter Coupon Code' } })
                                     }
-                                } else {
-                                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Enter Coupon Code' } })
-                                }
-                            }} underlayColor='transparent'>
-                                <Text style={styles.applyCoupon}>APPLY</Text>
-                            </TouchableHighlight>
+                                }} underlayColor='transparent'>
+                                    <Text style={styles.applyCoupon}>APPLY</Text>
+                                </TouchableHighlight>
 
+                            </View>
                         </View>
-                    </View>
 
-                    <View style={styles.bg}>
-                        <View style={styles.amountContainer}>
-                            <Text style={styles.amountName}>Base Fare</Text>
-                            <Text style={styles.priceTag}> Rs: <Text style={styles.price}>{RoomType?.netPrice}/-</Text></Text>
+                        <View style={styles.bg}>
+                            <View style={styles.amountContainer}>
+                                <Text style={styles.amountName}>Base Fare</Text>
+                                <Text style={styles.priceTag}> Rs: <Text style={styles.price}>{RoomType?.netPrice}/-</Text></Text>
+                            </View>
+                            <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
+
+
+                            <View style={styles.amountContainer}>
+                                <Text style={styles.amountName}>Discounts & {'\n'}Adjustments</Text>
+                                <Text style={styles.priceTag}> Rs : <Text style={styles.price}>{(discountPrice === '0') ? discountPrice : - discountPrice}/-</Text></Text>
+                            </View>
+                            <View style={{ backgroundColor: 'white', height: 1, opacity: 0.2, marginVertical: 7 }} />
+
+
+                            <View style={styles.total}>
+                                <Text style={styles.totalText}>Total</Text>
+                                <Text style={{ color: 'white', fontFamily: FONTS.fontBold }}>:</Text>
+                                <Text style={styles.priceTag}> Rs  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{totalFare?.MainTotalFare}</Text></Text>
+
+                            </View>
                         </View>
-                        <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
 
-                        <View style={styles.amountContainer}>
-                            <Text style={styles.amountName}>Discounts & {'\n'}Adjustments</Text>
-                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>{(discountPrice === '0') ? discountPrice : - discountPrice}/-</Text></Text>
-                        </View>
-                        <View style={{ backgroundColor: 'white', height: 1, opacity: 0.2, marginVertical: 7 }} />
+                        <View style={{ marginHorizontal: 20, marginTop: 10 }}>
 
+                            <Text style={{ fontFamily: FONTS.font, color: COLORS.BtnColorDark }}>Fill Billing Details</Text>
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
 
-                        <View style={styles.total}>
-                            <Text style={styles.totalText}>Total</Text>
-                            <Text style={{ color: 'white', fontFamily: FONTS.fontBold }}>:</Text>
-                            <Text style={styles.priceTag}> Rs  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{totalFare?.MainTotalFare}</Text></Text>
+                                <View style={styles.editTextBorder}>
+                                    <Controller
+                                        control={control}
+                                        name="Title"
+                                        rules={{
+                                            required: {
+                                                value: true,
+                                                message: 'Select Your Title',
+                                            }
+                                        }}
+                                        render={({ field: { onChange, value } }) => (
+                                            <Dropdown
+                                                showsVerticalScrollIndicator={true}
+                                                placeholder="Title"
+                                                data={selectTitle}
+                                                labelField="name"
+                                                valueField="value"
+                                                value={title}
+                                                name="Title"
+                                                {...register("Title")}
+                                                onChange={(item) => {
+                                                    onChange(item.value)
+                                                    setTitle(item.value)
+                                                }
+                                                }
 
-                        </View>
-                    </View>
+                                                selectedTextProps={{
+                                                    style: {
+                                                        width: width * 0.12,
+                                                        // fontSize: 13,
+                                                        fontWeight: '500',
+                                                        fontFamily: FONTS.font,
+                                                        letterSpacing: 0.5,
+                                                        paddingTop: 10,
+                                                        paddingHorizontal: 3,
+                                                        // width:width*0.1
+                                                        color: 'black',
+                                                    },
+                                                }}
+                                                style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
+                                                renderRightIcon={() => (
+                                                    <IoniconsIcon
+                                                        name="chevron-down"
+                                                        size={25}
+                                                        style={{ fontSize: 18, color: COLORS.colorTheme, }}
+                                                    />)}
+                                            />
+                                        )}
+                                    />
+                                    {errors.Title && (
+                                        <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.Title.message}</Text>
+                                    )}
+                                </View>
 
+                                <View style={[styles.editTextBorder, { width: width * 0.68 }]}>
+                                    <Controller
+                                        control={control}
+                                        name="FirstName"
+                                        rules={{
+                                            required: {
+                                                value: true,
+                                                message: "First Name"
+                                            }
+                                        }}
+                                        render={({ field: { onChange, value } }) => (
+                                            <TextInput
+                                                placeholderTextColor={"gray"}
+                                                // style={styles.inputeEditor}
+                                                name='FirstName'
+                                                placeholder="First Name"
+                                                keyboardType='default'
+                                                {...register("FirstName")}
+                                                value={value}
+                                                style={{ marginLeft: 10 }}
+                                                onChangeText={value => onChange(value.toLowerCase())}
+                                            />
+                                        )}
+                                    />
+                                    {errors.FirstName && (
+                                        <Text style={[styles.errormessage]}>{errors.FirstName.message}</Text>
+                                    )}
+                                </View>
 
-                    <View style={{ marginHorizontal: 20, marginTop: 10 }}>
-
-                        <Text style={{ fontFamily: FONTS.font, color: COLORS.BtnColorDark }}>Fill Billing Details</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            </View>
 
                             <View style={styles.editTextBorder}>
                                 <Controller
                                     control={control}
-                                    name="Title"
+                                    name="LastName"
                                     rules={{
                                         required: {
                                             value: true,
-                                            message: 'Select Your Title',
-                                        }
-                                    }}
-                                    render={({ field: { onChange, value } }) => (
-                                        <Dropdown
-                                            showsVerticalScrollIndicator={true}
-                                            placeholder="Title"
-                                            data={selectTitle}
-                                            labelField="name"
-                                            valueField="value"
-                                            value={title}
-                                            name="Title"
-                                            {...register("Title")}
-                                            onChange={(item) => {
-                                                onChange(item.value)
-                                                setTitle(item.value)
-                                            }
-                                            }
-
-                                            selectedTextProps={{
-                                                style: {
-                                                    width: width * 0.12,
-                                                    // fontSize: 13,
-                                                    fontWeight: '500',
-                                                    fontFamily: FONTS.font,
-                                                    letterSpacing: 0.5,
-                                                    paddingTop: 10,
-                                                    paddingHorizontal: 3,
-                                                    // width:width*0.1
-                                                    color: 'black',
-                                                },
-                                            }}
-                                            style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
-                                            renderRightIcon={() => (
-                                                <IoniconsIcon
-                                                    name="chevron-down"
-                                                    size={25}
-                                                    style={{ fontSize: 18, color: COLORS.colorTheme, }}
-                                                />)}
-                                        />
-                                    )}
-                                />
-                                {errors.Title && (
-                                    <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.Title.message}</Text>
-                                )}
-                            </View>
-
-                            <View style={[styles.editTextBorder, { width: width * 0.70 }]}>
-                                <Controller
-                                    control={control}
-                                    name="FirstName"
-                                    rules={{
-                                        required: {
-                                            value: true,
-                                            message: "First Name"
+                                            message: "Enter Your LastName"
                                         }
                                     }}
                                     render={({ field: { onChange, value } }) => (
                                         <TextInput
                                             placeholderTextColor={"gray"}
                                             // style={styles.inputeEditor}
-                                            name='FirstName'
-                                            placeholder="First Name"
+                                            name='LastName'
+                                            placeholder="Last Name"
                                             keyboardType='default'
-                                            {...register("FirstName")}
+                                            {...register("LastName")}
                                             value={value}
                                             style={{ marginLeft: 10 }}
                                             onChangeText={value => onChange(value.toLowerCase())}
                                         />
                                     )}
                                 />
-                                {errors.FirstName && (
-                                    <Text style={[styles.errormessage]}>{errors.FirstName.message}</Text>
+                                {errors.LastName && (
+                                    <Text style={[styles.errormessage]}>{errors.LastName.message}</Text>
                                 )}
                             </View>
 
-                        </View>
-
-                        <View style={styles.editTextBorder}>
-                            <Controller
-                                control={control}
-                                name="LastName"
-                                rules={{
-                                    required: {
-                                        value: true,
-                                        message: "Enter Your LastName"
-                                    }
-                                }}
-                                render={({ field: { onChange, value } }) => (
-                                    <TextInput
-                                        placeholderTextColor={"gray"}
-                                        // style={styles.inputeEditor}
-                                        name='LastName'
-                                        placeholder="Last Name"
-                                        keyboardType='default'
-                                        {...register("LastName")}
-                                        value={value}
-                                        style={{ marginLeft: 10 }}
-                                        onChangeText={value => onChange(value.toLowerCase())}
-                                    />
-                                )}
-                            />
-                            {errors.LastName && (
-                                <Text style={[styles.errormessage]}>{errors.LastName.message}</Text>
-                            )}
-                        </View>
-
-                        <View style={styles.editTextBorder}>
-                            <Controller
-                                control={control}
-                                name="Email"
-                                rules={{
-                                    required: {
-                                        value: true,
-                                        message: "Enter Your Email"
-                                    }
-                                }}
-                                render={({ field: { onChange, value } }) => (
-                                    <TextInput
-                                        placeholderTextColor={"gray"}
-                                        // style={styles.inputeEditor}
-                                        name='Email'
-                                        placeholder="Email"
-                                        keyboardType='email-address'
-                                        {...register("Email")}
-                                        value={value}
-                                        style={{ marginLeft: 10 }}
-                                        onChangeText={value => onChange(value.toLowerCase())}
-                                    />
-                                )}
-                            />
-                            {errors.Email && (
-                                <Text style={[styles.errormessage]}>{errors.Email.message}</Text>
-                            )}
-                        </View>
-
-                        <View style={styles.editTextBorder}>
-                            <Controller
-                                control={control}
-                                name="Phone"
-                                rules={{
-                                    required: {
-                                        value: true,
-                                        message: "Enter Your Phone"
-                                    }
-                                }}
-                                render={({ field: { onChange, value } }) => (
-                                    <TextInput
-                                        placeholderTextColor={"gray"}
-                                        // style={styles.inputeEditor}
-                                        name='Phone'
-                                        placeholder="Phone"
-                                        keyboardType='phone-pad'
-                                        {...register("Phone")}
-                                        value={value}
-                                        maxLength={10}
-                                        style={{ marginLeft: 10 }}
-                                        onChangeText={value => onChange(value.toLowerCase())}
-                                    />
-                                )}
-                            />
-                            {errors.Phone && (
-                                <Text style={[styles.errormessage]}>{errors.Phone.message}</Text>
-                            )}
-                        </View>
-
-                        <View style={styles.editTextBorder}>
-                            <Controller
-                                control={control}
-                                name="GST"
-                                render={({ field: { onChange, value } }) => (
-                                    <TextInput
-                                        placeholderTextColor={"gray"}
-                                        // style={styles.inputeEditor}
-                                        name='GST'
-                                        placeholder="GST No (Optional)"
-                                        keyboardType='default'
-                                        {...register("GST")}
-                                        value={value}
-                                        style={{ marginLeft: 10, }}
-                                        onChangeText={value => onChange(value.toLowerCase())}
-                                    />
-                                )}
-                            />
-                        </View>
-                    </View>
-
-
-                    <View>
-                        <View style={{ flexDirection: 'row', marginHorizontal: 20, justifyContent: 'space-between', marginTop: 5, alignItems: 'center' }}>
-                            <TouchableHighlight onPress={() => setPolicyBox(!policyBox)} underlayColor='transparent'>
-                                <View>
-                                    {policyBox === true ?
-                                        <Fontisto
-                                            name='checkbox-active'
-                                            size={15}
-                                            style={{ color: COLORS.BtnColorDark }}
+                            <View style={styles.editTextBorder}>
+                                <Controller
+                                    control={control}
+                                    name="Email"
+                                    rules={{
+                                        required: {
+                                            value: true,
+                                            message: "Enter Your Email"
+                                        }
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            placeholderTextColor={"gray"}
+                                            // style={styles.inputeEditor}
+                                            name='Email'
+                                            placeholder="Email"
+                                            keyboardType='email-address'
+                                            {...register("Email")}
+                                            value={value}
+                                            style={{ marginLeft: 10 }}
+                                            onChangeText={value => onChange(value.toLowerCase())}
                                         />
-                                        :
-                                        <Fontisto
-                                            name='checkbox-passive'
-                                            size={15}
-                                            style={{ color: COLORS.BtnColorDark }}
+                                    )}
+                                />
+                                {errors.Email && (
+                                    <Text style={[styles.errormessage]}>{errors.Email.message}</Text>
+                                )}
+                            </View>
+
+                            <View style={styles.editTextBorder}>
+                                <Controller
+                                    control={control}
+                                    name="Phone"
+                                    rules={{
+                                        required: {
+                                            value: true,
+                                            message: "Enter Your Phone"
+                                        }
+                                    }}
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            placeholderTextColor={"gray"}
+                                            // style={styles.inputeEditor}
+                                            name='Phone'
+                                            placeholder="Phone"
+                                            keyboardType='phone-pad'
+                                            {...register("Phone")}
+                                            value={value}
+                                            maxLength={10}
+                                            style={{ marginLeft: 10 }}
+                                            onChangeText={value => onChange(value.toLowerCase())}
                                         />
-                                    }
-                                </View>
-                            </TouchableHighlight>
-                            <Text style={styles.terms}>
-                                By completing this booking you agree to the booking terms and privacy policy.*
-                            </Text>
+                                    )}
+                                />
+                                {errors.Phone && (
+                                    <Text style={[styles.errormessage]}>{errors.Phone.message}</Text>
+                                )}
+                            </View>
+
+                            <View style={styles.editTextBorder}>
+                                <Controller
+                                    control={control}
+                                    name="GST"
+                                    render={({ field: { onChange, value } }) => (
+                                        <TextInput
+                                            placeholderTextColor={"gray"}
+                                            // style={styles.inputeEditor}
+                                            name='GST'
+                                            placeholder="GST No (Optional)"
+                                            keyboardType='default'
+                                            {...register("GST")}
+                                            value={value}
+                                            style={{ marginLeft: 10, }}
+                                            onChangeText={value => onChange(value.toLowerCase())}
+                                        />
+                                    )}
+                                />
+                            </View>
                         </View>
-                        {/* 
+
+
+                        <View>
+                            <View style={{ flexDirection: 'row', marginHorizontal: 20, justifyContent: 'space-between', marginTop: 5, alignItems: 'center' }}>
+                                <TouchableHighlight onPress={() => setPolicyBox(!policyBox)} underlayColor='transparent'>
+                                    <View>
+                                        {policyBox === true ?
+                                            <Fontisto
+                                                name='checkbox-active'
+                                                size={15}
+                                                style={{ color: COLORS.BtnColorDark }}
+                                            />
+                                            :
+                                            <Fontisto
+                                                name='checkbox-passive'
+                                                size={15}
+                                                style={{ color: COLORS.BtnColorDark }}
+                                            />
+                                        }
+                                    </View>
+                                </TouchableHighlight>
+                                <Text style={styles.terms}>
+                                    By completing this booking you agree to the booking terms and privacy policy.*
+                                </Text>
+                            </View>
+                            {/* 
                         <View style={{marginTop:5,flexDirection:'row',marginHorizontal:20,justifyContent:'space-between'}}>
                             <Text>Box</Text>
                                     <Text style={styles.terms}>
@@ -654,23 +654,20 @@ function HotelBooking({ route, navigation }) {
                                      </Text>
                         </View> */}
 
+                        </View>
+
                     </View>
-
-                </View>
-            </ScrollView>
+                </ScrollView>
             </KeyboardAvoidingView>
-
-
-            <View style={styles.ConfirmBtn}>
-                <TouchableHighlight underlayColor={'transparent'}
-                    onPress={handleSubmit(onSubmit)}
-                >
-                    <Text style={styles.confirmBook}>Confirm & Book</Text>
-                </TouchableHighlight>
+            <View style={{ backgroundColor:'#fff', paddingTop:10, paddingBottom:10}}>
+                <View style={styles.ConfirmBtn}>
+                    <TouchableHighlight underlayColor={'transparent'}
+                        onPress={handleSubmit(onSubmit)}
+                    >
+                        <Text style={styles.confirmBook}>Confirm & Book</Text>
+                    </TouchableHighlight>
+                </View>
             </View>
-
-
-
         </View>
     )
 }
@@ -681,8 +678,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: COLORS.borderColor,
         marginHorizontal: 20,
-        marginBottom: 10,
-        marginTop: 20,
+        // marginBottom: 10,
         borderRadius: 30,
         paddingVertical: 10,
     },
@@ -720,7 +716,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15, paddingVertical: 3, borderRadius: 22, alignItems: 'center'
     },
     totalText: { fontFamily: FONTS.fontBold, color: 'white', fontSize: height * 0.022 },
-    editTextBorder: { borderWidth: 0.7, height: 45, borderRadius: 7, borderColor: COLORS.borderColor, marginTop: 20, marginBottom: 5, backgroundColor: COLORS.AppbarColor },
+    editTextBorder: { borderWidth: 0.7, height: 50, borderRadius: 4, borderColor: COLORS.borderColor, marginTop: 10, marginBottom: 5, backgroundColor: COLORS.AppbarColor },
     terms: {
         fontFamily: FONTS.font,
         color: 'black',

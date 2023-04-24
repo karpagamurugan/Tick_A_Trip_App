@@ -54,7 +54,7 @@ const Flight = ({ navigation }) => {
   let ChildAndInfant = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }] //child and infant count
   let AdultCount = [{ value: '0' }, { value: '1' }, { value: '2' }, { value: '3' }, { value: '4' }, { value: '5' }, { value: '6' }, { value: '7' }, { value: '8' }, { value: '9' }] //adult count
 
-  let classList = [{ value: 'Business' }, { value: 'Economy' }, { value: 'Premium Economy' }];
+  let classList = [{ value: 'Business' }, { value: 'Economy' }, { value: 'Premium' }];
   const { AddTravaller_nationality, travelers_list } = useSelector((state) => state.userReducer)
 
   var tempList = []
@@ -316,13 +316,10 @@ const Flight = ({ navigation }) => {
                 </View>
 
 
-                <View>
+                <View style={{marginTop:15}}>
                   <View>
                     <View style={{ flexDirection: 'column' }}>
-
-
                       <View style={[style.frombtn, { marginHorizontal: 20, paddingLeft: 20, width: width * 0.9, justifyContent: 'flex-start', paddingVertical: 2 }]}>
-
                         <FromIcon height={22} width={22} />
                         <View style={{ paddingLeft: 15 }}>
                           <Text style={style.title}>FROM</Text>
@@ -455,7 +452,7 @@ const Flight = ({ navigation }) => {
                     </View>
 
 
-                    <View style={{ flexDirection: 'column' }}>
+                    <View style={{ flexDirection: 'column',}}>
                       <View style={[style.frombtn, { marginHorizontal: 20, paddingLeft: 20, width: width * 0.9, justifyContent: 'flex-start', paddingVertical: 2 }]}>
 
                         <ToIcon height={28} width={28} />
@@ -502,7 +499,7 @@ const Flight = ({ navigation }) => {
                               style={{
                                 color: 'black',
                                 fontFamily: FONTS.font,
-                                width: width * 0.6,
+                                width: width * 0.5,
                                 paddingTop: -15,
                                 paddingBottom: 0,
                                 // backgroundColor:'red'
@@ -605,8 +602,8 @@ const Flight = ({ navigation }) => {
                 </View>
 
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
-                  <TouchableHighlight onPress={() => setShowTraveller(!showTraveller)} underlayColor='transparent' style={{ marginRight: 10 }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal:20  }}>
+                  <TouchableHighlight onPress={() => setShowTraveller(!showTraveller)} underlayColor='transparent' style={{width:width*0.44}}>
                     <View style={[style.frombtn, { paddingVertical: 10, paddingHorizontal: 10 }]}>
                       <Ionicons name='md-person-outline' size={22} color={COLORS.textBlue} />
                       <View style={{ paddingLeft: 15 }}>
@@ -617,7 +614,7 @@ const Flight = ({ navigation }) => {
                   </TouchableHighlight>
 
 
-                  <View style={[style.frombtn, { paddingVertical: 7, paddingHorizontal: 7 }]}>
+                  <View style={[style.frombtn, { paddingVertical: 7, paddingHorizontal: 7, width:width*0.43, marginLeft:10}]}>
                     <ChairIcon height={25} width={25} />
                     <View style={{ paddingLeft: 15, flexDirection: 'column', }}>
                       <Text style={style.title}>CLASS</Text>
@@ -635,19 +632,20 @@ const Flight = ({ navigation }) => {
                           style: {
                             color: COLORS.colorText,
                             fontFamily: FONTS.mediam,
-                            fontSize: height * 0.019
+                            fontSize: height * 0.019,
+                            
                           }
                           // style: style.CommonText
                         }}
-                        style={{ paddingRight: 15, paddingLeft: 10 }}
+                        style={{ paddingRight: 10, paddingLeft: 5, }}
                       />
                     </View>
                   </View>
                 </View>
 
-                <View style={{ flexDirection: 'row', justifyContent: 'space-around' }}>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingHorizontal:20  }}>
                   <TouchableHighlight onPress={() => setFromPicker(!fromPicker)} underlayColor='transparent'>
-                    <View style={[style.frombtn, { paddingVertical: 10, paddingHorizontal: 10 }]}>
+                    <View style={[style.frombtn, { paddingVertical: 10, paddingHorizontal: 10, width:width*0.43,}]}>
                       <CalendarIcon height={22} width={22} />
                       <View style={{ paddingLeft: 15 }}>
                         <Text style={style.title}>DEPARTURE ON</Text>
@@ -656,7 +654,7 @@ const Flight = ({ navigation }) => {
                     </View>
                   </TouchableHighlight>
                   <TouchableHighlight onPress={() => (roundTrip === true) ? setToPicker(!toPicker) : null} underlayColor='transparent' style={{ opacity: (roundTrip === true) ? 1 : 0.6 }}>
-                    <View style={[style.frombtn, { paddingVertical: 10, paddingHorizontal: 10 }]}>
+                    <View style={[style.frombtn, { paddingVertical: 10, paddingHorizontal: 10, width:width*0.43, marginLeft:10}]}>
                       <CalendarIcon height={22} width={22} />
                       <View style={{ paddingLeft: 15 }}>
                         <Text style={style.title}>RETURN ON</Text>
@@ -755,7 +753,7 @@ const style = StyleSheet.create({
     borderRadius: 5,
     borderColor: COLORS.AppbarColor,
     justifyContent: 'center',
-    marginTop: 20,
+    marginTop: 15,
     paddingVertical: 0,
 
   },

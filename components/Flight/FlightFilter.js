@@ -252,6 +252,9 @@ function FlightFilter(props) {
                             <TouchableHighlight style={styles.filterbtns} onPress={() =>ClearFilter()} underlayColor='#BBBBBB66'>
                                 <Text style={styles.filterbtnText}>Clear</Text>
                             </TouchableHighlight>
+                            <TouchableHighlight style={styles.filterbtns} onPress={() =>setShowFilter(false)} underlayColor='#BBBBBB66'>
+                                <Text style={styles.filterbtnText}>close</Text>
+                            </TouchableHighlight>
                             <TouchableHighlight style={styles.filterbtns} onPress={() => onAppliedClick(multiSliderValue[0],multiSliderValue[1],selectAirline,cabin[cabinIndex].name,selectFlightStops)} underlayColor='#1B5CB74D'>
                                 <Text style={styles.filterbtnText}>Apply</Text>
                             </TouchableHighlight>

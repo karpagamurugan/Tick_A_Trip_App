@@ -57,6 +57,7 @@ const style = StyleSheet.create({
     hotelListLocName: {
         fontFamily: FONTS.mediam,
         fontSize: 13,
+        flex:1
     },
     ListHotelName: {
         fontFamily: FONTS.fontSemi,

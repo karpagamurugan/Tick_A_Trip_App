@@ -22,7 +22,7 @@ function BookingConfirm() {
 
         <View style={{ backgroundColor: 'white' }}>
             {/* <Text>Booking Confirm</Text> */}
-            <Appbar title={'Your ticket information'} />
+            <Appbar title={'Your booking information'} />
             <View style={{height:height *0.83}}>
             <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                  <View >

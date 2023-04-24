@@ -39,7 +39,7 @@ export default function Appbar({ title }) {
                                 <BackArrow height={20} width={20} />
                             </View>
                         </TouchableHighlight>
-                        <Text style={{ fontFamily: FONTS.fontBold, color: COLORS.colorText, fontSize: height * 0.026 }}>{title}</Text>
+                        <Text style={{ fontFamily: FONTS.fontBold, color: COLORS.colorText, fontSize: height * 0.024 }}>{title}</Text>
                         <View style={{ width: 10 }} />
                     </View>
             }
