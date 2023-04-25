@@ -154,9 +154,9 @@ const getFareRules = function* (data) {
 }
 
 const setRevalidate = function* (data) {
-    const { payload } = data
+    const { payload ,navigation,flightInfo,itemInfo} = data
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
-
+    console.log('payload',payload)
     try {
         const result = yield call(() =>
             axios.post(
@@ -169,9 +169,10 @@ const setRevalidate = function* (data) {
             }
             )
         );
-        console.log('Revalidation',result?.data)
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_REVALIDATE, payload: result?.data?.message })
+            navigation.navigate('flightBooking',{flightInfo:flightInfo,itemInfo: itemInfo})
+
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
         } else {

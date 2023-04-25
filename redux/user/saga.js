@@ -403,10 +403,12 @@ const getSearchTraveller = function* (data) {
             }
             )
         );
+        console.log('res..',result?.data)
         if (payload.type === 'country-code') {
             yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_CODE, payload: result.data });
 
         } else if (payload.type === 'issuing-country') {
+            console.log('if...')
             yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_ISSUING, payload: result.data });
 
         } else if (payload.type === 'nationality') {

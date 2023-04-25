@@ -133,8 +133,12 @@ function timeConvert(n) {
                 <View style={{ width: 1, height: height * 0.06, backgroundColor: 'grey' }} />
                 <View style={styles.booknowBtn}>
                     <TouchableHighlight underlayColor={'transparent'} onPress={() =>{
-                        dispatch({type:actions.SET_REVALIDATE,payload:{'fare_source_code':item?.FareSourceCode}})
-                         navigation.navigate('flightBooking',{flightInfo:props?.prefs,itemInfo: item})
+                        dispatch({type:actions.SET_REVALIDATE,
+                            payload:{'fare_source_code':item?.FareSourceCode},
+                            navigation:navigation,
+                            flightInfo:props?.prefs,
+                            itemInfo:item
+                        })
                          }}>
                         <Text style={styles.booknowText}>BOOK NOW</Text>
                     </TouchableHighlight>

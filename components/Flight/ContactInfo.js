@@ -88,7 +88,7 @@ const ContactInfo = (props) => {
                                         keyboardType='default'
                                         {...register("Name")}
                                         value={value}
-                                        onChangeText={value => onChange(value.toLowerCase())}
+                                        onChangeText={value => onChange(value)}
                                     />
                                 )}
                             />
@@ -114,7 +114,7 @@ const ContactInfo = (props) => {
                                         keyboardType='email-address'
                                         {...register("Email")}
                                         value={value}
-                                        onChangeText={value => onChange(value.toLowerCase())}
+                                        onChangeText={value => onChange(value)}
                                     />
                                 )}
                             />
@@ -149,7 +149,7 @@ const ContactInfo = (props) => {
                                         keyboardType='phone-pad'
                                         {...register("Phone")}
                                         value={value}
-                                        onChangeText={value => onChange(value.toLowerCase())}
+                                        onChangeText={value => onChange(value)}
                                         maxLength={10}
                                     />
                                 )}
@@ -171,7 +171,7 @@ const ContactInfo = (props) => {
                                         keyboardType='default'
                                         {...register("GST")}
                                         value={value}
-                                        onChangeText={value => onChange(value.toLowerCase())}
+                                        onChangeText={value => onChange(value)}
                                     />
                                 )}
                             />
@@ -335,7 +335,7 @@ const ContactInfo = (props) => {
                                         keyboardType='number-pad'
                                         {...register("PostalCode")}
                                         value={value}
-                                        onChangeText={value => onChange(value.toLowerCase())}
+                                        onChangeText={value => onChange(value)}
                                     
                                     />
                                 )}

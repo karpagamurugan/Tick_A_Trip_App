@@ -698,7 +698,8 @@ const Flight = ({ navigation }) => {
             onConfirm={(date) => {
               setFromPicker(!fromPicker)
               setFromDate(fromDate = date)
-              setTodate(ToDate=moment(fromDate).add(1, 'day'))
+              const newFromDate = new Date(moment(fromDate).add(1, 'day'))
+              setTodate(ToDate=newFromDate)
             }}
             onCancel={() => {
               setFromPicker(!fromPicker)
@@ -711,7 +712,7 @@ const Flight = ({ navigation }) => {
             open={toPicker}
             date={fromDate}
             mode="date"
-            minimumDate={moment(ToDate)}
+            minimumDate={ToDate}
             onConfirm={(date) => {
               setToPicker(!toPicker)
               setTodate(ToDate = date)

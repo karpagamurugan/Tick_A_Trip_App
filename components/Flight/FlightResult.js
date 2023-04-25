@@ -422,7 +422,7 @@ export default function FlightResult({ navigation, route }) {
                                                                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} key={ind}>
                                                                         <View style={{ alignItems: 'center' }}>
 
-                                                                            <Text style={styles.Textlite}> {data.flights[0].departureLocation}(
+                                                                            <Text style={styles.Textlite}> {data.flights[0].departureLocation} {'\n'}(
                                                                                 {
                                                                                     data.flights[0].flightList
                                                                                         .DepartureAirportLocationCode
@@ -472,7 +472,7 @@ export default function FlightResult({ navigation, route }) {
                                                                                 data.flights[
                                                                                    0
                                                                                 ].arrivalLocation
-                                                                            } (
+                                                                            } {'\n'} (
                                                                                 {
                                                                                     data.flights[
                                                                                         0
@@ -572,14 +572,13 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     Text: { fontFamily: FONTS.fontSemi, color: COLORS.colorText, fontSize: height * 0.012 },
-    Textlite: { fontFamily: FONTS.font, color: 'grey', fontSize: height * 0.012 },
+    Textlite: { fontFamily: FONTS.font, color: 'grey', fontSize: height * 0.012, },
     booknowText: {
         color: 'white',
         fontFamily: FONTS.mediam,
         paddingVertical: 3,
         paddingHorizontal: 10,
         fontSize: height * 0.014
-
     },
     booknowBtn: { alignItems: 'center', backgroundColor: COLORS.textBlue, borderRadius: 30 },
     priceText: {
