@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React from 'react';
-import { View, Text, Dimensions, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, TouchableHighlight, TouchableOpacity } from 'react-native';
 import EditIcon from '../../Assert/Images/icon/edit.svg';
 import BackArrow from '../../Assert/Images/icon/backward-arrow.svg';
 import COLORS from '../constants/color';
@@ -10,7 +10,7 @@ import Arrow from '../../Assert/Images/icon/backward-arrow-2.svg';
 import Hotel from '../../Assert/Icons/hotel.svg';
 import { useSelector } from 'react-redux';
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
-
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
@@ -18,81 +18,90 @@ let height = Dimensions.get('window').height;
 export default function HotelAppbar({ title }) {
 
     const navigation = useNavigation();
+    const { hotel_Coupons } = useSelector((state) => state.userReducer)
     const { RoomGuestPlace } = useSelector((state) => state.HotelReducer)
 
     return (
         <View>
 
-          { 
-          (title === 'Hotel')?
-          <View style={[styles.appbar,{justifyContent:'flex-start',width:width*0.85, borderTopRightRadius: 40,
-          borderBottomRightRadius: 40,}]}>
-                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
-                        {/* <BackArrow height={18} width={18} /> */}
-                        <MaterialIcon name='arrow-back-ios' color={COLORS.borderColor} size={height * 0.027} style={{ marginLeft: 8 }} />
+            {
+                (title === 'Hotel') ?
+                    <View style={[styles.appbar, {
+                        justifyContent: 'flex-start', width: width * 0.85, borderTopRightRadius: 40,
+                        borderBottomRightRadius: 40,
+                    }]}>
+                        <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
+                            {/* <BackArrow height={18} width={18} /> */}
+                            <MaterialIcon name='arrow-back-ios' color={COLORS.borderColor} size={height * 0.027} style={{ marginLeft: 8 }} />
 
-                </TouchableHighlight>
-                <View style={{width:10}}/>
-                   <View style={{alignItems:'center'}}>
-                   <Hotel height={30} width={30}/>
-                   <Text style={{fontSize:height*0.013,color:COLORS.BtnColorDark,fontFamily:FONTS.font}}>Hotels</Text>
-                   </View>
-                {/* <View style={styles.searchCity}>
+                        </TouchableHighlight>
+                        <View style={{ width: 10 }} />
+                        <View style={{ alignItems: 'center' }}>
+                            <Hotel height={30} width={30} />
+                            <Text style={{ fontSize: height * 0.013, color: COLORS.BtnColorDark, fontFamily: FONTS.font }}>Hotels</Text>
+                        </View>
+                        {/* <View style={styles.searchCity}>
                     <Text style={styles.searchIn}>{RoomGuestPlace?.Place}</Text>
                     <Text style={styles.searchCount}>{RoomGuestPlace?.room} , { RoomGuestPlace?.Guest}</Text>
                 </View> */}
-                 <View style={{width:10}}/>
+                        <View style={{ width: 10 }} />
 
-                <Text style={{fontFamily:FONTS.fontBold,color:COLORS.bg,fontSize:height*0.03,paddingLeft:20}}>{title}</Text>
-                <View/>
-            </View>
-          : <View style={styles.appbar}>
-                <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
-                        <BackArrow height={18} width={18} />
-                </TouchableHighlight>
-                   <View style={{alignItems:'center'}}>
-                   <Hotel height={30} width={30}/>
-                   <Text style={{fontSize:height*0.013,color:COLORS.BtnColorDark,fontFamily:FONTS.font}}>Hotels</Text>
-                   </View>
-                <View style={styles.searchCity}>
-                    <Text style={styles.searchIn}>{RoomGuestPlace?.Place}</Text>
-                    <Text style={styles.searchCount}>{RoomGuestPlace?.room} , { RoomGuestPlace?.Guest}</Text>
-                </View>
-                <View/>
-            </View>}
+                        <Text style={{ fontFamily: FONTS.fontBold, color: COLORS.bg, fontSize: height * 0.03, paddingLeft: 20 }}>{title}</Text>
+                        <View />
+                    </View>
+                    : <View style={styles.appbar}>
+                        <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
+                            <BackArrow height={18} width={18} />
+                        </TouchableHighlight>
+                        <View style={{ alignItems: 'center' }}>
+                            <Hotel height={30} width={30} />
+                            <Text style={{ fontSize: height * 0.013, color: COLORS.BtnColorDark, fontFamily: FONTS.font }}>Hotels</Text>
+                        </View>
+                        <View style={styles.searchCity}>
+                            <Text style={styles.searchIn}>{RoomGuestPlace?.Place}</Text>
+                            <Text style={styles.searchCount}>{RoomGuestPlace?.room} , {RoomGuestPlace?.Guest}</Text>
+                        </View>
+                        {(title === 'Hotel Booking') ?
+                            <TouchableOpacity onPress={() => navigation.navigate('offers')}>
+                                <MaterialCommunityIcons name='brightness-percent' size={25} color='#4C94F2' />
+                                {(hotel_Coupons?.message.length === 0) ? <></> : <View style={styles.offerDot}></View>}
+                            </TouchableOpacity> : <></> }
+                        <View />
+                    </View>}
         </View>
     )
 }
 
 
 const styles = StyleSheet.create({
-    searchCount:{
-        fontFamily:FONTS.font,
-        color:'gray',
-        fontSize:13,
+    searchCount: {
+        fontFamily: FONTS.font,
+        color: 'gray',
+        fontSize: 13,
     },
-    searchIn:{
-        fontFamily:FONTS.fontSemi,
-        alignSelf:'center',
-        letterSpacing:0.5,
-        color:COLORS.colorText,
-        lineHeight:18,
+    searchIn: {
+        fontFamily: FONTS.fontSemi,
+        alignSelf: 'center',
+        letterSpacing: 0.5,
+        color: COLORS.colorText,
+        lineHeight: 18,
     },
-    searchCity:{
-        marginRight:width * 0.10,
-        alignSelf:'center',
-        backgroundColor:'#fff',
-        paddingVertical:5,
-        paddingHorizontal:35,
-        borderRadius:100,
+    searchCity: {
+        marginRight: width * 0.10,
+        alignSelf: 'center',
+        backgroundColor: '#fff',
+        paddingVertical: 5,
+        paddingHorizontal: 35,
+        borderRadius: 100,
     },
     iconBack: {
-         backgroundColor: 'white',
-          borderRadius: 100,
-           width: 45, height: 45,
-            alignItems: 'center', 
-            justifyContent: 'center',
-             elevation: 3 },
+        backgroundColor: 'white',
+        borderRadius: 100,
+        width: 45, height: 45,
+        alignItems: 'center',
+        justifyContent: 'center',
+        elevation: 3
+    },
     appbar: {
         // width: width * 0.9,
         flexDirection: 'row',
@@ -114,4 +123,12 @@ const styles = StyleSheet.create({
 
         // elevation: 24,
     },
+    offerDot: {
+        width: 10,
+        height: 10,
+        backgroundColor: '#cc3300',
+        borderRadius: 100,
+        position: 'absolute',
+        right: 0,
+    }
 })

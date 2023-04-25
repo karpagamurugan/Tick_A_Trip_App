@@ -33,13 +33,15 @@ const AddTravellerForm = ({ navigation, route }) => {
     var [placeholderCountryCode, setPlaceholderCountryCode] = useState();
     var [placeholderIssuing, setPlaceholderIssuing] = useState();
     var [placeholderNationality, setPlaceholderNationality] = useState();
-    var [travellerId, setTravellerId]=useState();
+    var [travellerId, setTravellerId] = useState();
     const { AddTravaller_form, AddTravaller_country_code, AddTravaller_country_issuing, AddTravaller_nationality } = useSelector((state) => state.userReducer);
     var [travelRec, setTravelRec] = useState({ CountryCode: false, IssuingName: false, Nationality: false })
     var [selectedCountryCode, setSelectedCountryCode] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
     var [selectedIssuing, setSelectedIssuing] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
     var [selectedNationality, setSelectedNationality] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
     var [getSelectId, setGetSelectId] = useState({ CountryCode: '', IssuingName: '', Nationality: '', })
+    const [minAgeLimit, setMinAgeLimit] = useState('');
+    const [maxAgeLimit, setMaxAgeLimit] = useState('');
 
 
     const handleDebugger = useCallback(
@@ -83,7 +85,88 @@ const AddTravellerForm = ({ navigation, route }) => {
         handleDebugger()
     }
 
+    const AdultTypes = (item) => {
+        console.log('dhfs', item)
+        if(item === "Adult"){
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear() - 14;
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            today = yyyy + '-' + mm + '-' + dd;
+            // const str = "2020-06-11";
+            const dateadult = new Date(today);
+            // console.log('date1', date1)
+            setDobDate(dateadult)
+            setMaxAgeLimit(dateadult);
+            setMinAgeLimit(null);
 
+        }else if(item === "Child") {
+            var todayCM = new Date();
+            var ddCM = todayCM.getDate();
+            var mmCM = todayCM.getMonth() + 1;
+            var yyyyCM = todayCM.getFullYear() - 14;
+            if (ddCM < 10) {
+                ddCM = '0' + ddCM
+            }
+            if (mmCM < 10) {
+                mmCM = '0' + mmCM
+            }
+            todayCM = yyyyCM + '-' + mmCM + '-' + ddCM;
+            const dateChildMin = new Date(todayCM);
+            console.log('dateChildMin',dateChildMin)
+            setDobDate(dateChildMin)
+            setMinAgeLimit(dateChildMin)
+     
+            var todayCMX = new Date();
+            var ddCMX = todayCMX.getDate();
+            var mmCMX = todayCMX.getMonth() + 1;
+            var yyyyCMX = todayCMX.getFullYear() - 2;
+            if (ddCMX < 10) {
+                ddCMX = '0' + ddCMX
+            }
+            if (mmCMX < 10) {
+                mmCMX = '0' + mmCMX
+            }
+            todayCMX = yyyyCMX + '-' + mmCMX + '-' + ddCMX;
+            const dateChildMax = new Date(todayCMX);
+            console.log('dateChildMax',dateChildMax)
+            setDobDate(dateChildMax)
+            setMaxAgeLimit(dateChildMax)
+
+        }else if(item === "Infant"){
+            console.log('infantt')
+            var todayI = new Date();
+            var ddI = todayI.getDate();
+            var mmI = todayI.getMonth() + 1;
+            var yyyyI = todayI.getFullYear() - 2;
+            if (ddI < 10) {
+                ddI = '0' + ddI
+            }
+            if (mmI < 10) {
+                mmI = '0' + mmI
+            }
+            todayI = yyyyI + '-' + mmI + '-' + ddI;
+            const date4 = new Date(todayI);
+            // setDobDate(date4)
+            setMinAgeLimit(date4)
+            setMaxAgeLimit(new Date())
+        }
+    }
+    // console.log('minAgeLimit',minAgeLimit)
+    // console.log('maxAgeLimit',maxAgeLimit)
+    useEffect(() => {
+        // if () {
+            
+        // }
+    }, [])
+    console.log('ma', maxAgeLimit)
+    console.log('ma21', minAgeLimit)
     const selectTitleName = [
         { name: 'Mr', value: 'Mr' },
         { name: 'Miss', value: 'Miss' },
@@ -123,18 +206,18 @@ const AddTravellerForm = ({ navigation, route }) => {
                 issue_country: getSelectId?.IssuingName,
                 nationality: getSelectId?.Nationality,
             })
-          
+
 
             if (AddTravaller_form.find((List) => List?.email === data?.email) && ((List) => List?.mobileNumber === data?.mobileNumber)) {
-            
-                 dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Email already exist'} })
+
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Email already exist' } })
 
             } else {
                 dispatch({
                     type: userAction.GET_ADD_TRAVELLER_VALUE,
-                    payload: {data:listData,navigation:navigation}
+                    payload: { data: listData, navigation: navigation }
                 })
-    
+
                 // dispatch({
                 //     type: userAction.GET_ADD_TRAVELLER_FORM, payload: [...listData]
                 // })
@@ -154,25 +237,25 @@ const AddTravellerForm = ({ navigation, route }) => {
 
     const travellerUpdateBtn = (data) => {
         var updateList = {
-            traveler_id:travellerId,
+            traveler_id: travellerId,
             title: data?.nametitle,
             first_name: data?.firstName,
             last_name: data?.lastName,
-            gender:data?.selectedgender,
-            type:data?.selectedType,
+            gender: data?.selectedgender,
+            type: data?.selectedType,
             email: data?.email,
             phone: data?.mobileNumber,
             dob: data?.dob,
             area_code: data?.phoneCode,
-            passport:data?.passportNumber,
+            passport: data?.passportNumber,
             nationality: getSelectId?.Nationality,
             country_code: getSelectId?.CountryCode,
             issue_country: getSelectId?.IssuingName,
-            expire_date:data?.exdate,
+            expire_date: data?.exdate,
         }
         dispatch({
             type: userAction.SET_FLIGHT_UPDATE_TRAVELLER,
-            payload:{data:updateList,navigation:navigation}
+            payload: { data: updateList, navigation: navigation }
         })
     }
 
@@ -192,7 +275,7 @@ const AddTravellerForm = ({ navigation, route }) => {
             const selectedCountryCode = data?.country_code.country_code + '-' + data.country_code.name
             const selectedIssuing = data.issue_country.name
             const selectedNationality = data.nationality.name
-            const travellerId =data?.id
+            const travellerId = data?.id
             setTitle(nametitle)
             setSelectType(type)
             setGender(selectedgender)
@@ -201,7 +284,7 @@ const AddTravellerForm = ({ navigation, route }) => {
             setPlaceholderCountryCode(selectedCountryCode)
             setPlaceholderIssuing(selectedIssuing);
             setPlaceholderNationality(selectedNationality);
-            setGetSelectId({ CountryCode:data?.country_code?.id, IssuingName:data?.issue_country?.id, Nationality:data?.nationality?.id,})
+            setGetSelectId({ CountryCode: data?.country_code?.id, IssuingName: data?.issue_country?.id, Nationality: data?.nationality?.id, })
             setTravellerId(travellerId)
             reset({
                 firstName: firstName,
@@ -366,6 +449,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                                             onChange={(item) => {
                                                 onChange(item.value)
                                                 setSelectType(item.value)
+                                                AdultTypes(item.value)
                                             }}
                                             selectedTextProps={{
                                                 style: {
@@ -967,6 +1051,8 @@ const AddTravellerForm = ({ navigation, route }) => {
                     </View>
                 </ScrollView>
                 <Controller
+                    // min={maxAgeLimit}
+                    // max={maxAgeLimit}
                     control={control}
                     name="dob"
                     rules={{
@@ -977,6 +1063,9 @@ const AddTravellerForm = ({ navigation, route }) => {
                     }}
                     render={({ field: { onChange, value } }) => (
                         <DatePicker
+                            maximumDate={maxAgeLimit}
+                            minimumDate={minAgeLimit}
+                            // minimumDate={maxAgeLimit}   
                             modal
                             open={open}
                             date={dobDate}
@@ -992,12 +1081,13 @@ const AddTravellerForm = ({ navigation, route }) => {
                             onCancel={() => {
                                 setOpen(!open);
                             }}
+
                         />
                     )}
                 />
                 <Controller
                     control={control}
-                    name="dob"
+                    name="exdate"
                     rules={{
                         required: {
                             value: true,
@@ -1006,6 +1096,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                     }}
                     render={({ field: { onChange, value } }) => (
                         <DatePicker
+
                             modal
                             mode="date"
                             open={passportExDateopen}
@@ -1052,8 +1143,8 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         paddingTop: 2,
     },
-    inputeEditor:{
-        color:'black'
+    inputeEditor: {
+        color: 'black'
     }
 })
 

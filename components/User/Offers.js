@@ -11,22 +11,37 @@ import FeatherIcon from 'react-native-vector-icons/Feather';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome5';
 import HotelOffer from '../../Assert/Icons/hotel_offer.png';
 import FlightOffer from '../../Assert/Icons/flight_offer.png';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
-function Offers() {
+function Offers({ route, navigation, props }) {
+    // const { type } = props
+    // console.log('type', route.params.type)
     const TEXT_LENGTH = 40
     const TEXT_HEIGHT = 14
     const OFFSET = TEXT_LENGTH / 2 - TEXT_HEIGHT / 2
     const dispatch = useDispatch()
-    const { flight_Coupons, hotel_Coupons,isLogin } = useSelector((state) => state.userReducer)
-
+    const { flight_Coupons, hotel_Coupons, isLogin } = useSelector((state) => state.userReducer)
     useEffect(() => {
-            dispatch({ type: userAction.GET_ALL_FLIGHT_COUPON })
-            dispatch({ type: userAction.GET_ALL_HOTEL_COUPON })
-       
+        dispatch({ type: userAction.GET_ALL_FLIGHT_COUPON })
+        dispatch({ type: userAction.GET_ALL_HOTEL_COUPON })
+
     }, [])
+    // const copyCoupon = async (item) => {
+    //     try {
+    //         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Code Copied to Clipboard' } })
+    //         Clipboard.setString(item?.coupon_code)
+    //         // const text = await Clipboard.getString()
+    //         // AsyncStorage.setItem('ClipboardCoupon',text)
+    //         // console.log('try test')
+    //         // navigation.goBack()
+    //     }catch(e){
+    //         console.log(e)
+    //         //  console.log('catch test')       
+    //     }
+    // }
 
     return (
         <View>
@@ -40,7 +55,7 @@ function Offers() {
                                     <View key={index} >
                                         <View style={style.cardView}>
                                             <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
-                                                <View key={index} style={[style.discountText, { backgroundColor: index % 2 ==0 ? '#0041f2':'#71b7e3' }]}>
+                                                <View key={index} style={[style.discountText, { backgroundColor: index % 2 == 0 ? '#0041f2' : '#71b7e3' }]}>
                                                     <Text style={[style.verticalText]}>t</Text>
                                                     <Text style={[style.verticalText]}>n</Text>
                                                     <Text style={[style.verticalText]}>u</Text>
@@ -61,10 +76,8 @@ function Offers() {
                                                         </View>
                                                         <TouchableHighlight
                                                             underlayColor={false}
-                                                            onPress={() => {
-                                                                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Code Copied to Clipboard' } })
-                                                                Clipboard.setString(item?.coupon_code)
-                                                            }}>
+                                                            onPress={() => {dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Code Copied to Clipboard' } })
+                                                            Clipboard.setString(item?.coupon_code)}}>
                                                             <FeatherIcon name="copy" size={22} style={{ color: COLORS.textBlue, }} />
                                                         </TouchableHighlight>
                                                     </View>
@@ -94,7 +107,7 @@ function Offers() {
                                     <View style={style.cardView}>
                                         <View style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center' }}>
 
-                                            <View key={index} style={[style.discountText, { backgroundColor: index % 2 ==0 ? '#10ab87':'#0b7d97' }]}>
+                                            <View key={index} style={[style.discountText, { backgroundColor: index % 2 == 0 ? '#10ab87' : '#0b7d97' }]}>
                                                 <Text style={[style.verticalText]}>t</Text>
                                                 <Text style={[style.verticalText]}>n</Text>
                                                 <Text style={[style.verticalText]}>u</Text>
@@ -141,7 +154,7 @@ function Offers() {
                     }
                 </View>
             </View>
-        </View>
+        </View >
     )
 }
 

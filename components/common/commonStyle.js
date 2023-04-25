@@ -122,6 +122,7 @@ const style = StyleSheet.create({
         shadowOpacity: 0.58,
         shadowRadius: 16.00,
         elevation: 15,
+        marginTop:20,
     },
     RoomTitle: {
         fontFamily: FONTS.fontBold,

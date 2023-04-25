@@ -23,13 +23,19 @@ import IoniconsIcon from 'react-native-vector-icons/Ionicons'
 import CommonAction from '../../redux/common/actions';
 import hotelActions from "../../redux/Hotel/actions";
 import style from "../common/commonStyle";
+import Clipboard from "@react-native-clipboard/clipboard";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
 
-function HotelBooking({ route, navigation }) {
+function HotelBooking({ route, navigation, props }) {
+
+    // var copyCouponKey = props.couponCopyText
+    // console.log('copyCouponKey',copyCouponKey)
+
     const dispatch = useDispatch()
     const [HotelDetail, setHotelDetail] = useState(route?.params?.detail)
     const [RoomType, setRoomType] = useState(route?.params?.value)
@@ -44,7 +50,16 @@ function HotelBooking({ route, navigation }) {
     var [discountPrice, setDiscountPrice] = useState('0')
 
     const [title, setTitle] = useState();
+    // async function copyCouponKey() {
+    //     // const text = await Clipboard.getString()
+    //     console.log('text1111', text)
+    // }
+    // console.log('dkjsf', hotel_Coupons?.message.length)
+    useEffect(() => {
+        // copyCouponKey()
+        AsyncStorage.getItem('ClipboardCoupon').then((res) => setCouponCode(res))
 
+    }, [])
     const onSubmit = (data) => {
         if (policyBox !== true) {
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Accept the Privacy Policy' } })
@@ -111,8 +126,6 @@ function HotelBooking({ route, navigation }) {
         }
     }
     const PaymentGateWay = () => {
-
-
         var options = {
             key: RAZOR_KEY,
             key_secret: RAZOR_KEY_SECRET,
@@ -368,9 +381,9 @@ function HotelBooking({ route, navigation }) {
 
                     <View style={{ backgroundColor: 'white' }}>
                         <View style={styles.couponCode}>
-                            <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
+                            <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center', paddingHorizontal:10 }}>
                                 <TextInput
-                                    style={{ width: width * 0.75, color: 'black' }}
+                                    style={{ width: width * 0.60, color: 'black' }}
                                     placeholderTextColor={'grey'}
                                     placeholder='Add a coupon Code'
                                     onChangeText={e => {
@@ -382,19 +395,29 @@ function HotelBooking({ route, navigation }) {
                                     }
                                     }
                                 />
-                                <TouchableHighlight onPress={() => {
-                                    if (couponCode?.length !== 0) {
-                                        if (totalFare?.MainTotalFare === totalFare?.SubTotalFare) {
-                                            ApplyCoupon()
-                                        } else {
-                                            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon applied' } })
-                                        }
-                                    } else {
-                                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Enter Coupon Code' } })
-                                    }
-                                }} underlayColor='transparent'>
-                                    <Text style={styles.applyCoupon}>APPLY</Text>
-                                </TouchableHighlight>
+                                {/* <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }} > */}
+                                    {/* <TouchableHighlight
+                                        style={styles.offersStyl}
+                                        onPress={() => navigation.navigate('offers', { type: 'bookingType' })} >
+                                        <View>
+                                            <Text style={{ fontSize: height * 0.015, fontFamily: FONTS.fontBold, color: COLORS.textBlue }}>OFFERS</Text>
+                                        </View>
+                                    </TouchableHighlight> */}
+
+                                    <TouchableHighlight onPress={() => {
+                                            if (couponCode?.length !== 0) {
+                                                if (totalFare?.MainTotalFare === totalFare?.SubTotalFare) {
+                                                    ApplyCoupon()
+                                                } else {
+                                                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon applied' } })
+                                                }
+                                            } else {
+                                                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Enter Coupon Code' } })
+                                            }
+                                        }} underlayColor='transparent'>
+                                        <Text style={styles.applyCoupon}>APPLY</Text>
+                                    </TouchableHighlight>
+                                {/* </View> */}
 
                             </View>
                         </View>
@@ -502,7 +525,7 @@ function HotelBooking({ route, navigation }) {
                                                 {...register("FirstName")}
                                                 value={value}
                                                 style={{ marginLeft: 10 }}
-                                                onChangeText={value => onChange(value.toLowerCase())}
+                                                onChangeText={value => onChange(value)}
                                             />
                                         )}
                                     />
@@ -533,7 +556,7 @@ function HotelBooking({ route, navigation }) {
                                             {...register("LastName")}
                                             value={value}
                                             style={{ marginLeft: 10 }}
-                                            onChangeText={value => onChange(value.toLowerCase())}
+                                            onChangeText={value => onChange(value)}
                                         />
                                     )}
                                 />
@@ -562,7 +585,7 @@ function HotelBooking({ route, navigation }) {
                                             {...register("Email")}
                                             value={value}
                                             style={{ marginLeft: 10 }}
-                                            onChangeText={value => onChange(value.toLowerCase())}
+                                            onChangeText={value => onChange(value)}
                                         />
                                     )}
                                 />
@@ -592,7 +615,7 @@ function HotelBooking({ route, navigation }) {
                                             value={value}
                                             maxLength={10}
                                             style={{ marginLeft: 10 }}
-                                            onChangeText={value => onChange(value.toLowerCase())}
+                                            onChangeText={value => onChange(value)}
                                         />
                                     )}
                                 />
@@ -615,7 +638,7 @@ function HotelBooking({ route, navigation }) {
                                             {...register("GST")}
                                             value={value}
                                             style={{ marginLeft: 10, }}
-                                            onChangeText={value => onChange(value.toLowerCase())}
+                                            onChangeText={value => onChange(value)}
                                         />
                                     )}
                                 />
@@ -659,7 +682,7 @@ function HotelBooking({ route, navigation }) {
                     </View>
                 </ScrollView>
             </KeyboardAvoidingView>
-            <View style={{ backgroundColor:'#fff', paddingTop:10, paddingBottom:10}}>
+            <View style={{ backgroundColor: '#fff', paddingTop: 10, paddingBottom: 10 }}>
                 <View style={styles.ConfirmBtn}>
                     <TouchableHighlight underlayColor={'transparent'}
                         onPress={handleSubmit(onSubmit)}
@@ -702,7 +725,7 @@ const styles = StyleSheet.create({
     },
     text: { fontFamily: FONTS.fontBold, paddingLeft: 10, color: COLORS.colorText, fontSize: height * 0.017 },
     couponCode: {
-        borderRadius: 7, borderWidth: 0.9, borderColor: COLORS.borderColor, paddingVertical: 0, paddingHorizontal: 7,
+        borderRadius: 5, borderWidth: 0.9, borderColor: COLORS.borderColor,
         marginHorizontal: 15, marginTop: 10, backgroundColor: COLORS.AppbarColor, elevation: 1
     },
     applyCoupon: { fontFamily: FONTS.fontBold, color: COLORS.textBlue },
@@ -734,5 +757,16 @@ const styles = StyleSheet.create({
     titleStyle: {
         fontFamily: FONTS.font,
         color: COLORS.TextDarkGrey
-    }
+    },
+    // offersStyl: {
+    //     paddingHorizontal: 10,
+    //     backgroundColor: '#1B5CB74D',
+    //     paddingVertical: 16,
+
+    // },
+    // applyStyl: {
+    //     paddingHorizontal: 10,
+    //     backgroundColor: '#3D8EFF91',
+    //     paddingVertical: 15
+    // }
 })

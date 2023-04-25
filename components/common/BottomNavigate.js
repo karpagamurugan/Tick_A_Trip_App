@@ -50,7 +50,7 @@ function HomeTab() {
             <Stack.Screen name="flightBooking" component={FlightBooking} options={{ headerShown: false }} />
             <Stack.Screen name="FlightDetails" component={FlightDetails} options={{ headerShown: false }} />
             <Stack.Screen name="BookingConfirm" component={BookingConfirm} options={{ headerShown: false }} />
-
+            <Stack.Screen name="offers" component={Offers} options={{ headerShown: false }} />
         </Stack.Navigator>
     )
 }
