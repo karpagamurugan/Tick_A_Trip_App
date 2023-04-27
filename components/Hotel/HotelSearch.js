@@ -32,16 +32,14 @@ const HotelSearch = ({ navigation }) => {
   const dispatch = useDispatch()
   const { Searchbyname } = useSelector((state) => state.HotelReducer)
 
-
-
   const [selected, setSelected] = useState("");
   const [ciDate, setCidate] = useState(new Date())
   const [open, setOpen] = useState(false)
   const [coDate, setCodate] = useState(new Date())
   const [openCo, setOpenCo] = useState(false)
-  var [showGuestModal, setShowGuestModal] = useState(false);
+  var [showGuestModal, setShowGuestModal] = useState(false); //show add guest modal
   const [selectDestination, setSelectDestination] = useState(false)
-  // const [destination, setDestination] = useState({ city: 'coimbatore', country: 'india' })
+  
   const [selectAddRoom, setSelectAddRoom] = useState([])
   const [adultCount, setAdultCount] = useState(2)
   const [childCount, setChildCount] = useState(0)
@@ -51,134 +49,6 @@ const HotelSearch = ({ navigation }) => {
   var [desination, setDesination] = useState({ city: '', country: '' }) //select from Place
   var [noRecord, setNoRecord] = useState({ des: true })
 
-  // const CurrentLocation = () => {
-  //   Geocoder.init("AIzaSyAa2VY2pLrqe2F1_wD-UqlnxNp50Be53Xo");
-
-  // }
-  // useEffect(()=>{
-  //   Geolocation.getCurrentPosition(
-  //     (position) => {
-  //       const currentLongitude =
-  //         JSON.stringify(position.coords.longitude);
-  //       const currentLatitude =
-  //         JSON.stringify(position.coords.latitude);
-  //         apiReverseLocation(currentLatitude,currentLongitude)
-
-  //     }, (error) => alert(error.message), {
-  //     enableHighAccuracy: true, timeout: 20000, maximumAge: 1000
-  //   }
-  //   );
-  // },[])
-
-  //   const apiReverseLocation = (lat, lon) => {
-  //     const key = 'AIzaSyAXMAB9YA1Uol4BR1aWZ1r1KoCw5W7AzbE';
-  //     const api = `https://us1.locationiq.com/v1/reverse.php?key=${key}&lat=${lat}&lon=${lon}&format=json`;
-  //     const request = axios.get(api);
-  //     request
-  //       .then(res => {
-  //         console.log(res,'res....')
-
-  //       })
-  //       .catch(err => {
-  //         console.log(err)
-
-  //       });
-  //   };
-
-
-  // useEffect(() => {
-  //   const requestLocationPermission = async () => {
-  //     if (Platform.OS === 'ios') {
-  //       getOneTimeLocation();
-  //       subscribeLocationLocation();
-  //     } else {
-  //       try {
-  //         const granted = await PermissionsAndroid.request(
-  //           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-  //           {
-  //             title: 'Location Access Required',
-  //             message: 'This App needs to Access your location',
-  //           },
-  //         );
-  //         if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-  //           //To Check, If Permission is granted
-  //           getOneTimeLocation();
-  //           subscribeLocationLocation();
-  //         } else {
-  //           setLocationStatus('Permission Denied');
-  //         }
-  //       } catch (err) {
-  //         console.warn(err);
-  //       }
-  //     }
-  //   };
-  //   requestLocationPermission();
-  //   return () => {
-  //     Geolocation.clearWatch(watchID);
-  //   };
-  // }, []);
-  // const getOneTimeLocation = () => {
-  //   setLocationStatus('Getting Location ...');
-  //   Geolocation.getCurrentPosition(
-  //     //Will give you the current location
-  //     (position) => {
-  //       setLocationStatus('You are Here');
-
-  //       //getting the Longitude from the location json
-  //       const currentLongitude = 
-  //         JSON.stringify(position.coords.longitude);
-
-  //       //getting the Latitude from the location json
-  //       const currentLatitude = 
-  //         JSON.stringify(position.coords.latitude);
-
-  //       //Setting Longitude state
-  //       setCurrentLongitude(currentLongitude);
-
-  //       //Setting Longitude state
-  //       setCurrentLatitude(currentLatitude);
-  //     },
-  //     (error) => {
-  //       setLocationStatus(error.message);
-  //     },
-  //     {
-  //       enableHighAccuracy: false,
-  //       timeout: 30000,
-  //       maximumAge: 1000
-  //     },
-  //   );
-  // };
-
-  // const subscribeLocationLocation = () => {
-  //  let watchID = Geolocation.watchPosition(
-  //     (position) => {
-  //       //Will give you the location on location change
-
-  //       setLocationStatus('You are Here');
-
-  //       //getting the Longitude from the location json        
-  //       const currentLongitude =
-  //         JSON.stringify(position.coords.longitude);
-
-  //       //getting the Latitude from the location json
-  //       const currentLatitude = 
-  //         JSON.stringify(position.coords.latitude);
-
-  //       //Setting Longitude state
-  //       setCurrentLongitude(currentLongitude);
-
-  //       //Setting Latitude state
-  //       setCurrentLatitude(currentLatitude);
-  //     },
-  //     (error) => {
-  //       setLocationStatus(error.message);
-  //     },
-  //     {
-  //       enableHighAccuracy: false,
-  //       maximumAge: 1000
-  //     },
-  //   );
-  // };
 
   useEffect(() => {
     var d = new Date();
@@ -217,7 +87,10 @@ const HotelSearch = ({ navigation }) => {
         RoomList: selectAddRoom
       }
     })
-
+    dispatch({
+      type:hotelActions.SET_ROOM_GUEST_DETAIL,
+      payload:selectAddRoom
+    })
     dispatch({ type: commonAction.HOTEL_LOADER, payload: true })
     dispatch({
       type: hotelActions.GET_HOTEL_SEARCH, payload: {
@@ -412,17 +285,17 @@ const HotelSearch = ({ navigation }) => {
 
           <View>
             <View style={style.grid}>
-              <View >
+              <TouchableHighlight style={style.inputField} onPress={() => setOpen(true)} underlayColor='transparent'>
+
                 <View style={style.hotelSearchFieldGroupHalf}>
                   <View style={style.hotelSearchFieldGroupIcon}>
                     <MaterialCommunityIcons style={style.fieldIcon} name='calendar-arrow-right' />
                   </View>
                   <View>
                     <Text style={style.Searchlabel}>CHECK IN</Text>
-                    <TouchableHighlight style={style.inputField} onPress={() => setOpen(true)} underlayColor='transparent'>
                       <Text style={style.inputFieldText}>{moment(ciDate).format('MMM Do YYYY')}</Text>
-                    </TouchableHighlight>
                     <DatePicker
+                    minimumDate={ciDate}
                       modal
                       open={open}
                       date={ciDate}
@@ -437,18 +310,18 @@ const HotelSearch = ({ navigation }) => {
                     />
                   </View>
                 </View>
-              </View>
-              <View>
+                </TouchableHighlight>
+
+              <TouchableHighlight style={style.inputField} onPress={() => setOpenCo(true)} underlayColor='transparent'>
                 <View style={style.hotelSearchFieldGroupHalf}>
                   <View style={style.hotelSearchFieldGroupIcon}>
                     <MaterialCommunityIcons style={style.fieldIcon} name='calendar-arrow-left' />
                   </View>
                   <View style={style.hotelSearchFieldGroupInput}>
                     <Text style={style.Searchlabel}>CHECK OUT</Text>
-                    <TouchableHighlight style={style.inputField} onPress={() => setOpenCo(true)} underlayColor='transparent'>
                       <Text style={style.inputFieldText}>{moment(coDate).format('MMM Do YYYY')}</Text>
-                    </TouchableHighlight>
                     <DatePicker
+                    minimumDate={coDate}
                       modal
                       open={openCo}
                       mode="date"
@@ -463,7 +336,8 @@ const HotelSearch = ({ navigation }) => {
                     />
                   </View>
                 </View>
-              </View>
+                </TouchableHighlight>
+              
 
             </View>
           </View>
@@ -539,7 +413,7 @@ const HotelSearch = ({ navigation }) => {
                 </TouchableHighlight>
               </View>
               <View>
-                <View>
+               <View>
                   {selectAddRoom.map((val, index) => (
 
                     <View key={index} style={[style.roomColumn]}>
@@ -551,8 +425,6 @@ const HotelSearch = ({ navigation }) => {
                       </View>
                       <View style={style.selectGuestColumn}>
                         <HotelSelectRoomGuest
-                          // adult={adultCount}
-                          // child={childCount}
                           row={val}
                           index1={index}
                           room_no={index + 1}
@@ -636,7 +508,7 @@ const style = StyleSheet.create({
     backgroundColor: '#E9F3FF',
     marginHorizontal: 10,
     padding: 20,
-    borderRadius: 20
+    borderRadius: 20,
   },
   GuestModel: {
     flex: 1,
@@ -676,7 +548,6 @@ const style = StyleSheet.create({
   },
   hotelSearchFieldGroupHalf: {
     flexDirection: 'row',
-    // justifyContent:'center',
     backgroundColor: color.AppbarColor,
     alignItems: 'center',
     marginBottom: 20,

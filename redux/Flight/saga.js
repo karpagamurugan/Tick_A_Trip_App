@@ -60,8 +60,6 @@ const FlightSearch = function* (data) {
             )
         );
 
-        // console.log('result....',result?.data)
-        // console.log('payload....',payload)
         if (result?.data?.status === true) {
             let a = result?.data?.message.map(el => {
                 return {
@@ -100,9 +98,7 @@ const FlightSearch = function* (data) {
                 yield put({
                     type: actions.GET_FLIGHT_SEARCH, payload: c
                 });
-                // console.log(c,'final filter')
             } else {
-                console.log('round trip...:))',a)
                 yield put({
                     type: actions.GET_FLIGHT_SEARCH, payload: a
                 });
@@ -156,7 +152,6 @@ const getFareRules = function* (data) {
 const setRevalidate = function* (data) {
     const { payload ,navigation,flightInfo,itemInfo} = data
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
-    console.log('payload',payload)
     try {
         const result = yield call(() =>
             axios.post(
@@ -204,7 +199,6 @@ const setFlightBooking = function* (data) {
             }
             )
         );
-        console.log('flight booking result...',result?.data?.message)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })

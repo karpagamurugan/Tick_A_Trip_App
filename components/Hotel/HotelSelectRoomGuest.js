@@ -19,16 +19,12 @@ const HotelSelectRoomGuest = (props) => {
     var [adultCount, setAdultCount] = useState(2);
     var [childCount, setChildCount] = useState(0);
 
-    // const AdultQty = [1, 2, 3, 4, 5, 6]
-    // const ChildQty = [1, 2, 3, 4, 5, 6]
-
     let AdultIncrease = () => {
         if (adultCount >= 6) {
             setAdultCount(adultCount = adultCount);
         } else {
             setAdultCount(adultCount = adultCount + 1)
         }
-        console.log('...el', room_no)
         changeAddRoom(selectAddRoom.map((el) => el.room_no === room_no ? { ...el, adult: adultCount } : { ...el }))
     }
 
@@ -57,9 +53,7 @@ const HotelSelectRoomGuest = (props) => {
             setChildCount(childCount = childCount - 1)
         }
         OnSelectChild(childCount)
-        // if (childCount !== 0) {
-        //     removeSelectChild()
-        // }
+
     }
 
 
@@ -78,9 +72,7 @@ const HotelSelectRoomGuest = (props) => {
         { value: '11' },
         { value: '12' },
     ];
-    // const OnSelectAdult = (val) => {
-    //     changeAddRoom(selectAddRoom.map((el) => el.room_no === room_no ? { ...el, adult: val } : { ...el }))  
-    // }
+    
 
     const OnSelectChild = (val, index) => {
         let temp = []
@@ -126,19 +118,13 @@ const HotelSelectRoomGuest = (props) => {
                         <Text style={{ paddingLeft: 10, fontFamily: FONTS.mediam, fontSize:height*0.023 , color: '#000', textTransform: 'uppercase' }}>Adults</Text>
                     </View>
                     <View style={style.AdultQtyList}>
-                        {/* {AdultQty.map((val, index) => (
-                            <TouchableHighlight key={index} style={style.adultCoutTxt} onPress={() => OnSelectAdult(val, index)}>
-                                <Text style={val === row.adult ? style.activeSelectGuest : style.AdultQtyListCount} key={index}>{val}</Text>
-                            </TouchableHighlight>
-                        ))} */}
+                        
                     </View>
                     <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                         <TouchableHighlight style={[styles.CountButton]} onPress={() => AdultDecrease()} >
                             <Text style={{ color: '#fff' }}><FeatherIcon name='minus' size={20} /></Text>
                         </TouchableHighlight>
-                        {/* {AdultQty.map((val, index) => ( */}
                         <Text style={[styles.countNumber]}>{adultCount}</Text>
-                        {/* ))} */}
                         <TouchableHighlight onPress={() => AdultIncrease()} style={[styles.CountButton, { backgroundColor: '#003AA8' }]} >
                             <Text style={{ color: '#fff' }}><FeatherIcon name='plus' size={20} /></Text>
                         </TouchableHighlight>
@@ -155,13 +141,7 @@ const HotelSelectRoomGuest = (props) => {
                         </View>
                     </View>
 
-                    {/* <View style={style.AdultQtyList}>
-                    {ChildQty.map((val, index) => (
-                        <TouchableHighlight key={index} style={style.adultCoutTxt} onPress={() => OnSelectChild(val, index)}>
-                            <Text style={val === row.child ? style.activeSelectGuest : style.AdultQtyListCount} key={index}>{val}</Text>
-                        </TouchableHighlight>
-                    ))}
-                </View> */}
+                 
 
                     <View style={{ flexDirection: 'row', alignItems: 'center', }}>
                         <TouchableHighlight style={[styles.CountButton]} onPress={() => ChildDecrease()} >
@@ -178,57 +158,6 @@ const HotelSelectRoomGuest = (props) => {
                 </View>
             </View>
             <View>
-                {/* {row.child !== 0 ?
-                    <TouchableHighlight onPress={(val) => removeSelectChild(val, room_no)} underlayColor='transparent'><Text style={{ color: 'red', marginLeft: 20 }}>Remove Child</Text></TouchableHighlight>
-                    :
-                    null
-                } */}
-
-                {/* <FlatList
-                    data={Array(row.child).fill('')}
-                    keyExtractor={item => item.id}
-                    numColumns={2}
-                    renderItem={({ val, index }) =>
-                        <View key={index} style={{
-                            display: 'flex',
-                            flexDirection: 'row',
-                            alignSelf: 'center',
-                            paddingHorizontal: 20,
-                            flex: 1,
-                            paddingBottom: 10,
-                        }}>
-
-                            <Dropdown
-                                data={data}
-                                labelField="value"
-                                valueField="value"
-                                value={{ value: `${selectAddRoom[index1]?.child_age[index]}` }}
-                                showsVerticalScrollIndicator={true}
-                                name="child_age"
-                                placeholder={`Child ${index + 1} Age`}
-                                onChange={(item) => OnChildAge(item, index)}
-                                selectedTextProps={{
-                                    style: {
-                                        fontSize: 13,
-                                        fontWeight: '500',
-                                        fontFamily: font.font,
-                                        letterSpacing: 0.5,
-                                        padding: 0,
-                                        color: '#003AA8'
-                                    },
-                                }}
-                                style={style.dropStyleChildAge}
-                                renderRightIcon={() => (
-                                    <MaterialIcon
-                                        name="chevron-down-circle-outline"
-                                        size={22}
-                                        style={{ color: '#003AA8', paddingLeft: 5 }}
-                                    />)
-                                }
-                            />
-                        </View>
-                    }
-                /> */}
                 {Array(row.child).fill(null).map((val, index) => (
                     <View key={index} style={{
                         paddingHorizontal: 10,

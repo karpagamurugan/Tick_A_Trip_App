@@ -22,8 +22,7 @@ const Login = ({ navigation }) => {
     const dispatch = useDispatch();
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
   
-    var [socialLogin,setSocialLogin] = useState({GoogleLogin:null,FBLogin:null})
-
+    const [state, setState] = useState({googleLoginUrl: null,facebookURL: null,});//social login url
     const onSubmit = (data) => {
         dispatch({
             type: userActions.GET_USER_LOGIN, payload: {
@@ -55,12 +54,9 @@ const Login = ({ navigation }) => {
 
                 if(user) {
                     user.getIdToken().then(function(idToken) { 
-                          console.log('Token...',idToken)
                         //   return idToken;
                       });
-                    console.log('user credential',user)
-                    console.log('multiFactor',user?.multiFactor?.enrolledFactors)
-                    console.log('providerData',user?.providerData)
+                 
 
 
                 // axios.get(`${API_URL}/auth/google/callback?displayName=${user?.displayName}&email=${user?.email}&photoURL=${user?.photoURL}&providerId=${user?.providerData[0]?.providerId}&uid=${user?.providerData[0]?.uid}`,
@@ -83,10 +79,7 @@ const Login = ({ navigation }) => {
                 console.log('fb....')
             }
         
-  const [state, setState] = useState({
-    googleLoginUrl: null,
-    facebookURL: null,
-  });
+ 
 
   const handleGoogle = async () => {
     let temp = {
@@ -269,10 +262,8 @@ const style = StyleSheet.create({
         borderRadius: 100,
     },
     LoginBtnSec: {
-        // display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        // backgroundColor:'white'
     },
     SplashSection: {
         width: width,

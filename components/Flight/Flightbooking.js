@@ -126,7 +126,7 @@ export default function FlightBooking({ navigation, route }) {
                             setDiscountPrice(discountPrice = 0)
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
-                        } else {
+                        }else {
                             setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
@@ -180,27 +180,18 @@ export default function FlightBooking({ navigation, route }) {
 
         if (filteredAdultList?.length !== parseInt(adult)) {
             list.push({ name: 'Adult', value: 'Adult' },)
-        } else {
-            console.log('else...')
-          
         }
 
         if (filteredChildList?.length !== parseInt(child)) {
             list.push({ name: 'Child', value: 'Child' },)
 
-        } else {
-            console.log('else2....')
-        
-        }
+        } 
 
         if (filteredInfantList?.length !== parseInt(infant)) {
             list.push({ name: 'Infant', value: 'Infant' },)
 
-        } else {
-            console.log('else3....')
-        
-        }
-        console.log('travellerEdit',travellerEdit)
+        } 
+
         if(travellerEdit === true){
             list.push({ name: 'Infant', value: 'Infant' },)
             list.push({ name: 'Child', value: 'Child' },)
@@ -261,7 +252,6 @@ export default function FlightBooking({ navigation, route }) {
 
     
     const EditTravelDetails = (item, index) => {
-        console.log('item',item)
         setShowAddTraveller(true)
         setEditedIndex(editedIndex = index)
         setSelectedUser(item)
@@ -301,7 +291,6 @@ export default function FlightBooking({ navigation, route }) {
             issueCntry:getSelectIdExp?.IssuingCountry
 
         }
-        // console.log(allTravellerList)
 
         TypeDropDownList()
 
@@ -328,42 +317,7 @@ export default function FlightBooking({ navigation, route }) {
         TypeDropDownList()
     }
 
-    const SubmitAddBtn = (data) => {
-
-        const currentYear = new Date().getFullYear();
-        var dobDate = data?.dob?.getFullYear()
-        var age = currentYear - dobDate
-
-
-        if (data?.selectedType.toLowerCase() === 'adult') {
-
-            if (age < 12) {
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Adult Age does not match' } })
-            } else {
-                TravellerAddBtn(data)
-            }
-
-        } else if (data?.selectedType.toLowerCase() === 'child') {
-            if (age > 12 && age < 2) {
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Child Age does not match' } })
-            } else {
-                TravellerAddBtn(data)
-            }
-
-        } else if (data?.selectedType.toLowerCase() === 'infant') {
-            if (age > 2) {
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Infant Age does not match' } })
-
-            } else {
-                TravellerAddBtn(data)
-
-
-            }
-        }
-    }
-
     const TravellerAddBtn = (data) => {
-
         var AddedAdult = {
             type: data?.selectedType,
             title: data?.nametitle,
@@ -375,13 +329,9 @@ export default function FlightBooking({ navigation, route }) {
             passport: data?.Passport_Number,
             expDate:expDate,
             issueCntry:getSelectIdExp?.IssuingCountry
-
         }
-        // console.log('addded...',AddedAdult)
         setAllTravellerList(allTravellerList = [...allTravellerList, AddedAdult])
-
         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveller added Successfully' } })
-
         TypeDropDownList()
 
         setTitle("");
@@ -480,90 +430,10 @@ export default function FlightBooking({ navigation, route }) {
 
             }).catch((error) => {
                 dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-                console.log('error', error)
             });
         }
     }
-    const PaymentGateWay = (value) => {
-
-        var options = {
-            key: RAZOR_KEY,
-            key_secret: RAZOR_KEY_SECRET,
-            amount: '1000',
-            // amount: parseFloat(parseFloat(RoomType?.netPrice) * 100),
-            currency: CURRENCY,
-            name: data?.Name,
-            description: "Payment Tick A Trip",
-            timeout: TIMEOUT,
-            // order_id:'TickATrip_'+generateUUID(8),
-            prefill: {
-                email: value?.Email,
-                contact: value?.Phone,
-                name: value?.Name
-            },
-            notes: {
-                address: "",
-            },
-            theme: {
-                color: "#0543e9",
-            },
-        };
-        RazorpayCheckout.open(options).then((data) => {
-            // var bookingData= { 
-            //     IsPassportMandatory:  get_Revalidate?.IsPassportMandatory,
-            //     PostCode:value?.PostalCode,
-            //     TotalFare:  get_Revalidate?.TotalFareAmount,
-            //     adult_flight: adult,
-            //     area_code: 758,
-            //     child_flight: child,
-            //     country_code: value?.CountryCode,
-            //     customerEmail: userProfileData?.email,
-            //     customerName: userProfileData?.name,
-            //     customerPhone: userProfileData?.phone,
-            //     email_id:  value?.Email,
-            //     fare_source_code:get_Revalidate?.FareSourceCode,
-            //     dob: allTravellerList
-            //         ?.map((val) => val.dob)
-            //         .reduce((total, value, index) => {
-            //         return index === 0 ? value : total + "<br>" + value;
-            //         }),
-            //     first_name: allTravellerList
-            //         ?.map((val) => val.first_name)
-            //         .reduce((total, value, index) => {
-            //         return index === 0 ? value : total + "<br>" + value;
-            //         }),
-            //     gender: allTravellerList
-            //     ?.map((val) => val.gender)
-            //     .reduce((total, value, index) => {
-            //     return index === 0 ? value : total + "<br>" + value;
-            //     }),
-            //     last_name: allTravellerList
-            //     ?.map((val) => val.last_name)
-            //     .reduce((total, value, index) => {
-            //     return index === 0 ? value : total + "<br>" + value;
-            //     }),
-            //     title: allTravellerList
-            //     ?.map((val) => val.title)
-            //     .reduce((total, value, index) => {
-            //     return index === 0 ? value : total + "<br>" + value;
-            //     }),
-            //     infant_flight: infant,
-            //     isRefundable: get_Revalidate?.IsRefundable,
-            //     mobile_no:value?.Phone,
-            //     nationality: getSelectId?.Nationality,
-            //     paymentTransactionId: "pay_LUqKPqqPIMoDhr",
-            //     type: get_Revalidate?.FareType}
-
-            //   dispatch({type:hotelActions.SET_HOTEL_BOOKING,payload:dataList,navigation:navigation})
-
-
-        }).catch((error) => {
-            dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-            console.log('error', error)
-        });
-
-    }
-
+    
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             {/* appbar */}
@@ -1068,7 +938,7 @@ export default function FlightBooking({ navigation, route }) {
                             </View>
                            
 
-                            {
+                            {/* {
                                 (get_Revalidate?.IsPassportMandatory === true) ?
                                     <View>
                                         <View style={styles.editTextBorder}>
@@ -1233,7 +1103,7 @@ export default function FlightBooking({ navigation, route }) {
                                     </View>
                                     :
                                     <View />
-                            }
+                            } */}
                             <View style={{ marginVertical: 20, width: '90%', alignSelf: 'center' }}>
                                 {(travellerEdit === false) ?
 
@@ -1246,7 +1116,7 @@ export default function FlightBooking({ navigation, route }) {
                                             <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, opacity: 0.5 }}>Disabled</Text>
                                         </TouchableOpacity> :
                                         <TouchableOpacity
-                                            onPress={handleSubmit(SubmitAddBtn)}
+                                            onPress={handleSubmit(TravellerAddBtn)}
                                             style={[styles.clickBtn]}>
                                             <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
                                         </TouchableOpacity>

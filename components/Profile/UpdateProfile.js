@@ -110,18 +110,12 @@ function UpdateProfile({ navigation }) {
     return (
         <View style={styles.mainContainer}>
 
-            {/* <TouchableHighlight underlayColor={'transparent'} style={styles.cancelBtn} onPress={() =>
-                        setOpenModel(!openModel)
-                    }>
-                        <MaterialIcons name='cancel' size={23} color='red' />
-                    </TouchableHighlight> */}
             <KeyboardAvoidingView behavior="height">
                 <View style={styles.modalMainContainer}>
                 <Appbar title={'Edit Profile'} />
                 <View style={{height:height*0.85}}>
                 <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
                         <View >
-                            {/* <Text style={styles.modalTitle}>Profile Edit</Text> */}
                             <View style={{ height: 20 }} />
                             <View style={styles.modalSubContainer}>
 
@@ -454,9 +448,6 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         marginVertical: 5
     },
-    imageView: {
-
-    },
     editBtn: {
         height: 32,
         width: 120,
@@ -479,19 +470,9 @@ const styles = StyleSheet.create({
         marginTop: 15
     },
     modalMainContainer: {
-        // borderRadius: 10,
-        // backgroundColor: 'white',
         flexDirection: 'column',
-        // alignItems: 'center',
-        // alignSelf: 'center',
     },
-    modalTitle: {
-        fontFamily: FONTS.fontBold,
-        alignSelf: 'center',
-        paddingTop: 20,
-        color: 'black',
-        fontSize: height * 0.025
-    },
+   
     errorMsg: {
         color: 'red',
         fontSize: 12,
@@ -513,10 +494,7 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.mediam
     },
     modalSubContainer: { backgroundColor: 'white', width: width, paddingHorizontal: 20 },
-    chooseProfile: { color: 'white', backgroundColor: 'green', paddingVertical: 2, paddingHorizontal: 5, borderRadius: 15, fontSize: height * 0.02 },
     profile: { height: 50, width: 50, borderColor: '#2BAB38', borderWidth: 1, borderRadius: 100 },
-    updateBtn: { backgroundColor: 'green', borderRadius: 10, marginTop: 20, justifyContent: 'center', alignSelf: 'center' },
-    updateText: { color: 'white', fontFamily: FONTS.font, alignSelf: 'center', paddingVertical: 7, paddingHorizontal: 10 }
 })
 
 export default UpdateProfile

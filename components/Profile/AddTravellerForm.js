@@ -86,7 +86,6 @@ const AddTravellerForm = ({ navigation, route }) => {
     }
 
     const AdultTypes = (item) => {
-        console.log('dhfs', item)
         if(item === "Adult"){
             var today = new Date();
             var dd = today.getDate();
@@ -101,7 +100,6 @@ const AddTravellerForm = ({ navigation, route }) => {
             today = yyyy + '-' + mm + '-' + dd;
             // const str = "2020-06-11";
             const dateadult = new Date(today);
-            // console.log('date1', date1)
             setDobDate(dateadult)
             setMaxAgeLimit(dateadult);
             setMinAgeLimit(null);
@@ -119,7 +117,6 @@ const AddTravellerForm = ({ navigation, route }) => {
             }
             todayCM = yyyyCM + '-' + mmCM + '-' + ddCM;
             const dateChildMin = new Date(todayCM);
-            console.log('dateChildMin',dateChildMin)
             setDobDate(dateChildMin)
             setMinAgeLimit(dateChildMin)
      
@@ -135,12 +132,10 @@ const AddTravellerForm = ({ navigation, route }) => {
             }
             todayCMX = yyyyCMX + '-' + mmCMX + '-' + ddCMX;
             const dateChildMax = new Date(todayCMX);
-            console.log('dateChildMax',dateChildMax)
             setDobDate(dateChildMax)
             setMaxAgeLimit(dateChildMax)
 
         }else if(item === "Infant"){
-            console.log('infantt')
             var todayI = new Date();
             var ddI = todayI.getDate();
             var mmI = todayI.getMonth() + 1;
@@ -158,15 +153,7 @@ const AddTravellerForm = ({ navigation, route }) => {
             setMaxAgeLimit(new Date())
         }
     }
-    // console.log('minAgeLimit',minAgeLimit)
-    // console.log('maxAgeLimit',maxAgeLimit)
-    useEffect(() => {
-        // if () {
-            
-        // }
-    }, [])
-    console.log('ma', maxAgeLimit)
-    console.log('ma21', minAgeLimit)
+
     const selectTitleName = [
         { name: 'Mr', value: 'Mr' },
         { name: 'Miss', value: 'Miss' },

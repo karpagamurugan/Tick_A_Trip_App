@@ -40,7 +40,6 @@ export default function Hotel({navigation}) {
 
         setSelectedTab(index)
     }
-console.log('Completed_hotel?.bookings?.length',Completed_hotel?.bookings?.length)
     return (
         <View style={style.mainContainer}>
             <Appbar title={'HOTEL BOOKINGS'} />

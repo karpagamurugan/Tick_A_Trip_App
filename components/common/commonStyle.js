@@ -107,9 +107,6 @@ const style = StyleSheet.create({
         backgroundColor: '#fff',
         borderBottomRightRadius: 15,
         borderBottomLeftRadius: 15,
-        // borderColor: '#babab8',
-        // borderWidth:1,
-        // borderTopColor:'transparent',
     },
     hotelListCardSec: {
         marginHorizontal: 10,
@@ -134,8 +131,8 @@ const style = StyleSheet.create({
         textTransform: 'capitalize',
     },
     RoomTypesSec: {
-        paddingBottom: height * 0.20,
-        backgroundColor:'white',height:height
+        paddingBottom: height * 0.1,
+        backgroundColor:'white',
     },
     HotelDetailBannerCon: {
         height: height * 0.25,

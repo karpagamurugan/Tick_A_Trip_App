@@ -17,11 +17,7 @@ let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 function Offers({ route, navigation, props }) {
-    // const { type } = props
-    // console.log('type', route.params.type)
-    const TEXT_LENGTH = 40
-    const TEXT_HEIGHT = 14
-    const OFFSET = TEXT_LENGTH / 2 - TEXT_HEIGHT / 2
+    
     const dispatch = useDispatch()
     const { flight_Coupons, hotel_Coupons, isLogin } = useSelector((state) => state.userReducer)
     useEffect(() => {
@@ -29,20 +25,7 @@ function Offers({ route, navigation, props }) {
         dispatch({ type: userAction.GET_ALL_HOTEL_COUPON })
 
     }, [])
-    // const copyCoupon = async (item) => {
-    //     try {
-    //         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Code Copied to Clipboard' } })
-    //         Clipboard.setString(item?.coupon_code)
-    //         // const text = await Clipboard.getString()
-    //         // AsyncStorage.setItem('ClipboardCoupon',text)
-    //         // console.log('try test')
-    //         // navigation.goBack()
-    //     }catch(e){
-    //         console.log(e)
-    //         //  console.log('catch test')       
-    //     }
-    // }
-
+   
     return (
         <View>
             <View style={style.mainContainer}>
@@ -169,9 +152,6 @@ const style = StyleSheet.create({
         marginHorizontal: 20,
         borderRadius: 15,
         marginBottom: 10
-        // position: 'relative',
-        // height:height*0.20
-
     },
     circle: {
         height: 22,
@@ -183,11 +163,6 @@ const style = StyleSheet.create({
         position: 'absolute',
         top: height * 0.09,
         marginLeft: 10,
-    },
-    textStyle: {
-        fontFamily: FONTS.font,
-        color: 'white',
-        fontSize: height * 0.018
     },
     textBold: {
         fontFamily: FONTS.fontBold,
@@ -210,7 +185,6 @@ const style = StyleSheet.create({
     discountText: {
         paddingHorizontal: 25,
         paddingVertical: 20,
-        // backgroundColor: '#703c89',
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 15,
     },
@@ -223,16 +197,7 @@ const style = StyleSheet.create({
         fontFamily: FONTS.mediam,
         height: height * 0.02
     },
-    // offersTexts:{
-    //     flexDirection:'row',
-    //     alignItems:'flex-start'
-    // },
-    // paddingTop:7,paddingRight:6,color:COLORS.textBlue
-    offerIcons: {
-        position: 'absolute',
-        top: 0,
-        left: 50
-    }
+   
 })
 
 

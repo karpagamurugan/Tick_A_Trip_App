@@ -20,18 +20,17 @@ const height = Dimensions.get('window').height;
 const SignUp = ({ navigation }) => {
     const dispatch = useDispatch()
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
-    // const { handleSubmit, control, formState: { errors }, reset, register } = useForm();
-    let [dobDate, setDobDate] = useState(new Date());
-    let [passportExDate, setPassportExDate] = useState(new Date());
-    const [passportExDateopen, setpassportExDateOpen] = useState(false);
-    const [open, setOpen] = useState(false);
-    const [marriedStatus, setMarriedStatus] = useState(null)
-    const [title, setTitle] = useState(null)
-    const [otherOption, setOtherOption] = useState(false)
-    const [privacyBox, setPrivacyBox] = useState(false)
-    const [policyBox, setPolicyBox] = useState(false)
-    const [userPassword, setUserPassword] = useState('')
-    const [userConfirmPassword, setUserConfirmPassword] = useState('')
+    let [dobDate, setDobDate] = useState(new Date());//set DOB 
+    let [passportExDate, setPassportExDate] = useState(new Date());//set passport Exp
+    const [passportExDateopen, setpassportExDateOpen] = useState(false);//set open  passport Exp date picker
+    const [open, setOpen] = useState(false); //set open DOB date picker
+    const [marriedStatus, setMarriedStatus] = useState(null) //set maritial status
+    const [title, setTitle] = useState(null) //set title
+    const [otherOption, setOtherOption] = useState(false) //show hide other option
+    const [privacyBox, setPrivacyBox] = useState(false)//enable & disable privacy policy
+    const [policyBox, setPolicyBox] = useState(false)//enable & disable privacy policy
+    const [userPassword, setUserPassword] = useState('') //pass
+    const [userConfirmPassword, setUserConfirmPassword] = useState('') //confirm pass
 
     const maridalStatus = [
         {
@@ -54,9 +53,7 @@ const SignUp = ({ navigation }) => {
             value: 'Female'
         }
     ]
-    // const handleDebugger = useCallback(
-    //     debounce((e)=>console.log(e), 1000)
-    //     , []);
+  
     const onSubmit = (data) => {
         dispatch({
             type: userAction.GET_USER_REGISTER, payload: {
@@ -85,7 +82,6 @@ const SignUp = ({ navigation }) => {
             },
             navigation:navigation
         })
-        // handleDebugger()
     }
 
   

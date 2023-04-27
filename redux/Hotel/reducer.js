@@ -5,19 +5,19 @@ const initialState = {
     getHotelSearchResult: {},
     getHotelFilterResult: [],
     hotelSessionId: null,
-    Searchbyname:[],
-    HotelRoomType:[],
-    RoomGuestPlace:{
-        room:'',
-        Guest:'',
-        Place:'',
-        depatureDate:'',
-        arrivalDate:'',
-        RoomList:[]
+    Searchbyname: [],
+    HotelRoomType: [],
+    RoomGuestPlace: {
+        room: '',
+        Guest: '',
+        Place: '',
+        depatureDate: '',
+        arrivalDate: '',
+        RoomList: []
     },
-    BookingInfo:{},
-    HotelFilter:{},
-    
+    BookingInfo: {},
+    HotelFilter: {},
+
 }
 
 const HotelReducer = (state = initialState, action) => {
@@ -37,38 +37,43 @@ const HotelReducer = (state = initialState, action) => {
                 ...state,
                 hotelSessionId: action.payload
             }
-            case actions.SET_SELECT_NAME:
-                return {
-                    ...state,
-                    Searchbyname: action.payload
+        case actions.SET_SELECT_NAME:
+            return {
+                ...state,
+                Searchbyname: action.payload
+            }
+        case actions.SET_HOTEL_ROOM_TYPE:
+            return {
+                ...state,
+                HotelRoomType: action.payload
+            }
+        case actions.SET_ROOM_GUEST_PLACE:
+            return {
+                ...state,
+                RoomGuestPlace: {
+                    room: action.payload.room,
+                    Guest: action.payload.Guest,
+                    Place: action.payload.Place,
+                    depatureDate: action.payload.depatureDate,
+                    arrivalDate: action.payload.arrivalDate,
+                    RoomList: action.payload.RoomList
                 }
-                case actions.SET_HOTEL_ROOM_TYPE:
-                    return {
-                        ...state,
-                        HotelRoomType: action.payload
-                    }
-                    case actions.SET_ROOM_GUEST_PLACE:
-                        return {
-                            ...state,
-                            RoomGuestPlace: {
-                                room:action.payload.room,
-                                Guest:action.payload.Guest,
-                                Place:action.payload.Place,
-                                depatureDate:action.payload.depatureDate,
-                                arrivalDate:action.payload.arrivalDate,
-                                RoomList:action.payload.RoomList
-                            }
-                        }
-                            case actions.SET_HOTEL_BOOKING_DETAIL:
-                                return {
-                                    ...state,
-                                    BookingInfo: action.payload
-                                }
-                                case actions.SET_HOTEL_FILTER:
-                                    return {
-                                        ...state,
-                                        HotelFilter: action.payload
-                                    }
+            }
+        case actions.SET_HOTEL_BOOKING_DETAIL:
+            return {
+                ...state,
+                BookingInfo: action.payload
+            }
+        case actions.SET_HOTEL_FILTER:
+            return {
+                ...state,
+                HotelFilter: action.payload
+            }
+        case actions.SET_ROOM_GUEST_DETAIL:
+            return {
+                ...state,
+                HotemRoomGuest: action.payload
+            }
         default:
             return state;
     }

@@ -173,7 +173,6 @@ function FlightFilter(props) {
                                     CheckAirlineName.map((val, index) => (
                                         <View style={[styles.checkBox]} key={index}>
                                             <TouchableHighlight underlayColor='transparent' onPress={() => {
-                                                console.log(selectAirline)
                                                 if (!selectAirline.includes(val.value)) {
                                                     setSelectAirline(selectAirline = [...selectAirline, val.value])
                                                 } else {

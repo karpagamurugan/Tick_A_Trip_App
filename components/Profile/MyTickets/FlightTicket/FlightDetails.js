@@ -31,7 +31,6 @@ export default function FlightTicketDetails({ navigation }) {
     }
     function timeConvert(n) {
         var num = n;
-        console.log('n', n)
         var hours = Math.floor(num / 60) > 0 ? Math.floor(num / 60) + "H " : "";
         var rminutes =
             n - Math.floor(num / 60) * 60 > 0
@@ -46,8 +45,7 @@ export default function FlightTicketDetails({ navigation }) {
             <ScrollView style={{ height: height * 0.83 }}>
                 <View style={{ paddingHorizontal: 15 }}>
 
-                    {/* {flight_tickets_details?.flightTripDetails?.map((item, index) => {
-                        return ( */}
+              
                     <View>
                         <View style={{
                             flexDirection: "row",
@@ -55,8 +53,6 @@ export default function FlightTicketDetails({ navigation }) {
                             alignItems: 'center',
                             paddingVertical: 30,
                         }}>
-                            {/* {console.log('asddsds',flight_tickets_details.flightTripDetails.length)} */}
-                            {/* {console.log('flight_details_item333',item)} */}
                             <View style={{ width: "40%" }}>
                                 <Text style={[style.CountryShortName, { flex: 1 }]}>{flight_tickets_details.flightTripDetails[0]?.DepartureAirportLocationCode}</Text>
                                 <Text style={[style.CountryNameTitle, { flex: 1 }]}>{flight_tickets_details.flightTripDetails[0]?.DepartureAirportCity}</Text>

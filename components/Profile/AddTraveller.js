@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView, TouchableOpacity, Alert, } from 'react-native';
+import { View, Text, Dimensions, StyleSheet, TouchableHighlight, ScrollView,Image, TouchableOpacity, Alert, } from 'react-native';
 import COLORS from '../constants/color';
 import FONTS from '../constants/font';
 import Appbar from '../common/Appbar';
@@ -40,6 +40,7 @@ export default function AddTraveller({ navigation }) {
             type: userAction.SET_ADD_TRAVELLER_TOKEN, payload: true
         })
     }, []);
+
 
     const handleDelete = (item) => {
         Alert.alert(
@@ -95,19 +96,26 @@ export default function AddTraveller({ navigation }) {
                     </TouchableHighlight>
                 </View>
             </View>
+
             <ScrollView
                 showsVerticalScrollIndicator={false}
             >
                 <View>
                     {
+                        travelers_list?.travelers?.length === 0?
+                        <View style={{alignItems:'center',justifyContent:'center',height:height*0.5}}>
+                            
+                            <Image source={require('../../Assert/Images/airline.jpg')} style={{height:height*0.3,width:width*0.6}}/>
+                            <Text style={{fontFamily:FONTS.font}}>No Travelers ! </Text>
+                            </View>
+                        :
                         travelers_list?.travelers?.map((item, index) => (
-                              
                             <View key={index} style={styles.travellerCard}>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
                                     <View style={{ marginRight: 10 }}>
                                         <ProfileIcon height={20} width={20} />
                                     </View>
-                                    <Text style={{ fontSize: height * 0.018, fontFamily: FONTS.mediam, color: '#1B5CB7' }}>{item?.title} {item?.first_name} {item?.last_name}</Text>
+                                    <Text style={{ fontSize: height * 0.018, fontFamily: FONTS.mediam, color: '#1B5CB7',width:width*0.6, }}>{item?.title} {item?.first_name} {item?.last_name} </Text>
                                 </View>
                                 <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
                                     <TouchableOpacity

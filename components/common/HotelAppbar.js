@@ -64,7 +64,7 @@ export default function HotelAppbar({ title }) {
                         {(title === 'Hotel Booking') ?
                             <TouchableOpacity onPress={() => navigation.navigate('offers')}>
                                 <MaterialCommunityIcons name='brightness-percent' size={25} color='#4C94F2' />
-                                {(hotel_Coupons?.message.length === 0) ? <></> : <View style={styles.offerDot}></View>}
+                                {(hotel_Coupons?.message?.length === 0) ? <></> : <View style={styles.offerDot}></View>}
                             </TouchableOpacity> : <></> }
                         <View />
                     </View>}

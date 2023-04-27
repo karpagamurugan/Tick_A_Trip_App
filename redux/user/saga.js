@@ -193,7 +193,6 @@ const getHotelBookingsCancelRequest = function* (data) {
 }
 const getHotelBookingsCancelVerify = function* (data) {
     const { payload } = data;
-    console.log('payload...',payload)
     try {
         const result = yield call(() =>
             axios.post(`${API_URL}/user/hotel/cancelbooking`,
@@ -204,7 +203,6 @@ const getHotelBookingsCancelVerify = function* (data) {
                     },
                 })
         );
-        console.log('res....',result?.data)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
@@ -216,7 +214,6 @@ const getHotelBookingsCancelVerify = function* (data) {
         }
 
     } catch (err) {
-        console.log(err,'ehid')
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Something went wrong please try again'} })
         yield put({ type: actions.OTP_MODAL_VIEW, payload: false })
@@ -403,12 +400,10 @@ const getSearchTraveller = function* (data) {
             }
             )
         );
-        console.log('res..',result?.data)
         if (payload.type === 'country-code') {
             yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_CODE, payload: result.data });
 
         } else if (payload.type === 'issuing-country') {
-            console.log('if...')
             yield put({ type: actions.GET_ADD_TRAVELLER_COUNTRY_ISSUING, payload: result.data });
 
         } else if (payload.type === 'nationality') {
@@ -589,7 +584,6 @@ const userAthentification = function* (data) {
         }
 
     } catch (err) {
-        console.log('userAthentification', err)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:err.response.data.message}})
         yield put({ type: CommonAction.COMMON_LOADER, payload: false });
     }
@@ -660,7 +654,6 @@ const getUpcomingFlightTickets = function* (data) {
 
         if (result?.data?.success === true) {
             yield put({ type: actions.SET_UPCOMING_FLIGHT_TICKETS, payload: result.data })
-            // console.log('result data....',result?.data)
 
         } else {
             yield put({ type: actions.SET_UPCOMING_FLIGHT_TICKETS, payload: result.data })
@@ -690,7 +683,6 @@ const flightTicketsDetails = function* (data) {
         }
     } catch (err) {
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-        console.log('error Tickets Details....', err.message)
         yield put({ type: actions.GET_FLIGHT_TICKETS_DETAILS, payload: err.data });
     }
 }

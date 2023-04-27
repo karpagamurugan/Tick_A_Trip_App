@@ -74,8 +74,6 @@ function Profile({ navigation }) {
         setScnNumber(scnNumber = data?.SCN)
     }
     const onHotelCancellConfirm = () => {
-        console.log('otpInput', otpInput?.state?.otpText?.toString()?.replaceAll(",", ""))
-        console.log('data.supplierConfirmationNum', 'data?.SCN')
         dispatch({
             type: userActions.SET_GUEST_HOTEL_CANCELL_VERIFY, payload: {
                 supplierConfirmationNum: scnNumber,

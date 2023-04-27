@@ -16,44 +16,6 @@ const HotelRoomTypeCard = ( props) => {
     const {val,detail}=props
   
     return (
-        // <View style={style.hotelListCardSec}>
-        //     <View style={styles.hotelListCard}>
-        //         <View style={style.hotelListCardCon}>
-        //             <View style={style.hotelListCardHotelLocat}>
-        //                 <View style={style.hotelListCardHotelName}>
-        //                     <FontAwesome5 style={style.hotelListLocIcon} name='hotel' />
-        //                     <Text style={style.hotelListLocName}>5 GUEST</Text>
-        //                 </View>
-        //                 <View style={style.hotelListCardHotelName}>
-        //                     <Ionicons style={style.hotelListLocIcon} name='location-outline' />
-        //                     <Text style={style.hotelListLocName}>RS Puram</Text>
-        //                 </View>
-        //             </View>
-        //             <View style={style.hotelDesCont}>
-        //                 <View style={styles.RoomTypeStart}>
-        //                 <Stars
-        //                     default={0}
-        //                     count={5}
-        //                     half={true}
-        //                     disabled={true}
-        //                     starSize={50}
-        //                     spacing={5}
-        //                     fullStar={<FontAwesome name={'star'} style={[style.myStarStyle]} />}
-        //                     emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
-        //                     halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle]} />}
-        //                 />
-        //                 </View>
-        //                 <Text style={style.ListHotelName}>HOTEL NAME</Text>
-        //                 <Text style={style.ListHotelPrice}>5,500 <Text style={style.taxTect}>inclusing tax</Text></Text>
-        //                 <Text style={style.ListHotelDescription}>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer vel molestie nisl. Duis ac mi leo.</Text>
-        //                 <TouchableHighlight style={style.ListHotelBtn} onPress={()=>props.navigation.navigate('HotelDetail')}>
-        //                     <Text style={style.ListHotelBtnText}>BOOK NOW</Text>
-        //                 </TouchableHighlight>
-        //             </View>
-        //         </View>
-
-        //     </View>
-        // </View>
         <View style={styles.mainContainer}>
             <View style={{backgroundColor:'white'}}>
                 <View style={{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingHorizontal:20}}>
@@ -94,10 +56,7 @@ const HotelRoomTypeCard = ( props) => {
                <Text style={styles.title}>FareType : </Text>
                 <Text style={styles?.contentText}>{val?.fareType}</Text>
                </View>
-               {/* <View style={styles.subContainer}>
-               <Text style={styles.title}>Room Type : </Text>
-                <Text style={styles?.contentText}>{val?.roomType}</Text>
-               </View> */}
+              
                <View style={styles.subContainer}>
                <Text style={styles.title}>CancellationPolicy : </Text>
                 <Text style={styles?.contentText}>{val?.cancellationPolicy}</Text>

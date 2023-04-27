@@ -10,7 +10,8 @@ const HotelRoomType = ({navigation,route}) => {
     // const {detail}=props
 
     const { HotelRoomType } = useSelector((state) => state.HotelReducer)
-
+    
+console.log(' HotelRoomType?.roomRates?.perBookingRates', HotelRoomType?.roomRates?.perBookingRates?.length)
     return (
         <View>
             <HotelAppbar/>
