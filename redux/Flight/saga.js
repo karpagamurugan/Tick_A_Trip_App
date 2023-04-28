@@ -103,7 +103,6 @@ const FlightSearch = function* (data) {
                     type: actions.GET_FLIGHT_SEARCH, payload: a
                 });
             }
-            // yield put({ type: actions.GET_FLIGHT_SEARCH, payload: result?.data });
             payload.navigation.navigate('FlightResult', { prefs: payload?.prefs,type:payload?.data?.journey_type })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
         } else {
@@ -111,6 +110,7 @@ const FlightSearch = function* (data) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
         }
     } catch (err) {
+        console.log('errror',err)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
     }
@@ -187,6 +187,8 @@ const setFlightBooking = function* (data) {
     const { payload } = data
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
 
+    console.log('payload',payload)
+
     try {
         const result = yield call(() =>
             axios.post(
@@ -199,6 +201,7 @@ const setFlightBooking = function* (data) {
             }
             )
         );
+        console.log('result?.data?',result?.data)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })

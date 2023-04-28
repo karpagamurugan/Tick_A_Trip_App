@@ -36,29 +36,35 @@ let width = Dimensions.get('window').width;
 
 export default function FlightBooking({ navigation, route }) {
     const dispatch = useDispatch()
-    const { get_Revalidate, } = useSelector((state) => state.FlightSearchReducer)
-    const { AddTravaller_nationality, travelers_list, userProfileData, isLogin,AddTravaller_country_issuing } = useSelector((state) => state.userReducer)
+
+    const { get_Revalidate, } = useSelector((state) => state.FlightSearchReducer) //flight revalidation
+    const { AddTravaller_nationality, travelers_list, userProfileData, isLogin, AddTravaller_country_issuing } = useSelector((state) => state.userReducer) //get user data
+
+    const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm(); //controller for contact details
+    const { register: register2, formState: { errors: errors2 }, handleSubmit: handleSubmit2, control: control2, reset: reset2, setValue: setValue2 } = useForm(); //controller for traveller detail
+
     var [travelRec, setTravelRec] = useState({ CountryCode: false, Nationality: false })
-    var [issueCntry, setIssueCntry] = useState({ CountryCode: false, IssuingCountry: false })
     var [selectedNationality, setSelectedNationality] = useState({ CountryCode: '', Nationality: '', })
-    var [selectedIssueCntry, setSelectedIssueCntry] = useState({ CountryCode: '', IssuingCountry: '', })
     var [getSelectId, setGetSelectId] = useState({ CountryCode: '', Nationality: '', })
-    var [getSelectIdExp, setGetSelectIdExp] = useState({ CountryCode: '', IssuingCountry: '', })
+
+    var [showissueCtry, setShowissueCtry] = useState({ CountryCode: false, issueCtry: false })
+    var [selectedIssueCtry, setSelectedIssueCtry] = useState({ CountryCode: '', issueCtry: '', })
+    var [getSelectIssueId, setGetSelectIssueId] = useState({ CountryCode: '', issueCtry: '', })
+
     var [showAddTraveller, setShowAddTraveller] = useState(isLogin ? false : true);
     var [checkBoxOne, setCheckBoxOne] = useState(false);
-    var [checkBoxTwo, setCheckBoxTwo] = useState(false);
     var [travellerEdit, setTravellerEdit] = useState(false);
     var [adult, setAdult] = useState(route?.params?.flightInfo?.adult_flight?.toString()) //set adult count
     var [child, setchild] = useState(route?.params?.flightInfo?.child_flight?.toString()) //set child count
     var [infant, setInfant] = useState(route?.params?.flightInfo?.infant_flight?.toString()) //set infant count
     var [travellerSelectType, setTravellerSelectType] = useState([]);
-    const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
-    const { register: register2, formState: { errors: errors2 }, handleSubmit: handleSubmit2, control: control2, reset: reset2, setValue: setValue2 } = useForm();
     const [gender, setGender] = useState();
-    const [showDatePicker, setShowDatePicker] = useState(false);
-    const [showEXPDatePicker, setShowEXPDatePicker] = useState(false);
-    let [dobDate, setDobDate] = useState(new Date());
-    let [expDate, setExpDate] = useState(new Date());
+
+    const [showDatePicker, setShowDatePicker] = useState(false);//show dob date picker
+    let [dobDate, setDobDate] = useState(new Date());//for dob
+    const [showEXPDatePicker, setShowEXPDatePicker] = useState(false);//show pass expriy date picker
+    let [expDate, setExpDate] = useState(new Date());//for pass expiry
+
     const [selectType, setSelectType] = useState();
     const [title, setTitle] = useState();
 
@@ -70,9 +76,12 @@ export default function FlightBooking({ navigation, route }) {
     var [allTravellerList, setAllTravellerList] = useState([]);
     var [editedIndex, setEditedIndex] = useState();
 
-    var [couponCode, setCouponCode] = useState('')
-    var [totalFare, setTotaFare] = useState({ MainTotalFare: '', SubTotalFare: '' })
-    var [discountPrice, setDiscountPrice] = useState('0')
+    var [couponCode, setCouponCode] = useState('') //for coupon code
+    var [totalFare, setTotaFare] = useState({ MainTotalFare: '', SubTotalFare: '' }) //for total fare
+    var [discountPrice, setDiscountPrice] = useState('0') //for discount price
+
+    const [minAgeLimit, setMinAgeLimit] = useState('');
+    const [maxAgeLimit, setMaxAgeLimit] = useState('');
 
     const selectTitleName = [
         { name: 'Mr', value: 'Mr' },
@@ -86,6 +95,7 @@ export default function FlightBooking({ navigation, route }) {
         { name: 'Male', value: 'Male' },
         { name: 'Female', value: 'Female' },
     ]
+
     useEffect(() => {
         const travel = async () => {
             await AsyncStorage.getItem('tickatrip-token').then(
@@ -108,7 +118,6 @@ export default function FlightBooking({ navigation, route }) {
 
     }, [])
 
-
     const ApplyCoupon = () => {
 
         dispatch({ type: CommonAction.COMMON_LOADER, payload: true });
@@ -126,7 +135,7 @@ export default function FlightBooking({ navigation, route }) {
                             setDiscountPrice(discountPrice = 0)
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
-                        }else {
+                        } else {
                             setTotaFare(totalFare = { MainTotalFare: (totalFare?.MainTotalFare - finalFare).toFixed(0), SubTotalFare: totalFare?.SubTotalFare })
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon Applied' } })
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
@@ -181,23 +190,12 @@ export default function FlightBooking({ navigation, route }) {
         if (filteredAdultList?.length !== parseInt(adult)) {
             list.push({ name: 'Adult', value: 'Adult' },)
         }
-
         if (filteredChildList?.length !== parseInt(child)) {
             list.push({ name: 'Child', value: 'Child' },)
-
-        } 
-
+        }
         if (filteredInfantList?.length !== parseInt(infant)) {
             list.push({ name: 'Infant', value: 'Infant' },)
-
-        } 
-
-        if(travellerEdit === true){
-            list.push({ name: 'Infant', value: 'Infant' },)
-            list.push({ name: 'Child', value: 'Child' },)
-            list.push({ name: 'Adult', value: 'Adult' },)
         }
-
         setTravellerSelectType(list)
 
     }
@@ -207,6 +205,7 @@ export default function FlightBooking({ navigation, route }) {
         var childList = travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, route?.params?.flightInfo?.child_flight)
         var infantList = travelers_list?.travelers?.filter((el) => el.type === 'Infant')?.slice(0, route?.params?.flightInfo?.infant_flight)
         var tempList = [];
+
         for (let i = 0; i < adultList?.length; i++) {
             tempList.push(adultList[i])
         }
@@ -239,18 +238,18 @@ export default function FlightBooking({ navigation, route }) {
         setTravelRec(travelRec = { CountryCode: travelRec.CountryCode, IssuingName: travelRec.IssuingName, Nationality: true });
     }
 
-    const handleSelectIssuingCountry = (e) => {
+    const handleSelectIssueCountry = (e) => {
         Keyboard.dismiss()
-        setSelectedIssueCntry(selectedIssueCntry = { CountryCode: selectedIssueCntry.CountryCode, IssuingName: selectedIssueCntry.IssuingName, CountryCode: e.name });
-        setGetSelectIdExp(getSelectIdExp = { CountryCode: getSelectIdExp.CountryCode, IssuingName: getSelectIdExp.IssuingName, IssuingCountry: e.id, });
+        setSelectedIssueCtry(selectedIssueCtry = { CountryCode: selectedIssueCtry.CountryCode, IssuingName: selectedIssueCtry.IssuingName, issueCtry: e.name });
+        setGetSelectIssueId(getSelectIssueId = { CountryCode: getSelectIssueId.CountryCode, IssuingName: getSelectIssueId.IssuingName, issueCtry: e.id, });
         dispatch({
             type: userAction.GET_ADD_TRAVELLER_COUNTRY_ISSUING,
             payload: []
         })
-        setIssueCntry(issueCntry = { CountryCode: issueCntry.CountryCode, IssuingName: issueCntry.IssuingName, IssuingCountry: true });
+        setShowissueCtry(showissueCtry = { CountryCode: showissueCtry.CountryCode, IssuingName: showissueCtry.IssuingName, issueCtry: true });
     }
 
-    
+
     const EditTravelDetails = (item, index) => {
         setShowAddTraveller(true)
         setEditedIndex(editedIndex = index)
@@ -262,7 +261,9 @@ export default function FlightBooking({ navigation, route }) {
         let addTravelLastName = { lastName: item.last_name }
 
         setSelectedNationality({ getSelectId: item.nationality.id, Nationality: item.nationality.name })
+        setSelectedIssueCtry({ getSelectId: item.issueCtry.id, issueCtry: item.issueCtry.name })
         setTravelRec({ Nationality: true })
+        setShowissueCtry({ issueCtry: true })
         setDobDate(new Date(item.dob))
         setTitle(item.title)
         setSelectType(item.type)
@@ -286,10 +287,9 @@ export default function FlightBooking({ navigation, route }) {
             gender: data?.selectedgender,
             dob: data?.dob,
             nationality: getSelectId?.Nationality,
-            expDate:expDate,
-            Passport_Number:data?.Passport_Number,
-            issueCntry:getSelectIdExp?.IssuingCountry
-
+            passport: data?.PassNo,
+            expDate: data?.expDate,
+            issueCtry:getSelectIssueId.issueCtry
         }
 
         TypeDropDownList()
@@ -299,14 +299,11 @@ export default function FlightBooking({ navigation, route }) {
         setSelectType("");
         setDobDate(new Date());
         setSelectedNationality("");
+        setSelectedIssueCtry("")
         setTravellerEdit(false)
-        setExpDate(new Date())
-        setGetSelectIdExp({IssuingCountry:''})
         let addTravelFirstName = { firstName: '' }
         let addTravelLastName = { lastName: '' }
-        let addTravelPass = { Passport_Number: '' }
-
-        reset({ ...addTravelFirstName, ...addTravelLastName,...addTravelPass })
+        reset({ ...addTravelFirstName, ...addTravelLastName, })
     }
 
 
@@ -317,39 +314,157 @@ export default function FlightBooking({ navigation, route }) {
         TypeDropDownList()
     }
 
-    const TravellerAddBtn = (data) => {
-        var AddedAdult = {
-            type: data?.selectedType,
-            title: data?.nametitle,
-            first_name: data?.firstName,
-            last_name: data?.lastName,
-            gender: data?.selectedgender,
-            dob: data?.dob,
-            nationality: getSelectId?.Nationality,
-            passport: data?.Passport_Number,
-            expDate:expDate,
-            issueCntry:getSelectIdExp?.IssuingCountry
-        }
-        setAllTravellerList(allTravellerList = [...allTravellerList, AddedAdult])
-        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveller added Successfully' } })
-        TypeDropDownList()
+    const SubmitAddBtn = (data) => {
 
+        const currentYear = new Date().getFullYear();
+        var dobDate = data?.dob?.getFullYear()
+        var age = currentYear - dobDate
+
+
+        if (data?.selectedType.toLowerCase() === 'adult') {
+
+            if (age < 12) {
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Adult Age does not match' } })
+            } else {
+                TravellerAddBtn(data)
+            }
+
+        } else if (data?.selectedType.toLowerCase() === 'child') {
+            if (age > 12 && age < 2) {
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Child Age does not match' } })
+            } else {
+                TravellerAddBtn(data)
+            }
+
+        } else if (data?.selectedType.toLowerCase() === 'infant') {
+            if (age > 2) {
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Infant Age does not match' } })
+
+            } else {
+                TravellerAddBtn(data)
+
+
+            }
+        }
+    }
+
+
+    const AdultTypes = (item) => {
+        if (item === "Adult") {
+            var today = new Date();
+            var dd = today.getDate();
+            var mm = today.getMonth() + 1;
+            var yyyy = today.getFullYear() - 14;
+            if (dd < 10) {
+                dd = '0' + dd
+            }
+            if (mm < 10) {
+                mm = '0' + mm
+            }
+            today = yyyy + '-' + mm + '-' + dd;
+            const dateadult = new Date(today);
+            setDobDate(dateadult)
+            setMaxAgeLimit(dateadult);
+            setMinAgeLimit(null);
+
+        } else if (item === "Child") {
+            var todayCM = new Date();
+            var ddCM = todayCM.getDate();
+            var mmCM = todayCM.getMonth() + 1;
+            var yyyyCM = todayCM.getFullYear() - 14;
+            if (ddCM < 10) {
+                ddCM = '0' + ddCM
+            }
+            if (mmCM < 10) {
+                mmCM = '0' + mmCM
+            }
+            todayCM = yyyyCM + '-' + mmCM + '-' + ddCM;
+            const dateChildMin = new Date(todayCM);
+            setDobDate(dateChildMin)
+            setMinAgeLimit(dateChildMin)
+
+            var todayCMX = new Date();
+            var ddCMX = todayCMX.getDate();
+            var mmCMX = todayCMX.getMonth() + 1;
+            var yyyyCMX = todayCMX.getFullYear() - 2;
+            if (ddCMX < 10) {
+                ddCMX = '0' + ddCMX
+            }
+            if (mmCMX < 10) {
+                mmCMX = '0' + mmCMX
+            }
+            todayCMX = yyyyCMX + '-' + mmCMX + '-' + ddCMX;
+            const dateChildMax = new Date(todayCMX);
+            setDobDate(dateChildMax)
+            setMaxAgeLimit(dateChildMax)
+
+        } else if (item === "Infant") {
+            var todayI = new Date();
+            var ddI = todayI.getDate();
+            var mmI = todayI.getMonth() + 1;
+            var yyyyI = todayI.getFullYear() - 2;
+            if (ddI < 10) {
+                ddI = '0' + ddI
+            }
+            if (mmI < 10) {
+                mmI = '0' + mmI
+            }
+            todayI = yyyyI + '-' + mmI + '-' + ddI;
+            const date4 = new Date(todayI);
+            setMinAgeLimit(date4)
+            setMaxAgeLimit(new Date())
+        }
+    }
+
+    const TravellerAddBtn = (data) => {
+        if(get_Revalidate?.IsPassportMandatory){
+            var AddedAdult = {
+                type: data?.selectedType,
+                title: data?.nametitle,
+                first_name: data?.firstName,
+                last_name: data?.lastName,
+                gender: data?.selectedgender,
+                dob: data?.dob,
+                nationality: getSelectId?.Nationality,
+                passport: data?.PassNo,
+                expDate: data?.expDate,
+                issueCtry:getSelectIssueId.issueCtry
+            }
+        }else{
+            var AddedAdult = {
+                type: data?.selectedType,
+                title: data?.nametitle,
+                first_name: data?.firstName,
+                last_name: data?.lastName,
+                gender: data?.selectedgender,
+                dob: data?.dob,
+                nationality: getSelectId?.Nationality
+            }
+        }
+
+      
+        setAllTravellerList(allTravellerList = [...allTravellerList, AddedAdult])
+
+        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveller added Successfully' } })
+
+        TypeDropDownList()
         setTitle("");
         setGender("");
         setSelectType("");
         setDobDate(new Date());
         setSelectedNationality("");
+        setSelectedIssueCtry("")
 
         let addTravelFirstName = { firstName: '' }
         let addTravelLastName = { lastName: '' }
         reset({ ...addTravelFirstName, ...addTravelLastName, })
     }
-
+    console.log(get_Revalidate?.IsPassportMandatory,'validate');
     const ConfirmBooking = (data) => {
+        console.log('data..',data)
         var filteredAdultList = allTravellerList.filter((item) => item?.type.toLowerCase() === 'adult')
         var filteredChildList = allTravellerList.filter((item) => item?.type.toLowerCase() === 'child')
         var filteredInfantList = allTravellerList.filter((item) => item?.type.toLowerCase() === 'infant')
-
 
         if (filteredAdultList?.length !== parseInt(adult) || filteredChildList?.length !== parseInt(child) || filteredInfantList?.length !== parseInt(infant)) {
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Add a Traveller ' } })
@@ -357,83 +472,353 @@ export default function FlightBooking({ navigation, route }) {
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Accept the Privacy Policy' } })
         } else {
 
-            var options = {
-                key: RAZOR_KEY,
-                key_secret: RAZOR_KEY_SECRET,
-                amount: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
-                currency: CURRENCY,
-                name: data?.Name,
-                description: "Payment Tick A Trip",
-                timeout: TIMEOUT,
-                // order_id:'TickATrip_'+generateUUID(8),
-                prefill: {
-                    email: data?.Email,
-                    contact: data?.Phone,
-                    name: data?.Name
-                },
-                notes: {
-                    address: "",
-                },
-                theme: {
-                    color: "#0543e9",
-                },
-            };
-            RazorpayCheckout.open(options).then((val) => {
-                var bookingData = {
-                    IsPassportMandatory: get_Revalidate?.IsPassportMandatory,
-                    PostCode: data?.PostalCode,
-                    TotalFare: totalFare?.MainTotalFare,
-                    adult_flight: adult,
-                    area_code: 758,
-                    child_flight: child,
-                    country_code: data?.CountryCode,
-                    customerEmail: userProfileData?.email,
-                    customerName: userProfileData?.name,
-                    customerPhone: userProfileData?.phone,
-                    email_id: data?.Email,
-                    fare_source_code: get_Revalidate?.FareSourceCode,
-                    dob: allTravellerList
-                        ?.map((val) => moment(val.dob).format('YYYY-MM-DDTHH:mm:ss'))
-                        .reduce((total, value, index) => {
-                            return index === 0 ? moment(value).format('YYYY-MM-DDTHH:mm:ss') : moment(total).format('YYYY-MM-DDTHH:mm:ss') + "<br>" + moment(value).format('YYYY-MM-DDTHH:mm:ss');
-                        }),
-                    first_name: allTravellerList
-                        ?.map((val) => val.first_name)
-                        .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
 
-                        }),
-                    gender: allTravellerList
-                        ?.map((val) => val.gender)
-                        .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
-                        }),
-                    last_name: allTravellerList
-                        ?.map((val) => val.last_name)
-                        .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
-                        }),
-                    title: allTravellerList
-                        ?.map((val) => val.title)
-                        .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
-                        }),
-                    infant_flight: infant,
-                    isRefundable: get_Revalidate?.IsRefundable,
-                    mobile_no: data?.Phone,
-                    nationality: data?.CountryCode,
-                    paymentTransactionId: val?.razorpay_payment_id,
-                    type: get_Revalidate?.FareType
+        console.log('allTravellerList',allTravellerList)
+        console.log('data...',data)
+
+        var AdultList =[];
+        var ChildList=[];
+        var InfantList=[];
+
+        allTravellerList?.filter((e)=>{
+            if(e?.type.toLowerCase() === 'adult'){
+                AdultList.push(e)
+            }
+            if(e?.type.toLowerCase() === 'child'){
+                ChildList.push(e)
+            }
+            if(e?.type.toLowerCase() === 'infant'){
+                InfantList.push(e)
+            }
+        })
+
+
+        let bookingData = {
+            customerName: data?.Name,
+            customerEmail: data?.Email,
+            customerPhone: data?.Phone,
+            area_code:  758,
+            isRefundable:get_Revalidate?.IsRefundable,
+            country_code:data?.CountryCode,
+            first_name: AdultList
+              ?.map((val) => val.first_name)
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              }),
+            last_name: AdultList
+              ?.map((val) => val.last_name)
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              }),
+            email_id: data.Email,
+            mobile_no: data.Phone,
+            dob: AdultList
+              ?.map((val) => moment(val.dob).format('YYYY-MM-DDThh:mm:ss'))
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              }),
+            gender: AdultList
+              ?.map((val) => val.gender)
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              }),
+            type: get_Revalidate?.FareType,
+            IsPassportMandatory:get_Revalidate?.IsPassportMandatory,
+            adult_flight: adult,
+            child_flight: child,
+            infant_flight: infant,
+            fare_source_code:  get_Revalidate?.FareSourceCode,
+            PostCode:  data?.PostalCode,
+          };
+          bookingData['title'] = AdultList
+            ?.map((val) => val.title)
+            .reduce((total, value, index) => {
+              return index === 0 ? value : total + "<br>" + value;
+            });
+          if (get_Revalidate?.IsPassportMandatory) {
+            bookingData['issue_country'] = AdultList
+              ?.map((val) => val.issueCtry)
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              });
+          }
+          bookingData['nationality'] = AdultList
+            ?.map((val) => val.nationality)
+            .reduce((total, value, index) => {
+              return index === 0 ? value : total + "<br>" + value;
+            });
+          if (get_Revalidate?.IsPassportMandatory) {
+            bookingData['passport_no'] = AdultList
+              ?.map((val) => val?.passport)
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              });
+            bookingData['passport_expiry'] = AdultList
+              ?.map((val) => moment(val?.expDate).format('YYYY-MM-DD'))
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              });
+          }
+          if (child > 0) {
+            bookingData['child_dob'] =
+              ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => (val.dob))
+                  .reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['child_gender'] =
+            ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => val.gender)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['child_first_name'] =
+            ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => val.first_name)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['child_last_name'] =
+            ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => val.last_name)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+      
+            bookingData['child_title'] =
+            ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => val.title)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            if (get_Revalidate?.IsPassportMandatory) {
+              console.log(ChildList
+                ?.map((val) => val?.issueCtry)
+                .reduce((total, value, index) => {
+                  return index === 0 ? value : total + "<br>" + value;
+                }));
+              bookingData['child_issue_country'] =
+              ChildList?.length === 0
+                  ? ""
+                  : ChildList
+                    ?.map((val) => val?.issueCtry)
+                    .reduce((total, value, index) => {
+                      return index === 0 ? value : total + "<br>" + value;
+                    });
+            }
+            if (get_Revalidate?.IsPassportMandatory) {
+              bookingData['child_passport_expiry_date'] = ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => moment(val.expDate).format('YYYY-MM-DD'))
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+              bookingData['child_passport_no'] = ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => val.passport)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            }
+          }
+          if (infant > 0) {
+            bookingData['infant_dob'] =
+              InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.dob)
+                  .reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['infant_gender'] =
+            InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.gender)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['infant_first_name'] =
+            InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.first_name)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['infant_last_name'] =
+            InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.last_name)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['infant_title'] =
+            InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.title)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            if (get_Revalidate?.IsPassportMandatory) {
+              bookingData['infant_issue_country'] =
+              InfantList?.length === 0
+                  ? ""
+                  : InfantList
+                    ?.map((val) => val?.issueCtry)
+                    .reduce((total, value, index) => {
+                      return index === 0 ? value : total + "<br>" + value;
+                    });
+            }
+            if (get_Revalidate?.IsPassportMandatory) {
+              bookingData['infant_passport_expiry_date'] = InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) =>moment(val.expDate).format('YYYY-MM-DD'))
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+              bookingData['infant_passport_no'] = InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.passport)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            }
+          }
+          let price = totalFare?.MainTotalFare;
+         
+          var options = {
+                    key: RAZOR_KEY,
+                    key_secret: RAZOR_KEY_SECRET,
+                    amount: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
+                    currency: CURRENCY,
+                    name: data?.Name,
+                    description: "Payment Tick A Trip",
+                    timeout: TIMEOUT,
+                    prefill: {
+                        email: data?.Email,
+                        contact: data?.Phone,
+                        name: data?.Name
+                    },
+                    notes: {
+                        address: "",
+                    },
+                    theme: {
+                        color: "#0543e9",
+                    },
+                };
+
+               RazorpayCheckout.open(options).then((val) => {
+                if (val.razorpay_payment_id) {
+                    bookingData['paymentTransactionId'] = val.razorpay_payment_id;
+                    bookingData['TotalFare'] = price;
+                    console.log('price....',price)
+                    if (!!discountPrice) {
+                      bookingData['couponDiscount'] = discountPrice;
+                    }
                 }
-
                 dispatch({ type: FlightAction.SET_FLIGHT_BOOKING, payload: bookingData, navigation: navigation })
 
             }).catch((error) => {
                 dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
+                console.log('error', error)
             });
-        }
+
+        //     var options = {
+        //         key: RAZOR_KEY,
+        //         key_secret: RAZOR_KEY_SECRET,
+        //         amount: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
+        //         currency: CURRENCY,
+        //         name: data?.Name,
+        //         description: "Payment Tick A Trip",
+        //         timeout: TIMEOUT,
+        //         // order_id:'TickATrip_'+generateUUID(8),
+        //         prefill: {
+        //             email: data?.Email,
+        //             contact: data?.Phone,
+        //             name: data?.Name
+        //         },
+        //         notes: {
+        //             address: "",
+        //         },
+        //         theme: {
+        //             color: "#0543e9",
+        //         },
+        //     };
+        //     RazorpayCheckout.open(options).then((val) => {
+        //         var bookingData = {
+        //             IsPassportMandatory: get_Revalidate?.IsPassportMandatory,
+        //             PostCode: data?.PostalCode,
+        //             TotalFare: totalFare?.MainTotalFare,
+        //             adult_flight: adult,
+        //             area_code: 758,
+        //             child_flight: child,
+        //             country_code: data?.CountryCode,
+        //             customerEmail: userProfileData?.email,
+        //             customerName: userProfileData?.name,
+        //             customerPhone: userProfileData?.phone,
+        //             email_id: data?.Email,
+        //             fare_source_code: get_Revalidate?.FareSourceCode,
+        //             dob: allTravellerList
+        //                 ?.map((val) => moment(val.dob).format('YYYY-MM-DDTHH:mm:ss'))
+        //                 .reduce((total, value, index) => {
+        //                     return index === 0 ? moment(value).format('YYYY-MM-DDTHH:mm:ss') : moment(total).format('YYYY-MM-DDTHH:mm:ss') + "<br>" + moment(value).format('YYYY-MM-DDTHH:mm:ss');
+        //                 }),
+        //             first_name: allTravellerList
+        //                 ?.map((val) => val.first_name)
+        //                 .reduce((total, value, index) => {
+        //                     return index === 0 ? value : total + "<br>" + value;
+
+        //                 }),
+        //             gender: allTravellerList
+        //                 ?.map((val) => val.gender)
+        //                 .reduce((total, value, index) => {
+        //                     return index === 0 ? value : total + "<br>" + value;
+        //                 }),
+        //             last_name: allTravellerList
+        //                 ?.map((val) => val.last_name)
+        //                 .reduce((total, value, index) => {
+        //                     return index === 0 ? value : total + "<br>" + value;
+        //                 }),
+        //             title: allTravellerList
+        //                 ?.map((val) => val.title)
+        //                 .reduce((total, value, index) => {
+        //                     return index === 0 ? value : total + "<br>" + value;
+        //                 }),
+        //             infant_flight: infant,
+        //             isRefundable: get_Revalidate?.IsRefundable,
+        //             mobile_no: data?.Phone,
+        //             nationality: data?.CountryCode,
+        //             paymentTransactionId: val?.razorpay_payment_id,
+        //             type: get_Revalidate?.FareType
+        //         }
+
+        //         dispatch({ type: FlightAction.SET_FLIGHT_BOOKING, payload: bookingData, navigation: navigation })
+
+        //     }).catch((error) => {
+        //         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
+        //         console.log('error', error)
+        //     });
+        // }
     }
-    
+}
+   
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             {/* appbar */}
@@ -448,7 +833,6 @@ export default function FlightBooking({ navigation, route }) {
                             <FromIcon height={15} width={15} />
                             <View style={{ paddingLeft: 10 }}>
                                 <Text style={styles.appbarPlace}>{route?.params?.flightInfo?.fromCity}</Text>
-                                {/* <Text style={styles.appBarTraveller}>{route?.params?.flightInfo?.adult_flight} Adult, {route?.params?.flightInfo?.child_flight} Child, {route?.params?.flightInfo?.infant_flight} Infant</Text> */}
                             </View>
                         </View>
 
@@ -458,7 +842,6 @@ export default function FlightBooking({ navigation, route }) {
                             <ToIcon height={19} width={19} />
                             <View style={{ paddingLeft: 10 }}>
                                 <Text style={styles.appbarPlace}>{route?.params?.flightInfo?.toCity}</Text>
-                                {/* <Text style={styles.appBarTraveller}>{route?.params?.flightInfo?.class}</Text> */}
                             </View>
                         </View>
 
@@ -572,7 +955,7 @@ export default function FlightBooking({ navigation, route }) {
 
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Other charges</Text>
-                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>0/-</Text></Text>
+                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>0000/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
@@ -585,9 +968,6 @@ export default function FlightBooking({ navigation, route }) {
                         </View>
                     </View>
                 </View>
-
-
-
                 {isLogin &&
                     <ContactInfo
                         cuntryCode={cuntryCode}
@@ -597,18 +977,16 @@ export default function FlightBooking({ navigation, route }) {
                         errors2={errors2} reset2={reset2} setValue2={setValue2} />
                 }
 
-                {
-                    // (allTravellerList.length !== parseInt(adult) + parseInt(child) + parseInt(infant) && travellerEdit ===true) ?
-                    <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                            <Text style={[styles.formTitle]}>Add Traveller Details *</Text>
-                            {/* {isLogin &&
-                                    <TouchableOpacity onPress={() => setShowAddTraveller(!showAddTraveller)}>
-                                        <AntDesign name={showAddTraveller ? 'upcircleo' : 'downcircleo'} style={{ color: '#2B64FF', fontSize: height * 0.022, paddingRight: 15 }} />
-                                    </TouchableOpacity>
-                                } */}
-                        </View>
-                        {/* {(showAddTraveller === true) ? */}
+                <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                        <Text style={[styles.formTitle]}>Add Traveller Details *</Text>
+                        {isLogin &&
+                            <TouchableOpacity onPress={() => setShowAddTraveller(!showAddTraveller)}>
+                                <AntDesign name={showAddTraveller ? 'upcircleo' : 'downcircleo'} style={{ color: '#2B64FF', fontSize: height * 0.022, paddingRight: 15 }} />
+                            </TouchableOpacity>
+                        }
+                    </View>
+                    {(showAddTraveller === true) ?
                         <View>
                             <View style={[styles.editTextBorder]}>
                                 <Controller
@@ -633,6 +1011,7 @@ export default function FlightBooking({ navigation, route }) {
                                             onChange={(item) => {
                                                 onChange(item.value)
                                                 setSelectType(item.value)
+                                                AdultTypes(item.value)
                                             }}
                                             selectedTextProps={{
                                                 style: {
@@ -657,7 +1036,7 @@ export default function FlightBooking({ navigation, route }) {
                                 )}
                             </View>
                             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                <View style={[styles.editTextBorder, { width: "20%" }]}>
+                                <View style={[styles.editTextBorder, { width: "24%" }]}>
                                     <Controller
                                         control={control}
                                         name="nametitle"
@@ -689,7 +1068,7 @@ export default function FlightBooking({ navigation, route }) {
                                                         paddingTop: 10,
                                                     },
                                                 }}
-                                                style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
+                                                style={[styles.inputeEditor, { paddingHorizontal: 5}]}
                                                 renderRightIcon={() => (
                                                     <IoniconsIcon
                                                         name="chevron-down"
@@ -703,7 +1082,7 @@ export default function FlightBooking({ navigation, route }) {
                                         <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.nametitle.message}</Text>
                                     )}
                                 </View>
-                                <View style={[styles.editTextBorder, { width: "78%" }]}>
+                                <View style={[styles.editTextBorder, { width: "75%" }]}>
                                     <Controller
                                         control={control}
                                         name="firstName"
@@ -817,7 +1196,7 @@ export default function FlightBooking({ navigation, route }) {
                                     </View>
                                 </TouchableHighlight>
                                 {errors.dob && (
-                                    <Text style={[styles.errormessage]}>{errors.dob.message}</Text>
+                                    <Text style={[styles.errormessage,{marginTop:10}]}>{errors.dob.message}</Text>
                                 )}
                             </View>
                             <View>
@@ -839,7 +1218,7 @@ export default function FlightBooking({ navigation, route }) {
                                             value={selectedNationality?.Nationality}
                                             onChangeText={(e) => {
                                                 if (e === '') {
-                                                    setTravelRec(issueCntry = { Nationality: true })
+                                                    setTravelRec(travelRec = { Nationality: true })
                                                 }
                                                 if (e?.length >= 3) {
                                                     dispatch({
@@ -926,7 +1305,8 @@ export default function FlightBooking({ navigation, route }) {
                                                                     color: 'black',
                                                                     paddingHorizontal: 9,
                                                                     fontSize: 13,
-                                                                    paddingVertical: 2,
+                                                                    paddingVertical: 5,
+                                                                    fontFamily:FONTS.font
                                                                 }}>{e?.name}</Text>
                                                         </TouchableHighlight>
                                                     )
@@ -936,174 +1316,179 @@ export default function FlightBooking({ navigation, route }) {
                                     </View>
                                 }
                             </View>
-                           
-
-                            {/* {
-                                (get_Revalidate?.IsPassportMandatory === true) ?
-                                    <View>
-                                        <View style={styles.editTextBorder}>
-                                            <Controller
-                                                control={control}
-                                                name='Passport_Number'
-                                                rules={{
-                                                    required: {
-                                                        value: true,
-                                                        message: "Enter Your Passport Number"
-                                                    }
-                                                }}
-                                                render={({ field: { onChange, value } }) => (
-                                                    <TextInput
-                                                        placeholderTextColor={"gray"}
-                                                        style={styles.inputeEditor}
-                                                        placeholder="Passport Number"
-                                                        keyboardType='default'
-                                                        value={value}
-                                                        {...register('Passport_Number')}
-                                                        onChangeText={value => {
-                                                            onChange(value)
-                                                        }
-                                                        }
-                                                    />
-                                                )}
-                                            />
-                                            {errors.Passport_Number && (
-                                                <Text style={[styles.errormessage]}>{errors.Passport_Number.message}</Text>
-                                            )}
-                                        </View>
-                                        <View style={[styles.editTextBorder]}>
-                                            <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowDatePicker(!showEXPDatePicker)} style={{ paddingRight: 5 }}>
-                                                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                                    <Text style={{ color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
-                                                        {moment(expDate).format('DD/MM/YYYY').toString()}
-                                                    </Text>
-                                                    <AntDesign Icon name="calendar" size={25} color="gray" />
-                                                </View>
-                                            </TouchableHighlight>
-                                            {errors.exp && (
-                                                <Text style={[styles.errormessage]}>{errors.exp.message}</Text>
-                                            )}
-                                        </View>
-                                         <View>
-                                        <View style={[styles.editTextBorder]}>
-                                            <View
-                                                style={{
-                                                    flexDirection: 'row',
-                                                    height: 35,
-                                                    width: '100%',
-                                                    alignItems: 'center',
-                                                }}
-                                            >
-                                                <TextInput
-                                                    keyboardType={'default'}
-                                                    placeholder={'Issuing Country'}
-                                                    placeholderTextColor="gray"
-                                                    numberOfLines={1}
-                                                    name="issue_country"
-                                                    value={selectedIssueCntry?.IssuingCountry}
-                                                    onChangeText={(e) => {
-                                                        if (e === '') {
-                                                            setIssueCntry(issueCntry = { IssuingCountry: true })
-                                                        }
-                                                        if (e?.length >= 3) {
-                                                            dispatch({
-                                                                type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
-                                                                payload: {
-                                                                    name: e,
-                                                                    type:'issuing-country',
-                                                                }
-                                                            })
-                                                            setSelectedIssueCntry(selectedIssueCntry = { IssuingCountry: e })
-                                                        } else {
-                                                            setSelectedIssueCntry(selectedIssueCntry = { IssuingCountry: e })
-                                                            dispatch({
-                                                                type: userAction.GET_ADD_TRAVELLER_COUNTRY_ISSUING,
-                                                                payload: []
-                                                            })
+                            <View>
+                                {
+                                    
+                                    (get_Revalidate?.IsPassportMandatory) ?
+                                        <View>
+                                            <View style={styles.editTextBorder}>
+                                                <Controller
+                                                    control={control}
+                                                    name='PassNo'
+                                                    rules={{
+                                                        required: {
+                                                            value: true,
+                                                            message: "Enter Your Passport Number!"
                                                         }
                                                     }}
-                                                    style={{
-                                                        color: 'black',
-                                                        width: width * 0.9,
-                                                        paddingTop: 5,
-                                                        paddingBottom: 0,
-                                                    }}
+                                                    render={({ field: { onChange, value } }) => (
+                                                        <TextInput
+                                                            placeholderTextColor={"gray"}
+                                                            style={styles.inputeEditor}
+                                                            placeholder="Passport Number"
+                                                            keyboardType='default'
+                                                            value={value}
+                                                            {...register('PassNo')}
+                                                            onChangeText={value => {
+                                                                onChange(value)
+                                                            }
+                                                            }
+                                                        />
+                                                    )}
                                                 />
-                                                {
-                                                    selectedIssueCntry?.IssuingCountry !== "" ?
-                                                        <TouchableHighlight
-                                                            underlayColor={'transparent'}
-                                                            onPress={() => {
-                                                                setSelectedIssueCntry(selectedIssueCntry = { IssuingCountry: '' })
-                                                                dispatch({
-                                                                    type: userAction.GET_ADD_TRAVELLER_COUNTRY_ISSUING,
-                                                                    payload: []
-                                                                })
-                                                                setIssueCntry(issueCntry = { IssuingCountry: false });
+                                                {(get_Revalidate?.IsPassportMandatory)?errors.PassNo && (
+                                                    <Text style={[styles.errormessage]}>{errors.PassNo.message}</Text>
+                                                ):<></>}
+                                            </View>
+                                            <View style={[styles.editTextBorder]}>
+                                                <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowEXPDatePicker(!showEXPDatePicker)} style={{ paddingRight: 5 }}>
+                                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                                        <Text style={{ color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
+                                                            {moment(expDate).format('DD/MM/YYYY').toString()}
+                                                        </Text>
+                                                        <AntDesign Icon name="calendar" size={25} color="gray" />
+                                                    </View>
+                                                </TouchableHighlight>
+                                                {(get_Revalidate?.IsPassportMandatory)?errors.expDate && (
+                                                    <Text style={[styles.errormessage,{marginTop:10}]}>{errors?.expDate?.message}</Text>
+                                                ):<></>}
+                                            </View>
+                                            <View>
+                                                <View style={[styles.editTextBorder]}>
+                                                    <View
+                                                        style={{
+                                                            flexDirection: 'row',
+                                                            height: 35,
+                                                            width: '100%',
+                                                            alignItems: 'center',
+                                                        }}
+                                                    >
+                                                        <TextInput
+                                                            keyboardType={'default'}
+                                                            placeholder={'Issuing Country'}
+                                                            placeholderTextColor="gray"
+                                                            numberOfLines={1}
+                                                            name="issue_ctry"
+                                                            value={selectedIssueCtry.issueCtry}
+                                                            onChangeText={(e) => {
+                                                                if (e === '') {
+                                                                    setShowissueCtry(showissueCtry = { issueCtry: true })
+                                                                }
+                                                                if (e?.length >= 3) {
+                                                                    dispatch({
+                                                                        type: userAction.SET_ADD_TRAVELLER_SEARCH_BY_NAME,
+                                                                        payload: {
+                                                                            name: e,
+                                                                            type: 'issuing-country',
+                                                                        }
+                                                                    })
+                                                                    setSelectedIssueCtry(selectedIssueCtry = { issueCtry: e })
+                                                                } else {
+                                                                    setSelectedIssueCtry(selectedIssueCtry = { issueCtry: e })
+                                                                    dispatch({
+                                                                        type: userAction.GET_ADD_TRAVELLER_COUNTRY_ISSUING,
+                                                                        payload: []
+                                                                    })
+                                                                }
                                                             }}
-                                                        >
-                                                            <AntDesign name="closecircle" size={18} color="gray" style={{
-                                                                marginLeft: 10, marginRight: 10, position: 'absolute', right: 20, top: -4
-                                                            }} />
-                                                        </TouchableHighlight> : <></>
-                                                }
-                                            </View>
-                                        </View>
-                                        {(AddTravaller_country_issuing?.message === undefined && selectedIssueCntry?.IssuingCountry !== '' && issueCntry?.IssuingCountry === false) ?
-                                            <View style={{
-                                                backgroundColor: 'white',
-                                                width: '100%',
-                                                alignSelf: 'center',
-                                                position: 'relative',
-                                                zIndex: 2,
-                                                borderRadius: 5,
-                                                elevation: 10,
-                                                maxHeight: height * 0.35
-                                            }}>
-                                                <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, }}>No Options found</Text>
-                                            </View> : <View style={{
-                                                backgroundColor: 'white',
-                                                width: '100%',
-                                                alignSelf: 'center',
-                                                position: 'relative',
-                                                zIndex: 1,
-                                                borderRadius: 5,
-                                                elevation: 10,
-                                                maxHeight: height * 0.35
-                                            }}>
-
-                                                <ScrollView
-                                                    showsVerticalScrollIndicator={true}
-                                                    nestedScrollEnabled
-                                                    keyboardShouldPersistTaps='handled'
-                                                >
-                                                    {
-                                                        AddTravaller_country_issuing?.message?.map((e, i) => {
-                                                            return (
+                                                            style={{
+                                                                color: 'black',
+                                                                width: width * 0.9,
+                                                                paddingTop: 5,
+                                                                paddingBottom: 0,
+                                                            }}
+                                                        />
+                                                        {
+                                                            selectedIssueCtry?.issueCtry !== "" ?
                                                                 <TouchableHighlight
-                                                                    underlayColor={"transparent"}
-                                                                    key={i}
-                                                                    onPress={() => handleSelectIssuingCountry(e)}
+                                                                    underlayColor={'transparent'}
+                                                                    onPress={() => {
+                                                                        setSelectedIssueCtry(selectedIssueCtry = { issueCtry: '' })
+                                                                        dispatch({
+                                                                            type: userAction.GET_ADD_TRAVELLER_COUNTRY_ISSUING,
+                                                                            payload: []
+                                                                        })
+                                                                        setShowissueCtry(showissueCtry = { issueCtry: false });
+                                                                    }}
                                                                 >
-                                                                    <Text
-                                                                        style={{
-                                                                            color: 'black',
-                                                                            paddingHorizontal: 9,
-                                                                            fontSize: 13,
-                                                                            paddingVertical: 10,
-                                                                            fontFamily:FONTS.font
-                                                                        }}>{e.dial_code} - {e?.name}</Text>
-                                                                </TouchableHighlight>
-                                                            )
-                                                        })
-                                                    }
-                                                </ScrollView>
+                                                                    <AntDesign name="closecircle" size={18} color="gray" style={{
+                                                                        marginLeft: 10, marginRight: 10, position: 'absolute', right: 20, top: -4
+                                                                    }} />
+                                                                </TouchableHighlight> : <></>
+                                                        }
+                                                    </View>
+                                                </View>
+                                                {(AddTravaller_country_issuing?.message === undefined && selectedIssueCtry?.issueCtry !== '' && getSelectIssueId?.issueCtry === false) ?
+                                                    <View style={{
+                                                        backgroundColor: 'white',
+                                                        width: '100%',
+                                                        alignSelf: 'center',
+                                                        position: 'relative',
+                                                        zIndex: 2,
+                                                        borderRadius: 5,
+                                                        elevation: 10,
+                                                        maxHeight: height * 0.35
+                                                    }}>
+                                                        <Text style={{ color: 'grey', textAlign: 'center', paddingVertical: 5, }}>No Options found</Text>
+                                                    </View> : <View style={{
+                                                        backgroundColor: 'white',
+                                                        width: '100%',
+                                                        alignSelf: 'center',
+                                                        position: 'relative',
+                                                        zIndex: 2,
+                                                        borderRadius: 10,
+                                                        elevation: 10,
+                                                        maxHeight: height * 0.35
+                                                    }}>
+
+                                                        <ScrollView
+                                                            showsVerticalScrollIndicator={true}
+                                                            nestedScrollEnabled
+                                                            keyboardShouldPersistTaps='handled'
+                                                        >
+                                                            {
+                                                                AddTravaller_country_issuing?.message?.map((e, i) => {
+                                                                    return (
+                                                                        <TouchableHighlight
+                                                                            underlayColor={"transparent"}
+                                                                            key={i}
+                                                                            onPress={() => handleSelectIssueCountry(e)}
+                                                                        >
+                                                                            <Text
+                                                                                style={{
+                                                                                    color: 'black',
+                                                                                    fontFamily: FONTS.font,
+                                                                                    paddingHorizontal: 9,
+                                                                                    fontSize: 13,
+                                                                                    paddingVertical: 8,
+                                                                                }}>{e?.dial_code} - {e?.name}</Text>
+                                                                        </TouchableHighlight>
+                                                                    )
+                                                                })
+                                                            }
+                                                        </ScrollView>
+                                                    </View>
+                                                }
+
                                             </View>
-                                        }
-                                    </View>
-                                    </View>
-                                    :
-                                    <View />
-                            } */}
+
+
+                                        </View>
+
+                                        : <View />
+                                }
+                            </View>
+
                             <View style={{ marginVertical: 20, width: '90%', alignSelf: 'center' }}>
                                 {(travellerEdit === false) ?
 
@@ -1116,7 +1501,7 @@ export default function FlightBooking({ navigation, route }) {
                                             <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, opacity: 0.5 }}>Disabled</Text>
                                         </TouchableOpacity> :
                                         <TouchableOpacity
-                                            onPress={handleSubmit(TravellerAddBtn)}
+                                            onPress={handleSubmit(SubmitAddBtn)}
                                             style={[styles.clickBtn]}>
                                             <Text style={{ color: '#FFFFFF', fontSize: 18, fontFamily: FONTS.mediam, }}>Add</Text>
                                         </TouchableOpacity>
@@ -1129,14 +1514,10 @@ export default function FlightBooking({ navigation, route }) {
                                     </TouchableHighlight>
                                 }
                             </View>
-                        </View>
+                        </View> : <></>
+                    }
 
-                    </View>
-                    // :
-                    // <></>
-                }
-
-
+                </View>
                 <View style={{ marginHorizontal: 25, paddingTop: 15 }}>
                     {allTravellerList?.map((item, index) => {
                         return (
@@ -1166,77 +1547,6 @@ export default function FlightBooking({ navigation, route }) {
                     })}
 
 
-                    {/* {travelers_list?.travelers?.filter((el) => el.type === 'Adult')?.slice(0, route?.params?.flightInfo?.adult_flight)?.map((item, index) => {
-                        return (
-                            <View key={index} style={[styles.travellerDetails, { marginBottom: 20 }]}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <View style={{ marginRight: 10 }}>
-                                        <ProfileIcon height={22} width={22} />
-                                    </View>
-                                    <Text style={{ fontSize: 17, fontFamily: FONTS.mediam, color: '#1B5CB7' }}>{item?.title} {item?.first_name} {item?.last_name}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <TouchableOpacity
-                                        onPress={() => EditTravelDetails(item)}
-                                        style={{ marginRight: 20 }}>
-                                        <EditIcon height={22} width={22} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={() => deleteTraveller(item)}
-                                    >
-                                        <DeleteIcon height={22} width={22} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        );
-                    })} */}
-
-                    {/* {travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, route?.params?.flightInfo?.child_flight)?.map((item, index) => {
-                        return (
-                            <View key={index} style={[styles.travellerDetails, { marginBottom: 20 }]}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <View style={{ marginRight: 10 }}>
-                                        <ProfileIcon height={22} width={22} />
-                                    </View>
-                                    <Text style={{ fontSize: 17, fontFamily: FONTS.mediam, color: '#1B5CB7' }}>{item?.title} {item?.first_name} {item?.last_name}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <TouchableOpacity onPress={() => EditTravelDetails(item)} style={{ marginRight: 20 }}>
-                                        <EditIcon height={22} width={22} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={() => deleteTraveller(item)}
-                                    >
-                                        <DeleteIcon height={22} width={22} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        );
-                    })}
-
-                    {travelers_list?.travelers?.filter((el) => el.type === 'Infant')?.slice(0, route?.params?.flightInfo?.infant_flight)?.map((item, index) => {
-                        return (
-                            <View key={index} style={[styles.travellerDetails, { marginBottom: 20 }]}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <View style={{ marginRight: 10 }}>
-                                        <ProfileIcon height={22} width={22} />
-                                    </View>
-                                    <Text style={{ fontSize: 17, fontFamily: FONTS.mediam, color: '#1B5CB7' }}>{item?.title} {item?.first_name} {item?.last_name}</Text>
-                                </View>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
-                                    <TouchableOpacity onPress={() => EditTravelDetails(item)} style={{ marginRight: 20 }}>
-                                        <EditIcon height={22} width={22} />
-                                    </TouchableOpacity>
-                                    <TouchableOpacity
-                                        onPress={() => deleteTraveller(item)}
-                                    >
-                                        <DeleteIcon height={22} width={22} />
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        );
-                    })} */}
-
                     <View style={{ width: "90%", alignSelf: "center" }} >
                         <View style={{ flexDirection: 'row', alignItems: "flex-start", paddingBottom: 15 }}>
                             <Pressable onPress={() => setCheckBoxOne(!checkBoxOne)}>
@@ -1248,12 +1558,7 @@ export default function FlightBooking({ navigation, route }) {
                                     <Text style={{ color: '#C80505' }}>*</Text></Text>
                             </View>
                         </View>
-                        {/* <View style={{ flexDirection: 'row', alignItems: "flex-start" }}>
-                            <Pressable onPress={() => setCheckBoxTwo(!checkBoxTwo)}>
-                                <MaterialIcons style={[styles.checkBoxStyl]} name={checkBoxTwo ? "check-box" : "check-box-outline-blank"} />
-                            </Pressable>
-                            <Text style={{ color: "#333333", fontSize: 14, fontFamily: FONTS.font, flex: 1 }}>Send me travel offers, deals, and news by email & message</Text>
-                        </View> */}
+
                     </View>
                 </View>
 
@@ -1268,6 +1573,8 @@ export default function FlightBooking({ navigation, route }) {
                     }}
                     render={({ field: { onChange, value } }) => (
                         <DatePicker
+                            maximumDate={maxAgeLimit}
+                            minimumDate={minAgeLimit}
                             modal
                             open={showDatePicker}
                             date={dobDate}
@@ -1287,17 +1594,18 @@ export default function FlightBooking({ navigation, route }) {
                     )}
                 />
 
-<Controller register
+                <Controller register
                     control={control}
                     name="expDate"
                     rules={{
                         required: {
                             value: true,
-                            message: 'Select your Expiry date',
+                            message: 'Select your Expiry Date!',
                         },
                     }}
                     render={({ field: { onChange, value } }) => (
                         <DatePicker
+                            minimumDate={new Date()}
                             modal
                             open={showEXPDatePicker}
                             date={expDate}
@@ -1307,6 +1615,7 @@ export default function FlightBooking({ navigation, route }) {
                             value={value}
                             onConfirm={(DOB) => {
                                 onChange(DOB)
+                                console.log(DOB)
                                 setShowEXPDatePicker(!showEXPDatePicker);
                                 setExpDate(expDate = DOB);
                             }}
@@ -1316,7 +1625,6 @@ export default function FlightBooking({ navigation, route }) {
                         />
                     )}
                 />
-
             </ScrollView>
             <TouchableOpacity style={styles.ConfirmBtn}
                 onPress={handleSubmit2(ConfirmBooking)}>
@@ -1337,7 +1645,6 @@ const styles = StyleSheet.create({
     },
     appbarPlaceContainer: { backgroundColor: 'white', width: width * 0.75, marginLeft: 5, borderRadius: 30, paddingVertical: 10 },
     appbarPlace: { fontFamily: FONTS.font, fontSize: height * 0.018 },
-    appBarTraveller: { fontFamily: FONTS.font, marginTop: -6, fontSize: height * 0.016 },
     title: { fontFamily: FONTS.font, color: 'grey', fontSize: height * 0.0162 },
     text: { fontFamily: FONTS.fontBold, paddingLeft: 10, color: COLORS.colorText, fontSize: height * 0.017 },
     details: { flexDirection: 'column', backgroundColor: COLORS.lightGrey, paddingBottom: 15, paddingTop: 5 },
@@ -1356,13 +1663,11 @@ const styles = StyleSheet.create({
         paddingHorizontal: 15, paddingVertical: 3, borderRadius: 22, alignItems: 'center'
     },
     totalText: { fontFamily: FONTS.fontBold, color: 'white', fontSize: height * 0.022 },
-
     ConfirmBtn: {
         alignItems: 'center',
         backgroundColor: COLORS.borderColor,
         marginHorizontal: 20,
         marginBottom: 10,
-        // marginTop: 20,
         borderRadius: 30,
         paddingVertical: 10
     },
@@ -1384,13 +1689,6 @@ const styles = StyleSheet.create({
         fontSize: 28,
         paddingRight: 10,
         color: '#2B64FF',
-    },
-    policystyl: {
-        color: '#0566C8',
-        // borderBottomWidth: 1,
-        // borderBottomColor: '#0566C8',
-        fontFamily: FONTS.font,
-        fontSize: height * 0.015
     },
     travellerDetails: {
         backgroundColor: '#EEEEEE',
@@ -1415,5 +1713,5 @@ const styles = StyleSheet.create({
         height: height * 0.030,
         width: 1,
         backgroundColor: '#ddd'
-    }
+    },
 })

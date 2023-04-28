@@ -281,7 +281,7 @@ export default function FlightResult({ navigation, route }) {
                                                                     <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} key={ind}>
                                                                         <View style={{ alignItems: 'center' }}>
 
-                                                                            <Text style={styles.Textlite}> {data.flights[0].departureLocation}(
+                                                                            <Text style={styles.Textlite}> {data.flights[0].departureLocation} {'\n'}(
                                                                                 {
                                                                                     data.flights[0].flightList
                                                                                         .DepartureAirportLocationCode
@@ -331,7 +331,7 @@ export default function FlightResult({ navigation, route }) {
                                                                                 data.flights[
                                                                                     data.flights.length - 1
                                                                                 ].arrivalLocation
-                                                                            } (
+                                                                            } {'\n'} (
                                                                                 {
                                                                                     data.flights[
                                                                                         data.flights.length - 1

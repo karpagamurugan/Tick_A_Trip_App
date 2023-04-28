@@ -50,7 +50,6 @@ const ContactInfo = (props) => {
         reset({ ...defaultCountryCode,...defaultName, ...defaultEmail, ...defaultPhone})
         
         setSelectedCountryCode(selectedCountryCode = { CountryCode: e.dial_code + "-" + e.name });
-        // setGetSelectId(getSelectId = { CountryCode: e.id });
         props.setCountryCode(props.cuntryCode = { CountryCode: e.id })
         dispatch({
             type: userAction.GET_ADD_TRAVELLER_COUNTRY_CODE,
@@ -306,7 +305,8 @@ const ContactInfo = (props) => {
                                                                     color: 'black',
                                                                     paddingHorizontal: 9,
                                                                     fontSize: 13,
-                                                                    paddingVertical: 2,
+                                                                    paddingVertical: 5,
+                                                                    fontFamily:FONTS.font
                                                                 }}>{e?.dial_code} - {e?.name}</Text>
                                                         </TouchableHighlight>
                                                     )
@@ -336,6 +336,7 @@ const ContactInfo = (props) => {
                                         {...register("PostalCode")}
                                         value={value}
                                         onChangeText={value => onChange(value)}
+                                        maxLength={6}
                                     
                                     />
                                 )}
