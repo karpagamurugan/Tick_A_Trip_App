@@ -202,6 +202,7 @@ const setFlightBooking = function* (data) {
             )
         );
         console.log('result?.data?',result?.data)
+        console.log('result?.data?',result?.data?.BookFlightResponse?.BookFlightResult)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
@@ -213,7 +214,6 @@ const setFlightBooking = function* (data) {
         console.log('err', err)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-
     }
 }
 

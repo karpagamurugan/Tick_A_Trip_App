@@ -11,9 +11,6 @@ let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
 const ContactInfo = (props) => {
-    // const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm();
-
-    // register2={register2} control2={control2} errors2={errors2} reset2={reset2} setValue2={setValue2}
 
     var register = props?.register2;
     var control = props?.control2;
@@ -25,7 +22,7 @@ const ContactInfo = (props) => {
     const { userProfileData, AddTravaller_country_code } = useSelector((state) => state.userReducer)
     var [travelRec, setTravelRec] = useState({ CountryCode: false, Nationality: false })
     var [selectedCountryCode, setSelectedCountryCode] = useState({ CountryCode: '', Nationality: '', })
-    // var [getSelectId, setGetSelectId] = useState({ CountryCode: '' })
+
     var [showContact, setShowContact] = useState(true);
 
 
