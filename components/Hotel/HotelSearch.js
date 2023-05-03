@@ -33,9 +33,9 @@ const HotelSearch = ({ navigation }) => {
   const { Searchbyname } = useSelector((state) => state.HotelReducer)
 
   const [selected, setSelected] = useState("");
-  const [ciDate, setCidate] = useState(new Date())
+  var [ciDate, setCidate] = useState(new Date())
   const [open, setOpen] = useState(false)
-  const [coDate, setCodate] = useState(new Date())
+  var [coDate, setCodate] = useState(new Date())
   const [openCo, setOpenCo] = useState(false)
   var [showGuestModal, setShowGuestModal] = useState(false); //show add guest modal
   const [selectDestination, setSelectDestination] = useState(false)
@@ -43,9 +43,7 @@ const HotelSearch = ({ navigation }) => {
   const [selectAddRoom, setSelectAddRoom] = useState([])
   const [adultCount, setAdultCount] = useState(2)
   const [childCount, setChildCount] = useState(0)
-  const [currentLongitude, setCurrentLongitude] = useState('...');
-  const [currentLatitude, setCurrentLatitude] = useState('...');
-  const [locationStatus, setLocationStatus] = useState('');
+  
   var [desination, setDesination] = useState({ city: '', country: '' }) //select from Place
   var [noRecord, setNoRecord] = useState({ des: true })
 
@@ -295,14 +293,14 @@ const HotelSearch = ({ navigation }) => {
                     <Text style={style.Searchlabel}>CHECK IN</Text>
                       <Text style={style.inputFieldText}>{moment(ciDate).format('MMM Do YYYY')}</Text>
                     <DatePicker
-                    minimumDate={ciDate}
+                      minimumDate={new Date()}
                       modal
                       open={open}
                       date={ciDate}
                       mode="date"
                       onConfirm={(date) => {
                         setOpen(false)
-                        setCidate(date)
+                        setCidate(ciDate=date)
                       }}
                       onCancel={() => {
                         setOpen(false)
@@ -321,14 +319,14 @@ const HotelSearch = ({ navigation }) => {
                     <Text style={style.Searchlabel}>CHECK OUT</Text>
                       <Text style={style.inputFieldText}>{moment(coDate).format('MMM Do YYYY')}</Text>
                     <DatePicker
-                    minimumDate={coDate}
+                    minimumDate={new Date()}
                       modal
                       open={openCo}
                       mode="date"
                       date={coDate}
                       onConfirm={(date) => {
                         setOpenCo(false)
-                        setCodate(date)
+                        setCodate(coDate=date)
                       }}
                       onCancel={() => {
                         setOpenCo(false)
@@ -367,7 +365,6 @@ const HotelSearch = ({ navigation }) => {
             <TouchableHighlight underlayColor='transparent'
               onPress={() => {
                 OnSearchHotel()
-                // navigation.navigate('HotelList')
               }}>
               <View style={style.iconBoxBtn}>
                 <EvilIcons style={style.fieldIconBtn} name='search' />
@@ -375,21 +372,6 @@ const HotelSearch = ({ navigation }) => {
               </View>
             </TouchableHighlight>
           </View>
-
-          {/* <TouchableOpacity onPress={() => CurrentLocation}>
-            <Text>GetCurrentLocation</Text>
-          </TouchableOpacity> */}
-          {/* <Text style={style.boldText}>
-            {locationStatus}
-          </Text>
-          <Text
-            style={{
-              justifyContent: 'center',
-              alignItems: 'center',
-              marginTop: 16,
-            }}>
-            Longitude: {currentLongitude}
-          </Text> */}
         </View>
       </View>
 

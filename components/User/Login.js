@@ -12,6 +12,7 @@ import axios from 'axios';
 import { API_URL } from '../constants/constApi';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin, statusCodes, GoogleSigninButton } from '@react-native-google-signin/google-signin';
+import Entypo from 'react-native-vector-icons/Entypo';
 import GoogleLogin from './GoogleLogin';
 
 const width = Dimensions.get('window').width
@@ -21,6 +22,8 @@ const height = Dimensions.get('window').height
 const Login = ({ navigation }) => {
     const dispatch = useDispatch();
     const { handleSubmit, control, formState: { errors }, reset, register, setValue, getValues } = useForm();
+
+    var [showPass,setShowPass]=useState(true)
   
     const [state, setState] = useState({googleLoginUrl: null,facebookURL: null,});//social login url
     const onSubmit = (data) => {
@@ -171,15 +174,26 @@ const Login = ({ navigation }) => {
                                 },
                             }}
                             render={({ field: { onChange, value } }) => (
-                                <TextInput
+                                <View style={[style.LoginInput,{flexDirection:'row',alignItems:'center',justifyContent:'space-between',paddingRight:20}]}>
+                                     <TextInput
                                     {...register("userPassword")}
                                     name="userPassword"
                                     onChangeText={value => onChange(value)}
                                     textContentType="newPassword"
-                                    secureTextEntry style={style.LoginInput}
+                                    secureTextEntry={showPass}
+                                    //  style={style.LoginInput}
                                     placeholder="Enter the password" 
                                     placeholderTextColor={'grey'}
                                     />
+                                   
+                                   <TouchableHighlight underlayColor={'transparent'} onPress={()=>setShowPass(!showPass)}>
+                                 {   (!showPass)?
+                                   <Entypo name='eye' size={height*0.03} color={'#4d4f4d'}/>
+                                   :<Entypo name='eye-with-line' size={height*0.03} color={'#4d4f4d'}/>}
+                                   </TouchableHighlight>
+                                   
+
+                                </View>
                             )}
                         />
                         {errors.userPassword && (

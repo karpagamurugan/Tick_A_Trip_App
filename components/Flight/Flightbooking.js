@@ -38,7 +38,7 @@ export default function FlightBooking({ navigation, route }) {
     const dispatch = useDispatch()
 
     const { get_Revalidate, } = useSelector((state) => state.FlightSearchReducer) //flight revalidation
-    const { AddTravaller_nationality, travelers_list, userProfileData, isLogin, AddTravaller_country_issuing } = useSelector((state) => state.userReducer) //get user data
+    const { AddTravaller_nationality, travelers_list, userProfileData, isLogin, AddTravaller_country_issuing,flight_Coupons} = useSelector((state) => state.userReducer) //get user data
 
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm(); //controller for contact details
     const { register: register2, formState: { errors: errors2 }, handleSubmit: handleSubmit2, control: control2, reset: reset2, setValue: setValue2 } = useForm(); //controller for traveller detail
@@ -379,7 +379,7 @@ export default function FlightBooking({ navigation, route }) {
         }
     }
 
-
+    console.log('get_Revalidate?.FareType',get_Revalidate?.FareType)
     const AdultTypes = (item) => {
         if (item === "Adult") {
             var today = new Date();
@@ -507,6 +507,211 @@ export default function FlightBooking({ navigation, route }) {
         })
 
         let price =parseInt(totalFare?.MainTotalFare)
+        let bookingData = {
+            customerName: data?.Name,
+            customerEmail: data?.Email,
+            customerPhone: data?.Phone,
+            area_code:  758,
+            isRefundable:get_Revalidate?.IsRefundable,
+            country_code:data?.CountryCode,
+            first_name: AdultList
+              ?.map((val) => val.first_name)
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              }),
+            last_name: AdultList
+              ?.map((val) => val.last_name)
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              }),
+            email_id: data.Email,
+            mobile_no: data.Phone,
+            dob: AdultList
+              ?.map((val) => moment(val.dob).format('YYYY-MM-DDThh:mm:ss'))
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              }),
+            gender: AdultList
+              ?.map((val) => val.gender)
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              }),
+            type: get_Revalidate?.FareType,
+            IsPassportMandatory:get_Revalidate?.IsPassportMandatory,
+            adult_flight: adult,
+            child_flight: child,
+            infant_flight: infant,
+            fare_source_code:  get_Revalidate?.FareSourceCode,
+            PostCode:  data?.PostalCode,
+            // TotalFare: parseFloat(price * 100),
+          };
+          bookingData['title'] = AdultList
+            ?.map((val) => val.title)
+            .reduce((total, value, index) => {
+              return index === 0 ? value : total + "<br>" + value;
+            });
+          if (get_Revalidate?.IsPassportMandatory) {
+            bookingData['issue_country'] = AdultList
+              ?.map((val) => val.issueCtry)
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              });
+          }
+          bookingData['nationality'] = AdultList
+            ?.map((val) => val.nationality)
+            .reduce((total, value, index) => {
+              return index === 0 ? value : total + "<br>" + value;
+            });
+          if (get_Revalidate?.IsPassportMandatory) {
+            bookingData['passport_no'] = AdultList
+              ?.map((val) => val?.passport)
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              });
+            bookingData['passport_expiry'] = AdultList
+              ?.map((val) => moment(val?.expDate).format('YYYY-MM-DD'))
+              .reduce((total, value, index) => {
+                return index === 0 ? value : total + "<br>" + value;
+              });
+          }
+          if (child > 0) {
+            bookingData['child_dob'] =
+              ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => (val.dob))
+                  .reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['child_gender'] =
+            ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => val.gender)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['child_first_name'] =
+            ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => val.first_name)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['child_last_name'] =
+            ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => val.last_name)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+      
+            bookingData['child_title'] =
+            ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => val.title)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            if (get_Revalidate?.IsPassportMandatory) {
+              
+              bookingData['child_issue_country'] =
+              ChildList?.length === 0
+                  ? ""
+                  : ChildList
+                    ?.map((val) => val?.issueCtry)
+                    .reduce((total, value, index) => {
+                      return index === 0 ? value : total + "<br>" + value;
+                    });
+            }
+            if (get_Revalidate?.IsPassportMandatory) {
+              bookingData['child_passport_expiry_date'] = ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => moment(val.expDate).format('YYYY-MM-DD'))
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+              bookingData['child_passport_no'] = ChildList?.length === 0
+                ? ""
+                : ChildList
+                  ?.map((val) => val.passport)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            }
+          }
+          if (infant > 0) {
+            bookingData['infant_dob'] =
+              InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.dob)
+                  .reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['infant_gender'] =
+            InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.gender)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['infant_first_name'] =
+            InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.first_name)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['infant_last_name'] =
+            InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.last_name)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            bookingData['infant_title'] =
+            InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.title)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            if (get_Revalidate?.IsPassportMandatory) {
+              bookingData['infant_issue_country'] =
+              InfantList?.length === 0
+                  ? ""
+                  : InfantList
+                    ?.map((val) => val?.issueCtry)
+                    .reduce((total, value, index) => {
+                      return index === 0 ? value : total + "<br>" + value;
+                    });
+            }
+            if (get_Revalidate?.IsPassportMandatory) {
+              bookingData['infant_passport_expiry_date'] = InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) =>moment(val.expDate).format('YYYY-MM-DD'))
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+              bookingData['infant_passport_no'] = InfantList?.length === 0
+                ? ""
+                : InfantList
+                  ?.map((val) => val.passport)
+                  ?.reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                  });
+            }
+          }
 
        
           var options = {
@@ -532,214 +737,9 @@ export default function FlightBooking({ navigation, route }) {
 
                RazorpayCheckout.open(options).then((val) => {
                 if (val.razorpay_payment_id) {
-                    let bookingData = {
-                        customerName: data?.Name,
-                        customerEmail: data?.Email,
-                        customerPhone: data?.Phone,
-                        area_code:  758,
-                        isRefundable:get_Revalidate?.IsRefundable,
-                        country_code:data?.CountryCode,
-                        first_name: AdultList
-                          ?.map((val) => val.first_name)
-                          .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
-                          }),
-                        last_name: AdultList
-                          ?.map((val) => val.last_name)
-                          .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
-                          }),
-                        email_id: data.Email,
-                        mobile_no: data.Phone,
-                        dob: AdultList
-                          ?.map((val) => moment(val.dob).format('YYYY-MM-DDThh:mm:ss'))
-                          .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
-                          }),
-                        gender: AdultList
-                          ?.map((val) => val.gender)
-                          .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
-                          }),
-                        type: get_Revalidate?.FareType,
-                        IsPassportMandatory:get_Revalidate?.IsPassportMandatory,
-                        adult_flight: adult,
-                        child_flight: child,
-                        infant_flight: infant,
-                        fare_source_code:  get_Revalidate?.FareSourceCode,
-                        PostCode:  data?.PostalCode,
-                        // TotalFare: parseFloat(price * 100),
-                      };
-                      bookingData['title'] = AdultList
-                        ?.map((val) => val.title)
-                        .reduce((total, value, index) => {
-                          return index === 0 ? value : total + "<br>" + value;
-                        });
-                      if (get_Revalidate?.IsPassportMandatory) {
-                        bookingData['issue_country'] = AdultList
-                          ?.map((val) => val.issueCtry)
-                          .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
-                          });
-                      }
-                      bookingData['nationality'] = AdultList
-                        ?.map((val) => val.nationality)
-                        .reduce((total, value, index) => {
-                          return index === 0 ? value : total + "<br>" + value;
-                        });
-                      if (get_Revalidate?.IsPassportMandatory) {
-                        bookingData['passport_no'] = AdultList
-                          ?.map((val) => val?.passport)
-                          .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
-                          });
-                        bookingData['passport_expiry'] = AdultList
-                          ?.map((val) => moment(val?.expDate).format('YYYY-MM-DD'))
-                          .reduce((total, value, index) => {
-                            return index === 0 ? value : total + "<br>" + value;
-                          });
-                      }
-                      if (child > 0) {
-                        bookingData['child_dob'] =
-                          ChildList?.length === 0
-                            ? ""
-                            : ChildList
-                              ?.map((val) => (val.dob))
-                              .reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        bookingData['child_gender'] =
-                        ChildList?.length === 0
-                            ? ""
-                            : ChildList
-                              ?.map((val) => val.gender)
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        bookingData['child_first_name'] =
-                        ChildList?.length === 0
-                            ? ""
-                            : ChildList
-                              ?.map((val) => val.first_name)
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        bookingData['child_last_name'] =
-                        ChildList?.length === 0
-                            ? ""
-                            : ChildList
-                              ?.map((val) => val.last_name)
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                  
-                        bookingData['child_title'] =
-                        ChildList?.length === 0
-                            ? ""
-                            : ChildList
-                              ?.map((val) => val.title)
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        if (get_Revalidate?.IsPassportMandatory) {
-                          
-                          bookingData['child_issue_country'] =
-                          ChildList?.length === 0
-                              ? ""
-                              : ChildList
-                                ?.map((val) => val?.issueCtry)
-                                .reduce((total, value, index) => {
-                                  return index === 0 ? value : total + "<br>" + value;
-                                });
-                        }
-                        if (get_Revalidate?.IsPassportMandatory) {
-                          bookingData['child_passport_expiry_date'] = ChildList?.length === 0
-                            ? ""
-                            : ChildList
-                              ?.map((val) => moment(val.expDate).format('YYYY-MM-DD'))
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                          bookingData['child_passport_no'] = ChildList?.length === 0
-                            ? ""
-                            : ChildList
-                              ?.map((val) => val.passport)
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        }
-                      }
-                      if (infant > 0) {
-                        bookingData['infant_dob'] =
-                          InfantList?.length === 0
-                            ? ""
-                            : InfantList
-                              ?.map((val) => val.dob)
-                              .reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        bookingData['infant_gender'] =
-                        InfantList?.length === 0
-                            ? ""
-                            : InfantList
-                              ?.map((val) => val.gender)
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        bookingData['infant_first_name'] =
-                        InfantList?.length === 0
-                            ? ""
-                            : InfantList
-                              ?.map((val) => val.first_name)
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        bookingData['infant_last_name'] =
-                        InfantList?.length === 0
-                            ? ""
-                            : InfantList
-                              ?.map((val) => val.last_name)
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        bookingData['infant_title'] =
-                        InfantList?.length === 0
-                            ? ""
-                            : InfantList
-                              ?.map((val) => val.title)
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        if (get_Revalidate?.IsPassportMandatory) {
-                          bookingData['infant_issue_country'] =
-                          InfantList?.length === 0
-                              ? ""
-                              : InfantList
-                                ?.map((val) => val?.issueCtry)
-                                .reduce((total, value, index) => {
-                                  return index === 0 ? value : total + "<br>" + value;
-                                });
-                        }
-                        if (get_Revalidate?.IsPassportMandatory) {
-                          bookingData['infant_passport_expiry_date'] = InfantList?.length === 0
-                            ? ""
-                            : InfantList
-                              ?.map((val) =>moment(val.expDate).format('YYYY-MM-DD'))
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                          bookingData['infant_passport_no'] = InfantList?.length === 0
-                            ? ""
-                            : InfantList
-                              ?.map((val) => val.passport)
-                              ?.reduce((total, value, index) => {
-                                return index === 0 ? value : total + "<br>" + value;
-                              });
-                        }
-                      }
-
+               
                     bookingData['paymentTransactionId'] = val.razorpay_payment_id;
-                    bookingData['TotalFare'] = price/100
+                    bookingData['TotalFare'] = price
                     if (!!discountPrice) {
                       bookingData['couponDiscount'] = discountPrice;
                     }
@@ -832,6 +832,7 @@ export default function FlightBooking({ navigation, route }) {
     }
 }
    
+console.log('flight_Coupons',flight_Coupons)
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             {/* appbar */}
@@ -840,6 +841,8 @@ export default function FlightBooking({ navigation, route }) {
                     <MaterialIcons name='keyboard-arrow-left' size={35} color={COLORS.textBlue} />
                 </TouchableHighlight>
                 <Flight height={34} width={34} />
+              
+                <View style={{flexDirection:'row',alignItems:'center'}}>
                 <View style={styles.appbarPlaceContainer}>
                     <View style={{ paddingHorizontal: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', }}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -860,6 +863,12 @@ export default function FlightBooking({ navigation, route }) {
 
                     </View>
                 </View>
+                <TouchableOpacity onPress={() => navigation.navigate('offers')} style={{paddingLeft:15}}>
+                    <MaterialCommunityIcons name='brightness-percent' size={25} color='#4C94F2' />
+                    {(flight_Coupons?.length === 0) ? <></> : <View style={styles.offerDot}></View>}
+                </TouchableOpacity> 
+                </View>
+                
             </View>
             <ScrollView>
                 <View>
@@ -1537,7 +1546,7 @@ export default function FlightBooking({ navigation, route }) {
                     {allTravellerList?.map((item, index) => {
                         return (
                             <View key={index} style={[styles.travellerDetails, { marginBottom: 20 }]}>
-                                <View style={{ flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                                <View style={{ width:width*0.5,flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
                                     <View style={{ marginRight: 10 }}>
                                         <ProfileIcon height={22} width={22} />
                                     </View>
@@ -1655,9 +1664,10 @@ const styles = StyleSheet.create({
         height: height * 0.07,
         alignItems: 'center',
         paddingLeft: 10,
-        paddingRight: 15
+        paddingRight: 15,
+        // justifyContent:'space-between'
     },
-    appbarPlaceContainer: { backgroundColor: 'white', width: width * 0.75, marginLeft: 5, borderRadius: 30, paddingVertical: 10 },
+    appbarPlaceContainer: { backgroundColor: 'white', width: width * 0.65, marginLeft: 5, borderRadius: 30, paddingVertical: 10 },
     appbarPlace: { fontFamily: FONTS.font, fontSize: height * 0.018 },
     title: { fontFamily: FONTS.font, color: 'grey', fontSize: height * 0.0162 },
     text: { fontFamily: FONTS.fontBold, paddingLeft: 10, color: COLORS.colorText, fontSize: height * 0.017 },
@@ -1728,4 +1738,12 @@ const styles = StyleSheet.create({
         width: 1,
         backgroundColor: '#ddd'
     },
+    offerDot: {
+        width: 10,
+        height: 10,
+        backgroundColor: '#cc3300',
+        borderRadius: 100,
+        position: 'absolute',
+        right: 0,
+    }
 })

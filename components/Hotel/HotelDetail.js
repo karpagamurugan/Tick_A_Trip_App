@@ -19,7 +19,19 @@ import More from '../../Assert/Icons/more.svg';
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const HotelDetail = ({ navigation }) => {
+const HotelDetail = ({ navigation,route }) => {
+    console.log(route?.params)
+    // dispatch({
+    //     type: hotelActions.GET_HOTEL_ROOM_TYPE,
+    //     payload: {
+    //         hotelId: val?.hotelId,
+    //         productId: val?.productId,
+    //         sessionId: hotelSessionId,
+    //         tokenId: val?.tokenId
+    //     },
+    //     navigation: navigation,
+    //     detail: val
+    // })
     const [moreVisible, setMoreVisible] = useState(false);
     const [textShown, setTextShown] = useState(false);
     const [textReadMore, setTextReadMore] = useState(false);

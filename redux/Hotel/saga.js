@@ -32,13 +32,14 @@ const getHotelSearch = function* (data) {
                 }
             )
         );
-        if (result.data.status === true) {
-            yield put({ type: actions.SET_HOTEL_SEARCH, payload: result.data.message.hotelList });
-            yield put({ type: actions.SET_HOTEL_SESSION_ID, payload: result.data.message.sessionId });;
+        if (result?.data?.status === true) {
+            yield put({ type: actions.SET_HOTEL_SEARCH, payload: result?.data?.message?.hotelList });
+            yield put({ type: actions.SET_HOTEL_SESSION_ID, payload: result?.data?.message?.sessionId });;
             navigation.navigate('HotelList')
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         }else{
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors[0]?.errorMessage} })
 
         }
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })

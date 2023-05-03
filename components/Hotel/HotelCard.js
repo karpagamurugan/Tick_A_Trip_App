@@ -44,10 +44,12 @@ const HotelCard = (props) => {
                 <View style={style.hotelListCardCon}>
                     <View style={style.hotelListCardHotelLocat}>
                         <View style={{width:'48%',flex:1,paddingHorizontal:10}}>
-                            <View style={style.hotelListCardHotelName}>
+                            <TouchableHighlight onPress={()=>navigation.navigate('HotelDetail',{data:val})} underlayColor={'transparent'}>
+                            <View style={style.hotelListCardHotelName} >
                                 <FontAwesome5 style={style.hotelListLocIcon} name='hotel' />
                                 <Text style={style.hotelListLocName}>{val?.propertyType}</Text>
                             </View>
+                            </TouchableHighlight>
                         </View>
                         <View style={styles.GridVerticalLine}></View>
                         <View style={{width:'48%',flex:1,paddingHorizontal:10}}>
