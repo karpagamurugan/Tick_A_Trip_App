@@ -164,6 +164,7 @@ const setRevalidate = function* (data) {
             }
             )
         );
+        console.log('revalidate',result?.data?.status)
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_REVALIDATE, payload: result?.data?.message })
             navigation.navigate('flightBooking',{flightInfo:flightInfo,itemInfo: itemInfo})
