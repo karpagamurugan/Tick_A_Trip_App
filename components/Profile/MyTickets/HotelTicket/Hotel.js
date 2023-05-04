@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight,FlatList } from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, FlatList } from 'react-native';
 import COLORS from '../../../constants/color';
 import FONTS from '../../../constants/font';
 import Appbar from '../../../common/Appbar';
@@ -15,7 +15,7 @@ let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 
-export default function Hotel({navigation}) {
+export default function Hotel({ navigation }) {
     var [selectedTab, setSelectedTab] = useState(0);
 
     const dispatch = useDispatch();
@@ -40,6 +40,7 @@ export default function Hotel({navigation}) {
 
         setSelectedTab(index)
     }
+
     return (
         <View style={style.mainContainer}>
             <Appbar title={'HOTEL BOOKINGS'} />
@@ -71,49 +72,33 @@ export default function Hotel({navigation}) {
 
 
 
-            <ScrollView>
-                <View style={style.listView}>
-                    {
-                        (selectedTab === 0) ?
-                            <ScrollView>
-                                <View >
-                                    {(Upcoming_hotel?.bookings?.length === 0) ?
-                                        <View style={{ alignSelf: 'center', marginTop: 50 }}>
-                                            <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
-                                            <Text style={style.EmptyText}>You Don't have any bookings</Text>
-                                            <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
-                                                <Text style={style.bookingText} >Go to Booking</Text>
-                                            </TouchableHighlight>
-                                        </View>
-                                        :
-                                    Upcoming_hotel?.bookings?.map((item, index) => (
-                                        <HotelTicketView key={index} item={item} navigation={navigation} type={'upcoming'}/>
-                                        ))
-                                    }
-                                </View>
-                            </ScrollView> : (selectedTab === 1) ?
-                                <ScrollView>
-                                    <View>
-                                        {(Cancelled_hotel?.bookings?.length === 0) ?
-                                            <View style={{ alignSelf: 'center', marginTop: 50 }}>
-                                                <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
-                                                <Text style={style.EmptyText}>You Don't have any bookings</Text>
-                                                <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
-                                                    <Text style={style.bookingText} >Go to Booking</Text>
-                                                </TouchableHighlight>
-                                            </View>
-                                            :
-                                            Cancelled_hotel?.bookings?.map((item, index) => (
-                                                <HotelTicketView key={index} item={item} navigation={navigation} type={'cancelled'}/>
-                                                ))
-                                        }
+            <View style={style.listView}>
+                {
+                    (selectedTab === 0) ?
+                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+                    <View >
+                                {(Upcoming_hotel?.bookings?.length === 0) ?
+                                    <View style={{ alignSelf: 'center', marginTop: 50 }}>
+                                        <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                        <Text style={style.EmptyText}>You Don't have any bookings</Text>
+                                        <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
+                                            <Text style={style.bookingText} >Go to Booking</Text>
+                                        </TouchableHighlight>
                                     </View>
-                                </ScrollView> :
-                                selectedTab === 2 ?
-                                    <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-                                <View >
-                                            {(Completed_hotel?.bookings?.length === 0) ?
-                                                <View style={{ alignSelf: 'center', }}>
+                                    :
+                                    Upcoming_hotel?.bookings?.map((item, index) => (
+                                        <HotelTicketView key={index} item={item} navigation={navigation} type={'upcoming'} />
+                                    ))
+                                }
+                            </View>
+                        </ScrollView> : (selectedTab === 1) ?
+                            <View >
+                                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+
+                                    <View>
+                                        {
+                                            (Cancelled_hotel?.bookings?.length === 0) ?
+                                                <View style={{ alignSelf: 'center', marginTop: 50 }}>
                                                     <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
                                                     <Text style={style.EmptyText}>You Don't have any bookings</Text>
                                                     <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
@@ -121,17 +106,37 @@ export default function Hotel({navigation}) {
                                                     </TouchableHighlight>
                                                 </View>
                                                 :
-                                                Completed_hotel?.bookings?.map((item, index) => (
-                                                    <HotelTicketView key={index} item={item} navigation={navigation} type={'completed'}/>
-                                                    ))
-                                            }
-                                        </View>
-                                    </ScrollView> 
-                                  : <View />
-                    }
+                                                Cancelled_hotel?.bookings?.map((item, index) => (
+                                                    <HotelTicketView key={index} item={item} navigation={navigation} type={'cancelled'} />
+                                                ))
 
-                </View>
-            </ScrollView>
+                                        }
+                                    </View>
+                                </ScrollView>
+
+                            </View> :
+                            selectedTab === 2 ?
+                                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+                                    <View >
+                                        {(Completed_hotel?.bookings?.length === 0) ?
+                                            <View style={{ alignSelf: 'center', }}>
+                                                <Image style={style.EmptyImg} source={require('../../../../Assert/loader/hotelTicketEmpty.gif')} />
+                                                <Text style={style.EmptyText}>You Don't have any bookings</Text>
+                                                <TouchableHighlight underlayColor={'transparent'} style={{ alignSelf: 'center', borderColor: 'black', borderWidth: 1 }}>
+                                                    <Text style={style.bookingText} >Go to Booking</Text>
+                                                </TouchableHighlight>
+                                            </View>
+                                            :
+                                            Completed_hotel?.bookings?.map((item, index) => (
+                                                <HotelTicketView key={index} item={item} navigation={navigation} type={'completed'} />
+                                            ))
+                                        }
+                                    </View>
+                                </ScrollView>
+                                : <View />
+                }
+
+            </View>
 
         </View>
     )
@@ -139,7 +144,7 @@ export default function Hotel({navigation}) {
 
 const style = StyleSheet.create({
     mainContainer: { height: height, width: width, backgroundColor: 'white' },
-    listView: { height: height*0.9 },
+    listView: { height: height * 0.75, paddingBottom: 10 },
     tabsBar: {
         flexDirection: 'row',
         justifyContent: "space-around",
@@ -158,8 +163,8 @@ const style = StyleSheet.create({
         borderRadius: 15,
         alignItems: 'center'
     },
-    EmptyImg:{ height: 150, width: 250, resizeMode: 'cover' },
-    EmptyText:{ fontFamily: FONTS.font, paddingVertical: 5, color: 'black' },
-    bookingText:{ fontFamily: FONTS.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }
+    EmptyImg: { height: 150, width: 250, resizeMode: 'cover' },
+    EmptyText: { fontFamily: FONTS.font, paddingVertical: 5, color: 'black' },
+    bookingText: { fontFamily: FONTS.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }
 
 })
