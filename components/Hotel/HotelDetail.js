@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useCallback, useState,memo} from 'react'
+import React, { useCallback, useState, memo } from 'react'
 import { View, Text, ImageBackground, Dimensions, StyleSheet, ScrollView, TouchableHighlight, Pressable, Modal } from 'react-native'
 import style from '../common/commonStyle'
 import HotelAppbar from '../common/HotelAppbar'
@@ -15,12 +15,15 @@ import Wifi from '../../Assert/Icons/wifi.svg';
 import Bar from '../../Assert/Icons/glass-and-bottle-of-wine.svg';
 import Gym from '../../Assert/Icons/Clocks_1_.svg';
 import More from '../../Assert/Icons/more.svg';
+import { useSelector } from 'react-redux';
+import RenderHtml from 'react-native-render-html';
+import WebView from 'react-native-webview';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-const HotelDetail = ({ navigation,route }) => {
-    console.log(route?.params)
+const HotelDetail = ({ navigation, route }) => {
+    // console.log('paramss',route?.params)
     // dispatch({
     //     type: hotelActions.GET_HOTEL_ROOM_TYPE,
     //     payload: {
@@ -35,6 +38,9 @@ const HotelDetail = ({ navigation,route }) => {
     const [moreVisible, setMoreVisible] = useState(false);
     const [textShown, setTextShown] = useState(false);
     const [textReadMore, setTextReadMore] = useState(false);
+    const { HotelRoomType, hotelDetails } = useSelector((state) => state.HotelReducer)
+    console.log('hotelDetails', hotelDetails)
+    // console.log('hotelDetails',hotelDetails.message.name)
     const mainAminities = [
         'Parking',
         'Bath',
@@ -70,6 +76,10 @@ const HotelDetail = ({ navigation,route }) => {
         'Business Facilities',
         'Transportation Information',
     ]
+    const source = {
+        html: `${hotelDetails?.message?.description.content} `
+    };
+    console.log('hotelconten6t', hotelDetails?.message?.description.content)
     return (
         <View>
             <ScrollView>
@@ -78,20 +88,20 @@ const HotelDetail = ({ navigation,route }) => {
                     <View style={style.OverLay} />
                     <View style={style.HotelDetailBannerCon}>
                         <View style={{ justifyContent: 'flex-start', alignItems: 'flex-start' }}>
-                            <Text style={style.HotelDetailHotelName}>Hotel Arkadia - 301</Text>
+                            <Text style={style.HotelDetailHotelName}>{hotelDetails?.message?.name}</Text>
                             <View style={{ flexDirection: "row", alignItems: 'center', }}>
                                 <Stars
-                                    default={0}
+                                    default={hotelDetails?.message?.hotelRating}
                                     count={5}
                                     half={true}
                                     disabled={true}
                                     starSize={50}
                                     spacing={5}
-                                    fullStar={<FontAwesome name={'star'} style={[style.myStarStyle]} />}
+                                    fullStar={<FontAwesome name={'star'} style={[styles.myStarStyle]} />}
                                     emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle]} />}
                                     halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle]} />}
                                 />
-                                <Text style={{ color: '#BBBBBB', paddingLeft: 5,fontFamily: font.mediam, }}>reviews</Text>
+                                <Text style={{ color: '#BBBBBB', paddingLeft: 5, fontFamily: font.mediam, }}>reviews</Text>
                             </View>
                         </View>
                         <View>
@@ -106,13 +116,18 @@ const HotelDetail = ({ navigation,route }) => {
                         </View>
                     </View>
                 </ImageBackground>
-                <View style={{ paddingHorizontal: 15, backgroundColor: '#F8F8F8', }}>
-                    <Text style={style.HotelTitle}><Ionicons style={style.HotelTitleIcon} name='location' /> RS Puram, Coimbatore</Text>
+                <View style={{ paddingHorizontal: 15, backgroundColor: '#F8F8F8', flexDirection: 'row', alignItems: 'center', paddingTop: 8 }}>
+                    <Ionicons style={style.HotelTitleIcon} name='location' />
+                    <Text style={[style.HotelTitle, { flex: 1, paddingLeft: 5 }]}>{hotelDetails?.message?.address}</Text>
                 </View>
                 <View style={{ paddingHorizontal: 15 }}>
                     <View>
                         <Text style={style.TitleMain}>About the Hotel</Text>
                         <View>
+                            <RenderHtml
+                                // contentWidth={width * 0.8}
+                                source={source}
+                            />
                             <Text
                                 onTextLayout={onTextLayout}
                                 numberOfLines={textShown ? undefined : 4.7}
@@ -140,7 +155,7 @@ const HotelDetail = ({ navigation,route }) => {
                         <Text style={style.TitleMain}>Aminities</Text>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: 10 }}>
                             {roomFacility.map((val, index) => mainAminities.find(el => el === val) && (
-                                <View style={{ alignItems: "center", }}>
+                                <View key={index} style={{ alignItems: "center", }}>
                                     <View style={{
                                         marginHorizontal: 20,
                                         width: 50,
@@ -163,7 +178,7 @@ const HotelDetail = ({ navigation,route }) => {
                                         {(val === 'Bar') && <Bar height={20} />}
                                         {(val === 'Gym') && <Gym height={20} />}
                                     </View>
-                                    <Text style={{ ...style.list, paddingTop: 10 }} key={index}>{val}</Text>
+                                    <Text style={{ ...style.list, paddingTop: 10 }}>{val}</Text>
                                     {/* <Text style={style.list} key={index}><MaterialIcons style={style.listIcon} name='double-arrow' />{val}</Text> */}
                                 </View>
 
@@ -198,7 +213,7 @@ const HotelDetail = ({ navigation,route }) => {
                             animationType='slide'
                             transparent={true}
                             visible={moreVisible}
-                            onRequestClose={() => { 
+                            onRequestClose={() => {
                                 setMoreVisible(!moreVisible)
                             }}
                         >
@@ -259,6 +274,7 @@ const styles = StyleSheet.create({
         textShadowColor: '#fff',
         textShadowOffset: { width: 100, height: 100 },
         textShadowRadius: 2,
+
         // fontSize:20,
     },
     myEmptyStarStyle: {

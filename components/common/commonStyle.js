@@ -15,7 +15,6 @@ const style = StyleSheet.create({
         paddingHorizontal:10,
         borderColor: '#babab8',
         borderWidth: 1,
-        
     },
     hotelListCardHotelName: {
         flexDirection: 'row',
@@ -178,11 +177,8 @@ const style = StyleSheet.create({
         fontFamily: FONTS.mediam,
         color: '#52ADE5',
         fontSize: 14,
-        flexDirection: 'row',
-        alignItems: 'center',
         letterSpacing: 0.5,
-        paddingTop: 8,
-        marginBottom: 10,
+        
     },
     HotelTitleIcon: {
         color: '#FCC40A',

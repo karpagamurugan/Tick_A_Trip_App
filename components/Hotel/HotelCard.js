@@ -43,16 +43,30 @@ const HotelCard = (props) => {
                 </View>
                 <View style={style.hotelListCardCon}>
                     <View style={style.hotelListCardHotelLocat}>
-                        <View style={{width:'48%',flex:1,paddingHorizontal:10}}>
-                            <TouchableHighlight onPress={()=>navigation.navigate('HotelDetail',{data:val})} underlayColor={'transparent'}>
-                            <View style={style.hotelListCardHotelName} >
-                                <FontAwesome5 style={style.hotelListLocIcon} name='hotel' />
-                                <Text style={style.hotelListLocName}>{val?.propertyType}</Text>
-                            </View>
+                        <View style={{ width: '48%', flex: 1, paddingHorizontal: 10 }}>
+                            <TouchableHighlight onPress={() => {
+                                // console.log('dklafj', val)
+                                dispatch({
+                                    type: hotelActions.GET_HOTEL_DETAILS,
+                                    payload: {
+                                        hotelId: val?.hotelId,
+                                        productId: val?.productId,
+                                        sessionId: hotelSessionId,
+                                        tokenId: val?.tokenId
+                                    },
+                                    navigation: navigation,
+                                })
+                                // navigation.navigate('HotelDetail', { data: val })
+
+                            }} underlayColor={'transparent'}>
+                                <View style={style.hotelListCardHotelName} >
+                                    <FontAwesome5 style={style.hotelListLocIcon} name='hotel' />
+                                    <Text style={style.hotelListLocName}>{val?.propertyType}</Text>
+                                </View>
                             </TouchableHighlight>
                         </View>
                         <View style={styles.GridVerticalLine}></View>
-                        <View style={{width:'48%',flex:1,paddingHorizontal:10}}>
+                        <View style={{ width: '48%', flex: 1, paddingHorizontal: 10 }}>
                             <TouchableHighlight underlayColor={'transparent'} style={[style.hotelListCardHotelName, { paddingVertical: 0 }]}
                                 onPress={() => {
                                     const scheme = Platform.select({ ios: 'maps:0,0?q=', android: 'geo:0,0?q=' });
@@ -124,10 +138,10 @@ const styles = StyleSheet.create({
     hotelListCardCon: {
         paddingHorizontal: 10,
     },
-    GridVerticalLine:{
+    GridVerticalLine: {
         height: '100%',
-        width:2,
-        backgroundColor:'#babab8',
+        width: 2,
+        backgroundColor: '#babab8',
     }
 });
 export default HotelCard
