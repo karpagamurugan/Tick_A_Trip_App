@@ -18,6 +18,7 @@ const initialState = {
     BookingInfo: {},
     HotelFilter: {},
     hotelDetails: [],
+    AllReviews: [],
 }
 
 const HotelReducer = (state = initialState, action) => {
@@ -80,6 +81,11 @@ const HotelReducer = (state = initialState, action) => {
                   hotelDetails: action.payload,
                 //   initialHotelDetails: action.payload.initialDetails,
                 }
+                case actions.SET_REVIEWS:
+                    return {
+                      ...state,
+                      AllReviews: action.payload,
+                    }
         default:
             return state;
     }

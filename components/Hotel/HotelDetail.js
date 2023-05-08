@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useCallback, useState, memo } from 'react'
-import { View, Text, ImageBackground, Dimensions, StyleSheet, ScrollView, TouchableHighlight, Pressable, Modal } from 'react-native'
+import { View, Text, ImageBackground, Dimensions, StyleSheet, ScrollView, TouchableHighlight, Pressable, Modal, TextInput,Image } from 'react-native'
 import style from '../common/commonStyle'
 import HotelAppbar from '../common/HotelAppbar'
 import Stars from 'react-native-stars';
@@ -18,12 +18,14 @@ import More from '../../Assert/Icons/more.svg';
 import { useSelector } from 'react-redux';
 import RenderHtml from 'react-native-render-html';
 import WebView from 'react-native-webview';
+import FONTS from '../constants/font';
+import COLORS from '../constants/color';
+import { PROFILE_URL } from '../constants/constProfileApi';
 
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
 const HotelDetail = ({ navigation, route }) => {
-    // console.log('paramss',route?.params)
     // dispatch({
     //     type: hotelActions.GET_HOTEL_ROOM_TYPE,
     //     payload: {
@@ -38,13 +40,15 @@ const HotelDetail = ({ navigation, route }) => {
     const [moreVisible, setMoreVisible] = useState(false);
     const [textShown, setTextShown] = useState(false);
     const [textReadMore, setTextReadMore] = useState(false);
-    const { HotelRoomType, hotelDetails } = useSelector((state) => state.HotelReducer)
-    console.log('hotelDetails', hotelDetails)
-    // console.log('hotelDetails',hotelDetails.message.name)
+    const { HotelRoomType, hotelDetails, AllReviews} = useSelector((state) => state.HotelReducer)
+
+    var [Review,setReview]=useState()
+    var [rating,setRating]=useState()
+
     const mainAminities = [
-        'Parking',
+        'Car park',
         'Bath',
-        'Wifi',
+        'Wi-fi',
         'Bar',
         'Gym'
     ]
@@ -56,30 +60,10 @@ const HotelDetail = ({ navigation, route }) => {
     const onTextLayout = useCallback(e => {
         setTextReadMore(e.nativeEvent.lines.length >= 3.5)
     }, []);
-    const roomFacility = [
-        'Parking',
-        'Bath',
-        'Wifi',
-        'Bar',
-        'Gym',
-        'Room Service',
-        '24-Hour Guest Reception',
-        'Complimentary Toiletries',
-        'Healthy Breakfast',
-        'Ample Wall Outlets',
-        'Hair Styling Tools',
-        'Flexible Checkout',
-        'Pool',
-        'Mini-fridge',
-        'Complimentary Electronics Chargers',
-        'Clothing Iron',
-        'Business Facilities',
-        'Transportation Information',
-    ]
+   
     const source = {
         html: `${hotelDetails?.message?.description.content} `
     };
-    console.log('hotelconten6t', hotelDetails?.message?.description.content)
     return (
         <View>
             <ScrollView>
@@ -104,7 +88,7 @@ const HotelDetail = ({ navigation, route }) => {
                                 <Text style={{ color: '#BBBBBB', paddingLeft: 5, fontFamily: font.mediam, }}>reviews</Text>
                             </View>
                         </View>
-                        <View>
+                        {/* <View>
                             <View style={{ flexDirection: "row", alignItems: 'center', }}>
                                 <Text style={style.HotelDetailHotelPrice}>5,500</Text>
                                 <View style={{ paddingHorizontal: 5 }}>
@@ -113,34 +97,28 @@ const HotelDetail = ({ navigation, route }) => {
                                 </View>
                             </View>
                             <Text style={style.HotelDetailHotelTax}>including tax 6,220</Text>
-                        </View>
+                        </View> */}
                     </View>
                 </ImageBackground>
                 <View style={{ paddingHorizontal: 15, backgroundColor: '#F8F8F8', flexDirection: 'row', alignItems: 'center', paddingTop: 8 }}>
                     <Ionicons style={style.HotelTitleIcon} name='location' />
-                    <Text style={[style.HotelTitle, { flex: 1, paddingLeft: 5 }]}>{hotelDetails?.message?.address}</Text>
+                    <Text style={[style.HotelTitle, { flex: 1, paddingLeft: 5 }]}>{hotelDetails?.message?.address} , {'\n'}{hotelDetails?.message?.city} , {hotelDetails?.message?.country}</Text>
                 </View>
                 <View style={{ paddingHorizontal: 15 }}>
                     <View>
                         <Text style={style.TitleMain}>About the Hotel</Text>
                         <View>
-                            <RenderHtml
+                            {/* <RenderHtml
                                 // contentWidth={width * 0.8}
                                 source={source}
-                            />
+                            /> */}
                             <Text
                                 onTextLayout={onTextLayout}
                                 numberOfLines={textShown ? undefined : 4.7}
                                 style={style.parrah}
                             >
-                                Lorem ipsum dolor sit amet, consectetur adipiscing
-                                elit. Integer vel molestie nisl. Duis ac mi leo. Mauris at convallis
-                                erat. Aliquam interdum semper luctus. Sed viv Duis ac mi leo. Mauris at convallis
-                                erat. Aliquam interdum semper luctus. Sed vivSed viv Duis ac mi leo. Mauris at convallis
-                                erat. Aliquam interdum semper luctus. Sed vivSed viv Duis ac mi leo. Mauris at convallis
-                                erat. Aliquam interdum semper luctus.</Text>
+                               {hotelDetails?.message?.description.content}</Text>
                             {
-
                                 textReadMore ?
                                     <Text
                                         style={{ fontFamily: font.mediam, color: '#0041F2', fontSize: 15, }}
@@ -153,8 +131,8 @@ const HotelDetail = ({ navigation, route }) => {
                     </View>
                     <View style={{ marginBottom: 20, }}>
                         <Text style={style.TitleMain}>Aminities</Text>
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-around', paddingTop: 10 }}>
-                            {roomFacility.map((val, index) => mainAminities.find(el => el === val) && (
+                        <View style={{ flexDirection: 'row', paddingTop: 10 }}>
+                            {hotelDetails?.message?.facilities?.map((val, index) => mainAminities.find(el => el === val) && (
                                 <View key={index} style={{ alignItems: "center", }}>
                                     <View style={{
                                         marginHorizontal: 20,
@@ -172,9 +150,9 @@ const HotelDetail = ({ navigation, route }) => {
                                         shadowRadius: 16.00,
                                         elevation: 15,
                                     }}>
-                                        {(val === 'Parking') && <Parking height={20} />}
+                                        {(val === 'Car park') && <Parking height={20} />}
                                         {(val === 'Bath') && <Bath height={20} />}
-                                        {(val === 'Wifi') && <Wifi height={20} />}
+                                        {(val=== "Wi-fi") && <Wifi height={20} />}
                                         {(val === 'Bar') && <Bar height={20} />}
                                         {(val === 'Gym') && <Gym height={20} />}
                                     </View>
@@ -237,8 +215,8 @@ const HotelDetail = ({ navigation, route }) => {
                                     </View>
                                     <View style={{ paddingHorizontal: 30, }}>
                                         <ScrollView style={{ height: height * 0.35, }}>
-                                            {roomFacility.map((val, index) => (
-                                                <View style={{ flexDirection: 'row', alignItems: 'center', }}>
+                                            {hotelDetails?.message?.facilities?.map((val, index) => (
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', }} key={index}>
                                                     <FontAwesome style={[style.listIcon]} name='circle' />
                                                     <Text style={[style.list,
                                                     {
@@ -261,6 +239,97 @@ const HotelDetail = ({ navigation, route }) => {
                         <TouchableHighlight style={style.bookingBtn}>
                             <Text style={style.bookingBtnTxt}>Book Now</Text>
                         </TouchableHighlight>
+                    </View>
+                </View>
+
+
+                <View>
+                    <View style={styles.ratingContainer}>
+                        <Text style={[styles.ratingTitle,{color:'black',fontWeight:'bold',fontSize:height*0.025}]}>Room Review</Text>
+                        <View style={{height:1,width:width*0.85,backgroundColor:'grey',alignSelf:'center',marginVertical:5}}/>
+                        <Text style={[styles.ratingTitle,{fontSize:height*0.02,color:'grey'}]}>Leave a Rating & Comment</Text>
+                        <View style={{alignItems:'flex-start',paddingLeft:10}}>
+                        <Stars
+                                    default={5}
+                                    count={5}
+                                    half={true}
+                                    disabled={false}
+                                    starSize={55}
+                                    update={(val)=>{
+                                        setRating(rating=val)
+                                    }}
+                                    spacing={5}
+                                    fullStar={<FontAwesome name={'star'} style={[styles.myStarStyle,{fontSize:20}]} />}
+                                    emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle,{fontSize:20}]} />}
+                                    halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle,{fontSize:20}]} />}
+                                />
+                        </View>
+                        <View style={{backgroundColor:'#f0f0f0',height:height*0.2,margin:10,borderRadius:5}}>
+                            <TextInput
+                            placeholder='Write message here'
+                            placeholderTextColor={'#b3b3b3'}
+                            style={{paddingLeft:10,fontFamily:FONTS.font}}
+                            onChangeText={(e)=>{
+                                setReview(Review=e)
+                            }}
+                            />
+
+                        </View>
+
+                        <TouchableHighlight underlayColor={'transparent'} onPress={()=>{
+                            console.log('Review',Review)
+                            console.log('hotelId',hotelDetails?.message?.hotelId)
+                        }
+
+                        }
+                         style={{backgroundColor:COLORS.starFill,alignItems:'center',alignSelf:'flex-end',marginRight:10,borderRadius:5}}>
+                            <Text style={[styles.ratingTitle,{fontSize:height*0.018,color:'#fff',fontWeight:'bold',padding:5}]}>SUBMIT REVIEW </Text>
+                        </TouchableHighlight>
+
+
+                        <View>
+                            {
+                                AllReviews?.data?.map((val,index)=>{
+                                 return(
+                                    <View style={{padding:10}}>
+                                  <View style={{flexDirection:'row'}}>
+                                    <View>
+                                    <Image  style={styles.profileImage} source={{ uri: `${PROFILE_URL}${val?.user?.profile_image}` }}/>
+                                    <Text style={{fontFamily:FONTS.font,paddingLeft:5}}>{val?.user?.username}</Text>
+                                        </View>
+                                        <View>
+                                            {/* <TouchableHighlight>
+                                                
+                                            </TouchableHighlight> */}
+                                            </View>
+                                    </View>
+                                    <View style={{flexDirection:'row',paddingLeft:5,paddingTop:10}}>
+                                    <Stars
+                                    default={val?.rating}
+                                    count={5}
+                                    half={true}
+                                    disabled={false}
+                                    starSize={55}
+                                    spacing={5}
+                                    fullStar={<FontAwesome name={'star'} style={[styles.myStarStyle,{fontSize:15}]} />}
+                                    emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle,{fontSize:15}]} />}
+                                    halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle,{fontSize:15}]} />}
+                                />
+                                        </View>
+                                        
+                                        <View style={{paddingLeft:10,paddingTop:5}}>
+                                        <Text style={{fontFamily:FONTS.font}}>
+                                            {
+                                                val?.description
+                                            }
+                                        </Text>
+                                            </View>
+                                    </View>
+                                 )
+
+                                })
+                            }
+                        </View>
                     </View>
                 </View>
             </ScrollView>
@@ -304,6 +373,25 @@ const styles = StyleSheet.create({
         justifyContent: "space-between",
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
-    }
+    },
+    ratingContainer:{
+        // height:height*0.3,
+        marginBottom:20,
+        width:width *0.95,
+        alignSelf:'center',
+        backgroundColor:'white',
+        borderRadius:15,
+        // alignItems:'center',
+        padding:5,
+        paddingBottom:10
+    },
+    ratingTitle:{
+        paddingVertical:5,
+        fontFamily:FONTS.font,
+        paddingLeft:10
+    },
+    profileImage: { height: 35, width: 35, borderRadius: 100,borderWidth:1,borderColor:'grey' },
+
+
 });
 export default memo(HotelDetail)

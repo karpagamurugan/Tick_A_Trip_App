@@ -14,6 +14,7 @@ const HotelSaga = function* () {
         yield takeEvery(actions.SET_HOTEL_BOOKING, setHotelBooking),
         yield takeEvery(actions.GET_HOTEL_BOOKING_DETAIL, getHotelBookingDetail),
         yield takeEvery(actions.GET_HOTEL_DETAILS, getHotelDetails),
+        yield takeEvery(actions.GET_REVIEWS, getHotelReview),
     ])
 }
 const getHotelDetails = function* (data) {
@@ -40,6 +41,11 @@ const getHotelDetails = function* (data) {
             console.log("result__data",result?.data)
             yield put({ type: actions.SET_HOTEL_DETAILS, payload: result?.data });
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+            yield put({ type: actions.GET_REVIEWS, payload: {
+                hotelId:result?.data?.message.hotelId,
+                type:'Hotel'
+            } })
+
             navigation.navigate('HotelDetail')
              
         } else {
@@ -249,6 +255,40 @@ const getHotelBookingDetail = function* (data) {
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
 
+    }
+}
+
+
+const getHotelReview = function* (data) {
+    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
+    const { payload, navigation } = data
+    console.log('payload,',payload)
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/hotelReviews`,
+                payload,
+                {
+                    headers: {
+                        accept: 'application/json',
+                        // 'Content-Type': 'multipart/form-data',
+                    },
+                }
+            )
+        );
+        console.log('result review......',result.data)
+        if (result.data.status === true) {
+            yield put({ type: actions.SET_REVIEWS, payload: result.data.message });
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+        } else {
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
+            yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+
+        }
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+    } catch (err) {
+        yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
     }
 }
 
