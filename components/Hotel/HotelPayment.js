@@ -4,19 +4,16 @@ import RenderHtml from 'react-native-render-html';
 import WebView from "react-native-webview";
 
 export default function HotelPaymentWebView({route}) {
-    console.log(route.params)
+            console.log(route?.params?.check_out)
 
     const width = Dimensions.get('window').width
     const height = Dimensions.get('window').height
-    const source = {
-        URL: `https://tickatrip.travel/server/checkoutAgain/1`
-    };
+  
 
     return (
-        
         <View style={{height:height,width:width}}>
             <WebView
-            source={{uri:'https://tickatrip.travel/server/checkoutAgain/1'}}
+            source={{uri:`https://tickatrip.travel/server/checkoutAgain/${route?.params?.check_out}`}}
             />
         </View>
     )
