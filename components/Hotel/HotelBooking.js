@@ -79,63 +79,98 @@ function HotelBooking({ route, navigation, props }) {
                     );
     
                     var price = parseFloat(totalFare?.MainTotalFare)
-                    var options = {
-                        key: RAZOR_KEY,
-                        key_secret: RAZOR_KEY_SECRET,
-                        amount: price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100,
-                        currency: CURRENCY,
-                        name: data.FirstName + " " + data.LastName,
-                        description: 'Tick A Trip Hotel Booking Payment',
-                        timeout: TIMEOUT,
-                        prefill: {
-                            email: data?.Email,
-                            contact: data?.Phone,
-                            name: data.FirstName + " " + data.LastName,
-                        },
-                        notes: {
-                            address: "",
-                        },
-                        theme: {
-                            color: "#0543e9",
-                        },
-                    };
-                    RazorpayCheckout.open(options).then((res) => {
-                        console.log('res...',res)
-                        var dataList = {
-                            sessionId: hotelSessionId,
-                            productId: RoomType?.productId,
-                            tokenId: HotelDetail?.tokenId,
-                            hotelId: HotelDetail?.hotelId,
-                            rateBasisId: RoomType?.rateBasisId,
-                            clientRef: RoomType?.productId,
-                            customerName: data?.FirstName,
-                            customerEmail: data?.Email,
-                            customerPhone: data?.Phone,
-                            customerGst: "",
-                            transactionId: "",
-                            paymentStatus: "",
-                            bookingNote: "Remark",
-                            paxDetails: [],
-                            hotelName: HotelDetail?.hotelName,
-                            hotelCity: HotelDetail?.city,
-                            hotelCountry: HotelDetail?.country,
-                            hotelAddress: HotelDetail?.address,
-                            TotalFare: parseFloat(price * 100),
-                        }
+                    var dataList = {
+                        sessionId: hotelSessionId,
+                        productId: RoomType?.productId,
+                        tokenId: HotelDetail?.tokenId,
+                        hotelId: HotelDetail?.hotelId,
+                        rateBasisId: RoomType?.rateBasisId,
+                        clientRef: RoomType?.productId,
+                        customerName: data?.FirstName,
+                        customerEmail: data?.Email,
+                        customerPhone: data?.Phone,
+                        customerGst: "",
+                        transactionId: "",
+                        paymentStatus: "",
+                        bookingNote: "Remark",
+                        paxDetails: [],
+                        hotelName: HotelDetail?.hotelName,
+                        hotelCity: HotelDetail?.city,
+                        hotelCountry: HotelDetail?.country,
+                        hotelAddress: HotelDetail?.address,
+                        TotalFare: parseFloat(price * 100),
+                    }
+
+                    // dataList['transactionId'] = res.razorpay_payment_id;
+                    // dataList['paymentStatus'] = res?.razorpay_payment_id ? 'true' : 'false';
+                    dataList['paxDetails'] = tempData;
+                    if (!!discountPrice) {
+                        dataList['couponDiscount'] = discountPrice;
+                    }
+                    dataList['TotalFare'] = (price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100;
+                
+                    dispatch({ type: hotelActions.GET_HOTEL_CHECKOUT, payload: dataList, navigation: navigation })
+
+
+
+
+                    // var options = {
+                    //     key: RAZOR_KEY,
+                    //     key_secret: RAZOR_KEY_SECRET,
+                    //     amount: price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100,
+                    //     currency: CURRENCY,
+                    //     name: data.FirstName + " " + data.LastName,
+                    //     description: 'Tick A Trip Hotel Booking Payment',
+                    //     timeout: TIMEOUT,
+                    //     prefill: {
+                    //         email: data?.Email,
+                    //         contact: data?.Phone,
+                    //         name: data.FirstName + " " + data.LastName,
+                    //     },
+                    //     notes: {
+                    //         address: "",
+                    //     },
+                    //     theme: {
+                    //         color: "#0543e9",
+                    //     },
+                    // };
+                    // RazorpayCheckout.open(options).then((res) => {
+                    //     console.log('res...',res)
+                    //     var dataList = {
+                    //         sessionId: hotelSessionId,
+                    //         productId: RoomType?.productId,
+                    //         tokenId: HotelDetail?.tokenId,
+                    //         hotelId: HotelDetail?.hotelId,
+                    //         rateBasisId: RoomType?.rateBasisId,
+                    //         clientRef: RoomType?.productId,
+                    //         customerName: data?.FirstName,
+                    //         customerEmail: data?.Email,
+                    //         customerPhone: data?.Phone,
+                    //         customerGst: "",
+                    //         transactionId: "",
+                    //         paymentStatus: "",
+                    //         bookingNote: "Remark",
+                    //         paxDetails: [],
+                    //         hotelName: HotelDetail?.hotelName,
+                    //         hotelCity: HotelDetail?.city,
+                    //         hotelCountry: HotelDetail?.country,
+                    //         hotelAddress: HotelDetail?.address,
+                    //         TotalFare: parseFloat(price * 100),
+                    //     }
     
-                        dataList['transactionId'] = res.razorpay_payment_id;
-                        dataList['paymentStatus'] = res?.razorpay_payment_id ? 'true' : 'false';
-                        dataList['paxDetails'] = tempData;
-                        if (!!discountPrice) {
-                            dataList['couponDiscount'] = discountPrice;
-                        }
-                        dataList['TotalFare'] = (price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100;
+                    //     dataList['transactionId'] = res.razorpay_payment_id;
+                    //     dataList['paymentStatus'] = res?.razorpay_payment_id ? 'true' : 'false';
+                    //     dataList['paxDetails'] = tempData;
+                    //     if (!!discountPrice) {
+                    //         dataList['couponDiscount'] = discountPrice;
+                    //     }
+                    //     dataList['TotalFare'] = (price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100;
                     
-                        dispatch({ type: hotelActions.SET_HOTEL_BOOKING, payload: dataList, navigation: navigation })
-                    }).catch((error) => {
-                        console.log(error,'errror')
-                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-                    });
+                    //     dispatch({ type: hotelActions.SET_HOTEL_BOOKING, payload: dataList, navigation: navigation })
+                    // }).catch((error) => {
+                    //     console.log(error,'errror')
+                    //     dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
+                    // });
                 }
               dispatch({ type: CommonAction.HOTEL_LOADER, payload: false })
             }).catch (el => {

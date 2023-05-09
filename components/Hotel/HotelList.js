@@ -41,8 +41,8 @@ const HotelList = ({ navigation, route }) => {
                     <HotelFilter navigation={navigation} setOpenFilter={setOpenFilter} openFilter={openFilter} />
                 </View>
             </Modal>
-            <ScrollView>
-                <HotelAppbar title='Hotel Detail' />
+            <HotelAppbar title='Hotel Detail' />
+            <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <View style={style.hotelDetailSec}>
                     <View style={style.HotelDetailFilterSec}>
                         <View style={{ flexDirection: 'row', alignItems: 'center' }}>

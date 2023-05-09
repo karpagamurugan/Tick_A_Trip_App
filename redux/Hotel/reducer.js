@@ -81,10 +81,11 @@ const HotelReducer = (state = initialState, action) => {
                   hotelDetails: action.payload,
                 //   initialHotelDetails: action.payload.initialDetails,
                 }
-                case actions.SET_REVIEWS:
+                case actions.SET_HOTEL_REVIEWS:
                     return {
                       ...state,
                       AllReviews: action.payload,
+                      nextPageUrl: action.page
                     }
         default:
             return state;
