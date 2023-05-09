@@ -365,6 +365,7 @@ const HotelSearch = ({ navigation }) => {
             <TouchableHighlight underlayColor='transparent'
               onPress={() => {
                 OnSearchHotel()
+                // navigation.navigate('HotelPayment',{check_out:'1'})
               }}>
               <View style={style.iconBoxBtn}>
                 <EvilIcons style={style.fieldIconBtn} name='search' />

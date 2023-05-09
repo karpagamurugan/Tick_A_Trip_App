@@ -109,8 +109,9 @@ function HotelBooking({ route, navigation, props }) {
                     }
                     dataList['TotalFare'] = (price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100;
                 
-                    dispatch({ type: hotelActions.GET_HOTEL_CHECKOUT, payload: dataList, navigation: navigation })
+                    // dispatch({ type: hotelActions.GET_HOTEL_CHECKOUT, payload: dataList, navigation: navigation })
 
+                    navigation.navigate('HotelPayment',{check_out:'1'})
 
 
 

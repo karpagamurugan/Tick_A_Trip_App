@@ -440,6 +440,7 @@ const getHotelCheckout = function* (data) {
         );
         console.log('final result',result?.data)
         if (result.data.status === true) {
+            navigation.navigate('HotelPayment',{check_out:'1'})
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         } else {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Something went wrong please try again' } })

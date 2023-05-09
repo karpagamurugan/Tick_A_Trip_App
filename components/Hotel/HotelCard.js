@@ -104,7 +104,8 @@ const HotelCard = (props) => {
                                     navigation: navigation,
                                     detail: val
                                 })
-                            }}>
+                            }}
+                            >
                             <Text style={style.ListHotelBtnText}>BOOK NOW</Text>
                         </TouchableHighlight>
                     </View>
