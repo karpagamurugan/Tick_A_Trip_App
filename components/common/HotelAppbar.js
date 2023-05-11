@@ -113,13 +113,13 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: 20,
         paddingRight: 15,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 12,
-        },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.00,
+        // shadowColor: "#000",
+        // shadowOffset: {
+        //     width: 0,
+        //     height: 12,
+        // },
+        // shadowOpacity: 0.58,
+        // shadowRadius: 16.00,
 
         // elevation: 24,
     },

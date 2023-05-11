@@ -41,7 +41,7 @@ const Home = ({ navigation }) => {
 
   
   return (
-    <ScrollView >
+    <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
       <View style={{ width: width, paddingHorizontal: 20, }}>
       {/* {
                     LISTdATA?.filter((d)=>d?.type === 'adult')?.slice(0,1)?.map((item)=>(

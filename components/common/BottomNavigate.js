@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React,{memo} from 'react'
-import { View, Text, StyleSheet, Dimensions, Image } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, Image, Platform } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs'
 import Home from '../Home/Home'
 import Hotel from '../Hotel/Hotel'
@@ -114,8 +114,9 @@ const BottomNavigate = ({ navigation }) => {
             headerShown: false,
             tabBarStyle: {
                 backgroundColor: '#E9F3FF',
-                height: 60,
+                height: Platform.OS==='ios'?75:60,
                 borderRadius: 15,
+                paddingTop:Platform.OS==='ios'?20:0
             },
             tabBarShowLabel: false
         }}>

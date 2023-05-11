@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useEffect, useState, memo, useRef } from 'react';
-import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable, ActivityIndicator, Animated, TextInput } from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable, ActivityIndicator, Animated, TextInput, Share } from 'react-native';
 import COLORS from '../constants/color';
 import FONTS from '../constants/font';
 import TicketIcon from '../../Assert/Images/icon/Ticket.svg';
@@ -211,7 +211,21 @@ function Profile({ navigation }) {
                                 </View>
                             </TouchableHighlight>
 
-                            <TouchableHighlight onPress={() => null} underlayColor='transparent'>
+                            <TouchableHighlight onPress={async () => {
+                                    if (Platform.OS === 'android') {
+                                        await Share.share({
+                                            title: 'Refer your friend',
+                                            message: "Install the app from Play Store https://play.google.com/store/apps/details?id=com.pjchit",
+                                            url: "https://play.google.com/store/apps/details?id=com.pjchit"
+                                        })
+                                    }else if(Platform.OS==='ios'){
+                                        await Share.share({
+                                            title: 'Refer your friend',
+                                            message: "Install the app from App Store ",
+                                            url: "http://itunes.apple.com/app/id1453977874"
+                                        })
+                                    }
+                                }} underlayColor='transparent'>
                                 <View style={styles.navBtn}>
                                     <ShareIcon height={22} width={22} />
                                     <Text style={styles.navTitle}>Share App</Text>

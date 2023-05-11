@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Dimensions, TouchableHighlight, ScrollView, TextInput, Image, KeyboardAvoidingView } from 'react-native'
+import { View, Text, StyleSheet, Dimensions, TouchableHighlight, ScrollView, TextInput, Image, KeyboardAvoidingView, Platform } from 'react-native'
 import Appbar from "../common/Appbar";
 import HotelAppbar from "../common/HotelAppbar";
 import COLORS from "../constants/color";
@@ -79,40 +79,76 @@ function HotelBooking({ route, navigation, props }) {
                     );
     
                     var price = parseFloat(totalFare?.MainTotalFare)
-                    var dataList = {
-                        sessionId: hotelSessionId,
-                        productId: RoomType?.productId,
-                        tokenId: HotelDetail?.tokenId,
+                    // var dataList = {
+                    //     sessionId: hotelSessionId,
+                    //     productId: RoomType?.productId,
+                    //     tokenId: HotelDetail?.tokenId,
+                    //     hotelId: HotelDetail?.hotelId,
+                    //     rateBasisId: RoomType?.rateBasisId,
+                    //     clientRef: RoomType?.productId,
+                    //     customerName: data?.FirstName,
+                    //     customerEmail: data?.Email,
+                    //     customerPhone: data?.Phone,
+                    //     customerGst: "",
+                    //     transactionId: "",
+                    //     paymentStatus: "",
+                    //     bookingNote: "Remark",
+                    //     paxDetails: [],
+                    //     hotelName: HotelDetail?.hotelName,
+                    //     hotelCity: HotelDetail?.city,
+                    //     hotelCountry: HotelDetail?.country,
+                    //     hotelAddress: HotelDetail?.address,
+                    //     TotalFare: parseFloat(price * 100),
+                    // }
+
+                    // // dataList['transactionId'] = res.razorpay_payment_id;
+                    // // dataList['paymentStatus'] = res?.razorpay_payment_id ? 'true' : 'false';
+                    // dataList['paxDetails'] = tempData;
+                    // if (!!discountPrice) {
+                    //     dataList['couponDiscount'] = discountPrice;
+                    // }
+                    // dataList['TotalFare'] = (price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100;
+                
+
+                    let dataList = {
+                        // occupancy: JSON.stringify(tempData),
+                        checkin: moment(RoomGuestPlace?.depatureDate).format('YYYY-MM-DD'),
+                        Checkout:moment(RoomGuestPlace?.arrivalDate).format('YYYY-MM-DD'),
+                        amount: (price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100,
+                        currency: CURRENCY,
+                        payment_capture: true,
+                        data:{
+                                sessionId: hotelSessionId,
+                                productId:RoomType?.productId,
+                                tokenId: HotelDetail?.tokenId,
+                                rateBasisId: RoomType?.rateBasisId,
+                                clientRef: RoomType?.productId,
+                                customerEmail: data.Email,
+                                customerPhone: data.Phone,
+                                bookingNote: "Remark",
+                                paxDetails: tempData,
+                            },
+                        name: data?.FirstName+ " " +  data?.LastName,
+                        description: 'Tick A Trip Hotel Booking Payment',
                         hotelId: HotelDetail?.hotelId,
-                        rateBasisId: RoomType?.rateBasisId,
-                        clientRef: RoomType?.productId,
-                        customerName: data?.FirstName,
-                        customerEmail: data?.Email,
+                        customerName:  data?.FirstName+ " " +  data?.LastName,
                         customerPhone: data?.Phone,
-                        customerGst: "",
+                        customerEmail:  data?.Email,
+                        customerGst: data?.GST ===undefined?'':data?.GST,
+                        acceptTerms: policyBox,
+                        title: data.Title,
                         transactionId: "",
                         paymentStatus: "",
-                        bookingNote: "Remark",
-                        paxDetails: [],
                         hotelName: HotelDetail?.hotelName,
-                        hotelCity: HotelDetail?.city,
-                        hotelCountry: HotelDetail?.country,
-                        hotelAddress: HotelDetail?.address,
-                        TotalFare: parseFloat(price * 100),
+                        hotelCity:HotelDetail?.city,
+                        hotelCountry:  HotelDetail?.country,
+                        hotelAddress:  HotelDetail?.address,
+                        couponDiscount: discountPrice === undefined ? "" : discountPrice,
+                        TotalFare:(price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100
                     }
 
-                    // dataList['transactionId'] = res.razorpay_payment_id;
-                    // dataList['paymentStatus'] = res?.razorpay_payment_id ? 'true' : 'false';
-                    dataList['paxDetails'] = tempData;
-                    if (!!discountPrice) {
-                        dataList['couponDiscount'] = discountPrice;
-                    }
-                    dataList['TotalFare'] = (price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100;
-                
-                    // dispatch({ type: hotelActions.GET_HOTEL_CHECKOUT, payload: dataList, navigation: navigation })
-
-                    navigation.navigate('HotelPayment',{check_out:'1'})
-
+                   
+                    dispatch({ type: hotelActions.GET_HOTEL_CHECKOUT, payload: dataList, navigation: navigation })
 
 
                     // var options = {
@@ -289,7 +325,7 @@ return (
         <HotelAppbar title={'Hotel Booking'} />
         <KeyboardAvoidingView behavior="height">
 
-            <ScrollView style={{ height: height * 0.74 }}>
+            <ScrollView style={{ height: height * 0.74 }} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <Image source={{ uri: HotelDetail?.thumbNailUrl }} style={{ height: height * 0.27, marginTop: 15 }} />
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 }}>
                     <View>
@@ -359,7 +395,7 @@ return (
                     <View style={styles.couponCode}>
                         <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center', paddingHorizontal: 10 }}>
                             <TextInput
-                                style={{ width: width * 0.60, color: 'black' }}
+                                style={{ width: width * 0.60, color: 'black',height:height*0.05 }}
                                 placeholderTextColor={'grey'}
                                 placeholder='Add a coupon Code'
                                 onChangeText={e => {
@@ -466,7 +502,7 @@ return (
                                                     color: 'black',
                                                 },
                                             }}
-                                            style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
+                                            style={[styles.inputeEditor, { paddingHorizontal: 5,paddingTop:0 }]}
                                             renderRightIcon={() => (
                                                 <IoniconsIcon
                                                     name="chevron-down"
@@ -494,13 +530,13 @@ return (
                                     render={({ field: { onChange, value } }) => (
                                         <TextInput
                                             placeholderTextColor={"gray"}
-                                            // style={styles.inputeEditor}
+                                            style={styles.inputeEditor}
                                             name='FirstName'
                                             placeholder="First Name"
                                             keyboardType='default'
                                             {...register("FirstName")}
                                             value={value}
-                                            style={{ marginLeft: 10 }}
+                                            // style={{ marginLeft: 10 }}
                                             onChangeText={value => onChange(value)}
                                         />
                                     )}
@@ -525,13 +561,13 @@ return (
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         placeholderTextColor={"gray"}
-                                        // style={styles.inputeEditor}
+                                        style={styles.inputeEditor}
                                         name='LastName'
                                         placeholder="Last Name"
                                         keyboardType='default'
                                         {...register("LastName")}
                                         value={value}
-                                        style={{ marginLeft: 10 }}
+                                        // style={{ marginLeft: 10 }}
                                         onChangeText={value => onChange(value)}
                                     />
                                 )}
@@ -554,13 +590,13 @@ return (
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         placeholderTextColor={"gray"}
-                                        // style={styles.inputeEditor}
+                                        style={styles.inputeEditor}
                                         name='Email'
                                         placeholder="Email"
                                         keyboardType='email-address'
                                         {...register("Email")}
                                         value={value}
-                                        style={{ marginLeft: 10 }}
+                                        // style={{ marginLeft: 10 }}
                                         onChangeText={value => onChange(value)}
                                     />
                                 )}
@@ -583,14 +619,14 @@ return (
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         placeholderTextColor={"gray"}
-                                        // style={styles.inputeEditor}
+                                        style={styles.inputeEditor}
                                         name='Phone'
                                         placeholder="Phone"
                                         keyboardType='phone-pad'
                                         {...register("Phone")}
                                         value={value}
                                         maxLength={10}
-                                        style={{ marginLeft: 10 }}
+                                        // style={{ marginLeft: 10 }}
                                         onChangeText={value => onChange(value)}
                                     />
                                 )}
@@ -607,13 +643,13 @@ return (
                                 render={({ field: { onChange, value } }) => (
                                     <TextInput
                                         placeholderTextColor={"gray"}
-                                        // style={styles.inputeEditor}
+                                        style={styles.inputeEditor}
                                         name='GST'
                                         placeholder="GST No (Optional)"
                                         keyboardType='default'
                                         {...register("GST")}
                                         value={value}
-                                        style={{ marginLeft: 10, }}
+                                        // style={{ marginLeft: 10, }}
                                         onChangeText={value => onChange(value)}
                                     />
                                 )}
@@ -726,4 +762,9 @@ const styles = StyleSheet.create({
         fontFamily: FONTS.font,
         color: COLORS.TextDarkGrey
     },
+    inputeEditor: {
+        color: 'black',
+        paddingLeft:10,
+       paddingTop:Platform.OS==='ios'?15:10
+    }
 })

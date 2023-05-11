@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React,{useCallback, useEffect, useState} from 'react';
-import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight } from 'react-native';
+import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight, Platform } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import userActions from '../../redux/user/actions';
@@ -352,7 +352,8 @@ const style = StyleSheet.create({
         borderRadius: 5,
         backgroundColor: COLORS.TextGrey,
         paddingLeft: 15,
-        color:'black'
+        color:'black',
+        height:height*0.05
     },
     fogetPassword: {
         flexDirection: 'row',

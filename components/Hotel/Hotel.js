@@ -15,12 +15,11 @@ const height = Dimensions.get('window').height
 const Hotel = ({navigation}) => {
   return (
     <View style={{backgroundColor:'white'}}>
-      <ScrollView>
+      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         <ImageBackground
           source={require('../../Assert/Images/hotel-bg.png')}
           style={{ width: width, height: height * 0.36 }} resizeMode="contain">
                     <HotelAppbar title='Hotel' />
-
         </ImageBackground>
         <HotelSearch navigation={navigation} />
         <View style={style.HotelPopularList}>

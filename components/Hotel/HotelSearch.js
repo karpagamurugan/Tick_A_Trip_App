@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React, { useState, useEffect } from 'react'
-import { View, Text, Dimensions, TouchableHighlight, Modal, StyleSheet, ScrollView, TextInput, TouchableOpacity, PermissionsAndroid, Keyboard } from 'react-native'
+import { View, Text, Dimensions, TouchableHighlight, Modal, StyleSheet, ScrollView, TextInput, TouchableOpacity, PermissionsAndroid, Keyboard, Platform } from 'react-native'
 import DatePicker from 'react-native-date-picker'
 import EvilIcons from 'react-native-vector-icons/EvilIcons'
 import color from '../constants/color';
@@ -136,7 +136,7 @@ const HotelSearch = ({ navigation }) => {
     <View style={style.hotelSearch}>
       <View style={style.hotelSearchTop}>
         <View>
-          <View style={{ marginBottom: 20 }}>
+          <View style={{ marginBottom: 20,top:Platform.OS==='ios'?-20:0}}>
             <View style={style.hotelSearchFieldGroup}>
               <View style={style.hotelSearchFieldGroupIcon}>
                 <Ionicons style={style.fieldIcon} name='location' />

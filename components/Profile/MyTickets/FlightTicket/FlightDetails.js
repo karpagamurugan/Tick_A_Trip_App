@@ -42,7 +42,7 @@ export default function FlightTicketDetails({ navigation }) {
     return (
         <View>
             <Appbar title={'Flight Details'} />
-            <ScrollView style={{ height: height * 0.83 }}>
+            <ScrollView style={{ height: height * 0.83 }} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <View style={{ paddingHorizontal: 15 }}>
 
               
@@ -151,7 +151,7 @@ export default function FlightTicketDetails({ navigation }) {
                                 <View style={[style.FlightStopingCart]}>
                                     {flight_tickets_details?.flightTripDetails?.map((item, index) => {
                                         return (
-                                            <View>
+                                            <View key={index}>
                                                 <View>
                                                     <View style={style.FlightVerticalLeftLine}></View>
                                                     <View style={{ justifyContent: 'center', top: '50%' }}>

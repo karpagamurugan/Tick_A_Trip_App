@@ -1,5 +1,5 @@
 import React, { useState, useCallback, useEffect } from 'react';
-import { View, Text, ScrollView, Dimensions, StyleSheet, TouchableHighlight, Modal, Pressable, TextInput, Keyboard } from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet, TouchableHighlight, Modal, Pressable, TextInput, Keyboard, Platform } from 'react-native';
 import COLORS from '../constants/color';
 import FONTS from '../constants/font';
 import Appbar from '../common/Appbar';
@@ -339,7 +339,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                                                 paddingTop: 10,
                                             },
                                         }}
-                                        style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
+                                        style={[styles.inputeEditor, { paddingHorizontal: 5,paddingTop:0 }]}
                                         renderRightIcon={() => (
                                             <IoniconsIcon
                                                 name="chevron-down"
@@ -447,7 +447,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                                                     paddingTop: 10,
                                                 },
                                             }}
-                                            style={[styles.inputeEditor, { paddingHorizontal: 5, }]}
+                                            style={[styles.inputeEditor, { paddingHorizontal: 5,paddingTop:0 }]}
                                             renderRightIcon={() => (
                                                 <IoniconsIcon
                                                     name="chevron-down"
@@ -494,7 +494,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                                                     paddingTop: 10,
                                                 },
                                             }}
-                                            style={[styles.inputeEditor, { paddingHorizontal: 5, }]}
+                                            style={[styles.inputeEditor, { paddingHorizontal: 5,paddingTop:0 }]}
                                             renderRightIcon={() => (
                                                 <IoniconsIcon
                                                     name="chevron-down"
@@ -623,6 +623,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                                         height: 35,
                                         width: '100%',
                                         alignItems: 'center',
+                                        paddingLeft:Platform.OS==='ios'?7:0
                                     }}
                                 >
 
@@ -724,9 +725,9 @@ const AddTravellerForm = ({ navigation, route }) => {
                                                                 style={{
                                                                     color: 'black',
                                                                     paddingHorizontal: 9,
-                                                                    fontSize: 13,
+                                                                    fontSize: height*0.015,
                                                                     fontFamily: FONTS.font,
-                                                                    paddingVertical: 2,
+                                                                    paddingVertical: 5,
                                                                 }}>{e?.dial_code} - {e?.name}</Text>
                                                         </TouchableHighlight>
                                                     )
@@ -746,6 +747,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                                         height: 35,
                                         width: '100%',
                                         alignItems: 'center',
+                                        paddingLeft:Platform.OS==='ios'?7:0
                                     }}
                                 >
                                     <TextInput
@@ -844,9 +846,9 @@ const AddTravellerForm = ({ navigation, route }) => {
                                                             style={{
                                                                 color: 'black',
                                                                 paddingHorizontal: 9,
-                                                                fontSize: 13,
+                                                                fontSize: height*0.015,
                                                                 fontFamily: FONTS.font,
-                                                                paddingVertical: 2,
+                                                                paddingVertical: 5,
                                                             }}>{e?.name}</Text>
                                                     </TouchableHighlight>
                                                 )
@@ -870,6 +872,7 @@ const AddTravellerForm = ({ navigation, route }) => {
                                         height: 35,
                                         width: '100%',
                                         alignItems: 'center',
+                                        paddingLeft:Platform.OS==='ios'?7:0
                                     }}
                                 >
                                     <TextInput
@@ -968,9 +971,9 @@ const AddTravellerForm = ({ navigation, route }) => {
                                                             style={{
                                                                 color: 'black',
                                                                 paddingHorizontal: 9,
-                                                                fontSize: 13,
+                                                                fontSize: height*0.015,
                                                                 fontFamily: FONTS.font,
-                                                                paddingVertical: 2,
+                                                                paddingVertical: 5,
                                                             }}>{e?.name}</Text>
                                                     </TouchableHighlight>
                                                 )
@@ -1131,7 +1134,9 @@ const styles = StyleSheet.create({
         paddingTop: 2,
     },
     inputeEditor: {
-        color: 'black'
+        color: 'black',
+        paddingLeft:Platform.OS==='ios'?10:0,
+       paddingTop:Platform.OS==='ios'?15:0
     }
 })
 

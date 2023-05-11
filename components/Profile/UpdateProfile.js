@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, TouchableHighlight, ScrollView, StyleSheet, Dimensions, Image, TextInput, Alert, Modal, KeyboardAvoidingView } from 'react-native';
+import { View, Text, TouchableHighlight, ScrollView, StyleSheet, Dimensions, Image, TextInput, Alert, Modal, KeyboardAvoidingView, Platform } from 'react-native';
 import FONTS from "../constants/font";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons'
 import moment from "moment";
@@ -428,7 +428,7 @@ function UpdateProfile({ navigation }) {
 const styles = StyleSheet.create({
     mainContainer: { height: height, width: width, backgroundColor: 'white' },
     editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: '#2B64FF', marginTop: 20, },
-    inputeEditor: { paddingLeft: 10, fontFamily: FONTS.font, color: "#000000", width: width * 0.5 },
+    inputeEditor: { paddingLeft: 10, fontFamily: FONTS.font, color: "#000000", width: width * 0.5,paddingTop:Platform.OS==='ios'?10:0 },
     placeHolderText: {
         color: '#2B64FF',
         position: 'absolute',
@@ -481,8 +481,8 @@ const styles = StyleSheet.create({
     },
     dropDownContainer: {
         backgroundColor: '#fff',
-        // borderColor: COLORS.TextDarkGrey,
-        //borderWidth: 1,
+        borderColor: Platform.OS==='ios'?COLORS.TextDarkGrey:'#fff',
+        borderWidth:  Platform.OS==='ios'?0.3:0,
         marginTop: 10,
         width: "100%",
         borderRadius: 10,

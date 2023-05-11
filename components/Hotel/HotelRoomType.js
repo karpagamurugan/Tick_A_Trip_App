@@ -15,7 +15,7 @@ console.log(' HotelRoomType?.roomRates?.perBookingRates', HotelRoomType?.roomRat
     return (
         <View>
             <HotelAppbar/>
-            <ScrollView>
+            <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <View style={style.RoomTypesSec}>
                     <Text style={style.RoomTitle}>Select Your Room Type</Text>
                     {

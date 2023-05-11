@@ -423,24 +423,29 @@ const deleteHotelReview = function* (data) {
 
 const getHotelCheckout = function* (data) {
     yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
-    const { payload, navigation, detail } = data
-    console.log(payload,'checkout')
+    // const { payload, navigation, detail } = data
+    // var form_data = new FormData();
+
+    // for (var key in payload) {
+    //     form_data.append(key, payload[key]);
+    // }
+    // console.log(`${API_URL}/checkout`,'checkout')
+    console.log(`data.payload`,data.payload)
     try {
         const result = yield call(() =>
             axios.post(
-                `${API_URL}/checkout`,
-                payload,
+                `${API_URL}/checkout`,data.payload,
                 {
                     headers: {
-                        accept: 'application/json',
-                        'Content-Type': 'multipart/form-data',
+                        'Content-Type': 'application/json',
                     },
                 }
             )
         );
         console.log('final result',result?.data)
         if (result.data.status === true) {
-            navigation.navigate('HotelPayment',{check_out:'1'})
+            data.navigation.navigate('HotelPayment',{check_out:result?.data?.checkout_id})
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Success'} })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         } else {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Something went wrong please try again' } })
@@ -448,10 +453,9 @@ const getHotelCheckout = function* (data) {
         }
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
-        console.log('error',err)
-        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:err} })
+        console.log('error',err?.message)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Request Failed with status 500'} })
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
-        yield put({ type: actions.SET_HOTEL_ROOM_TYPE, payload: err.data });
     }
 }
 export default HotelSaga;
