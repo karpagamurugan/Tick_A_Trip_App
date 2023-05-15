@@ -428,7 +428,7 @@ function UpdateProfile({ navigation }) {
 const styles = StyleSheet.create({
     mainContainer: { height: height, width: width, backgroundColor: 'white' },
     editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: '#2B64FF', marginTop: 20, },
-    inputeEditor: { paddingLeft: 10, fontFamily: FONTS.font, color: "#000000", width: width * 0.5,paddingTop:Platform.OS==='ios'?10:0 },
+    inputeEditor: { paddingLeft: 10, fontFamily: FONTS.font, color: "#000000", width: width * 0.5,paddingTop:10 },
     placeHolderText: {
         color: '#2B64FF',
         position: 'absolute',

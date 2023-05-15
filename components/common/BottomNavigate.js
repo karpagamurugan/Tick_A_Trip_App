@@ -32,6 +32,7 @@ import Search from '../GlobalSearch/Search'
 import Otp from '../Profile/Otp'
 import Offers from '../User/Offers'
 import HotelPaymentWebView from '../Hotel/HotelPayment'
+import FlightPaymentWebView from '../Flight/FlightPayment'
 const Stack = createNativeStackNavigator();
 
 function HomeTab() {
@@ -53,6 +54,8 @@ function HomeTab() {
             <Stack.Screen name="FlightDetails" component={FlightDetails} options={{ headerShown: false }} />
             <Stack.Screen name="BookingConfirm" component={BookingConfirm} options={{ headerShown: false }} />
             <Stack.Screen name="offers" component={Offers} options={{ headerShown: false }} />
+            <Stack.Screen name='FlightPayment' component={FlightPaymentWebView}options={{ headerShown: false }}/>
+
         </Stack.Navigator>
     )
 }

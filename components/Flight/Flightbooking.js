@@ -542,6 +542,11 @@ export default function FlightBooking({ navigation, route }) {
             child_flight: child,
             infant_flight: infant,
             fare_source_code:  get_Revalidate?.FareSourceCode,
+            totalFare:get_Revalidate?.BaseFareAmount,
+            taxes:get_Revalidate?.TotalTaxAmount,
+            couponDiscount:parseFloat(discountPrice ??'0').toFixed(0),
+            totalAmount:price,
+            currency:CURRENCY,
             PostCode:  data?.PostalCode,
             // TotalFare: parseFloat(price * 100),
           };
@@ -712,46 +717,53 @@ export default function FlightBooking({ navigation, route }) {
                   });
             }
           }
-
+        //   bookingData['paymentTransactionId'] = val.razorpay_payment_id;
+        //   bookingData['TotalFare'] = price
+        //   if (!!discountPrice) {
+        //     bookingData['couponDiscount'] = discountPrice;
+        //   }
        
-          var options = {
-                    key: RAZOR_KEY,
-                    key_secret: RAZOR_KEY_SECRET,
-                    amount: price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100,
-                    currency: CURRENCY,
-                    name: data?.Name,
-                    description: "Payment Tick A Trip",
-                    timeout: TIMEOUT,
-                    prefill: {
-                        email: data?.Email,
-                        contact: data?.Phone,
-                        name: data?.Name
-                    },
-                    notes: {
-                        address: "",
-                    },
-                    theme: {
-                        color: "#0543e9",
-                    },
-                };
+        //   var options = {
+        //             key: RAZOR_KEY,
+        //             key_secret: RAZOR_KEY_SECRET,
+        //             amount: price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100,
+        //             currency: CURRENCY,
+        //             name: data?.Name,
+        //             description: "Payment Tick A Trip",
+        //             timeout: TIMEOUT,
+        //             prefill: {
+        //                 email: data?.Email,
+        //                 contact: data?.Phone,
+        //                 name: data?.Name
+        //             },
+        //             notes: {
+        //                 address: "",
+        //             },
+        //             theme: {
+        //                 color: "#0543e9",
+        //             },
+        //         };
 
-               RazorpayCheckout.open(options).then((val) => {
-                if (val.razorpay_payment_id) {
+        //        RazorpayCheckout.open(options).then((val) => {
+        //         if (val.razorpay_payment_id) {
                
-                    bookingData['paymentTransactionId'] = val.razorpay_payment_id;
-                    bookingData['TotalFare'] = price
-                    if (!!discountPrice) {
-                      bookingData['couponDiscount'] = discountPrice;
-                    }
-                    dispatch({ type: FlightAction.SET_FLIGHT_BOOKING, payload: bookingData, navigation: navigation })
-                }else{
-                    console.log('else....')
-                }
+        //             bookingData['paymentTransactionId'] = val.razorpay_payment_id;
+        //             bookingData['TotalFare'] = price
+        //             if (!!discountPrice) {
+        //               bookingData['couponDiscount'] = discountPrice;
+        //             }
+        //             dispatch({ type: FlightAction.SET_FLIGHT_BOOKING, payload: bookingData, navigation: navigation })
+        //         }else{
+        //             console.log('else....')
+        //         }
 
-            }).catch((error) => {
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-                console.log('error', error)
-            });
+        //     }).catch((error) => {
+        //         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
+        //         console.log('error', error)
+        //     });
+
+            dispatch({ type: FlightAction.GET_FLIGHT_CHECKOUT, payload: bookingData, navigation: navigation })
+
 
         //     var options = {
         //         key: RAZOR_KEY,
@@ -832,7 +844,6 @@ export default function FlightBooking({ navigation, route }) {
     }
 }
    
-console.log('flight_Coupons',flight_Coupons)
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             {/* appbar */}

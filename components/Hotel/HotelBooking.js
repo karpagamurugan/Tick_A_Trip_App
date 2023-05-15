@@ -218,7 +218,29 @@ function HotelBooking({ route, navigation, props }) {
         }
     }
 
+// const onSubmit=(data)=>{
+//     let url ="https://tickatrip.travel?status=true&message=none&ticket_no=12345"
+//     // if (url !== null) {
+//     //     const new_url = url.url;
+//     //     console.log(new_url)
+    
+//     //     const urlCallback = new URL(new_url);
+//     //     const code = urlCallback.searchParams.get('status');
+    
+//     //     console.log('response params',code)
+//     //   }
 
+//     // let params = new URLSearchParams('https://tickatrip.travel?status=true&message=none&ticket_no=12345');
+//     // let entries = params.entries();
+//     // Object.fromEntries(entries); 
+
+//     console.log('url',url);
+//     let params = new URLSearchParams(url?.split('?')[1])
+//     console.log('params',params)
+//     let entries = params.entries();
+// //    let newData= Object.fromEntries(entries);
+//     console.log('newData',Object.fromEntries(entries))
+// }
 
 useEffect(() => {
     // dispatch({ type: commonAction.COMMON_LOADER, payload: true })

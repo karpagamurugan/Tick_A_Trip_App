@@ -29,11 +29,29 @@ function App() {
   const Stack = createNativeStackNavigator();
   useEffect(() => {
     setToken()
+
+    // var url = "https://tickatrip.travel/booking-response?status=true&mesage=Your%20Booking%20is%20Successful"
+
+    //                 var regex = /[?&]([^=#]+)=([^&#]*)/g,
+    //                   params = {},
+    //                   match;
+    //                 while (match = regex.exec(url)) {
+    //                   params[match[1]] = match[2];
+    //                 }
+    //                 console.log('value params....',params) 
+
+    let Message ='Your%20Booking%20is%20Successfull';
+
+    console.log('Message',Message)
+    console.log('Message',Message.replaceAll('%20',' '))
+
+    
+
   }, [])
   const setToken = (async) => {
     AsyncStorage.getItem('tickatrip-token').then((res) => setAuthToken(res))
   }
-  
+
   return (
     <Provider store={store}>
       
