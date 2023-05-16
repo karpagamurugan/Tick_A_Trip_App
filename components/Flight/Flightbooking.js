@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { View, Text, ScrollView, StyleSheet, Dimensions, TouchableHighlight, TextInput, Keyboard, TouchableOpacity, Pressable, Button } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, Dimensions, TouchableHighlight, TextInput, Keyboard, TouchableOpacity, Pressable, Button, Platform } from 'react-native';
 import COLORS from "../constants/color";
 import FONTS from "../constants/font";
 import Appbar from '../common/Appbar';
@@ -937,7 +937,7 @@ export default function FlightBooking({ navigation, route }) {
                     <View style={styles.couponCode}>
                         <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
                             <TextInput
-                                style={{ width: width * 0.75 }}
+                                style={{ width: width * 0.75,height:height*0.045 }}
                                 placeholder='Add a coupon Code'
                                 onChangeText={e => {
                                     if (e?.length === 0) {
@@ -1019,9 +1019,9 @@ export default function FlightBooking({ navigation, route }) {
                             </TouchableOpacity>
                         }
                     </View>
-                    {(showAddTraveller === true) ?
+                    {(showAddTraveller === true)?
                         <View>
-                            <View style={[styles.editTextBorder]}>
+                            <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
                                 <Controller
                                     control={control}
                                     name="selectedType"
@@ -1030,7 +1030,7 @@ export default function FlightBooking({ navigation, route }) {
                                             value: true,
                                             message: "Select Your Type"
                                         }
-                                    }}
+                                    }} 
                                     render={({ field: { onChange, value } }) => (
                                         <Dropdown
                                             showsVerticalScrollIndicator={true}
@@ -1069,7 +1069,7 @@ export default function FlightBooking({ navigation, route }) {
                                 )}
                             </View>
                             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                <View style={[styles.editTextBorder, { width: "24%" }]}>
+                                <View style={[styles.editTextBorder, {paddingTop:Platform.OS==='ios'?5:0,width:'24%'}]}>
                                     <Controller
                                         control={control}
                                         name="nametitle"
@@ -1173,7 +1173,7 @@ export default function FlightBooking({ navigation, route }) {
                                     <Text style={[styles.errormessage]}>{errors.lastName.message}</Text>
                                 )}
                             </View>
-                            <View style={styles.editTextBorder}>
+                            <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
                                 <Controller
                                     control={control}
                                     name="selectedgender"
@@ -1219,7 +1219,7 @@ export default function FlightBooking({ navigation, route }) {
                                     <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.selectedgender.message}</Text>
                                 )}
                             </View>
-                            <View style={[styles.editTextBorder]}>
+                            <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
                                 <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowDatePicker(!showDatePicker)} style={{ paddingRight: 5 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <Text style={{ color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
@@ -1233,7 +1233,7 @@ export default function FlightBooking({ navigation, route }) {
                                 )}
                             </View>
                             <View>
-                                <View style={[styles.editTextBorder]}>
+                                <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
                                     <View
                                         style={{
                                             flexDirection: 'row',
@@ -1354,7 +1354,7 @@ export default function FlightBooking({ navigation, route }) {
                                     
                                     (get_Revalidate?.IsPassportMandatory) ?
                                         <View>
-                                            <View style={styles.editTextBorder}>
+                                            <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
                                                 <Controller
                                                     control={control}
                                                     name='PassNo'
@@ -1385,7 +1385,7 @@ export default function FlightBooking({ navigation, route }) {
                                                     <Text style={[styles.errormessage]}>{errors.PassNo.message}</Text>
                                                 )}
                                             </View>
-                                            <View style={[styles.editTextBorder]}>
+                                            <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
                                                 <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowEXPDatePicker(!showEXPDatePicker)} style={{ paddingRight: 5 }}>
                                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                         <Text style={{ color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
@@ -1399,7 +1399,7 @@ export default function FlightBooking({ navigation, route }) {
                                                 ):<></>}
                                             </View>
                                             <View>
-                                                <View style={[styles.editTextBorder]}>
+                                                <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
                                                     <View
                                                         style={{
                                                             flexDirection: 'row',
@@ -1685,7 +1685,7 @@ const styles = StyleSheet.create({
     details: { flexDirection: 'column', backgroundColor: COLORS.lightGrey, paddingBottom: 15, paddingTop: 5 },
     couponCode: {
         borderRadius: 7, borderWidth: 0.9, borderColor: COLORS.borderColor, paddingVertical: 0, paddingHorizontal: 7,
-        marginHorizontal: 15, marginTop: 10, backgroundColor: COLORS.AppbarColor, elevation: 1
+        marginHorizontal: 15, marginTop: 10, backgroundColor: COLORS.AppbarColor, elevation: 1,
     },
     applyCoupon: { fontFamily: FONTS.fontBold, color: COLORS.textBlue },
     bg: { backgroundColor: COLORS.bg, padding: 20, margin: 10, borderRadius: 7, elevation: 5, shadowColor: COLORS.bg },
@@ -1707,7 +1707,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     confirmBook: { fontFamily: FONTS.mediam, color: 'white', fontSize: height * 0.027 },
-    editTextBorder: { backgroundColor: '#E9F3FF', borderWidth: 1, height: 50, borderRadius: 3, borderColor: '#2B64FF', marginBottom: 15, paddingHorizontal: 5, },
+    editTextBorder: { backgroundColor: '#E9F3FF', borderWidth: 1, height: 50, borderRadius: 3, borderColor: '#2B64FF', marginBottom: 15, paddingHorizontal: 5,paddingTop:15 },
     formTitle: {
         fontSize: height * 0.020,
         color: '#2B64FF',

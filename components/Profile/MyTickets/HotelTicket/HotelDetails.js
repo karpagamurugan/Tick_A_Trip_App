@@ -16,8 +16,6 @@ export default function HotelTicketDetails({ item, navigation }) {
     const hadleClick = (index) => {
         setSelectedTab(index)
     }
-
-
     return (
         <View style={[style.mainContainer,]}>
             <Appbar title={'Booking Details'} />
@@ -38,7 +36,7 @@ export default function HotelTicketDetails({ item, navigation }) {
                 </TouchableHighlight>
             </View>
 
-            <ScrollView style={{ height: height }}>
+            <ScrollView style={{ height: height }} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <View>
                     {
                         (selectedTab === 0) ?
@@ -50,7 +48,13 @@ export default function HotelTicketDetails({ item, navigation }) {
                                             <Text style={{ fontSize: 15, color: "#003AA8", fontFamily: FONTS.mediam, }}>Your Supplier Confirmation No :</Text>
                                             <Text style={{ fontFamily: FONTS.mediam, }}> {Hotel_details?.message?.supplierConfirmationNum}</Text>
                                         </View>
+                                       {
+                                        (Hotel_details?.message?.roomBookDetails?.image ===null ||Hotel_details?.message?.roomBookDetails?.image ===undefined)?
+                                        <Image style={{ height: 180, width: 350, resizeMode: 'cover', marginTop: 15, borderRadius: 5 }} source={{ uri: 'https://www.freepnglogos.com/uploads/hotel-logo-png/download-building-hotel-clipart-png-33.png' }} />
+
+                                        :
                                         <Image style={{ height: 180, width: 350, resizeMode: 'cover', marginTop: 15, borderRadius: 5 }} source={{ uri: Hotel_details?.message?.roomBookDetails?.image }} />
+                                       }
                                     </View>
 
                                     <Text style={[style.bookingDetailStyl]}>BOOKING DETAILS</Text>
@@ -160,7 +164,7 @@ export default function HotelTicketDetails({ item, navigation }) {
                                                     {(Hotel_details?.message?.roomBookDetails?.image === null || Hotel_details?.message?.roomBookDetails?.image === undefined) ?
                                                         <Image
                                                             style={{ width: 140, height: 145, borderRadius: 5, }}
-                                                            source={require('../../../../Assert/Images/imageNotFound.jpg')}
+                                                            source={{uri:'https://cdn-icons-png.flaticon.com/128/489/489870.png'}}
                                                         /> :
                                                         <Image source={Hotel_details?.message?.roomBookDetails?.image} />
                                                     }

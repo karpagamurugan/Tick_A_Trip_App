@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, StyleSheet, Text, Dimensions, ScrollView, TouchableOpacity, TouchableHighlight, TextInput, Keyboard, } from "react-native";
+import { View, StyleSheet, Text, Dimensions, ScrollView, TouchableOpacity, TouchableHighlight, TextInput, Keyboard, Platform, } from "react-native";
 import FONTS from "../constants/font";
 import AntDesign from 'react-native-vector-icons/AntDesign';
 import { useDispatch, useSelector } from "react-redux";
@@ -173,7 +173,7 @@ const ContactInfo = (props) => {
                             />
                         </View>
                         <View>
-                            <View style={[styles.editTextBorder]}>
+                            <View style={[styles.editTextBorder,{paddingTop:0}]}>
                                 <View
                                     style={{
                                         flexDirection: 'row',
@@ -356,6 +356,7 @@ const styles = StyleSheet.create({
         borderRadius: 3, borderColor: '#2B64FF',
         marginTop: 8, marginBottom: 10,
         paddingHorizontal: 5,
+        paddingTop:Platform.OS==='ios'?18:0
     },
     formTitle: {
         fontSize: height * 0.020,

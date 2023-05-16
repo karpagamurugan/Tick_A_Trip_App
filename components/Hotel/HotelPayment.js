@@ -22,15 +22,12 @@ export default function HotelPaymentWebView({route,navigation}) {
                 console.log('success....',params?.message) 
                 if(params?.message !==undefined){
                     var Message= params?.message.toString().replaceAll('\%20',' ')
-                    console.log('Message',Message)
-                    console.log(' params....',params) 
-                    console.log('status params....',params?.status) 
-                    if(params.status === true){
+                    if(params.status === true||params.status ==='true'){
                         // if( Message === 'Your Booking is Successfull'){
-                            navigation.reset({
-                                index: 0,
-                                routes: [{ name: 'Home' }]
-                            })
+                            // navigation.reset({
+                            //     index: 0,
+                            //     routes: [{ name: 'Home' }]
+                            // })
                             navigation.navigate('Home')
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Your Booking is Successfull'} })
                         // }else{
@@ -59,8 +56,6 @@ export default function HotelPaymentWebView({route,navigation}) {
                 console.log('webview....',state);
                 // let a = state.url.split('https://tickatrip.travel')[1];
                 // let b = new URLSearchParams(a)
-
-                
 
                 // if(state?.url==='https://tickatrip.travel/'){
                 //     navigation.goBack()

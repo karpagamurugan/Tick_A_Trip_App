@@ -63,6 +63,8 @@ const FlightSearch = function* (data) {
             )
         );
 
+        console.log('result',result?.data)
+
         if (result?.data?.status === true) {
             let a = result?.data?.message.map(el => {
                 return {

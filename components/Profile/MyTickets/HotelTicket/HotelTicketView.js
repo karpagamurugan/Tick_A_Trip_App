@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable } from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable, Platform } from 'react-native';
 import COLORS from '../../../constants/color';
 import FONTS from '../../../constants/font';
 import Appbar from '../../../common/Appbar';
@@ -53,7 +53,6 @@ export default function HotelTicketView({ item, navigation, type }) {
                     <View style={{ flexDirection: 'row',justifyContent:'space-between',marginTop:5  }}>
                     <Text style={{ fontFamily: FONTS.font, color: '#FE712A', fontSize: height * 0.017 }}>No of Days :  {item?.days}</Text>
                         <TouchableHighlight underlayColor='transparent' onPress={() => {
-
                             dispatch({
                                 type: userAction.SET_HOTEL_TICKETS_DETAILS, payload: {
                                     "supplierConfirmationNum": item.supplierConfirmationNum,
@@ -122,7 +121,10 @@ const style = StyleSheet.create({
         marginVertical: 7,
         marginHorizontal: 20,
         borderRadius: 10,
-        padding: 10
+        padding: 10,
+        overflow:'hidden',
+        borderWidth:Platform.OS==='ios'?0.1:0,
+        borderColor:'grey'
     },
     cardText: { paddingLeft: 15 },
     title: {
@@ -138,7 +140,8 @@ const style = StyleSheet.create({
         paddingVertical: 2,
         color: 'white',
         marginRight: 10,
-        fontSize: height * 0.02
+        fontSize: height * 0.02,
+        overflow:'hidden'
     },
     viewDetail: {
         fontFamily: FONTS.font,

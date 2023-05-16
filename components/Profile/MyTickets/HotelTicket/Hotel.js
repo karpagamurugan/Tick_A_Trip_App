@@ -86,7 +86,7 @@ export default function Hotel({ navigation }) {
                                         </TouchableHighlight>
                                     </View>
                                     :
-                                    Upcoming_hotel?.bookings?.map((item, index) => (
+                                    Upcoming_hotel?.bookings?.reverse()?.map((item, index) => (
                                         <HotelTicketView key={index} item={item} navigation={navigation} type={'upcoming'} />
                                     ))
                                 }
@@ -106,7 +106,7 @@ export default function Hotel({ navigation }) {
                                                     </TouchableHighlight>
                                                 </View>
                                                 :
-                                                Cancelled_hotel?.bookings?.map((item, index) => (
+                                                Cancelled_hotel?.bookings?.reverse()?.map((item, index) => (
                                                     <HotelTicketView key={index} item={item} navigation={navigation} type={'cancelled'} />
                                                 ))
 
@@ -127,7 +127,7 @@ export default function Hotel({ navigation }) {
                                                 </TouchableHighlight>
                                             </View>
                                             :
-                                            Completed_hotel?.bookings?.map((item, index) => (
+                                            Completed_hotel?.bookings?.reverse()?.map((item, index) => (
                                                 <HotelTicketView key={index} item={item} navigation={navigation} type={'completed'} />
                                             ))
                                         }

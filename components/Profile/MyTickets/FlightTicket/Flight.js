@@ -90,7 +90,7 @@ export default function Flight({ navigation }) {
                                 </View>
                                 :
 
-                                Upcoming_flight?.bookings?.map((item, index) => (
+                                Upcoming_flight?.bookings?.reverse()?.map((item, index) => (
                                     <FlightCard item={item} navigation={navigation} type={'upcoming'} key={index} />
 
                                 ))
@@ -114,7 +114,7 @@ export default function Flight({ navigation }) {
                                     </View>
                                     :
 
-                                    Cancelled_flight?.bookings?.map((item, index) => (
+                                    Cancelled_flight?.bookings?.reverse()?.map((item, index) => (
                                         <FlightCard item={item} navigation={navigation} type={'cancelled'} key={index} />
 
                                     ))
@@ -135,7 +135,7 @@ export default function Flight({ navigation }) {
                                             </TouchableHighlight>
                                         </View>
                                         :
-                                        Completed_flight?.bookings?.map((item, index) => (
+                                        Completed_flight?.bookings?.reverse()?.map((item, index) => (
                                             <FlightCard item={item} navigation={navigation} type={'completed'} key={index} />
 
                                         ))

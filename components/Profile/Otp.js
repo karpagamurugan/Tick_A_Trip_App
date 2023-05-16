@@ -20,15 +20,14 @@ const Otp = ({ item, navigation, type }) => {
         dispatch({
             type: userActions.GET_HOTEL_BOOKINGS_CANCEL_VERIFY, payload: {
                 supplierConfirmationNum: item.supplierConfirmationNum,
-                referenceNum: item.referenceNum,
+                referenceNum: item?.referenceNum,
                 OTP: otpInput?.state?.otpText?.toString()?.replaceAll(",", "")
             }
         })
        }else if(type==='flight'){
         dispatch({
             type: userActions.GET_FLIGHT_BOOKINGS_CANCEL_VERIFY, payload: {
-                supplierConfirmationNum: item.supplierConfirmationNum,
-                referenceNum: item.referenceNum,
+                UniqueID: item?.ticket_order_unique_id,
                 OTP: otpInput?.state?.otpText?.toString()?.replaceAll(",", "")
             }
         })

@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable } from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableHighlight, Modal, Pressable, Platform } from 'react-native';
 import COLORS from '../../../constants/color';
 import FONTS from '../../../constants/font';
 import ArrowIcon from 'react-native-vector-icons/AntDesign';
@@ -20,14 +20,14 @@ export default function FlightCard({ item, navigation, type }) {
     const dispatch = useDispatch()
 
     const OnCancelFlightBooking = (item, index) => {
-        // setModalVisible(true)
+        console.log('modal ', item)
         dispatch({
             type: userAction.OTP_MODAL_VIEW, payload: true
         })
         dispatch({
             type: userAction.GET_FLIGHT_BOOKINGS_CANCEL_REQUEST, payload: {
-                supplierConfirmationNum: item.supplierConfirmationNum,
-                referenceNum: item.referenceNum
+                ticket_order_unique_id: item?.ticket_order_unique_id
+
             },
             navigation: navigation
         })
@@ -45,7 +45,7 @@ export default function FlightCard({ item, navigation, type }) {
                 </View>
                 <View style={style.cardText}>
                     <Text style={style.title}>PNR : {item?.AirlinePNR}</Text>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: width * 0.65 }}>
                         <View style={{}}>
                             <Text style={style.depatureTime}>Depature : {moment(item?.DepartureDateTime).format('hh:mm a')}</Text>
                             <Text style={style.depatureTime}>Boarding : {moment(item?.ArrivalDateTime).format('hh:mm a')}</Text>
@@ -76,12 +76,13 @@ export default function FlightCard({ item, navigation, type }) {
                                 }}>
                                 <Text style={style.viewDetail}>View Ticket</Text>
                             </TouchableHighlight>
-                            <ArrowIcon name='down' size={12} color='#0041F2' />
+                            {/* <ArrowIcon name='down' size={12} color='#0041F2' /> */}
                         </View>
 
                     </View>
                 </View>
             </View>
+
             <Modal
                 animationType="slide"
                 visible={otpModalView}
@@ -91,11 +92,12 @@ export default function FlightCard({ item, navigation, type }) {
                     <View style={style.ModalContainer}>
                         <View style={style.modalView}>
                             <View style={style.modalFlex}>
-                                <Text style={style.ModalLabelText}>Hotel Booking Cancel</Text>
+                                <Text style={style.ModalLabelText}>Flight Booking Cancel</Text>
                                 <Pressable
-                                    onPress={() => dispatch({
-                                        type: userAction.OTP_MODAL_VIEW, payload: false
-                                    })}>
+                                    onPress={() =>
+                                        dispatch({
+                                            type: userAction.OTP_MODAL_VIEW, payload: false
+                                        })}>
                                     <IoniconsIcon name='close' size={35} color='#7c7c7c' />
                                 </Pressable>
                             </View>
@@ -116,7 +118,10 @@ const style = StyleSheet.create({
         marginVertical: 7,
         marginHorizontal: 20,
         borderRadius: 10,
-        padding: 10
+        padding: 10,
+        borderWidth: Platform.OS === 'ios' ? 0.1 : 0,
+        borderColor: 'grey',
+        overflow: 'hidden'
     },
     cardView: { flexDirection: 'row' },
     cardText: { paddingLeft: 15 },
@@ -134,7 +139,8 @@ const style = StyleSheet.create({
         paddingVertical: 2,
         color: 'white',
         marginRight: 10,
-        fontSize: height * 0.02
+        fontSize: height * 0.02,
+        overflow: 'hidden'
     },
     viewDetail: {
         fontFamily: FONTS.font,
@@ -142,11 +148,30 @@ const style = StyleSheet.create({
         color: '#0041F2',
         textDecorationLine: 'underline'
     },
-    depatureTime: { fontFamily: FONTS.font, fontSize: height * 0.02, color: '#898989' },
+    depatureTime: { fontFamily: FONTS.font, fontSize: height * 0.018, color: '#898989' },
     DividerHR: { width: 1, backgroundColor: 'grey', height: height * 0.02, marginVertical: 3 },
     place: { fontFamily: FONTS.font, color: 'grey' },
-    bookingDate: { fontFamily: FONTS.font, color: '#FE712A', fontSize: height * 0.02 }
-
+    bookingDate: { fontFamily: FONTS.font, color: '#FE712A', fontSize: height * 0.02 },
+    ModalContainer: {
+        alignItems: 'center',
+        marginHorizontal: 15,
+        backgroundColor: '#fff',
+        borderRadius: 6,
+    },
+    modalFlex: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginHorizontal: 20,
+        borderBottomWidth: 1,
+        borderBottomColor: '#ddd',
+        paddingTop: 10
+    },
+    ModalLabelText: {
+        fontSize: 20,
+        color: '#000',
+        fontFamily: FONTS.mediam,
+    },
 
 
 })

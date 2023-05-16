@@ -226,6 +226,8 @@ const getFlightBookingsCancelRequest = function* (data) {
     for (var key in payload) {
         form_data.append(key, payload[key]);
     }
+
+    console.log('payload....',form_data)
     try {
         const result = yield call(() =>
             axios.post(`${API_URL}/user/flight/requestcancellation`,
@@ -235,6 +237,7 @@ const getFlightBookingsCancelRequest = function* (data) {
                 },
             })
         );
+        console.log('result,,..',result?.data)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message} })
@@ -250,15 +253,22 @@ const getFlightBookingsCancelRequest = function* (data) {
 }
 const getFlightBookingsCancelVerify = function* (data) {
     const { payload } = data;
+    var form_data = new FormData();
+    for (var key in payload) {
+        form_data.append(key, payload[key]);
+    }
+
+    console.log('payload....',form_data)
     try {
         const result = yield call(() =>
             axios.post(`${API_URL}/user/flight/cancelbooking`,
-                JSON.stringify(payload), {
+            form_data, {
                 headers: {
                     "Content-Type": "multipart/form-data",
                 },
             })
         );
+        console.log('response resul...',result?.data)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
@@ -268,6 +278,7 @@ const getFlightBookingsCancelVerify = function* (data) {
         }
 
     } catch (err) {
+        console.log('error...',err)
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err} })
     }
