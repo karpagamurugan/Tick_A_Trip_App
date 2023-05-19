@@ -57,7 +57,7 @@ const HotelList = ({ navigation, route }) => {
                         </View>
                         <View style={style.filterFileldIcon}>
                             <TouchableHighlight onPress={() => setOpenFilter(true)} underlayColor='transparent'>
-                                <AntDesign style={style.filterIcon} name='filter' />
+                                <AntDesign style={style.filterIcon} name='filter' size={21} color={'#B9B9B9'} />
                             </TouchableHighlight>
                         </View>
                     </View>
@@ -106,19 +106,18 @@ const style = StyleSheet.create({
         alignItems: 'center',
     },
     filterIcon: {
-        fontSize: 22,
-        color: '#B9B9B9',
+        // fontSize: height*0.025,
         backgroundColor: '#E9F3FF',
         padding: 10,
         borderRadius: 100,
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 12,
+            height: 8,
         },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.00,
-
+        shadowOpacity: 0.20,
+        shadowRadius: 5.00,
+        // overflow:'hidden',
         // elevation: 24,
     },
     HotelDetailFilterSec: {

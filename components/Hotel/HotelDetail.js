@@ -186,22 +186,7 @@ const HotelDetail = ({ navigation, route }) => {
                         <View style={{ flexDirection: 'row', paddingTop: 10 }}>
                             {hotelDetails?.message?.facilities?.map((val, index) => mainAminities.find(el => el === val) && (
                                 <View key={index} style={{ alignItems: "center", }}>
-                                    <View style={{
-                                        marginHorizontal: 20,
-                                        width: 50,
-                                        alignItems: "center",
-                                        paddingVertical: 15,
-                                        borderRadius: 10,
-                                        backgroundColor: "#E9F3FF",
-                                        shadowColor: "#000",
-                                        shadowOffset: {
-                                            width: 0,
-                                            height: 12,
-                                        },
-                                        shadowOpacity: 0.58,
-                                        shadowRadius: 16.00,
-                                        elevation: 15,
-                                    }}>
+                                    <View style={styles.boxshawdow}>
                                         {(val === 'Car park') && <Parking height={20} />}
                                         {(val === 'Bath') && <Bath height={20} />}
                                         {(val === "Wi-fi") && <Wifi height={20} />}
@@ -216,22 +201,7 @@ const HotelDetail = ({ navigation, route }) => {
                             <Pressable
                                 onPress={() => setMoreVisible(true)}
                                 style={{ alignItems: "center", }}>
-                                <View style={{
-                                    marginHorizontal: 20,
-                                    width: 50,
-                                    alignItems: "center",
-                                    paddingVertical: 15,
-                                    borderRadius: 10,
-                                    backgroundColor: "#E9F3FF",
-                                    shadowColor: "#000",
-                                    shadowOffset: {
-                                        width: 0,
-                                        height: 12,
-                                    },
-                                    shadowOpacity: 0.58,
-                                    shadowRadius: 16.00,
-                                    elevation: 15,
-                                }}>
+                                <View style={styles.boxshawdow}>
                                     <More height={20} />
                                 </View>
                                 <Text style={{ ...style.list, paddingTop: 10 }}>More</Text>
@@ -523,6 +493,22 @@ const styles = StyleSheet.create({
         paddingLeft: 10
     },
     profileImage: { height: 35, width: 35, borderRadius: 100, borderWidth: 1, borderColor: '#efefef' },
+    boxshawdow:{
+        marginHorizontal: 20,
+        width: 50,
+        alignItems: "center",
+        paddingVertical: 15,
+        borderRadius: 10,
+        backgroundColor: "#E9F3FF",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        shadowOpacity: 0.38,
+        shadowRadius: 10.00,
+        // elevation: 15,
+    }
 
 
 });

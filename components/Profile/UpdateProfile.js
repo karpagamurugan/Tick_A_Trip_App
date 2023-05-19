@@ -139,13 +139,13 @@ function UpdateProfile({ navigation }) {
                 console.log('res....', res)
 
                 // let url = 'file://' + destPath
-                // setImage(image = {
-                //     URL: url,
-                //     type: res.type,
-                //     name: res?.name,
-                // })
+                setImage(image = {
+                    URL: res?.assets[0]?.uri,
+                    type: res?.assets[0]?.type,
+                    name: res?.assets[0].fileName,
+                })
     
-                // setImageUri(res?.uri)
+                // setImageUri(res?.assets[0]?.uri)
             }
         });
     }

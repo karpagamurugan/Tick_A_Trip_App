@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import { Dimensions, StyleSheet } from "react-native";
+import { Dimensions, Platform, StyleSheet } from "react-native";
 import COLORS from "../constants/color";
 import FONTS from "../constants/font";
 
@@ -113,11 +113,11 @@ const style = StyleSheet.create({
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
-            height: 12,
+            height: 8,
         },
-        shadowOpacity: 0.58,
-        shadowRadius: 16.00,
-        elevation: 15,
+        shadowOpacity: 0.40,
+        shadowRadius: 5.00,
+        elevation:Platform.OS==='ios'?0:15,
         marginTop:20,
     },
     RoomTitle: {
