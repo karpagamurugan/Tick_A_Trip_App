@@ -680,9 +680,11 @@ const getUpcomingFlightTickets = function* (data) {
 const flightTicketsDetails = function* (data) {
     const { payload } = data;
     try {
+        console.log(payload.userId,'user id...')
         const result = yield call(() =>
             axios.get(`${API_URL}/user/flight/mybookings/detail/${payload.userId}`)
         )
+        console.log('result... flight',result?.data)
         if (result?.data?.bookings !== undefined) {
             yield put({ type: actions.GET_FLIGHT_TICKETS_DETAILS, payload: result?.data?.bookings })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
@@ -691,8 +693,12 @@ const flightTicketsDetails = function* (data) {
         } else {
             yield put({ type: actions.GET_FLIGHT_TICKETS_DETAILS, payload: result?.data?.bookings })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
+
         }
     } catch (err) {
+        console.log('error in flight detail',err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
         yield put({ type: actions.GET_FLIGHT_TICKETS_DETAILS, payload: err.data });
     }

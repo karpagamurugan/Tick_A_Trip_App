@@ -10,6 +10,7 @@ import HotelCard from './HotelCard';
 import HotelFilter from './HotelFilter';
 import HotelAppbar from '../common/HotelAppbar';
 import { useSelector } from 'react-redux';
+import COLORS from '../constants/color';
 
 const data = [
     { label: 'Item 1', value: '1' },
@@ -55,9 +56,9 @@ const HotelList = ({ navigation, route }) => {
                                 <Text style={style.totalHotel}>{getHotelSearchResult.length ? getHotelSearchResult.length : 0} Hotels</Text>
                             </View>
                         </View>
-                        <View style={style.filterFileldIcon}>
+                        <View style={style.filter}>
                             <TouchableHighlight onPress={() => setOpenFilter(true)} underlayColor='transparent'>
-                                <AntDesign style={style.filterIcon} name='filter' size={21} color={'#B9B9B9'} />
+                                <AntDesign name='filter' size={21} color={'#B9B9B9'} />
                             </TouchableHighlight>
                         </View>
                     </View>
@@ -79,11 +80,27 @@ const HotelList = ({ navigation, route }) => {
 
 export default memo(HotelList)
 const style = StyleSheet.create({
-
+    filter: {
+        // alignSelf: 'flex-end',
+        marginRight: 10,
+        marginTop: 10,
+        backgroundColor: COLORS.AppbarColor,
+        padding: 10,
+        borderRadius: 100,
+        marginBottom: 7,
+        flexDirection: 'row',
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 8,
+        },
+        shadowOpacity: 0.20,
+        shadowRadius: 5.00,
+    },
     hotelDetailSec: {
         paddingHorizontal: 10,
         // backgroundColor:'white',
-        // height:height
+        // height:height,
         // height:height*0.5,
         backgroundColor: 'white',
     },

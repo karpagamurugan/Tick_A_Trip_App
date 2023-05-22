@@ -1135,8 +1135,8 @@ const styles = StyleSheet.create({
     },
     inputeEditor: {
         color: 'black',
-        paddingLeft:Platform.OS==='ios'?10:0,
-       paddingTop:Platform.OS==='ios'?15:0
+        paddingLeft:10,
+       paddingTop:Platform.OS==='ios'?15:10
     }
 })
 

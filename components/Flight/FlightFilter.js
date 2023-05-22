@@ -128,9 +128,9 @@ function FlightFilter(props) {
                     left: 0,
                     right: 0,
                 }}/>
-            <View style={styles.modalContainer}>
+            {/* <View style={styles.modalContainer}> */}
          
-                  <ScrollView>
+                  <ScrollView style={styles.filterModelSec}>
                   <View style={{ padding: 10, borderRadius: 20}}>
                         <Text style={styles.modalTitle}>Refine Result</Text>
                         <View style={{ height: 0.5, backgroundColor: 'grey' }} />
@@ -261,7 +261,7 @@ function FlightFilter(props) {
                         </View>
                     </View>
                   </ScrollView>
-            </View>
+            {/* </View> */}
         </View>
     )
 }
@@ -269,7 +269,19 @@ function FlightFilter(props) {
 
 
 const styles = StyleSheet.create({
-    modalContainer: { marginHorizontal: 20, borderRadius: 10 , backgroundColor: '#E9F3FF',marginTop:20},
+    filterModelSec: {
+        backgroundColor: '#E9F3FF',
+        position: 'absolute',
+        width: width * 0.9,
+        alignSelf: 'center',
+        top: height * 0.1,
+        paddingHorizontal: 20,
+        paddingTop: 20,
+        borderRadius: 10,
+        height: height * 0.8,
+        alignContent: 'center',
+    },
+    modalContainer: { marginHorizontal: 20, borderRadius: 10 , backgroundColor: '#E9F3FF',marginTop:0,alignContent:'center',alignItems:'center',alignSelf:'center'},
     modalBg: { width: '100%', flexDirection: 'column', borderRadius: 20, alignSelf: 'center' },
     modalTitle: { fontFamily: FONTS.fontBold, color: COLORS.colorText, fontSize: height * 0.027, },
     listBottom: {

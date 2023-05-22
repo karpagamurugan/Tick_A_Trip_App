@@ -37,9 +37,9 @@ export default function HotelPaymentWebView({route,navigation}) {
                         console.log('false')
                         navigation.goBack()
                     }
+                }else if(params?.referenceNum === undefined && url.includes('https://tickatrip.travel/booking-response')){
+                    navigation.goBack()
                 }
-              
-            
 
 
                 // if(params?.message !==undefined){

@@ -289,7 +289,9 @@ const ApplyCoupon = () => {
                     var disFare = totalFare?.MainTotalFare / 100
                     var finalFare = disFare * applyCoupon
                     setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                    if (parseInt(RoomType?.netPrice) >= parseInt(discountPrice)) {
+                    console.log('parseInt(RoomType?.netPrice',parseInt(RoomType?.netPrice))
+                    console.log('parseInt(discountPrice)',parseInt(discountPrice))
+                    if (parseInt(RoomType?.netPrice) <= parseInt(discountPrice)) {
                         setDiscountPrice(discountPrice = 0)
                         dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
@@ -312,7 +314,7 @@ const ApplyCoupon = () => {
                     var finalFare = disFare * applyCoupon
                     setDiscountPrice(discountPrice = finalFare.toFixed(0))
 
-                    if (parseInt(RoomType?.netPrice) >= parseInt(discountPrice)) {
+                    if (parseInt(RoomType?.netPrice) <= parseInt(discountPrice)) {
                         setDiscountPrice(discountPrice = 0)
                         dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
@@ -342,12 +344,12 @@ const ApplyCoupon = () => {
 }
 
 return (
-    <View style={{ height: height * 0.92, backgroundColor: 'transparent' }}>
+    <View style={{flex:1, backgroundColor: 'transparent' }}>
         {/* <Appbar title={'Hotel Booking'}/> */}
         <HotelAppbar title={'Hotel Booking'} />
-        <KeyboardAvoidingView behavior="height">
+        {/* <KeyboardAvoidingView behavior="height"> */}
 
-            <ScrollView style={{ height: height * 0.74 }} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+            <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <Image source={{ uri: HotelDetail?.thumbNailUrl }} style={{ height: height * 0.27, marginTop: 15 }} />
                 <View style={{ marginTop: 10, flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20 }}>
                     <View>
@@ -707,15 +709,9 @@ return (
 
                 </View>
             </ScrollView>
-        </KeyboardAvoidingView>
-        <TouchableHighlight underlayColor={'transparent'} onPress={handleSubmit(onSubmit)}>
-            <View style={{ backgroundColor: '#fff', paddingTop: 10, paddingBottom: 10 }}>
-                <View style={styles.ConfirmBtn}>
-
+        {/* </KeyboardAvoidingView> */}
+        <TouchableHighlight  style={styles.ConfirmBtn} underlayColor={'transparent'} onPress={handleSubmit(onSubmit)}>
                     <Text style={styles.confirmBook}>Confirm & Book</Text>
-
-                </View>
-            </View>
         </TouchableHighlight>
     </View>
 )
@@ -729,7 +725,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         // marginBottom: 10,
         borderRadius: 30,
-        paddingVertical: 10,
+        paddingVertical: 10
     },
     confirmBook: { fontFamily: FONTS.mediam, color: 'white', fontSize: height * 0.027 },
     HotelDetailHotelPrice: {

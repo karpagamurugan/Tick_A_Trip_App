@@ -133,7 +133,6 @@ export default function AddTraveller({ navigation }) {
                                 </View>
                             </View>
                         ))
-
                     }
                 </View>
             </ScrollView>

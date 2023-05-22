@@ -131,7 +131,7 @@ export default function FlightBooking({ navigation, route }) {
                         var disFare = totalFare?.MainTotalFare / 100
                         var finalFare = disFare * applyCoupon
                         setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                        if (parseInt(totalFare?.MainTotalFare) >= parseInt(discountPrice)) {
+                        if (parseInt(totalFare?.MainTotalFare) <= parseInt(discountPrice)) {
                             setDiscountPrice(discountPrice = 0)
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
@@ -151,7 +151,7 @@ export default function FlightBooking({ navigation, route }) {
                         var disFare = totalFare?.MainTotalFare / 100
                         var finalFare = disFare * applyCoupon
                         setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                        if (parseInt(totalFare?.MainTotalFare) >= parseInt(discountPrice)) {
+                        if (parseInt(totalFare?.MainTotalFare) <= parseInt(discountPrice)) {
                             setDiscountPrice(discountPrice = 0)
                             dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
                             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Coupon not apllicable' } })
@@ -479,6 +479,8 @@ export default function FlightBooking({ navigation, route }) {
         reset({ ...addTravelFirstName, ...addTravelLastName, })
     }
 
+    console.log('flight_Coupons',flight_Coupons)
+
     const ConfirmBooking = (data) => {
         var filteredAdultList = allTravellerList.filter((item) => item?.type.toLowerCase() === 'adult')
         var filteredChildList = allTravellerList.filter((item) => item?.type.toLowerCase() === 'child')
@@ -548,7 +550,6 @@ export default function FlightBooking({ navigation, route }) {
             totalAmount:price,
             currency:CURRENCY,
             PostCode:  data?.PostalCode,
-            // TotalFare: parseFloat(price * 100),
           };
           bookingData['title'] = AdultList
             ?.map((val) => val.title)
@@ -762,85 +763,24 @@ export default function FlightBooking({ navigation, route }) {
         //         console.log('error', error)
         //     });
 
-            dispatch({ type: FlightAction.GET_FLIGHT_CHECKOUT, payload: bookingData, navigation: navigation })
-
-
-        //     var options = {
-        //         key: RAZOR_KEY,
-        //         key_secret: RAZOR_KEY_SECRET,
-        //         amount: parseFloat(parseFloat(totalFare?.MainTotalFare) * 100),
-        //         currency: CURRENCY,
-        //         name: data?.Name,
-        //         description: "Payment Tick A Trip",
-        //         timeout: TIMEOUT,
-        //         // order_id:'TickATrip_'+generateUUID(8),
-        //         prefill: {
-        //             email: data?.Email,
-        //             contact: data?.Phone,
-        //             name: data?.Name
-        //         },
-        //         notes: {
-        //             address: "",
-        //         },
-        //         theme: {
-        //             color: "#0543e9",
-        //         },
-        //     };
-        //     RazorpayCheckout.open(options).then((val) => {
-        //         var bookingData = {
-        //             IsPassportMandatory: get_Revalidate?.IsPassportMandatory,
-        //             PostCode: data?.PostalCode,
-        //             TotalFare: totalFare?.MainTotalFare,
-        //             adult_flight: adult,
-        //             area_code: 758,
-        //             child_flight: child,
-        //             country_code: data?.CountryCode,
-        //             customerEmail: userProfileData?.email,
-        //             customerName: userProfileData?.name,
-        //             customerPhone: userProfileData?.phone,
-        //             email_id: data?.Email,
-        //             fare_source_code: get_Revalidate?.FareSourceCode,
-        //             dob: allTravellerList
-        //                 ?.map((val) => moment(val.dob).format('YYYY-MM-DDTHH:mm:ss'))
-        //                 .reduce((total, value, index) => {
-        //                     return index === 0 ? moment(value).format('YYYY-MM-DDTHH:mm:ss') : moment(total).format('YYYY-MM-DDTHH:mm:ss') + "<br>" + moment(value).format('YYYY-MM-DDTHH:mm:ss');
-        //                 }),
-        //             first_name: allTravellerList
-        //                 ?.map((val) => val.first_name)
-        //                 .reduce((total, value, index) => {
-        //                     return index === 0 ? value : total + "<br>" + value;
-
-        //                 }),
-        //             gender: allTravellerList
-        //                 ?.map((val) => val.gender)
-        //                 .reduce((total, value, index) => {
-        //                     return index === 0 ? value : total + "<br>" + value;
-        //                 }),
-        //             last_name: allTravellerList
-        //                 ?.map((val) => val.last_name)
-        //                 .reduce((total, value, index) => {
-        //                     return index === 0 ? value : total + "<br>" + value;
-        //                 }),
-        //             title: allTravellerList
-        //                 ?.map((val) => val.title)
-        //                 .reduce((total, value, index) => {
-        //                     return index === 0 ? value : total + "<br>" + value;
-        //                 }),
-        //             infant_flight: infant,
-        //             isRefundable: get_Revalidate?.IsRefundable,
-        //             mobile_no: data?.Phone,
-        //             nationality: data?.CountryCode,
-        //             paymentTransactionId: val?.razorpay_payment_id,
-        //             type: get_Revalidate?.FareType
-        //         }
-
-        //         dispatch({ type: FlightAction.SET_FLIGHT_BOOKING, payload: bookingData, navigation: navigation })
-
-        //     }).catch((error) => {
-        //         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-        //         console.log('error', error)
-        //     });
-        // }
+                axios.post(
+                    `${API_URL}/revalidate`,
+                    {fare_source_code:get_Revalidate?.FareSourceCode}, {
+                    headers: {
+                        accept: 'application/json',
+                        'Content-Type': 'multipart/form-data',
+                    },
+                }
+                ).then((result)=>{
+                    if (result?.data?.status === true) {
+                        dispatch({ type: FlightAction.GET_REVALIDATE, payload: result?.data?.message })
+                        dispatch({ type: FlightAction.GET_FLIGHT_CHECKOUT, payload: bookingData, navigation: navigation })
+                        dispatch({ type: CommonAction.FLIGHT_LOADER, payload: false })
+                    } else {
+                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Validation failed, Search again or try other flights' } })
+                        dispatch({ type: CommonAction.FLIGHT_LOADER, payload: false })
+                    }
+                })
     }
 }
    
@@ -881,7 +821,7 @@ export default function FlightBooking({ navigation, route }) {
                 </View>
                 
             </View>
-            <ScrollView>
+            <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                 <View>
                     <View style={{ backgroundColor: '#F7F7F7' }}>
                         <View style={{ flexDirection: 'row', justifyContent: 'space-evenly', paddingVertical: 25 }}>
@@ -1664,6 +1604,7 @@ export default function FlightBooking({ navigation, route }) {
                 onPress={handleSubmit2(ConfirmBooking)}>
                 <Text style={styles.confirmBook}>Confirm & Book</Text>
             </TouchableOpacity>
+           
         </View>
     )
 }
@@ -1702,7 +1643,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: COLORS.borderColor,
         marginHorizontal: 20,
-        marginBottom: 10,
+        // marginBottom: 10,
         borderRadius: 30,
         paddingVertical: 10
     },

@@ -16,6 +16,8 @@ export default function HotelTicketDetails({ item, navigation }) {
     const hadleClick = (index) => {
         setSelectedTab(index)
     }
+
+    console.log('Hotel_details',Hotel_details.message)
     return (
         <View style={[style.mainContainer,]}>
             <Appbar title={'Booking Details'} />

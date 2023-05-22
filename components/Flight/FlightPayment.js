@@ -20,6 +20,11 @@ export default function FlightPaymentWebView({ route, navigation }) {
                   params[match[1]] = match[2];
                 }
                 console.log('success params....',params) 
+                if(params?.status === false ||params?.status ==="false" ){
+                    navigation.goBack()
+                }else if(params?.status === true ||params?.status === "true" ){
+
+                }
 
             }else{
                 console.log('failed param ',url)

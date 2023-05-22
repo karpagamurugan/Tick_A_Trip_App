@@ -157,6 +157,7 @@ const getFareRules = function* (data) {
 const setRevalidate = function* (data) {
     const { payload ,navigation,flightInfo,itemInfo} = data
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
+    console.log('loggg revalidate',payload)
     try {
         const result = yield call(() =>
             axios.post(
@@ -177,7 +178,7 @@ const setRevalidate = function* (data) {
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
         } else {
-            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Revalidation Failed' } })
+            yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Validation failed, Search again or try other flights' } })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
         }
@@ -233,7 +234,6 @@ const getFlightCheckout = function* (data) {
     //     form_data.append(key, payload[key]);
     // }
     // console.log(`${API_URL}/checkout`,'checkout')
-    console.log(`data.payload`,data.payload)
     try {
         const result = yield call(() =>
             axios.post(
