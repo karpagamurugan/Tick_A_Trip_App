@@ -44,8 +44,6 @@ export default function FlightTicketDetails({ navigation }) {
             <Appbar title={'Flight Details'} />
             <ScrollView style={{ height: height * 0.83 }} showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <View style={{ paddingHorizontal: 15 }}>
-
-              
                     <View>
                         <View style={{
                             flexDirection: "row",

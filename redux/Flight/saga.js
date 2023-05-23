@@ -15,6 +15,7 @@ const FlightSearchSaga = function* () {
         yield takeEvery(actions.SET_REVALIDATE, setRevalidate),
         yield takeEvery(actions.SET_FLIGHT_BOOKING, setFlightBooking),
         yield takeEvery(actions.GET_FLIGHT_CHECKOUT, getFlightCheckout),
+        yield takeEvery(actions.SET_FLIGHT_TRIPS_DETAIL, getFlightTrips),
     ])
 }
 
@@ -157,7 +158,6 @@ const getFareRules = function* (data) {
 const setRevalidate = function* (data) {
     const { payload ,navigation,flightInfo,itemInfo} = data
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
-    console.log('loggg revalidate',payload)
     try {
         const result = yield call(() =>
             axios.post(
@@ -170,7 +170,6 @@ const setRevalidate = function* (data) {
             }
             )
         );
-        console.log('revalidate',result?.data?.status)
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_REVALIDATE, payload: result?.data?.message })
             navigation.navigate('flightBooking',{flightInfo:flightInfo,itemInfo: itemInfo})
@@ -259,6 +258,40 @@ const getFlightCheckout = function* (data) {
         console.log('error',err?.message)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Request Failed with status 500'} })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+    }
+}
+
+
+
+const getFlightTrips = function* (data) {
+    const { payload,navigation } = data
+    yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
+
+    try {
+        const result = yield call(() =>
+            axios.post(
+                `${API_URL}/trip_details`,
+                payload, {
+                headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+            )
+        );
+
+        if (result?.data?.status === true) {
+            yield put({ type: actions.GET_FLIGHT_TRIPS_DETAIL, payload: result?.data });
+            yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+            navigation.navigate('flightBookingConfirm')
+        } else {
+            yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
+        }
+    } catch (err) {
+        console.log('err', err.message)
+        yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
+
     }
 }
 

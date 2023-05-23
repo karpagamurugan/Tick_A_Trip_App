@@ -33,6 +33,8 @@ import Otp from '../Profile/Otp'
 import Offers from '../User/Offers'
 import HotelPaymentWebView from '../Hotel/HotelPayment'
 import FlightPaymentWebView from '../Flight/FlightPayment'
+import HotelBookingConfirm from '../Hotel/BookingConfirm'
+import FlightBookingConfirm from '../Flight/BookingConfirm'
 const Stack = createNativeStackNavigator();
 
 function HomeTab() {
@@ -47,14 +49,15 @@ function HomeTab() {
             <Stack.Screen name='HotelDetail' component={HotelDetail}options={{ headerShown: false }}/>
             <Stack.Screen name='HotelBooking' component={HotelBooking}options={{ headerShown: false }}/>
             <Stack.Screen name='HotelPayment' component={HotelPaymentWebView}options={{ headerShown: false }}/>
+            <Stack.Screen name="hotelBookingConfirm" component={HotelBookingConfirm} options={{ headerShown: false }} />
 
             <Stack.Screen name="flight" component={Flight} options={{ headerShown: false }} />
             <Stack.Screen name="FlightResult" component={FlightResult} options={{ headerShown: false }} />
             <Stack.Screen name="flightBooking" component={FlightBooking} options={{ headerShown: false }} />
             <Stack.Screen name="FlightDetails" component={FlightDetails} options={{ headerShown: false }} />
-            <Stack.Screen name="BookingConfirm" component={BookingConfirm} options={{ headerShown: false }} />
             <Stack.Screen name="offers" component={Offers} options={{ headerShown: false }} />
             <Stack.Screen name='FlightPayment' component={FlightPaymentWebView}options={{ headerShown: false }}/>
+            <Stack.Screen name="flightBookingConfirm" component={FlightBookingConfirm} options={{ headerShown: false }} />
 
         </Stack.Navigator>
     )

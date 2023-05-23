@@ -17,7 +17,6 @@ export default function HotelTicketDetails({ item, navigation }) {
         setSelectedTab(index)
     }
 
-    console.log('Hotel_details',Hotel_details.message)
     return (
         <View style={[style.mainContainer,]}>
             <Appbar title={'Booking Details'} />
@@ -48,7 +47,7 @@ export default function HotelTicketDetails({ item, navigation }) {
 
                                         <View style={{ flexDirection: "row", alignItems: "center", }}>
                                             <Text style={{ fontSize: 15, color: "#003AA8", fontFamily: FONTS.mediam, }}>Your Supplier Confirmation No :</Text>
-                                            <Text style={{ fontFamily: FONTS.mediam, }}> {Hotel_details?.message?.supplierConfirmationNum}</Text>
+                                            <Text style={{ fontFamily: FONTS.mediam, }}> {Hotel_details?.message?.supplier_confirmation_no}</Text>
                                         </View>
                                        {
                                         (Hotel_details?.message?.roomBookDetails?.image ===null ||Hotel_details?.message?.roomBookDetails?.image ===undefined)?
@@ -70,21 +69,21 @@ export default function HotelTicketDetails({ item, navigation }) {
                                                     <Text style={style.bookingTitle}>Booking Status</Text>
                                                     <Text style={[style.bookingListContent,
                                                     { color: "#65C14F", fontFamily: FONTS.fontBold, fontSize: 20 }]}
-                                                    >{Hotel_details?.message?.status}</Text>
+                                                    >{Hotel_details?.message?.booking_status}</Text>
                                                 </View>
                                                 <View style={{ paddingBottom: 10 }}>
                                                     <Text style={style.bookingTitle}>Check Out</Text>
-                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.checkOut}</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.check_out}</Text>
                                                 </View>
                                             </View>
                                             <View>
                                                 <View style={{ paddingBottom: 10 }}>
                                                     <Text style={style.bookingTitle}>Booking Time </Text>
-                                                    <Text style={style.bookingListContent}>{moment(Hotel_details?.message?.roomBookDetails?.bookingDateTime).format('mm:ss A')}</Text>
+                                                    <Text style={style.bookingListContent}>{moment(Hotel_details?.message?.booking_time).format('mm:ss A')}</Text>
                                                 </View>
                                                 <View style={{ paddingBottom: 10 }}>
                                                     <Text style={style.bookingTitle}>Check In</Text>
-                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.checkIn}</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.check_in}</Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -95,20 +94,20 @@ export default function HotelTicketDetails({ item, navigation }) {
                                             </View>
                                             <View style={{ paddingBottom: 10 }}>
                                                 <Text style={style.bookingTitle}>Hotel Name</Text>
-                                                <Text style={[style.bookingListContent, { color: "#00065E", fontFamily: FONTS.fontBold, fontSize: 19 }]}>{Hotel_details?.message?.roomBookDetails?.hotelName}</Text>
+                                                <Text style={[style.bookingListContent, { color: "#00065E", fontFamily: FONTS.fontBold, fontSize: 19 }]}>{Hotel_details?.message?.hotel_name}</Text>
                                             </View>
                                             <View style={{ paddingBottom: 10 }}>
                                                 <Text style={[style.bookingTitle,]}>Hotel Address</Text>
-                                                <Text style={[style.bookingListContent,]}>{Hotel_details?.message?.roomBookDetails?.address}</Text>
+                                                <Text style={[style.bookingListContent,]}>{Hotel_details?.message?.hotel_address}</Text>
                                             </View>
                                             <View style={{ flexDirection: "row", paddingBottom: 10,justifyContent:'space-between' }}>
                                                 <View>
                                                     <Text style={style.bookingTitle}>City</Text>
-                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.city}</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.city}</Text>
                                                 </View>
                                                 <View>
                                                     <Text style={style.bookingTitle}>Country</Text>
-                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.country}</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.country}</Text>
                                                 </View>
                                             </View>
                                         </View>
@@ -120,45 +119,45 @@ export default function HotelTicketDetails({ item, navigation }) {
                                             <View style={[style.paddBottom10]}>
                                                 <Text style={style.bookingTitle}>Booking Days</Text>
                                                 <Text style={style.bookingListContent}>
-                                                    {Hotel_details?.message?.roomBookDetails?.days}
+                                                    {Hotel_details?.message?.booking_days}
                                                 </Text>
                                             </View>
                                             <View style={[style.paddBottom10]}>
                                                 <Text style={style.bookingTitle}>Net Price</Text>
                                                 <Text style={style.bookingListContent}>
-                                                    {Hotel_details?.message?.roomBookDetails?.currency}
-                                                    {Hotel_details?.message?.roomBookDetails?.NetPrice}
+                                                    {/* {Hotel_details?.message?.roomBookDetails?.currency} */}
+                                                    {Hotel_details?.message?.net_price}
                                                 </Text>
                                             </View>
-                                            {(Hotel_details?.message?.roomBookDetails?.fareType === '' || Hotel_details?.message?.roomBookDetails?.fareType === undefined || Hotel_details?.message?.roomBookDetails?.fareType === null) ? <View /> :
+                                            {(Hotel_details?.message?.fare_type === '' || Hotel_details?.message?.fare_type === undefined || Hotel_details?.message?.fare_type === null) ? <View /> :
                                                 <View style={[style.paddBottom10]}>
                                                     <Text style={style.bookingTitle}>Fair Type</Text>
-                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.fareType}</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.fare_type}</Text>
                                                 </View>
                                             }
-                                            {(Hotel_details?.message?.roomBookDetails?.customerEmail === '' || Hotel_details?.message?.roomBookDetails?.customerEmail === undefined || Hotel_details?.message?.roomBookDetails?.customerEmail === null) ? <View /> :
+                                            {(Hotel_details?.message?.customer_email === '' || Hotel_details?.message?.customer_email === undefined || Hotel_details?.message?.customer_email === null) ? <View /> :
                                                 <View style={[style.paddBottom10]}>
                                                     <Text style={style.bookingTitle}>Customer Email</Text>
-                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.customerEmail}</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.customer_email}</Text>
                                                 </View>
                                             }
-                                            {(Hotel_details?.message?.roomBookDetails?.customerPhone === '' || Hotel_details?.message?.roomBookDetails?.customerPhone === undefined || Hotel_details?.message?.roomBookDetails?.customerPhone === null) ? <View /> :
+                                            {(Hotel_details?.message?.customer_phone === '' || Hotel_details?.message?.customer_phone === undefined || Hotel_details?.message?.customer_phone === null) ? <View /> :
                                                 <View style={[style.paddBottom10]}>
                                                     <Text style={style.bookingTitle}>Customer Phone</Text>
-                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.roomBookDetails?.customerPhone}</Text>
+                                                    <Text style={style.bookingListContent}>{Hotel_details?.message?.customer_phone}</Text>
                                                 </View>
                                             }
                                         </View>
                                         <Text style={style.centerLine}></Text>
                                         <View style={{ paddingBottom: 20 }}>
                                             <Text style={style.bookingTitle}>Cancellation Policy</Text>
-                                            <Text style={[style.bookingListContent, { fontSize: 14 }]}>{Hotel_details?.message?.roomBookDetails?.cancellationPolicy}</Text>
+                                            <Text style={[style.bookingListContent, { fontSize: 14 }]}>{Hotel_details?.message?.cancellation_policy}</Text>
                                         </View>
                                     </View>
                                 </View>
                             </ScrollView> : (selectedTab === 1) ?
                                 <ScrollView style={{ marginHorizontal: 10, marginTop: 20, }}>
-                                    {Hotel_details?.message?.roomBookDetails?.rooms?.map((val, index) => (
+                                    {Hotel_details?.message?.room_details.map((val, index) => (
                                         <View style={{ borderRadius: 10, padding: 10, borderWidth: 1, borderColor: '#D6E6F9', }} key={index}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                 <View style={{ paddingRight: 10 }}>
@@ -180,7 +179,7 @@ export default function HotelTicketDetails({ item, navigation }) {
                                                 </View>
                                             </View>
                                             <Text style={style.RoomListText}>Description: <Text style={{ color: "#000000", fontSize: 17, textTransform: 'capitalize' }}>{val?.description}</Text></Text>
-                                            <Text style={[style.CoustomerName]}>{val?.paxDetails?.name[0]} + {val?.paxDetails?.name?.length}</Text>
+                                            <Text style={[style.CoustomerName]}>{val?.paxDetails?.name[0]} + {val?.paxDetails?.name?.length - 1}</Text>
                                         </View>
                                     ))}
                                 </ScrollView> :

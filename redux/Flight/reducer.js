@@ -10,7 +10,9 @@ const initialState = {
     Filtered_List:{
         show:false,
         data:[]
-    }
+    },
+    trip_detail:{},
+
 }
 
 const FlightSearchReducer = (state = initialState, action) => {
@@ -48,6 +50,11 @@ const FlightSearchReducer = (state = initialState, action) => {
                                 data:action.payload.data
                             },
                         }; 
+                        case actions.GET_FLIGHT_TRIPS_DETAIL:
+                    return {
+                        ...state,
+                        trip_detail:action.payload,
+                    }; 
         default:
             return state;
     }

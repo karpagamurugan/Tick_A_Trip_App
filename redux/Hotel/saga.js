@@ -25,7 +25,7 @@ const HotelSaga = function* () {
 }
 
 const getHotelDetails = function* (data) {
-    const { payload, navigation } = data;
+    const { payload, navigation,value } = data;
     var form_data = new FormData();
 
     for (var key in payload) {
@@ -50,7 +50,7 @@ const getHotelDetails = function* (data) {
                 type:'Hotel'
             },initial:true })
 
-            navigation.navigate('HotelDetail',{data:payload})
+            navigation.navigate('HotelDetail',{data:payload,value:value})
              
         } else {
             console.log("else....")
@@ -245,7 +245,7 @@ const getHotelBookingDetail = function* (data) {
             )
         );
         if (result.data.status === true) {
-            navigation.navigate('BookingConfirm')
+            navigation.navigate('hotelBookingConfirm')
             yield put({ type: actions.SET_HOTEL_BOOKING_DETAIL, payload: result.data.message });
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         } else {

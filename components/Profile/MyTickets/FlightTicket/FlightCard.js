@@ -47,8 +47,8 @@ export default function FlightCard({ item, navigation, type }) {
                     <Text style={style.title}>PNR : {item?.AirlinePNR}</Text>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', width: width * 0.65 }}>
                         <View style={{}}>
-                            <Text style={style.depatureTime}>Depature : {moment(item?.DepartureDateTime).format('hh:mm a')}</Text>
-                            <Text style={style.depatureTime}>Boarding : {moment(item?.ArrivalDateTime).format('hh:mm a')}</Text>
+                            <Text style={style.depatureTime}>Depature : {moment(item?.DepartureDateTime).format('HH:MM a')}</Text>
+                            <Text style={style.depatureTime}>Boarding : {moment(item?.ArrivalDateTime).format('HH:MM a')}</Text>
 
                         </View>
                         {

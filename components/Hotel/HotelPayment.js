@@ -10,22 +10,24 @@ export default function HotelPaymentWebView({route,navigation}) {
     const height = Dimensions.get('window').height
   
     const dispatch = useDispatch();
-    const handlePayment = (url) => {
+    const handlePayment = (url,title) => {
 
         try {
-            if(url !== undefined){
+            if(url !== undefined && title !==undefined){
                 var regex = /[?&]([^=#]+)=([^&#]*)/g,
                   params = {},
+                  titleparms={},
                   match;
                 while (match = regex.exec(url)) {
                   params[match[1]] = match[2];
                 }
 
-                if(params?.referenceNum !== undefined){
+              while (match = regex.exec(title)) {
+                titleparms[match[1]] = match[2];
+              }
+
+                if(params?.referenceNum !== undefined && titleparms?.message !==undefined){
                     if(url.includes('https://tickatrip.travel/hotel-booking-confirm')){
-                        console.log('log.....',true)
-                        console.log('success....',params?.referenceNum) 
-                        console.log('success....',params?.supplierConfirmationNum) 
                         dispatch({
                             type: hotelActions.GET_HOTEL_BOOKING_DETAIL, payload: {
                                 supplierConfirmationNum: params?.supplierConfirmationNum,
@@ -33,12 +35,15 @@ export default function HotelPaymentWebView({route,navigation}) {
                             },
                             navigation: navigation
                         });
+                      dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: titleparms?.message } })
                     }else{
                         console.log('false')
                         navigation.goBack()
+                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: titleparms?.message } })
                     }
                 }else if(params?.referenceNum === undefined && url.includes('https://tickatrip.travel/booking-response')){
                     navigation.goBack()
+                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: titleparms?.message } })
                 }
 
 
@@ -74,7 +79,7 @@ export default function HotelPaymentWebView({route,navigation}) {
             onNavigationStateChange={(state) => {
                 // setCanGoBack(state.canGoBack)
                 // handleRes(state.title)
-                handlePayment(state.url.toString())
+                handlePayment(state.url.toString(),state.title.toString())
                 console.log('webview....',state);
                 // let a = state.url.split('https://tickatrip.travel')[1];
                 // let b = new URLSearchParams(a)

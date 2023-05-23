@@ -45,7 +45,6 @@ const HotelCard = (props) => {
                     <View style={style.hotelListCardHotelLocat}>
                         <View style={{ width: '48%', flex: 1, paddingHorizontal: 10 }}>
                             <TouchableHighlight onPress={() => {
-                                // console.log('dklafj', val)
                                 dispatch({
                                     type: hotelActions.GET_HOTEL_DETAILS,
                                     payload: {
@@ -54,6 +53,7 @@ const HotelCard = (props) => {
                                         sessionId: hotelSessionId,
                                         tokenId: val?.tokenId
                                     },
+                                    value:val,
                                     navigation: navigation,
                                 })
                                 // navigation.navigate('HotelDetail', { data: val })
@@ -99,7 +99,8 @@ const HotelCard = (props) => {
                                         hotelId: val?.hotelId,
                                         productId: val?.productId,
                                         sessionId: hotelSessionId,
-                                        tokenId: val?.tokenId
+                                        tokenId: val?.tokenId,
+                                        country_code:val?.country
                                     },
                                     navigation: navigation,
                                     detail: val

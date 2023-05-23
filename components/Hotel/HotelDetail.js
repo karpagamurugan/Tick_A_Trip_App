@@ -44,13 +44,13 @@ const HotelDetail = ({ navigation, route }) => {
     const [moreVisible, setMoreVisible] = useState(false);
     const [textShown, setTextShown] = useState(false);
     const [textReadMore, setTextReadMore] = useState(false);
-    const { HotelRoomType, hotelDetails, AllReviews,nextPageUrl,hotelSessionId} = useSelector((state) => state.HotelReducer)
-    const { userProfileData} = useSelector((state) => state.userReducer)
+    const { HotelRoomType, hotelDetails, AllReviews, nextPageUrl, hotelSessionId } = useSelector((state) => state.HotelReducer)
+    const { userProfileData } = useSelector((state) => state.userReducer)
 
     var [Review, setReview] = useState()
     var [rating, setRating] = useState(parseInt(5))
-    var [editReview,setEditReview]=useState(false)
-    var [reviewId,setReviewId]=useState();
+    var [editReview, setEditReview] = useState(false)
+    var [reviewId, setReviewId] = useState();
 
     const mainAminities = [
         'Car park',
@@ -72,26 +72,26 @@ const HotelDetail = ({ navigation, route }) => {
         html: `${hotelDetails?.message?.description.content} `
     };
 
-    
+
     const showMore = (id, description) => {
         dispatch({ type: hotelActions.GET_HOTEL_REVIEWS, payload: { type: 'Hotel', hotelId: hotelDetails?.message?.hotelId }, initial: false })
     }
 
-    const AddReview=()=>{
+    const AddReview = () => {
         dispatch({
-            type:hotelActions.GET_ADD_REVIEW,
-            payload:{
-                description:Review,
-                hotelId:hotelDetails?.message?.hotelId,
-                rating:rating,
-                type:"Hotel"
+            type: hotelActions.GET_ADD_REVIEW,
+            payload: {
+                description: Review,
+                hotelId: hotelDetails?.message?.hotelId,
+                rating: rating,
+                type: "Hotel"
 
             }
         })
-        setReview(Review='')
-        setRating(rating=5)
+        setReview(Review = '')
+        setRating(rating = 5)
     }
-    const UpdateReview=()=>{
+    const UpdateReview = () => {
         dispatch({
             type: hotelActions.GET_UPDATE_REVIEW,
             payload: {
@@ -107,19 +107,20 @@ const HotelDetail = ({ navigation, route }) => {
         })
 
         setEditReview(false)
-        setReview(Review='')
-        setRating(rating=5)
+        setReview(Review = '')
+        setRating(rating = 5)
 
     }
-    const ClearReview=()=>{
+    const ClearReview = () => {
         setEditReview(false)
-        setRating(rating=5)
-        setReview(Review='')
+        setRating(rating = 5)
+        setReview(Review = '')
     }
+
     return (
         <View>
-          <HotelAppbar />
-            <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} style={{paddingBottom:20}}>
+            <HotelAppbar />
+            <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false} style={{ paddingBottom: 20 }}>
                 <ImageBackground style={style.HotelDetailBanner} source={require('../../Assert/Images/hotel.jpg')}>
                     <View style={style.OverLay} />
                     <View style={style.HotelDetailBannerCon}>
@@ -253,84 +254,85 @@ const HotelDetail = ({ navigation, route }) => {
                             </View>
                         </Modal>
                     </View>
-                    
+
                     <View>
-                        <TouchableHighlight style={style.bookingBtn}  onPress={() => {
-                                dispatch({
-                                    type: hotelActions.GET_HOTEL_ROOM_TYPE,
-                                    payload: {
-                                        hotelId: route?.params?.data?.hotelId,
-                                        productId: route?.params?.data?.productId,
-                                        sessionId: route?.params?.data?.sessionId,
-                                        tokenId:route?.params?.data?.tokenId
-                                    },
-                                    navigation: navigation,
-                                    detail: hotelDetails?.message
-                                })
-                            }}>
+                        <TouchableHighlight underlayColor={'transparent'} style={style.bookingBtn} onPress={() => {
+                            dispatch({
+                                type: hotelActions.GET_HOTEL_ROOM_TYPE,
+                                payload: {
+                                    hotelId: route?.params?.data?.hotelId,
+                                    productId: route?.params?.data?.productId,
+                                    sessionId: route?.params?.data?.sessionId,
+                                    tokenId: route?.params?.data?.tokenId,
+                                    country_code: route?.params?.value?.country
+                                },
+                                navigation: navigation,
+                                detail: hotelDetails?.message
+                            })
+                        }}>
                             <Text style={style.bookingBtnTxt}>Book Now</Text>
                         </TouchableHighlight>
                     </View>
                 </View>
 
 
-                {(AllReviews?.length !==0)&&<View style={{marginBottom:20}}>
+                {(AllReviews?.length !== 0) && <View style={{ marginBottom: 20 }}>
                     <View style={styles.ratingContainer}>
                         <Text style={[styles.ratingTitle, { color: 'black', fontWeight: 'bold', fontSize: height * 0.025 }]}>Room Review</Text>
                         <View style={{ height: 0.5, width: width * 0.85, backgroundColor: 'grey', alignSelf: 'center', marginVertical: 5 }} />
-                       {
-                        userProfileData&&
-                        <View>
-                             <Text style={[styles.ratingTitle, { fontSize: height * 0.02, color: 'grey' }]}>Leave a Rating & Comment</Text>
-                        <View style={{ alignItems: 'flex-start', paddingLeft: 10 }}>
-                            <Stars
-                                default={rating}
-                                count={5}
-                                half={true}
-                                disabled={false}
-                                starSize={55}
-                                update={(val) => {
-                                    setRating(rating = val)
-                                }}
-                                spacing={5}
-                                fullStar={<FontAwesome name={'star'} style={[styles.myStarStyle, { fontSize: 20 }]} />}
-                                emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle, { fontSize: 20 }]} />}
-                                halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle, { fontSize: 20 }]} />}
-                            />
-                        </View>
-                        <View style={{ backgroundColor: '#f0f0f0', height: height * 0.2, margin: 10, borderRadius: 5 }}>
-                            <TextInput
-                                placeholder='Write message here'
-                                placeholderTextColor={'#b3b3b3'}
-                                style={{ paddingLeft: 10, fontFamily: FONTS.font }}
-                                value={Review}
-                                onChangeText={(e) => {
-                                    setReview(Review = e)
-                                }}
-                            />
-                        </View>
+                        {
+                            userProfileData &&
+                            <View>
+                                <Text style={[styles.ratingTitle, { fontSize: height * 0.02, color: 'grey' }]}>Leave a Rating & Comment</Text>
+                                <View style={{ alignItems: 'flex-start', paddingLeft: 10 }}>
+                                    <Stars
+                                        default={rating}
+                                        count={5}
+                                        half={true}
+                                        disabled={false}
+                                        starSize={55}
+                                        update={(val) => {
+                                            setRating(rating = val)
+                                        }}
+                                        spacing={5}
+                                        fullStar={<FontAwesome name={'star'} style={[styles.myStarStyle, { fontSize: 20 }]} />}
+                                        emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle, { fontSize: 20 }]} />}
+                                        halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle, { fontSize: 20 }]} />}
+                                    />
+                                </View>
+                                <View style={{ backgroundColor: '#f0f0f0', height: height * 0.2, margin: 10, borderRadius: 5 }}>
+                                    <TextInput
+                                        placeholder='Write message here'
+                                        placeholderTextColor={'#b3b3b3'}
+                                        style={{ paddingLeft: 10, fontFamily: FONTS.font }}
+                                        value={Review}
+                                        onChangeText={(e) => {
+                                            setReview(Review = e)
+                                        }}
+                                    />
+                                </View>
                             </View>
-                       }
+                        }
 
-                      {
-                        (editReview)?
-                        <View style={{flexDirection:'row',alignSelf: 'flex-end',}}>
-                            <TouchableHighlight underlayColor={'transparent'} onPress={() => ClearReview()}
-                            style={{ backgroundColor: COLORS.starFill, alignItems: 'center',  marginRight: 10, borderRadius: 5 }}>
-                            <Text style={[styles.ratingTitle, { fontSize: height * 0.018, color: '#fff', fontWeight: 'bold', padding: 5 }]}>CLEAR</Text>
-                        </TouchableHighlight>
-                            <TouchableHighlight underlayColor={'transparent'} onPress={() => UpdateReview()}
-                            style={{ backgroundColor: COLORS.starFill, alignItems: 'center', alignSelf: 'flex-end', marginRight: 10, borderRadius: 5 }}>
-                            <Text style={[styles.ratingTitle, { fontSize: height * 0.018, color: '#fff', fontWeight: 'bold', padding: 5 }]}>UPDATE</Text>
-                        </TouchableHighlight>
-                            </View>
+                        {
+                            (editReview) ?
+                                <View style={{ flexDirection: 'row', alignSelf: 'flex-end', }}>
+                                    <TouchableHighlight underlayColor={'transparent'} onPress={() => ClearReview()}
+                                        style={{ backgroundColor: COLORS.starFill, alignItems: 'center', marginRight: 10, borderRadius: 5 }}>
+                                        <Text style={[styles.ratingTitle, { fontSize: height * 0.018, color: '#fff', fontWeight: 'bold', padding: 5 }]}>CLEAR</Text>
+                                    </TouchableHighlight>
+                                    <TouchableHighlight underlayColor={'transparent'} onPress={() => UpdateReview()}
+                                        style={{ backgroundColor: COLORS.starFill, alignItems: 'center', alignSelf: 'flex-end', marginRight: 10, borderRadius: 5 }}>
+                                        <Text style={[styles.ratingTitle, { fontSize: height * 0.018, color: '#fff', fontWeight: 'bold', padding: 5 }]}>UPDATE</Text>
+                                    </TouchableHighlight>
+                                </View>
 
-                        :<TouchableHighlight underlayColor={'transparent'} onPress={() => AddReview()}
-                        style={{ backgroundColor: COLORS.starFill, alignItems: 'center', alignSelf: 'flex-end', marginRight: 10, borderRadius: 5 }}>
-                        <Text style={[styles.ratingTitle, { fontSize: height * 0.018, color: '#fff', fontWeight: 'bold', padding: 5 }]}>SUBMIT</Text>
-                    </TouchableHighlight>
-                      }
-                        
+                                : <TouchableHighlight underlayColor={'transparent'} onPress={() => AddReview()}
+                                    style={{ backgroundColor: COLORS.starFill, alignItems: 'center', alignSelf: 'flex-end', marginRight: 10, borderRadius: 5 }}>
+                                    <Text style={[styles.ratingTitle, { fontSize: height * 0.018, color: '#fff', fontWeight: 'bold', padding: 5 }]}>SUBMIT</Text>
+                                </TouchableHighlight>
+                        }
+
 
 
                         <View>
@@ -339,84 +341,84 @@ const HotelDetail = ({ navigation, route }) => {
                                     return (
                                         <View>
                                             <View style={{ padding: 10 }}>
-                                            <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-                                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                    <Image style={styles.profileImage} source={{ uri: `${PROFILE_URL}${val?.user?.profile_image}` }} />
-                                                    <View>
-                                                        <Text style={{ fontFamily: FONTS.font, paddingLeft: 8, color: '#063077', fontSize: height * 0.019,fontWeight:'bold' }}>{val?.user?.username}</Text>
+                                                <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+                                                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                                        <Image style={styles.profileImage} source={{ uri: `${PROFILE_URL}${val?.user?.profile_image}` }} />
+                                                        <View>
+                                                            <Text style={{ fontFamily: FONTS.font, paddingLeft: 8, color: '#063077', fontSize: height * 0.019, fontWeight: 'bold' }}>{val?.user?.username}</Text>
 
-                                                        <Text style={{ fontFamily: FONTS.font, paddingLeft: 8, color: 'grey', fontSize: height * 0.012,paddingTop:4 }}>{moment(new Date(val?.updated_at)).fromNow()}</Text>
+                                                            <Text style={{ fontFamily: FONTS.font, paddingLeft: 8, color: 'grey', fontSize: height * 0.012, paddingTop: 4 }}>{moment(new Date(val?.updated_at)).fromNow()}</Text>
 
+                                                        </View>
                                                     </View>
-                                                </View>
-                                               { 
-                                               
-                                               (userProfileData?.username === val?.user?.username && !editReview)&&<View style={{ flexDirection: 'row', width: width * 0.15, justifyContent: 'space-between' }}>
-                                                    <TouchableHighlight onPress={() => {
-                                                        setEditReview(true)
-                                                        setRating(rating=val?.rating)
-                                                        setReview(Review=val?.description)
-                                                        setReviewId(reviewId=val?.id)
-                                                    }} underlayColor={'transparent'}>
-                                                        <AntDesign name='edit' size={21} color={COLORS.BtnColor} />
-                                                    </TouchableHighlight>
-                                                    <TouchableHighlight onPress={() => {
-
-                                                        Alert.alert(
-                                                            `REVIEW`,
-                                                            "Do you want to delete this Review?",
-                                                            [
-                                                                {
-                                                                    text: 'CANCEL',
-                                                                    onPress: () => { },
-                                                                    style: 'cancel',
-                                                                },
-                                                                {
-                                                                    text: 'DELETE',
-                                                                    onPress: () => {
-                                                                        dispatch({
-                                                                            type: hotelActions.GET_DELETE_REVIEW,
-                                                                            payload: {
-                                                                                id:val?.id
-                                                                            }
-                                                                        })
-                                                                    },
-                                                                    style: 'cancel',
-                                                                },
-                                                            ], { cancelable: true, }
-                                                        )
-                                                    }} underlayColor={'transparent'}>
-                                                        <MaterialIcons name='delete-forever' size={23} color={'red'} />
-                                                    </TouchableHighlight>
-                                                </View>
-                                                }
-                                            </View>
-                                            <View style={{ flexDirection: 'row', paddingLeft: 5, paddingTop: 10 }}>
-                                                <Stars
-                                                    default={val?.rating}
-                                                    count={5}
-                                                    half={true}
-                                                    disabled={true}
-                                                    starSize={55}
-                                                    spacing={5}
-                                                    fullStar={<FontAwesome name={'star'} style={[styles.myStarStyle, { fontSize: 15 }]} />}
-                                                    emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle, { fontSize: 15 }]} />}
-                                                    halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle, { fontSize: 15 }]} />}
-                                                />
-                                            </View>
-
-                                            <View style={{ paddingLeft: 10, paddingTop: 5 }}>
-                                                <Text style={{ fontFamily: FONTS.font }}>
                                                     {
-                                                        val?.description
+
+                                                        (userProfileData?.username === val?.user?.username && !editReview) && <View style={{ flexDirection: 'row', width: width * 0.15, justifyContent: 'space-between' }}>
+                                                            <TouchableHighlight onPress={() => {
+                                                                setEditReview(true)
+                                                                setRating(rating = val?.rating)
+                                                                setReview(Review = val?.description)
+                                                                setReviewId(reviewId = val?.id)
+                                                            }} underlayColor={'transparent'}>
+                                                                <AntDesign name='edit' size={21} color={COLORS.BtnColor} />
+                                                            </TouchableHighlight>
+                                                            <TouchableHighlight onPress={() => {
+
+                                                                Alert.alert(
+                                                                    `REVIEW`,
+                                                                    "Do you want to delete this Review?",
+                                                                    [
+                                                                        {
+                                                                            text: 'CANCEL',
+                                                                            onPress: () => { },
+                                                                            style: 'cancel',
+                                                                        },
+                                                                        {
+                                                                            text: 'DELETE',
+                                                                            onPress: () => {
+                                                                                dispatch({
+                                                                                    type: hotelActions.GET_DELETE_REVIEW,
+                                                                                    payload: {
+                                                                                        id: val?.id
+                                                                                    }
+                                                                                })
+                                                                            },
+                                                                            style: 'cancel',
+                                                                        },
+                                                                    ], { cancelable: true, }
+                                                                )
+                                                            }} underlayColor={'transparent'}>
+                                                                <MaterialIcons name='delete-forever' size={23} color={'red'} />
+                                                            </TouchableHighlight>
+                                                        </View>
                                                     }
-                                                </Text>
+                                                </View>
+                                                <View style={{ flexDirection: 'row', paddingLeft: 5, paddingTop: 10 }}>
+                                                    <Stars
+                                                        default={val?.rating}
+                                                        count={5}
+                                                        half={true}
+                                                        disabled={true}
+                                                        starSize={55}
+                                                        spacing={5}
+                                                        fullStar={<FontAwesome name={'star'} style={[styles.myStarStyle, { fontSize: 15 }]} />}
+                                                        emptyStar={<FontAwesome name={'star-o'} style={[styles.myStarStyle, styles.myEmptyStarStyle, { fontSize: 15 }]} />}
+                                                        halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle, { fontSize: 15 }]} />}
+                                                    />
+                                                </View>
+
+                                                <View style={{ paddingLeft: 10, paddingTop: 5 }}>
+                                                    <Text style={{ fontFamily: FONTS.font }}>
+                                                        {
+                                                            val?.description
+                                                        }
+                                                    </Text>
+                                                </View>
+
                                             </View>
+                                            <View style={{ height: 1, width: width * 0.85, backgroundColor: '#efefef', alignSelf: 'center', marginVertical: 5 }} />
 
                                         </View>
-                                        <View style={{ height: 1, width: width * 0.85, backgroundColor: '#efefef', alignSelf: 'center', marginVertical: 5 }} />
-
-                                            </View>
                                     )
 
                                 })
@@ -424,9 +426,9 @@ const HotelDetail = ({ navigation, route }) => {
 
 
                             {
-                                nextPageUrl&&
+                                nextPageUrl &&
                                 <TouchableHighlight onPress={() => showMore()} underlayColor={'transparent'}>
-                                    <Text style={{fontFamily:FONTS.font,color:COLORS.BtnColor,paddingLeft:20}}>
+                                    <Text style={{ fontFamily: FONTS.font, color: COLORS.BtnColor, paddingLeft: 20 }}>
                                         Show more reviews
                                     </Text>
                                 </TouchableHighlight>
@@ -493,7 +495,7 @@ const styles = StyleSheet.create({
         paddingLeft: 10
     },
     profileImage: { height: 35, width: 35, borderRadius: 100, borderWidth: 1, borderColor: '#efefef' },
-    boxshawdow:{
+    boxshawdow: {
         marginHorizontal: 20,
         width: 50,
         alignItems: "center",
