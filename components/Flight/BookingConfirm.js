@@ -1,19 +1,22 @@
 import React, { useState } from "react";
 import { View, Text, ScrollView, Dimensions, StyleSheet, Image, TouchableOpacity, Pressable, Animated } from 'react-native';
-import Appbar from "../../../common/Appbar";
-import FONTS from "../../../constants/font";
-import TakeOn from "../../../../Assert/Icons/take_1.svg";
-import TakeOff from "../../../../Assert/Icons/take_2.svg";
-import FlightStopArch from '../../../../Assert/Icons/flight_stop_arch.svg';
-import FlightStopIcon from '../../../../Assert/Icons/flight_stop.svg';
-import FlightStopDownIcon from '../../../../Assert/Icons/Flight_down_Icon.svg';
+import Appbar from "../common/Appbar";
+import FONTS from "../constants/font";
+import TakeOn from "../../Assert/Icons/take_1.svg";
+import TakeOff from "../../Assert/Icons/take_2.svg";
+import FlightStopArch from '../../Assert/Icons/flight_stop_arch.svg';
+import FlightStopIcon from '../../Assert/Icons/flight_stop.svg';
+import FlightStopDownIcon from '../../Assert/Icons/Flight_down_Icon.svg';
 import AntDesignIcon from 'react-native-vector-icons/AntDesign';
 import FontAwesomeIcon from 'react-native-vector-icons/FontAwesome';
 import FeatherIcon from 'react-native-vector-icons/Feather';
 import IoniconsIcon from 'react-native-vector-icons/Ionicons';
 import { useSelector } from "react-redux";
-import COLORS from "../../../constants/color";
+import COLORS from "../constants/color";
 import moment from 'moment'
+
+ const height = Dimensions.get('window').height
+ const width = Dimensions.get('window').width
 
 export default function FlightBookingConfirm(){
     var [stopTab, setStopTab] = useState(0)
@@ -62,7 +65,7 @@ export default function FlightBookingConfirm(){
                             </View>
                         </View>
                         <View style={[style.FlightBannerSec]}>
-                            <Image style={{ width: 350, height: 200 }} source={require('../../../../Assert/Images/Asset5.png')} />
+                            <Image style={{ width: 350, height: 200 }} source={require('../../Assert/Images/Asset5.png')} />
                             <View style={[style.cartBackgroundDesign, { marginTop: 10 }]}>
                                 <View style={[style.LeftCircle]} />
                                 <View style={[style.RightCircle]} />

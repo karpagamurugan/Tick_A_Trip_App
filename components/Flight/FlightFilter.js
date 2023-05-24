@@ -131,10 +131,10 @@ function FlightFilter(props) {
             {/* <View style={styles.modalContainer}> */}
          
                   <ScrollView style={styles.filterModelSec}>
-                  <View style={{ padding: 10, borderRadius: 20}}>
+                  <View style={{ padding: 10, borderRadius: 20,paddingBottom:30}}>
                         <Text style={styles.modalTitle}>Refine Result</Text>
                         <View style={{ height: 0.5, backgroundColor: 'grey' }} />
-                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 10, paddingHorizontal: 5 }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 5, paddingHorizontal: 5 }}>
                             <Text style={styles.FilterTitle}>Price</Text>
                             {/* <Text style={styles.priceRangeText}>{priceRange?.min}</Text> */}
                         </View>
@@ -220,7 +220,7 @@ function FlightFilter(props) {
                             </View>
 
                             <Text style={[styles.FilterTitle, { paddingTop: 10 }]}>Stops</Text>
-                            <View style={{ paddingLeft: 10 }}>
+                            <View style={{ paddingLeft: 10,}}>
                                 {
                                     CheckFlightStopsName.map((val, index) => (
                                         <View style={[styles.checkBox]} key={index}>
@@ -275,7 +275,7 @@ const styles = StyleSheet.create({
         width: width * 0.9,
         alignSelf: 'center',
         top: height * 0.1,
-        paddingHorizontal: 20,
+        paddingHorizontal: 5,
         paddingTop: 20,
         borderRadius: 10,
         height: height * 0.8,

@@ -225,6 +225,8 @@ export default function FlightBooking({ navigation, route }) {
             tempList.push(infantList[k])
 
         }
+
+        console.log('tempList',tempList)
         setAllTravellerList(allTravellerList = tempList)
         setFlightInfoType(flightInfoType = { flightAdultList: adultList?.length, flightChildList: childList?.length, flightInfantList: infantList?.length })
        

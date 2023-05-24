@@ -16,7 +16,6 @@ export default function HotelTicketDetails({ item, navigation }) {
     const hadleClick = (index) => {
         setSelectedTab(index)
     }
-
     return (
         <View style={[style.mainContainer,]}>
             <Appbar title={'Booking Details'} />
@@ -157,7 +156,9 @@ export default function HotelTicketDetails({ item, navigation }) {
                                 </View>
                             </ScrollView> : (selectedTab === 1) ?
                                 <ScrollView style={{ marginHorizontal: 10, marginTop: 20, }}>
-                                    {Hotel_details?.message?.room_details.map((val, index) => (
+                                   {(Hotel_details?.message?.room_details ===false||Hotel_details?.message?.room_details ==='false'||Hotel_details?.message?.room_details ===undefined||Hotel_details?.message?.room_details.length ===0)?
+                                   <View/>: 
+                                    Hotel_details?.message?.room_details.map((val, index) => (
                                         <View style={{ borderRadius: 10, padding: 10, borderWidth: 1, borderColor: '#D6E6F9', }} key={index}>
                                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                                 <View style={{ paddingRight: 10 }}>

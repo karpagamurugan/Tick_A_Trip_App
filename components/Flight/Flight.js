@@ -74,6 +74,8 @@ const Flight = ({ navigation }) => {
       tempList.push(adultList[k])
 
     }
+    console.log('tempList',tempList)
+
   }, [])
 
   const handleSelection = (e) => {

@@ -244,6 +244,7 @@ const getHotelBookingDetail = function* (data) {
                 }
             )
         );
+        console.log('reasult?.data...',result?.data)
         if (result.data.status === true) {
             navigation.navigate('hotelBookingConfirm')
             yield put({ type: actions.SET_HOTEL_BOOKING_DETAIL, payload: result.data.message });

@@ -35,7 +35,7 @@ export default function HotelPaymentWebView({route,navigation}) {
                             },
                             navigation: navigation
                         });
-                      dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: titleparms?.message } })
+                    //   dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: titleparms?.message } })
                     }else{
                         console.log('false')
                         navigation.goBack()
