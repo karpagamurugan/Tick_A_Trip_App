@@ -227,7 +227,6 @@ const getFlightBookingsCancelRequest = function* (data) {
         form_data.append(key, payload[key]);
     }
 
-    console.log('payload....',form_data)
     try {
         const result = yield call(() =>
             axios.post(`${API_URL}/user/flight/requestcancellation`,
@@ -237,7 +236,6 @@ const getFlightBookingsCancelRequest = function* (data) {
                 },
             })
         );
-        console.log('result,,..',result?.data)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message} })
@@ -258,7 +256,6 @@ const getFlightBookingsCancelVerify = function* (data) {
         form_data.append(key, payload[key]);
     }
 
-    console.log('payload....',form_data)
     try {
         const result = yield call(() =>
             axios.post(`${API_URL}/user/flight/cancelbooking`,
@@ -268,7 +265,6 @@ const getFlightBookingsCancelVerify = function* (data) {
                 },
             })
         );
-        console.log('response resul...',result?.data)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.COMMON_LOADER, payload: false })
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Cancelled Successfully' } })
@@ -278,7 +274,6 @@ const getFlightBookingsCancelVerify = function* (data) {
         }
 
     } catch (err) {
-        console.log('error...',err)
         yield put({ type: CommonAction.COMMON_LOADER, payload: false })
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err} })
     }
@@ -336,7 +331,7 @@ const handleProfileUpdate = function* (data) {
 }
 
 const getHotelDetails = function* (data) {
-    const { payload } = data
+    const { payload ,navigation} = data
     try {
         const result = yield call(() =>
             axios.post(
@@ -350,6 +345,7 @@ const getHotelDetails = function* (data) {
             )
         );
         yield put({ type: actions.GET_HOTEL_TICKETS_DETAILS, payload: result.data });
+        navigation.navigate('HotelTicketDetails')
 
     } catch (err) {
         yield put({ type: actions.GET_HOTEL_TICKETS_DETAILS, payload: err.data });
@@ -426,7 +422,7 @@ const getSearchTraveller = function* (data) {
             yield put({ type: actions.GET_ADD_TRAVELLER_NATIONALITY, payload: "" });
         }
     } catch (err) {
-        console.log('getSearchTraveller', err.nametitle.message)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
 
     }
 }
@@ -565,7 +561,6 @@ const userAthentification = function* (data) {
                     }
                 ).catch(e => {
                     // yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: e } })
-                    console.log('loggggg', e)
                 })
             )
         if (result !== undefined) {
@@ -630,7 +625,8 @@ const getCompletedFlightTickets = function* (data) {
     } catch (err) {
         // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
         // yield put({ type: actions.SET_USER_PROFILE, payload: err.data })
-        console.log('error completed....', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
+
     }
 }
 const getCancelledFlightTickets = function* (data) {
@@ -653,7 +649,8 @@ const getCancelledFlightTickets = function* (data) {
     } catch (err) {
         // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
         // yield put({ type: actions.SET_USER_PROFILE, payload: err.data })
-        console.log('error.... cancelled', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
+
     }
 }
 const getUpcomingFlightTickets = function* (data) {
@@ -673,18 +670,15 @@ const getUpcomingFlightTickets = function* (data) {
 
         // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {
-
-        console.log('error upcoming....', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
     }
 }
 const flightTicketsDetails = function* (data) {
     const { payload } = data;
     try {
-        console.log(payload.userId,'user id...')
         const result = yield call(() =>
             axios.get(`${API_URL}/user/flight/mybookings/detail/${payload.userId}`)
         )
-        console.log('result... flight',result?.data)
         if (result?.data?.bookings !== undefined) {
             yield put({ type: actions.GET_FLIGHT_TICKETS_DETAILS, payload: result?.data?.bookings })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
@@ -697,7 +691,6 @@ const flightTicketsDetails = function* (data) {
 
         }
     } catch (err) {
-        console.log('error in flight detail',err)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
         yield put({ type: actions.GET_FLIGHT_TICKETS_DETAILS, payload: err.data });
@@ -724,7 +717,7 @@ const getCompletedHotelTickets = function* (data) {
 
     } catch (err) {
 
-        console.log('error completed.... hotel', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
 
     }
@@ -773,7 +766,7 @@ const getUpcomingHotelTickets = function* (data) {
         }
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
-        console.log('error upcoming hotel....', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
 
     }

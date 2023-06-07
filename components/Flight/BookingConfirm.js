@@ -15,19 +15,16 @@ import { useSelector } from "react-redux";
 import COLORS from "../constants/color";
 import moment from 'moment'
 
- const height = Dimensions.get('window').height
- const width = Dimensions.get('window').width
+const height = Dimensions.get('window').height
+const width = Dimensions.get('window').width
 
-export default function FlightBookingConfirm(){
+export default function FlightBookingConfirm() {
     var [stopTab, setStopTab] = useState(0)
     const [PassengerList, setPassengerList] = useState(false);
     const [rotateStart, setRotateStart] = useState(false);
     var [rotateAnimation, setRotateAnimation] = useState(new Animated.Value(0));
 
     const { trip_detail } = useSelector((state) => state.FlightSearchReducer)
-
-
-    console.log('trip_detail',trip_detail)
 
     const stopHandleClick = (index) => {
         setStopTab(index)
@@ -103,7 +100,7 @@ export default function FlightBookingConfirm(){
                     {/* })} */}
 
                     <View style={{ paddingVertical: 25 }}>
-                        <View style={{paddingBottom:10}}>
+                        <View style={{ paddingBottom: 10 }}>
                             <Text style={[style.commonTitle]}>Flight Detail</Text>
                         </View>
                         <View style={{ position: 'absolute', top: 1, alignSelf: 'center', zIndex: 1 }}>
@@ -115,12 +112,12 @@ export default function FlightBookingConfirm(){
                         </View>
                         <View>
                             <FlightStopArch style={{ width: width * 0.90, height: height * 0.05, alignSelf: 'center', }} />
-                            <TouchableOpacity style={{ justifyContent: 'center', alignSelf: 'center',flexDirection:'row',top:15,position:'absolute',padding:10 }} onPress={() => setRotateStart(!rotateStart)}>
+                            <TouchableOpacity style={{ justifyContent: 'center', alignSelf: 'center', flexDirection: 'row', top: 15, position: 'absolute', padding: 10 }} onPress={() => setRotateStart(!rotateStart)}>
                                 <Text style={style.stopTitle}>{(rotateStart === true) ? 'Close Details' : 'View Details'}</Text>
                                 <FeatherIcon name={(rotateStart === true) ? "chevron-up" : "chevron-down"} size={25} color={'#000'} />
                             </TouchableOpacity>
                         </View>
-                        <View style={{ flexDirection: 'row', justifyContent:'space-between', alignItems: 'center' }}>
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                             <Text style={style.LocationTitle}>
                                 {trip_detail.flightTripDetails[0]?.DepartureAirportLocationCode}
                             </Text>
@@ -257,31 +254,32 @@ export default function FlightBookingConfirm(){
                     <View style={style.bg}>
                         <View style={style.amountContainer}>
                             <Text style={style.amountName}>Base Fare</Text>
-                            <Text style={style.priceTag}> Rs: <Text style={style.price}>{trip_detail?.priceDetails?.EquiFare?.Amount}/-</Text></Text>
+                            <Text style={style.priceTag}> <Text style={style.price}>{trip_detail?.bookingDetails?.total_amount_paid}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
                         <View style={style.amountContainer}>
                             <Text style={style.amountName}>Taxes</Text>
-                            <Text style={style.priceTag}> Rs : <Text style={style.price}>{trip_detail?.priceDetails?.Tax?.Amount}/-</Text></Text>
+                            <Text style={style.priceTag}>  <Text style={style.price}>{trip_detail?.bookingDetails?.tax}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
                         <View style={style.amountContainer}>
-                            <Text style={style.amountName}>Service Tax</Text>
-                            <Text style={style.priceTag}> Rs : <Text style={style.price}>{trip_detail?.priceDetails?.ServiceTax?.Amount}-</Text></Text>
+                            <Text style={style.amountName}>Convenience Fee</Text>
+                            <Text style={style.priceTag}> <Text style={style.price}>{trip_detail?.bookingDetails?.convenience_fee}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
-                        {/* <View style={style.amountContainer}>
-                            <Text style={style.amountName}>Other charges</Text>
-                            <Text style={style.priceTag}> Rs : <Text style={style.price}>299/-</Text></Text>
-                        </View> */}
+                        <View style={style.amountContainer}>
+                            <Text style={style.amountName}>Discount & Adjusment</Text>
+                            <Text style={style.price}>{(flight_tickets_details?.bookingDetails?.coupon_applied_discount_amount === null ||flight_tickets_details?.bookingDetails?.coupon_applied_discount_amount===0)?'0':('-' +trip_detail?.bookingDetails?.coupon_applied_discount_amount)}/-</Text>
+                        </View>
+                        
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
                         <View style={style.total}>
                             <Text style={style.totalText}>Total</Text>
                             <Text style={{ color: 'white', fontFamily: FONTS.fontBold }}>:</Text>
-                            <Text style={style.priceTag}> Rs  <Text style={[style.price, { fontSize: height * 0.03 }]}>{trip_detail?.priceDetails?.TotalFare?.Amount}</Text></Text>
+                            <Text style={style.priceTag}> {trip_detail?.bookingDetails?.currency}  <Text style={[style.price, { fontSize: height * 0.03 }]}>{trip_detail?.bookingDetails?.order_amount}</Text></Text>
                         </View>
                     </View>
                 </View>
@@ -445,7 +443,6 @@ const style = StyleSheet.create({
         position: 'absolute',
         backgroundColor: '#3D8EFF91',
         left: 0,
-        // borderRadius: 5
     },
     FlightHorizontalLine: {
         height: 3,
@@ -453,7 +450,6 @@ const style = StyleSheet.create({
         position: 'absolute',
         backgroundColor: '#3D8EFF91',
         bottom: 0,
-        // borderRadius:5
     },
     FlightVerticalRightLine: {
         width: 3,
@@ -461,6 +457,5 @@ const style = StyleSheet.create({
         position: 'absolute',
         backgroundColor: '#3D8EFF91',
         right: 0,
-        // borderRadius: 5
     }
 })

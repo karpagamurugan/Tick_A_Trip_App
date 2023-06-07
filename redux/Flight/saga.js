@@ -43,14 +43,14 @@ const getAirportnameList = function* (data) {
         }
 
     } catch (err) {
-        console.log('err', err.message)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message } })
+
     }
 }
 
 const FlightSearch = function* (data) {
     const { payload } = data
-    console.log('API',`${API_URL}/getFlightSearch`)
-    console.log('payloaddata',payload)
+
     try {
         const result = yield call(() =>
             axios.post(
@@ -64,7 +64,6 @@ const FlightSearch = function* (data) {
             )
         );
 
-        console.log('result',result?.data)
 
         if (result?.data?.status === true) {
             let a = result?.data?.message.map(el => {
@@ -116,7 +115,6 @@ const FlightSearch = function* (data) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
         }
     } catch (err) {
-        console.log('errror',err)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
     }
@@ -149,7 +147,7 @@ const getFareRules = function* (data) {
 
         }
     } catch (err) {
-        console.log('err', err.message)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
     }
@@ -182,7 +180,6 @@ const setRevalidate = function* (data) {
 
         }
     } catch (err) {
-        console.log('err', err)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
     }
@@ -192,8 +189,6 @@ const setRevalidate = function* (data) {
 const setFlightBooking = function* (data) {
     const { payload } = data
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
-
-    console.log('payload',payload)
 
     try {
         const result = yield call(() =>
@@ -207,8 +202,6 @@ const setFlightBooking = function* (data) {
             }
             )
         );
-        console.log('result?.data?',result?.data)
-        console.log('result?.data?',result?.data?.BookFlightResponse?.BookFlightResult)
         if (result?.data?.status === true) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message } })
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
@@ -217,7 +210,6 @@ const setFlightBooking = function* (data) {
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
         }
     } catch (err) {
-        console.log('err', err)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
     }
@@ -226,13 +218,7 @@ const setFlightBooking = function* (data) {
 
 const getFlightCheckout = function* (data) {
     yield put({ type: CommonAction.FLIGHT_LOADER, payload: true })
-    // const { payload, navigation, detail } = data
-    // var form_data = new FormData();
-
-    // for (var key in payload) {
-    //     form_data.append(key, payload[key]);
-    // }
-    // console.log(`${API_URL}/checkout`,'checkout')
+   
     try {
         const result = yield call(() =>
             axios.post(
@@ -244,7 +230,6 @@ const getFlightCheckout = function* (data) {
                 }
             )
         );
-        console.log('final result',result?.data)
         if (result.data.status === true) {
             data.navigation.navigate('FlightPayment',{check_out:result?.data?.checkout_id})
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Success'} })
@@ -255,7 +240,6 @@ const getFlightCheckout = function* (data) {
         }
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
     } catch (err) {
-        console.log('error',err?.message)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Request Failed with status 500'} })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
     }
@@ -283,13 +267,13 @@ const getFlightTrips = function* (data) {
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_FLIGHT_TRIPS_DETAIL, payload: result?.data });
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-            navigation.navigate('flightBookingConfirm')
+            // navigation.navigate('flightBookingConfirm')
         } else {
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
         }
     } catch (err) {
-        console.log('err', err.message)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
     }

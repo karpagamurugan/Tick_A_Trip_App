@@ -226,7 +226,6 @@ export default function FlightBooking({ navigation, route }) {
 
         }
 
-        console.log('tempList',tempList)
         setAllTravellerList(allTravellerList = tempList)
         setFlightInfoType(flightInfoType = { flightAdultList: adultList?.length, flightChildList: childList?.length, flightInfantList: infantList?.length })
        
@@ -271,7 +270,6 @@ export default function FlightBooking({ navigation, route }) {
             travellerSelectType.push({ name: 'Infant', value: 'Infant' })
         }
 
-        console.log('item',item)
         setShowAddTraveller(true)
         setEditedIndex(editedIndex = index)
         setSelectedUser(item)
@@ -381,7 +379,6 @@ export default function FlightBooking({ navigation, route }) {
         }
     }
 
-    console.log('get_Revalidate?.FareType',get_Revalidate?.FareType)
     const AdultTypes = (item) => {
         if (item === "Adult") {
             var today = new Date();
@@ -481,7 +478,6 @@ export default function FlightBooking({ navigation, route }) {
         reset({ ...addTravelFirstName, ...addTravelLastName, })
     }
 
-    console.log('flight_Coupons',flight_Coupons)
 
     const ConfirmBooking = (data) => {
         var filteredAdultList = allTravellerList.filter((item) => item?.type.toLowerCase() === 'adult')
@@ -720,51 +716,6 @@ export default function FlightBooking({ navigation, route }) {
                   });
             }
           }
-        //   bookingData['paymentTransactionId'] = val.razorpay_payment_id;
-        //   bookingData['TotalFare'] = price
-        //   if (!!discountPrice) {
-        //     bookingData['couponDiscount'] = discountPrice;
-        //   }
-       
-        //   var options = {
-        //             key: RAZOR_KEY,
-        //             key_secret: RAZOR_KEY_SECRET,
-        //             amount: price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100,
-        //             currency: CURRENCY,
-        //             name: data?.Name,
-        //             description: "Payment Tick A Trip",
-        //             timeout: TIMEOUT,
-        //             prefill: {
-        //                 email: data?.Email,
-        //                 contact: data?.Phone,
-        //                 name: data?.Name
-        //             },
-        //             notes: {
-        //                 address: "",
-        //             },
-        //             theme: {
-        //                 color: "#0543e9",
-        //             },
-        //         };
-
-        //        RazorpayCheckout.open(options).then((val) => {
-        //         if (val.razorpay_payment_id) {
-               
-        //             bookingData['paymentTransactionId'] = val.razorpay_payment_id;
-        //             bookingData['TotalFare'] = price
-        //             if (!!discountPrice) {
-        //               bookingData['couponDiscount'] = discountPrice;
-        //             }
-        //             dispatch({ type: FlightAction.SET_FLIGHT_BOOKING, payload: bookingData, navigation: navigation })
-        //         }else{
-        //             console.log('else....')
-        //         }
-
-        //     }).catch((error) => {
-        //         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-        //         console.log('error', error)
-        //     });
-
                 axios.post(
                     `${API_URL}/revalidate`,
                     {fare_source_code:get_Revalidate?.FareSourceCode}, {
@@ -912,25 +863,25 @@ export default function FlightBooking({ navigation, route }) {
                     <View style={styles.bg}>
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Base Fare</Text>
-                            <Text style={styles.priceTag}> Rs: <Text style={styles.price}>{get_Revalidate?.BaseFareAmount}/-</Text></Text>
+                            <Text style={styles.priceTag}><Text style={styles.price}>{get_Revalidate?.BaseFareAmount}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Taxes</Text>
-                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>{get_Revalidate?.TotalTaxAmount}/-</Text></Text>
+                            <Text style={styles.priceTag}> <Text style={styles.price}>{get_Revalidate?.TotalTaxAmount}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Discounts & {'\n'}Adjustments</Text>
-                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>{(discountPrice === '0') ? discountPrice : - discountPrice}/-</Text></Text>
+                            <Text style={styles.priceTag}> <Text style={styles.price}>{(discountPrice === '0') ? discountPrice : - discountPrice}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Other charges</Text>
-                            <Text style={styles.priceTag}> Rs : <Text style={styles.price}>0000/-</Text></Text>
+                            <Text style={styles.priceTag}> <Text style={styles.price}>0/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
@@ -938,7 +889,7 @@ export default function FlightBooking({ navigation, route }) {
                         <View style={styles.total}>
                             <Text style={styles.totalText}>Total</Text>
                             <Text style={{ color: 'white', fontFamily: FONTS.fontBold }}>:</Text>
-                            <Text style={styles.priceTag}> Rs  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{totalFare?.MainTotalFare}</Text></Text>
+                            <Text style={styles.priceTag}> {get_Revalidate?.CurrencyCode}  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{totalFare?.MainTotalFare}</Text></Text>
 
                         </View>
                     </View>

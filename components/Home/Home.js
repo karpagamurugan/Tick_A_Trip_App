@@ -42,36 +42,11 @@ const Home = ({ navigation }) => {
   }
   userLogin()
 
-  // useEffect(()=>{
-  //   var adultList = travelers_list?.travelers?.filter((el) => el.type === 'Adult')?.slice(0, 1)
-  //   var childList = travelers_list?.travelers?.filter((el) => el.type === 'Child')?.slice(0, 1)
-  //   var infantList = travelers_list?.travelers?.filter((el) => el.type === 'Infant')?.slice(0, 1)
-  //   var tempList = [];
 
-  //   for (let i = 0; i < adultList?.length; i++) {
-  //       tempList.push(adultList[i])
-  //   }
-  //   for (let j = 0; j < childList?.length; j++) {
-  //       tempList.push(childList[j])
-
-  //   }
-  //   for (let k = 0; k < infantList?.length; k++) {
-  //       tempList.push(infantList[k])
-
-  //   }
-  //   // tempList=[adultList,childList,infantList]
-
-  //   console.log('tempList',tempList)
-  // },[])
 
   return (
     <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
       <View style={{ width: width, paddingHorizontal: 20, }}>
-      {/* {
-                    LISTdATA?.filter((d)=>d?.type === 'adult')?.slice(0,1)?.map((item)=>(
-                        <Text style={{color:'black'}}>{item?.name}</Text>
-                    ))
-                } */}
 
         <Text style={style.bannerTd}>Explore the  World with us</Text>
         <View style={style.bannerBtns}>

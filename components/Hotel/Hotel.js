@@ -36,4 +36,4 @@ const Hotel = ({navigation}) => {
   )
 }
 
-export default Hotel
+export default React.memo(Hotel)

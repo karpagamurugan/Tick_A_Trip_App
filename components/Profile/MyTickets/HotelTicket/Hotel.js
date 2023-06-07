@@ -15,7 +15,7 @@ let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
 
-export default function Hotel({ navigation }) {
+ function Hotel({ navigation }) {
     var [selectedTab, setSelectedTab] = useState(0);
 
     const dispatch = useDispatch();
@@ -41,6 +41,15 @@ export default function Hotel({ navigation }) {
         setSelectedTab(index)
     }
 
+    var [bookingList,setBookingList]=useState(bookingList={completed: Completed_hotel?.bookings?.reverse(),cancelled: Cancelled_hotel?.bookings?.reverse(),upcoming:Upcoming_hotel?.bookings?.reverse()})
+
+
+    useEffect(()=>{
+        setBookingList(bookingList={completed: Completed_hotel?.bookings?.reverse(),cancelled: Cancelled_hotel?.bookings?.reverse(),upcoming:Upcoming_hotel?.bookings?.reverse()})
+    },[])
+
+    // console.log('bookingList',bookingList.upcoming)
+    // console.log('bookingList',Completed_hotel)
     return (
         <View style={style.mainContainer}>
             <Appbar title={'HOTEL BOOKINGS'} />
@@ -86,7 +95,7 @@ export default function Hotel({ navigation }) {
                                         </TouchableHighlight>
                                     </View>
                                     :
-                                    Upcoming_hotel?.bookings?.reverse()?.map((item, index) => (
+                                  Upcoming_hotel?.bookings?.map((item, index) => (
                                         <HotelTicketView key={index} item={item} navigation={navigation} type={'upcoming'} />
                                     ))
                                 }
@@ -94,7 +103,6 @@ export default function Hotel({ navigation }) {
                         </ScrollView> : (selectedTab === 1) ?
                             <View >
                                 <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
-
                                     <View>
                                         {
                                             (Cancelled_hotel?.bookings?.length === 0) ?
@@ -106,10 +114,9 @@ export default function Hotel({ navigation }) {
                                                     </TouchableHighlight>
                                                 </View>
                                                 :
-                                                Cancelled_hotel?.bookings?.reverse()?.map((item, index) => (
+                                              Cancelled_hotel?.bookings?.map((item, index) => (
                                                     <HotelTicketView key={index} item={item} navigation={navigation} type={'cancelled'} />
                                                 ))
-
                                         }
                                     </View>
                                 </ScrollView>
@@ -127,7 +134,7 @@ export default function Hotel({ navigation }) {
                                                 </TouchableHighlight>
                                             </View>
                                             :
-                                            Completed_hotel?.bookings?.reverse()?.map((item, index) => (
+                                          Completed_hotel?.bookings?.map((item, index) => (
                                                 <HotelTicketView key={index} item={item} navigation={navigation} type={'completed'} />
                                             ))
                                         }
@@ -168,3 +175,4 @@ const style = StyleSheet.create({
     bookingText: { fontFamily: FONTS.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }
 
 })
+export default React.memo(Hotel)

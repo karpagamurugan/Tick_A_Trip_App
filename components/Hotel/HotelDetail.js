@@ -339,7 +339,7 @@ const HotelDetail = ({ navigation, route }) => {
                             {
                                 AllReviews?.map((val, index) => {
                                     return (
-                                        <View>
+                                        <View key={index}>
                                             <View style={{ padding: 10 }}>
                                                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -352,7 +352,6 @@ const HotelDetail = ({ navigation, route }) => {
                                                         </View>
                                                     </View>
                                                     {
-
                                                         (userProfileData?.username === val?.user?.username && !editReview) && <View style={{ flexDirection: 'row', width: width * 0.15, justifyContent: 'space-between' }}>
                                                             <TouchableHighlight onPress={() => {
                                                                 setEditReview(true)

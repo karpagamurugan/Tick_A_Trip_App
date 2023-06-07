@@ -184,6 +184,7 @@ const style = StyleSheet.create({
     },
     discountText: {
         paddingHorizontal: 25,
+        // width:width*0.15,
         paddingVertical: 20,
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 15,
@@ -195,7 +196,8 @@ const style = StyleSheet.create({
         transform: [{ rotate: '-90deg' }],
         textTransform: 'uppercase',
         fontFamily: FONTS.mediam,
-        height: height * 0.02
+        height: height * 0.02,
+        // marginHorizontal:25
     },
    
 })

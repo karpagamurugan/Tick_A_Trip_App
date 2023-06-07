@@ -17,7 +17,7 @@ import COLORS from '../../../constants/color';
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
-export default function Flight({ navigation }) {
+function Flight({ navigation }) {
     useEffect(() => {
         dispatch({
             type: actions.GET_UPCOMING_FLIGHT_TICKETS
@@ -37,6 +37,13 @@ export default function Flight({ navigation }) {
     const { Completed_flight, Cancelled_flight, Upcoming_flight } = useSelector((state) => state.userReducer)
 
     var [selectedTab, setSelectedTab] = useState(0);
+    var [tripsList,setTripList]=useState(tripsList={completed:Completed_flight?.bookings?.reverse(),cancelled:Cancelled_flight?.bookings?.reverse(),upcoming:Upcoming_flight?.bookings?.reverse()})
+
+
+    useEffect(()=>{
+        setTripList(tripsList={completed:Completed_flight?.bookings?.reverse(),cancelled:Cancelled_flight?.bookings?.reverse(),upcoming:Upcoming_flight?.bookings?.reverse()})
+
+    },[])
 
     // setting tab item backgroundColor
     const hadleClick = (index) => {
@@ -90,7 +97,7 @@ export default function Flight({ navigation }) {
                                 </View>
                                 :
 
-                                Upcoming_flight?.bookings?.reverse()?.map((item, index) => (
+                                Upcoming_flight?.bookings?.map((item, index) => (
                                     <FlightCard item={item} navigation={navigation} type={'upcoming'} key={index} />
 
                                 ))
@@ -114,7 +121,7 @@ export default function Flight({ navigation }) {
                                     </View>
                                     :
 
-                                    Cancelled_flight?.bookings?.reverse()?.map((item, index) => (
+                                    Cancelled_flight?.bookings?.map((item, index) => (
                                         <FlightCard item={item} navigation={navigation} type={'cancelled'} key={index} />
 
                                     ))
@@ -135,7 +142,7 @@ export default function Flight({ navigation }) {
                                             </TouchableHighlight>
                                         </View>
                                         :
-                                        Completed_flight?.bookings?.reverse()?.map((item, index) => (
+                                       tripsList.completed?.map((item, index) => (
                                             <FlightCard item={item} navigation={navigation} type={'completed'} key={index} />
 
                                         ))
@@ -177,3 +184,4 @@ const style = StyleSheet.create({
     bookingBtn:{ fontFamily: FONTS.font, paddingVertical: 5, color: 'black', paddingHorizontal: 5 }
 
 })
+export default React.memo(Flight)

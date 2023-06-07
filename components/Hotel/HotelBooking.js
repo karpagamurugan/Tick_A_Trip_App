@@ -147,103 +147,16 @@ function HotelBooking({ route, navigation, props }) {
                         TotalFare:(price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100
                     }
 
-                   
                     dispatch({ type: hotelActions.GET_HOTEL_CHECKOUT, payload: dataList, navigation: navigation })
-
-
-                    // var options = {
-                    //     key: RAZOR_KEY,
-                    //     key_secret: RAZOR_KEY_SECRET,
-                    //     amount: price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100,
-                    //     currency: CURRENCY,
-                    //     name: data.FirstName + " " + data.LastName,
-                    //     description: 'Tick A Trip Hotel Booking Payment',
-                    //     timeout: TIMEOUT,
-                    //     prefill: {
-                    //         email: data?.Email,
-                    //         contact: data?.Phone,
-                    //         name: data.FirstName + " " + data.LastName,
-                    //     },
-                    //     notes: {
-                    //         address: "",
-                    //     },
-                    //     theme: {
-                    //         color: "#0543e9",
-                    //     },
-                    // };
-                    // RazorpayCheckout.open(options).then((res) => {
-                    //     console.log('res...',res)
-                    //     var dataList = {
-                    //         sessionId: hotelSessionId,
-                    //         productId: RoomType?.productId,
-                    //         tokenId: HotelDetail?.tokenId,
-                    //         hotelId: HotelDetail?.hotelId,
-                    //         rateBasisId: RoomType?.rateBasisId,
-                    //         clientRef: RoomType?.productId,
-                    //         customerName: data?.FirstName,
-                    //         customerEmail: data?.Email,
-                    //         customerPhone: data?.Phone,
-                    //         customerGst: "",
-                    //         transactionId: "",
-                    //         paymentStatus: "",
-                    //         bookingNote: "Remark",
-                    //         paxDetails: [],
-                    //         hotelName: HotelDetail?.hotelName,
-                    //         hotelCity: HotelDetail?.city,
-                    //         hotelCountry: HotelDetail?.country,
-                    //         hotelAddress: HotelDetail?.address,
-                    //         TotalFare: parseFloat(price * 100),
-                    //     }
-    
-                    //     dataList['transactionId'] = res.razorpay_payment_id;
-                    //     dataList['paymentStatus'] = res?.razorpay_payment_id ? 'true' : 'false';
-                    //     dataList['paxDetails'] = tempData;
-                    //     if (!!discountPrice) {
-                    //         dataList['couponDiscount'] = discountPrice;
-                    //     }
-                    //     dataList['TotalFare'] = (price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100;
-                    
-                    //     dispatch({ type: hotelActions.SET_HOTEL_BOOKING, payload: dataList, navigation: navigation })
-                    // }).catch((error) => {
-                    //     console.log(error,'errror')
-                    //     dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-                    // });
                 }
               dispatch({ type: CommonAction.HOTEL_LOADER, payload: false })
             }).catch (el => {
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Payment Action Failed' } })
-            console.log('el....', el)
             dispatch({ type: CommonAction.HOTEL_LOADER, payload: false })
         })
         }
     }
-
-// const onSubmit=(data)=>{
-//     let url ="https://tickatrip.travel?status=true&message=none&ticket_no=12345"
-//     // if (url !== null) {
-//     //     const new_url = url.url;
-//     //     console.log(new_url)
-    
-//     //     const urlCallback = new URL(new_url);
-//     //     const code = urlCallback.searchParams.get('status');
-    
-//     //     console.log('response params',code)
-//     //   }
-
-//     // let params = new URLSearchParams('https://tickatrip.travel?status=true&message=none&ticket_no=12345');
-//     // let entries = params.entries();
-//     // Object.fromEntries(entries); 
-
-//     console.log('url',url);
-//     let params = new URLSearchParams(url?.split('?')[1])
-//     console.log('params',params)
-//     let entries = params.entries();
-// //    let newData= Object.fromEntries(entries);
-//     console.log('newData',Object.fromEntries(entries))
-// }
-
 useEffect(() => {
-    // dispatch({ type: commonAction.COMMON_LOADER, payload: true })
     dispatch({ type: userActions.GET_USER_PROFILE })
     setTotaFare(totalFare = { MainTotalFare: RoomType?.netPrice, SubTotalFare: RoomType?.netPrice })
     setDiscountPrice(discountPrice = '0')
@@ -289,8 +202,6 @@ const ApplyCoupon = () => {
                     var disFare = totalFare?.MainTotalFare / 100
                     var finalFare = disFare * applyCoupon
                     setDiscountPrice(discountPrice = finalFare.toFixed(0))
-                    console.log('parseInt(RoomType?.netPrice',parseInt(RoomType?.netPrice))
-                    console.log('parseInt(discountPrice)',parseInt(discountPrice))
                     if (parseInt(RoomType?.netPrice) <= parseInt(discountPrice)) {
                         setDiscountPrice(discountPrice = 0)
                         dispatch({ type: CommonAction.COMMON_LOADER, payload: false });
@@ -716,7 +627,7 @@ return (
     </View>
 )
 }
-export default HotelBooking
+export default React.memo(HotelBooking)
 
 const styles = StyleSheet.create({
     ConfirmBtn: {

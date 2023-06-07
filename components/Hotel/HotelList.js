@@ -78,7 +78,7 @@ const HotelList = ({ navigation, route }) => {
     )
 }
 
-export default memo(HotelList)
+export default React.memo(HotelList)
 const style = StyleSheet.create({
     filter: {
         // alignSelf: 'flex-end',

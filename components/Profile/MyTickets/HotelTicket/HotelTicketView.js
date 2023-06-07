@@ -13,7 +13,7 @@ import userAction from '../../../../redux/user/actions';
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
-export default function HotelTicketView({ item, navigation, type }) {
+ function HotelTicketView({ item, navigation, type }) {
     const {otpModalView} = useSelector((state) => state.userReducer)
     const [modalVisible, setModalVisible] = useState(false);
     const dispatch = useDispatch();
@@ -57,9 +57,9 @@ export default function HotelTicketView({ item, navigation, type }) {
                                 type: userAction.SET_HOTEL_TICKETS_DETAILS, payload: {
                                     "supplierConfirmationNum": item.supplierConfirmationNum,
                                     "referenceNum": item.referenceNum
-                                }
+                                },navigation:navigation
                             });
-                            navigation.navigate('HotelTicketDetails')
+                            // navigation.navigate('HotelTicketDetails')
                         }}>
                             <Text style={style.viewDetail}>View Booking Details</Text>
                         </TouchableHighlight>
@@ -170,3 +170,4 @@ const style = StyleSheet.create({
         fontFamily: FONTS.mediam,
     },
 })
+export default React.memo(HotelTicketView)

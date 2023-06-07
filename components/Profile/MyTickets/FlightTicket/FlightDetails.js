@@ -18,7 +18,7 @@ import moment from 'moment'
 const width = Dimensions.get('window').width
 const height = Dimensions.get('window').height
 
-export default function FlightTicketDetails({ navigation }) {
+ function FlightTicketDetails({ navigation }) {
     var [stopTab, setStopTab] = useState(0)
     const [PassengerList, setPassengerList] = useState(false);
     const [rotateStart, setRotateStart] = useState(false);
@@ -254,31 +254,34 @@ export default function FlightTicketDetails({ navigation }) {
                     <View style={style.bg}>
                         <View style={style.amountContainer}>
                             <Text style={style.amountName}>Base Fare</Text>
-                            <Text style={style.priceTag}> Rs: <Text style={style.price}>{flight_tickets_details?.priceDetails?.EquiFare?.Amount}/-</Text></Text>
+                            <Text style={style.priceTag}><Text style={style.price}>{flight_tickets_details?.bookingDetails?.total_amount_paid}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
                         <View style={style.amountContainer}>
                             <Text style={style.amountName}>Taxes</Text>
-                            <Text style={style.priceTag}> Rs : <Text style={style.price}>{flight_tickets_details?.priceDetails?.Tax?.Amount}/-</Text></Text>
+                            <Text style={style.priceTag}> <Text style={style.price}>{flight_tickets_details?.bookingDetails?.tax}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
                         <View style={style.amountContainer}>
-                            <Text style={style.amountName}>Service Tax</Text>
-                            <Text style={style.priceTag}> Rs : <Text style={style.price}>{flight_tickets_details?.priceDetails?.ServiceTax?.Amount}-</Text></Text>
+                            <Text style={style.amountName}>Convenience Fee</Text>
+                            <Text style={style.priceTag}><Text style={style.price}>{flight_tickets_details?.bookingDetails?.convenience_fee}/-</Text></Text>
                         </View>
-                        <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
-                        {/* <View style={style.amountContainer}>
-                            <Text style={style.amountName}>Other charges</Text>
-                            <Text style={style.priceTag}> Rs : <Text style={style.price}>299/-</Text></Text>
-                        </View> */}
+                      
+                        <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
+                        
+                        <View style={style.amountContainer}>
+                            <Text style={style.amountName}>Discount & Adjusment</Text>
+                         <Text style={style.price}>{(flight_tickets_details?.bookingDetails?.coupon_applied_discount_amount ===null ||flight_tickets_details?.bookingDetails?.coupon_applied_discount_amount ===0||flight_tickets_details?.bookingDetails?.coupon_applied_discount_amount ==='0')?'0': ("-" +flight_tickets_details?.bookingDetails?.coupon_applied_discount_amount)}/-</Text>
+                        </View>
+
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
                         <View style={style.total}>
                             <Text style={style.totalText}>Total</Text>
                             <Text style={{ color: 'white', fontFamily: FONTS.fontBold }}>:</Text>
-                            <Text style={style.priceTag}> Rs  <Text style={[style.price, { fontSize: height * 0.03 }]}>{flight_tickets_details?.priceDetails?.TotalFare?.Amount}</Text></Text>
+                            <Text style={style.priceTag}> {flight_tickets_details?.bookingDetails?.currency}  <Text style={[style.price, { fontSize: height * 0.03 }]}>{flight_tickets_details?.bookingDetails?.order_amount}</Text></Text>
                         </View>
                     </View>
                 </View>
@@ -450,7 +453,6 @@ const style = StyleSheet.create({
         position: 'absolute',
         backgroundColor: '#3D8EFF91',
         bottom: 0,
-        // borderRadius:5
     },
     FlightVerticalRightLine: {
         width: 3,
@@ -458,6 +460,7 @@ const style = StyleSheet.create({
         position: 'absolute',
         backgroundColor: '#3D8EFF91',
         right: 0,
-        // borderRadius: 5
     }
 })
+
+export default React.memo(FlightTicketDetails)

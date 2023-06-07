@@ -251,4 +251,4 @@ const style = StyleSheet.create({
 
 })
 
-export default HotelBookingConfirm
+export default React.memo(HotelBookingConfirm)

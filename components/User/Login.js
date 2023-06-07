@@ -1,6 +1,6 @@
 /* eslint-disable prettier/prettier */
 import React,{useCallback, useEffect, useState} from 'react';
-import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight, Platform } from 'react-native';
+import { View, Text, Dimensions, TextInput, ImageBackground, Image, StyleSheet, TouchableHighlight, Platform, ScrollView } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useForm, Controller } from 'react-hook-form';
 import userActions from '../../redux/user/actions';
@@ -59,16 +59,7 @@ const Login = ({ navigation }) => {
                     user.getIdToken().then(function(idToken) { 
                         //   return idToken;
                       });
-                 
-
-
-                // axios.get(`${API_URL}/auth/google/callback?displayName=${user?.displayName}&email=${user?.email}&photoURL=${user?.photoURL}&providerId=${user?.providerData[0]?.providerId}&uid=${user?.providerData[0]?.uid}`,
-                // ).then(result => {
-                //     console.log('result....',result)
-                  
-                // }).catch((error) => {
-                //     console.log('error',error)
-                // });
+                
                 } else {
                     console.log(false);
                 }
@@ -111,6 +102,8 @@ const Login = ({ navigation }) => {
   }, []);
 
     return (
+       <View>
+        <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         <View style={style.SplashSection}>
             <ImageBackground source={require('../../Assert/Images/background.png')}  style={style.SplashBgImage} resizeMode="cover">
                 <Image style={style.BrandLogoSplash} source={require('../../Assert/Images/white-logo.png')} />
@@ -234,6 +227,8 @@ const Login = ({ navigation }) => {
                 </View>
             </ImageBackground>
         </View>
+        </ScrollView>
+       </View>
     );
 };
 
@@ -353,7 +348,7 @@ const style = StyleSheet.create({
         backgroundColor: COLORS.TextGrey,
         paddingLeft: 15,
         color:'black',
-        height:height*0.05
+        height:height*0.06,
     },
     fogetPassword: {
         flexDirection: 'row',

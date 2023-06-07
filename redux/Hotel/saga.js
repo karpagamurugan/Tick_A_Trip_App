@@ -53,12 +53,11 @@ const getHotelDetails = function* (data) {
             navigation.navigate('HotelDetail',{data:payload,value:value})
              
         } else {
-            console.log("else....")
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         }
     } catch (err) {
-        console.log("catch....")
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         yield put({ type: actions.SET_HOTEL_DETAILS, payload: err.data });
     }
@@ -92,7 +91,6 @@ const getHotelSearch = function* (data) {
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
-        console.log('err', err.message.map((val) => val))
         yield put({ type: actions.SET_HOTEL_SEARCH, payload: err.data });
     }
 }
@@ -124,7 +122,7 @@ const getHotelFilter = function* (data) {
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         }
     } catch (err) {
-        console.log('err', err)
+        yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err} })
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         yield put({ type: actions.SET_HOTEL_FILTER, payload: err?.data });
     }
@@ -152,7 +150,6 @@ const getHotelNameSearch = function* (data) {
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
-        console.log('err', err.message.map((val) => val))
         yield put({ type: actions.SET_SELECT_NAME, payload: err.data });
     }
 }
@@ -244,9 +241,8 @@ const getHotelBookingDetail = function* (data) {
                 }
             )
         );
-        console.log('reasult?.data...',result?.data)
         if (result.data.status === true) {
-            navigation.navigate('hotelBookingConfirm')
+            // navigation.navigate('hotelBookingConfirm')
             yield put({ type: actions.SET_HOTEL_BOOKING_DETAIL, payload: result.data.message });
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         } else {
@@ -265,9 +261,7 @@ const getHotelBookingDetail = function* (data) {
 
 const getHotelReview = function* (data) {
     const { payload, navigation } = data
-    console.log('payload,  all',payload)
     try {
-            console.log('data',data?.initial)
         if (data.initial) {
             const result = yield call(() =>
                 axios.post(
@@ -279,7 +273,6 @@ const getHotelReview = function* (data) {
                 }
                 )
             );
-            console.log(result?.data?.message.data.length)
 
             if (result?.data?.status) {
                 yield put({ type: actions.SET_HOTEL_REVIEWS,  payload: result.data.message.data, page: result.data.message.next_page_url  });
@@ -287,7 +280,6 @@ const getHotelReview = function* (data) {
             }
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         } else {
-            console.log(store.getState().HotelReducer.nextPageUrl,'else....')
             const result = yield call(() =>
                 axios.post(
                     `${store.getState().HotelReducer.nextPageUrl}`,
@@ -298,7 +290,6 @@ const getHotelReview = function* (data) {
                 }
                 )
             );
-            console.log(result?.data?.message.data.length)
             if (result.data.status) {
                 yield put({ type: actions.SET_HOTEL_REVIEWS, payload: [...store.getState().HotelReducer.AllReviews, ...result.data.message.data], page: result.data.message.next_page_url });
             }
@@ -306,7 +297,6 @@ const getHotelReview = function* (data) {
         }
     
     } catch (err) {
-        console.log('error',err)
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
     }
@@ -315,7 +305,6 @@ const getHotelReview = function* (data) {
 const createHotelReview = function* (data) {
     yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
     const { payload, navigation } = data
-    console.log(payload)
 
     try {
         const result = yield call(() =>
@@ -352,7 +341,6 @@ const createHotelReview = function* (data) {
 const updateHotelReview = function* (data) {
     yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
     const { payload, navigation } = data
-    console.log(payload)
     try {
         const result = yield call(() =>
             axios.put(
@@ -365,7 +353,6 @@ const updateHotelReview = function* (data) {
                 }
             )
         );
-        console.log('result?.data',result?.data)
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_HOTEL_REVIEWS,
             payload: {
@@ -389,7 +376,6 @@ const updateHotelReview = function* (data) {
 const deleteHotelReview = function* (data) {
     yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
     const { payload, navigation } = data
-    console.log('payload, de',payload)
     try {
         const result = yield call(() =>
             axios.delete(
@@ -401,7 +387,6 @@ const deleteHotelReview = function* (data) {
                 }
             )
         );
-        console.log('dele',result?.data)
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_HOTEL_REVIEWS,
             payload: {
@@ -416,7 +401,6 @@ const deleteHotelReview = function* (data) {
         }
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
-        console.log('logg err',err)
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
     }
@@ -424,14 +408,7 @@ const deleteHotelReview = function* (data) {
 
 const getHotelCheckout = function* (data) {
     yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
-    // const { payload, navigation, detail } = data
-    // var form_data = new FormData();
-
-    // for (var key in payload) {
-    //     form_data.append(key, payload[key]);
-    // }
-    // console.log(`${API_URL}/checkout`,'checkout')
-    console.log(`data.payload`,data.payload)
+   
     try {
         const result = yield call(() =>
             axios.post(
@@ -443,7 +420,6 @@ const getHotelCheckout = function* (data) {
                 }
             )
         );
-        console.log('final result',result?.data)
         if (result.data.status === true) {
             data.navigation.navigate('HotelPayment',{check_out:result?.data?.checkout_id})
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Success'} })
@@ -454,7 +430,6 @@ const getHotelCheckout = function* (data) {
         }
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     } catch (err) {
-        console.log('error',err?.message)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Request Failed with status 500'} })
         yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
     }

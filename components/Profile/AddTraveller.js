@@ -15,7 +15,7 @@ import ProfileIcon from '../../Assert/Images/Profile.svg';
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
-export default function AddTraveller({ navigation }) {
+function AddTraveller({ navigation }) {
     const { travelers_list } = useSelector((state) => state.userReducer)
     var [useToken, setUseToken] = useState('')
     const dispatch = useDispatch()
@@ -102,7 +102,7 @@ export default function AddTraveller({ navigation }) {
             >
                 <View>
                     {
-                        travelers_list?.travelers?.length === 0?
+                        (travelers_list?.travelers?.length === 0 || travelers_list?.travelers ===undefined)?
                         <View style={{alignItems:'center',justifyContent:'center',height:height*0.5}}>
                             
                             <Image source={require('../../Assert/Images/airline.jpg')} style={{height:height*0.3,width:width*0.6}}/>
@@ -176,15 +176,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         paddingLeft: 20,
         paddingRight: 15,
-        // shadowColor: "#000",
-        // shadowOffset: {
-        //     width: 0,
-        //     height: 12,
-        // },
-        // shadowOpacity: 0.58,
-        // shadowRadius: 16.00,
-
-        // elevation: 24,
     },
     addIcon: {
         backgroundColor: COLORS.AppbarColor,
@@ -207,3 +198,4 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
 })
+export default React.memo(AddTraveller)

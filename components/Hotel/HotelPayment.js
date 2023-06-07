@@ -25,9 +25,17 @@ export default function HotelPaymentWebView({route,navigation}) {
               while (match = regex.exec(title)) {
                 titleparms[match[1]] = match[2];
               }
+              console.log('url',url)
+              console.log(url.includes('https://tickatrip.travel/hotel-booking-confirm'))
+              console.log('(params?.referenceNum',params?.referenceNum)
 
-                if(params?.referenceNum !== undefined && titleparms?.message !==undefined){
-                    if(url.includes('https://tickatrip.travel/hotel-booking-confirm')){
+                if(params?.referenceNum !== undefined ){
+                    if(url.includes('https://tickatrip.travel/hotel-booking-confirm') ===true){
+                        // navigation.replace('hotelBookingConfirm')
+                        navigation.reset({
+                            index: 0,
+                            routes: [{ name: 'hotelBookingConfirm' }]
+                        })
                         dispatch({
                             type: hotelActions.GET_HOTEL_BOOKING_DETAIL, payload: {
                                 supplierConfirmationNum: params?.supplierConfirmationNum,
@@ -35,9 +43,7 @@ export default function HotelPaymentWebView({route,navigation}) {
                             },
                             navigation: navigation
                         });
-                    //   dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: titleparms?.message } })
                     }else{
-                        console.log('false')
                         navigation.goBack()
                         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: titleparms?.message } })
                     }
@@ -45,25 +51,6 @@ export default function HotelPaymentWebView({route,navigation}) {
                     navigation.goBack()
                     dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: titleparms?.message } })
                 }
-
-
-                // if(params?.message !==undefined){
-                //     var Message= params?.message.toString().replaceAll('\%20',' ')
-                //     if(params.status === true||params.status ==='true'){
-                //         // if( Message === 'Your Booking is Successfull'){
-                //             // navigation.reset({
-                //             //     index: 0,
-                //             //     routes: [{ name: 'Home' }]
-                //             // })
-                //             navigation.navigate('Home')
-                //             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Your Booking is Successfull'} })
-                //         // }else{
-                //         //     console.log('false....')
-                //         // }
-                //     }else{
-                //         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:'Booling Failed'} })
-                //     }
-                // }
 
             }else{
                 console.log('failed param ',url)
@@ -77,17 +64,8 @@ export default function HotelPaymentWebView({route,navigation}) {
         <View style={{height:height,width:width}}>
             <WebView
             onNavigationStateChange={(state) => {
-                // setCanGoBack(state.canGoBack)
-                // handleRes(state.title)
+                console.log('state',state)
                 handlePayment(state.url.toString(),state.title.toString())
-                console.log('webview....',state);
-                // let a = state.url.split('https://tickatrip.travel')[1];
-                // let b = new URLSearchParams(a)
-
-                // if(state?.url==='https://tickatrip.travel/'){
-                //     navigation.goBack()
-
-                // }
             }}
             source={{uri:`https://tickatrip.travel/server/checkoutAgain/${route?.params?.check_out}`}}
             />

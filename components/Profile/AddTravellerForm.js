@@ -1140,4 +1140,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default AddTravellerForm;
+export default React.memo(AddTravellerForm)

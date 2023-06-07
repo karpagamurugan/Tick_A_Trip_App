@@ -38,7 +38,7 @@ function UpdateProfile({ navigation }) {
     var [myGender, setMyGender] = useState(profileData?.gender);
     var [myMaritialStatus, setMyMaritialStatus] = useState(profileData?.married_status);
     var [myProfileUrl, setMyProfileUrl] = useState(profileData?.profile_image?.toString())
-    var [dob, setDob] = useState(new Date(profileData?.dob+" 00:00:00")); //set DOB in profile update
+    var [dob, setDob] = useState(new Date(profileData?.dob + " 00:00:00")); //set DOB in profile update
 
     const btnSubmit = (val) => {
 
@@ -124,40 +124,38 @@ function UpdateProfile({ navigation }) {
             },
         };
         launchImageLibrary(options, res => {
-            console.log('Response = ', res);
             if (res.didCancel) {
                 dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'User cancelled the picker' } })
 
             } else if (res.error) {
-                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message:res.error } })
+                dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: res.error } })
 
             } else if (res.customButton) {
-                console.log('User tapped custom button: ', res.customButton);
                 alert(res.customButton);
             } else {
                 let source = res;
-                console.log('res....', res)
-
-                // let url = 'file://' + destPath
                 setImage(image = {
                     URL: res?.assets[0]?.uri,
                     type: res?.assets[0]?.type,
                     name: res?.assets[0].fileName,
                 })
-    
+
                 // setImageUri(res?.assets[0]?.uri)
             }
         });
     }
 
     return (
-        <View style={styles.mainContainer}>
+        // <KeyboardAvoidingView enabled style={{ height: height }} behavior={Platform.OS === 'ios' ? 'padding' : null}>
 
-            <KeyboardAvoidingView behavior="height">
-                <View style={styles.modalMainContainer}>
+        <View style={styles.mainContainer}>
+            <View style={styles.modalMainContainer}>
                 <Appbar title={'Edit Profile'} />
-                <View style={{height:height*0.85}}>
-                <ScrollView showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
+                <ScrollView showsHorizontalScrollIndicator={false}
+                    showsVerticalScrollIndicator={false}
+                    keyboardShouldPersistTaps='handled'
+                >
+                    <View style={{ height: height * 0.85 }}>
                         <View >
                             <View style={{ height: 20 }} />
                             <View style={styles.modalSubContainer}>
@@ -172,15 +170,14 @@ function UpdateProfile({ navigation }) {
                                                 source={{ uri: `${PROFILE_URL}${myProfileUrl}` }}
                                             />}
                                     <TouchableHighlight
-                                        onPress={() =>
-                                            {
-                                                if(Platform.OS==='ios'){
-                                                    IOSPicker()
-                                                }else{
-                                                    filePicker() 
-                                                }
+                                        onPress={() => {
+                                            if (Platform.OS === 'ios') {
+                                                IOSPicker()
+                                            } else {
+                                                filePicker()
                                             }
-                                          }
+                                        }
+                                        }
                                         style={styles.editBtn}>
                                         <Text style={{
                                             color: '#fff',
@@ -343,10 +340,10 @@ function UpdateProfile({ navigation }) {
                                 <View style={styles.editTextBorder}>
                                     <Text style={styles.placeHolderText}>Date-Of-Birth</Text>
                                     <TouchableHighlight onPress={() => setShowDatePick(true)} underlayColor='transparent' style={{ paddingRight: 5 }}>
-                                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                                        <Text style={{ fontFamily: FONTS.font, color: 'black', paddingVertical: 10, paddingLeft: 7 }}>{moment(dob).format('YYYY-MM-DD')}</Text>
-                                            <CalendarIcon name="calendar-month-outline" size={25} color="#000" style={{marginRight:3}} />
-                                    </View>
+                                        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
+                                            <Text style={{ fontFamily: FONTS.font, color: 'black', paddingVertical: 10, paddingLeft: 7 }}>{moment(dob).format('YYYY-MM-DD')}</Text>
+                                            <CalendarIcon name="calendar-month-outline" size={25} color="#000" style={{ marginRight: 3 }} />
+                                        </View>
                                     </TouchableHighlight>
                                 </View>
 
@@ -455,31 +452,34 @@ function UpdateProfile({ navigation }) {
                             </TouchableHighlight>
                             <View style={{ height: 20 }} />
                         </View>
-                    </ScrollView>
-                </View>
-                    <DatePicker
-                        modal
-                        mode="date"
-                        open={showDatePick}
-                        date={dob}
-                        onConfirm={(date) => {
-                            setDob(date)
-                            setShowDatePick(false)
-                        }}
-                        onCancel={() => {
-                            setShowDatePick(false)
-                        }}
-                    />
-                </View>
-            </KeyboardAvoidingView>
+                    </View>
+                </ScrollView>
+                <DatePicker
+                    modal
+                    mode="date"
+                    open={showDatePick}
+                    date={dob}
+                    onConfirm={(date) => {
+                        setDob(date)
+                        setShowDatePick(false)
+                    }}
+                    onCancel={() => {
+                        setShowDatePick(false)
+                    }}
+                />
+            </View>
         </View>
+
+
+        // </KeyboardAvoidingView>
+
     )
 }
 
 const styles = StyleSheet.create({
-    mainContainer: { height: height, width: width, backgroundColor: 'white' },
+    mainContainer: { flex: 1, width: width, backgroundColor: 'white' },
     editTextBorder: { borderWidth: 1, height: 45, borderRadius: 7, borderColor: '#2B64FF', marginTop: 20, },
-    inputeEditor: { paddingLeft: 10, fontFamily: FONTS.font, color: "#000000", width: width * 0.5,paddingTop:10 },
+    inputeEditor: { paddingLeft: 10, fontFamily: FONTS.font, color: "#000000", width: width * 0.87, paddingTop: 10 },
     placeHolderText: {
         color: '#2B64FF',
         position: 'absolute',
@@ -523,7 +523,6 @@ const styles = StyleSheet.create({
     modalMainContainer: {
         flexDirection: 'column',
     },
-   
     errorMsg: {
         color: 'red',
         fontSize: 12,
@@ -532,8 +531,8 @@ const styles = StyleSheet.create({
     },
     dropDownContainer: {
         backgroundColor: '#fff',
-        borderColor: Platform.OS==='ios'?COLORS.TextDarkGrey:'#fff',
-        borderWidth:  Platform.OS==='ios'?0.3:0,
+        borderColor: Platform.OS === 'ios' ? COLORS.TextDarkGrey : '#fff',
+        borderWidth: Platform.OS === 'ios' ? 0.3 : 0,
         marginTop: 10,
         width: "100%",
         borderRadius: 10,
@@ -548,4 +547,4 @@ const styles = StyleSheet.create({
     profile: { height: 50, width: 50, borderColor: '#2BAB38', borderWidth: 1, borderRadius: 100 },
 })
 
-export default UpdateProfile
+export default React.memo(UpdateProfile)

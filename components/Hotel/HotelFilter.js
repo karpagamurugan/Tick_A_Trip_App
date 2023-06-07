@@ -937,4 +937,4 @@ const style = StyleSheet.create({
     custmCheckBox: { height: 16, width: 16, borderRadius: 2, borderColor: 'grey', borderWidth: 0.6, alignItems: 'center' }
 
 })
-export default HotelFilter
+export default React.memo(HotelFilter)

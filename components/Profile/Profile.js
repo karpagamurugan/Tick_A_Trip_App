@@ -543,4 +543,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default memo(Profile)
+export default React.memo(Profile)

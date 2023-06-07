@@ -19,8 +19,6 @@ function FlightCard (props){
     var navigation = props.navigation;
     const dispatch =useDispatch()
 
-    console.log('item',item?.flight)
-
 function timeConvert(n) {
     var num = n;
     var hours = Math.floor(num / 60) > 0 ? Math.floor(num / 60) + "H " : "";

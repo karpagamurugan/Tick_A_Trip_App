@@ -15,12 +15,11 @@ import Otp from '../../Otp';
 let width = Dimensions.get('window').width;
 let height = Dimensions.get('window').height;
 
-export default function FlightCard({ item, navigation, type }) {
+ function FlightCard({ item, navigation, type }) {
     const { otpModalView } = useSelector((state) => state.userReducer)
     const dispatch = useDispatch()
 
     const OnCancelFlightBooking = (item, index) => {
-        console.log('modal ', item)
         dispatch({
             type: userAction.OTP_MODAL_VIEW, payload: true
         })
@@ -175,3 +174,6 @@ const style = StyleSheet.create({
 
 
 })
+
+
+export default React.memo(FlightCard)
