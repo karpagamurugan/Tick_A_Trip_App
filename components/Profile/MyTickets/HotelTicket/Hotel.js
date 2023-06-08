@@ -48,8 +48,6 @@ let height = Dimensions.get('window').height;
         setBookingList(bookingList={completed: Completed_hotel?.bookings?.reverse(),cancelled: Cancelled_hotel?.bookings?.reverse(),upcoming:Upcoming_hotel?.bookings?.reverse()})
     },[])
 
-    // console.log('bookingList',bookingList.upcoming)
-    // console.log('bookingList',Completed_hotel)
     return (
         <View style={style.mainContainer}>
             <Appbar title={'HOTEL BOOKINGS'} />

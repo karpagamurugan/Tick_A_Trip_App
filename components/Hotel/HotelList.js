@@ -81,7 +81,6 @@ const HotelList = ({ navigation, route }) => {
 export default React.memo(HotelList)
 const style = StyleSheet.create({
     filter: {
-        // alignSelf: 'flex-end',
         marginRight: 10,
         marginTop: 10,
         backgroundColor: COLORS.AppbarColor,
@@ -99,9 +98,6 @@ const style = StyleSheet.create({
     },
     hotelDetailSec: {
         paddingHorizontal: 10,
-        // backgroundColor:'white',
-        // height:height,
-        // height:height*0.5,
         backgroundColor: 'white',
     },
     searchPlaceIcon: {
@@ -123,7 +119,6 @@ const style = StyleSheet.create({
         alignItems: 'center',
     },
     filterIcon: {
-        // fontSize: height*0.025,
         backgroundColor: '#E9F3FF',
         padding: 10,
         borderRadius: 100,
@@ -134,8 +129,6 @@ const style = StyleSheet.create({
         },
         shadowOpacity: 0.20,
         shadowRadius: 5.00,
-        // overflow:'hidden',
-        // elevation: 24,
     },
     HotelDetailFilterSec: {
         flexDirection: 'row',
@@ -168,9 +161,6 @@ const style = StyleSheet.create({
         height: 40,
         fontSize: 16,
     },
-    // filterFileld: {
-    //     width: width * 0.5
-    // },
     totalHotel: {
         color: 'black'
     }

@@ -26,13 +26,10 @@ const PopularPlaceCard = ({navigation}) => {
 
     const { Popular_Places } = useSelector((state) => state.PopularPlacesReducer);
 
-    // useEffect(()=>{
-    //     setPopularPlace(popularPlace=Popular_Places)
-    // }, [])
+
     const handlePassData=(item)=>{
             dispatch({ type: popularAction.SET_POPULAR_PLACE_DETAILS, payload: { id: item?.id, navigation } })
             dispatch({ type: CommonAction.COMMON_LOADER, payload: true })
-            // handleDebugger()
     }
     const handleDebugger = useCallback(
         debounce((e)=>console.log(e), 1000)
@@ -47,7 +44,6 @@ const PopularPlaceCard = ({navigation}) => {
                         <View>
                             <View style={style.PopularPlaceCardImage}>
                                 <Image style={style.PopularPlaceCardImageSingle} source={{ uri: `${API_IMG_URL}/server/popularplace/${item.place_image}` }} />
-                                {/* <Text style={style.PopularPlaceCardImageRev}><Entypo style={style.PopularPlaceCardImageRevStart} name='star' />4.5 (42K)</Text> */}
                             </View>
                             <View style={style.PopularPlaceCardCont}>
                                 <Text style={style.PopularPlaceCardCity}>{item?.place_name}</Text>
@@ -71,17 +67,11 @@ const PopularPlaceCard = ({navigation}) => {
             }
 </ScrollView>
 
-            {/* <Text style={style.PopularPlaceCardPrice}>$456.00</Text> */}
-
         </View>
     )
 }
 
 const style = StyleSheet.create({
-    // PopularplaceCard: {
-    //     width: width * 0.4,
-    //     marginRight: 20
-    //   },
     PopularPlaceCardPrice: {
         color: '#FE712A',
         fontFamily: FONTS.fontBold,
@@ -138,4 +128,4 @@ const style = StyleSheet.create({
         
     },
 })
-export default PopularPlaceCard
+export default React.memo(PopularPlaceCard)

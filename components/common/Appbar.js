@@ -68,7 +68,5 @@ const styles = StyleSheet.create({
         },
         shadowOpacity: 0.30,
         shadowRadius: 10.00,
-
-        // elevation: 24,
     },
 })

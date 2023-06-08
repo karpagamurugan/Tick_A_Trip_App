@@ -16,7 +16,6 @@ export default function HotelLoader() {
         >
 
             <Pressable
-                // onPress={() => show_loader}
                 style={{
                     position: 'absolute',
                     backgroundColor: '#000000',
@@ -25,15 +24,9 @@ export default function HotelLoader() {
                     bottom: 0,
                     left: 0,
                     right: 0,
-                    // backgroundColor:'red'
                 }} />
 
-            {/* <View style={{ flex: 1, justifyContent: 'center', alignItems: "center" }} >
-                <View style={{ borderRadius: 100, backgroundColor: 'white', flexDirection: 'column', alignItems: 'center', padding: 0 }}>
-
-                    <Image source={require('../../components/common/hotelLoader.js')} style={{ width: 150, height: 150 }} />
-                </View>
-            </View> */}
+           
             <View style={{ width: width, height: height, display: 'flex', justifyContent: 'center', alignItems: "center"}}>
                 <View style={{backgroundColor:'#fff', width: 150,height: 150,borderRadius: 100,overflow: "hidden",flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
                     <Image style={{ height: 100, width: 100, resizeMode: 'cover', }} source={require('../../Assert/loader/hotel.gif')} />

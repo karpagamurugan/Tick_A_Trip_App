@@ -370,4 +370,4 @@ const styles = StyleSheet.create({
         marginTop: 2,
     },
 })
-export default ContactInfo;
+export default React.memo(ContactInfo);

@@ -73,7 +73,6 @@ function AddTraveller({ navigation }) {
 
     return (
         <View style={{ width: width, height: height , backgroundColor: 'white' }}>
-            {/* <Appbar title={'Traveller'} /> */}
             <View style={{
                 flexDirection: 'row',
                 alignItems: 'center',

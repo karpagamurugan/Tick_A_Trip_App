@@ -23,7 +23,6 @@ const height = Dimensions.get('window').height
     const [PassengerList, setPassengerList] = useState(false);
     const [rotateStart, setRotateStart] = useState(false);
     var [rotateAnimation, setRotateAnimation] = useState(new Animated.Value(0));
-    // const { get_Revalidate } = useSelector((state) => state.FlightSearchReducer)
     const { flight_tickets_details } = useSelector((state) => state.userReducer)
 
     const stopHandleClick = (index) => {
@@ -125,25 +124,7 @@ const height = Dimensions.get('window').height
                                 {flight_tickets_details.flightTripDetails[flight_tickets_details.flightTripDetails.length - 1]?.ArrivalAirportLocationCode}
                             </Text>
                         </View>
-                        {/* {(rotateStart === true) ?
-                            <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', paddingHorizontal: 45, paddingVertical: 20, }}>
-                                <TouchableOpacity style={[style.FlightTakeOnIcon]}>
-                                    <TakeOn height={30} width={30} fill='red' />
-                                </TouchableOpacity>
-                                <View style={[style.backBorder]} />
-                                <TouchableOpacity>
-                                    <Text style={[style.flightCount]}>1</Text>
-                                </TouchableOpacity>
-                                <View style={[style.backBorder]} />
-                                <TouchableOpacity>
-                                    <Text style={[style.flightCount]}>2</Text>
-                                </TouchableOpacity>
-                                <View style={[style.backBorder]} />
-                                <TouchableOpacity style={[style.FlightTakeOnIcon]}>
-                                    <TakeOff height={30} width={30} />
-                                </TouchableOpacity>
-                            </View> : <></>
-                        } */}
+                       
                         {(rotateStart === true) ?
                             <View>
                                 <View style={[style.FlightStopingCart]}>
@@ -445,7 +426,6 @@ const style = StyleSheet.create({
         position: 'absolute',
         backgroundColor: '#3D8EFF91',
         left: 0,
-        // borderRadius: 5
     },
     FlightHorizontalLine: {
         height: 3,

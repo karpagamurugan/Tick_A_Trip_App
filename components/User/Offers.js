@@ -31,7 +31,18 @@ function Offers({ route, navigation, props }) {
             <View style={style.mainContainer}>
                 <Appbar title={'Offers'} />
                 <View style={{ marginTop: 20 }}>
-                    <View>
+                
+
+                    {
+                        (flight_Coupons?.message?.length ===0 && hotel_Coupons?.message?.length ===0 ||flight_Coupons?.message?.length === undefined && hotel_Coupons?.message?.length ===undefined)?
+                        <View style={{alignSelf:'center',height:height*0.8,width:width*0.6,justifyContent:'center'}}>
+                            <Image source={require('../../Assert/Images/noOffers.png')}/>
+                            </View>
+
+                            :
+
+                            <View>
+                                  <View>
                         {
                             hotel_Coupons?.message?.map((item, index) => {
                                 return (
@@ -135,6 +146,10 @@ function Offers({ route, navigation, props }) {
                             )
                         })
                     }
+                     </View>
+
+                    }
+                  
                 </View>
             </View>
         </View >
@@ -184,7 +199,6 @@ const style = StyleSheet.create({
     },
     discountText: {
         paddingHorizontal: 25,
-        // width:width*0.15,
         paddingVertical: 20,
         borderTopLeftRadius: 15,
         borderBottomLeftRadius: 15,
@@ -197,7 +211,6 @@ const style = StyleSheet.create({
         textTransform: 'uppercase',
         fontFamily: FONTS.mediam,
         height: height * 0.02,
-        // marginHorizontal:25
     },
    
 })

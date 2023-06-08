@@ -12,7 +12,7 @@ import PopularPlaceCard from "./PopularPlaceCard";
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
-export default function PopularPlacesDetails({ navigation }) {
+ function PopularPlacesDetails({ navigation }) {
     const { Places_details } = useSelector((state) => state.PopularPlacesReducer)
     let place_name=Places_details?.place_name;
 
@@ -22,14 +22,12 @@ export default function PopularPlacesDetails({ navigation }) {
             <ScrollView>
 
                 <Image style={style.PopularPlaceCardImageSingle}  source={{ uri: `${API_IMG_URL}/server/popularplace/${Places_details?.place_image}` }}/>
-                {/* <Text style={style.PlaceText}>{Places_details?.place_name}</Text> */}
 
                 <View style={style.galleryListStyle}>
 
                         <View>
                         <Text style={style.PlaceText}>{Places_details?.place_name}</Text>
                         <Text style={style.titleStyle}>{Places_details?.title}</Text>
-                        {/* <Text>l,m iorc opigcelor[]wxfr;pe' {`\n`}lcfds;lv.c;v,.c,v;dfwderewrwegrwhbsbbb</Text> */}
                         <Text style={style.descriptionStyle}>{Places_details?.description}</Text>
 
                         <ScrollView horizontal showsHorizontalScrollIndicator={false}>
@@ -86,3 +84,5 @@ const style = StyleSheet.create({
     }
     
 })
+
+export default React.memo(PopularPlacesDetails)

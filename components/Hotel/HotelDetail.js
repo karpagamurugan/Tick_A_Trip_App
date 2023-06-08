@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useCallback, useState, memo } from 'react'
+import React, { useCallback, useState } from 'react'
 import { View, Text, ImageBackground, Dimensions, StyleSheet, ScrollView, TouchableHighlight, Pressable, Modal, TextInput, Image, Alert } from 'react-native'
 import style from '../common/commonStyle'
 import HotelAppbar from '../common/HotelAppbar'
@@ -30,17 +30,7 @@ const height = Dimensions.get('window').height
 
 const HotelDetail = ({ navigation, route }) => {
     const dispatch = useDispatch()
-    // dispatch({
-    //     type: hotelActions.GET_HOTEL_ROOM_TYPE,
-    //     payload: {
-    //         hotelId: val?.hotelId,
-    //         productId: val?.productId,
-    //         sessionId: hotelSessionId,
-    //         tokenId: val?.tokenId
-    //     },
-    //     navigation: navigation,
-    //     detail: val
-    // })
+   
     const [moreVisible, setMoreVisible] = useState(false);
     const [textShown, setTextShown] = useState(false);
     const [textReadMore, setTextReadMore] = useState(false);
@@ -141,16 +131,7 @@ const HotelDetail = ({ navigation, route }) => {
                                 <Text style={{ color: '#BBBBBB', paddingLeft: 5, fontFamily: font.mediam, }}>reviews</Text>
                             </View>
                         </View>
-                        {/* <View>
-                            <View style={{ flexDirection: "row", alignItems: 'center', }}>
-                                <Text style={style.HotelDetailHotelPrice}>5,500</Text>
-                                <View style={{ paddingHorizontal: 5 }}>
-                                    <Text style={styles.HotelPriceList}>Rs</Text>
-                                    <Text style={styles.HotelPriceList}>Per Day</Text>
-                                </View>
-                            </View>
-                            <Text style={style.HotelDetailHotelTax}>including tax 6,220</Text>
-                        </View> */}
+                     
                     </View>
                 </ImageBackground>
                 <View style={{ paddingHorizontal: 15, backgroundColor: '#F8F8F8', flexDirection: 'row', alignItems: 'center', paddingTop: 8 }}>
@@ -161,10 +142,7 @@ const HotelDetail = ({ navigation, route }) => {
                     <View>
                         <Text style={style.TitleMain}>About the Hotel</Text>
                         <View>
-                            {/* <RenderHtml
-                                // contentWidth={width * 0.8}
-                                source={source}
-                            /> */}
+                         
                             <Text
                                 onTextLayout={onTextLayout}
                                 numberOfLines={textShown ? undefined : 4.7}
@@ -195,7 +173,6 @@ const HotelDetail = ({ navigation, route }) => {
                                         {(val === 'Gym') && <Gym height={20} />}
                                     </View>
                                     <Text style={{ ...style.list, paddingTop: 10 }}>{val}</Text>
-                                    {/* <Text style={style.list} key={index}><MaterialIcons style={style.listIcon} name='double-arrow' />{val}</Text> */}
                                 </View>
 
                             ))}
@@ -206,8 +183,6 @@ const HotelDetail = ({ navigation, route }) => {
                                     <More height={20} />
                                 </View>
                                 <Text style={{ ...style.list, paddingTop: 10 }}>More</Text>
-                                {/* <Text style={style.list} key={index}>{val}</Text> */}
-                                {/* <Text style={style.list} key={index}><MaterialIcons style={style.listIcon} name='double-arrow' />{val}</Text> */}
                             </Pressable>
                         </View>
                         <Modal
@@ -446,8 +421,6 @@ const styles = StyleSheet.create({
         textShadowColor: '#fff',
         textShadowOffset: { width: 100, height: 100 },
         textShadowRadius: 2,
-
-        // fontSize:20,
     },
     myEmptyStarStyle: {
         color: '#FCC40A',
@@ -478,13 +451,11 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
     },
     ratingContainer: {
-        // height:height*0.3,
         marginBottom: 20,
         width: width * 0.95,
         alignSelf: 'center',
         backgroundColor: 'white',
         borderRadius: 15,
-        // alignItems:'center',
         padding: 5,
         paddingBottom: 10
     },
@@ -513,4 +484,4 @@ const styles = StyleSheet.create({
 
 
 });
-export default memo(HotelDetail)
+export default React.memo(HotelDetail)

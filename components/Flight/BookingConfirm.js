@@ -18,7 +18,7 @@ import moment from 'moment'
 const height = Dimensions.get('window').height
 const width = Dimensions.get('window').width
 
-export default function FlightBookingConfirm() {
+ function FlightBookingConfirm() {
     var [stopTab, setStopTab] = useState(0)
     const [PassengerList, setPassengerList] = useState(false);
     const [rotateStart, setRotateStart] = useState(false);
@@ -125,25 +125,7 @@ export default function FlightBookingConfirm() {
                                 {trip_detail.flightTripDetails[trip_detail.flightTripDetails.length - 1]?.ArrivalAirportLocationCode}
                             </Text>
                         </View>
-                        {/* {(rotateStart === true) ?
-                            <View style={{ flexDirection: "row", alignItems: 'center', justifyContent: 'space-around', paddingHorizontal: 45, paddingVertical: 20, }}>
-                                <TouchableOpacity style={[style.FlightTakeOnIcon]}>
-                                    <TakeOn height={30} width={30} fill='red' />
-                                </TouchableOpacity>
-                                <View style={[style.backBorder]} />
-                                <TouchableOpacity>
-                                    <Text style={[style.flightCount]}>1</Text>
-                                </TouchableOpacity>
-                                <View style={[style.backBorder]} />
-                                <TouchableOpacity>
-                                    <Text style={[style.flightCount]}>2</Text>
-                                </TouchableOpacity>
-                                <View style={[style.backBorder]} />
-                                <TouchableOpacity style={[style.FlightTakeOnIcon]}>
-                                    <TakeOff height={30} width={30} />
-                                </TouchableOpacity>
-                            </View> : <></>
-                        } */}
+                      
                         {(rotateStart === true) ?
                             <View>
                                 <View style={[style.FlightStopingCart]}>
@@ -378,7 +360,6 @@ const style = StyleSheet.create({
         zIndex: -1,
     },
     FlightStopingCart: {
-        // backgroundColor: '#eee',
         paddingVertical: 10,
         paddingHorizontal: 10,
         borderRadius: 20,
@@ -459,3 +440,5 @@ const style = StyleSheet.create({
         right: 0,
     }
 })
+
+export default React.memo(FlightBookingConfirm)

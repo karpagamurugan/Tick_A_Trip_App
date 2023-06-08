@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React,{memo} from 'react'
+import React from 'react'
 import { View, Text, StyleSheet, Image, Dimensions, ImageBackground, TouchableHighlight } from 'react-native'
 import Ionicons from 'react-native-vector-icons/Ionicons'
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5'
@@ -125,10 +125,9 @@ bookNow:{
         textShadowColor: '#fff',
         textShadowOffset: { width: 100, height: 100 },
         textShadowRadius: 2,
-        // fontSize:20,
     },
     myEmptyStarStyle: {
         color: '#000',
     },
 });
-export default memo(HotelRoomTypeCard)
+export default React.memo(HotelRoomTypeCard)

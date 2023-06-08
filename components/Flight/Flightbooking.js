@@ -34,7 +34,7 @@ import axios from "axios";
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
-export default function FlightBooking({ navigation, route }) {
+ function FlightBooking({ navigation, route }) {
     const dispatch = useDispatch()
 
     const { get_Revalidate, } = useSelector((state) => state.FlightSearchReducer) //flight revalidation
@@ -1652,3 +1652,5 @@ const styles = StyleSheet.create({
         right: 0,
     }
 })
+
+export default React.memo(FlightBooking)

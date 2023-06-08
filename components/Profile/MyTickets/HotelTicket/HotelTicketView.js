@@ -19,7 +19,6 @@ let height = Dimensions.get('window').height;
     const dispatch = useDispatch();
     
     const OnCancelHotelBooking = (item, index) => {
-        // setModalVisible(true)
         dispatch({
             type:userAction.OTP_MODAL_VIEW, payload:true
         })
@@ -59,7 +58,6 @@ let height = Dimensions.get('window').height;
                                     "referenceNum": item.referenceNum
                                 },navigation:navigation
                             });
-                            // navigation.navigate('HotelTicketDetails')
                         }}>
                             <Text style={style.viewDetail}>View Booking Details</Text>
                         </TouchableHighlight>

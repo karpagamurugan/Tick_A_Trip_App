@@ -96,8 +96,6 @@ const HotelSearch = ({ navigation }) => {
         checkout: moment(coDate).format('YYYY-MM-DD'),
         city_name: desination.city,
         country_name: desination.country,
-        // city_name: 'Delhi',
-        // country_name: 'United States of America',
         requiredCurrency: 'INR',
         occupancy: selectAddRoom,
       },
@@ -148,7 +146,6 @@ const HotelSearch = ({ navigation }) => {
                   <View
                     style={{
                       flexDirection: 'row',
-                      // height: 35,
                       width: '100%',
                       alignItems: 'center',
                     }}
@@ -365,7 +362,6 @@ const HotelSearch = ({ navigation }) => {
             <TouchableHighlight underlayColor='transparent'
               onPress={() => {
                 OnSearchHotel()
-                // navigation.navigate('HotelPayment',{check_out:'1'})
               }}>
               <View style={style.iconBoxBtn}>
                 <EvilIcons style={style.fieldIconBtn} name='search' />
@@ -526,7 +522,6 @@ const style = StyleSheet.create({
   inputFieldText: {
     color: '#000000',
     fontFamily: font.font,
-    // letterSpacing: 0.8,
     fontSize: height * 0.019,
   },
   hotelSearchFieldGroupHalf: {
@@ -563,7 +558,6 @@ const style = StyleSheet.create({
     paddingHorizontal: 20,
     backgroundColor: color.AppbarColor,
     alignItems: 'center',
-    // marginBottom: 20,
     paddingVertical: 15,
     borderRadius: 10,
     marginHorizontal: 0,
@@ -604,4 +598,4 @@ const style = StyleSheet.create({
   }
 
 })
-export default HotelSearch
+export default React.memo(HotelSearch)

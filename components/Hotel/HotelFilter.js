@@ -241,21 +241,7 @@ const HotelFilter = (props) => {
 
     }
     const onSubmit = (data) => {
-        // let tempFilter = {
-        //     filters: {
-        //         price: {
-        //             min: multiSliderValue[0],
-        //             max: multiSliderValue[1],
-        //         },
-        //         rating:selectRating?.length !==0?selectRating.toString:'',
-        //         // tripadvisorRating: tempAdvisorRating.length ? tempAdvisorRating : '',
-        //         // faretype: data?.fareType ? data?.fareType : '',
-        //         propertyType: data?.propertyType ? data?.propertyType : '',
-        //         facility: selectFecility.length !== 0 ? selectFecility?.toString : '',
-        //         sorting: data?.sortBy ? data?.sortBy:'' ,
-        //         locality: selectLocality.length !== 0 ? selectLocality : '',
-        //     }
-        // }
+     
         let tempFilter = {
             filters: {
                 price: {
@@ -332,7 +318,6 @@ const HotelFilter = (props) => {
             type: hotelActions.GET_HOTEL_FILTER,
             payload: {
                 sessionId: hotelSessionId,
-                // maxResult: getHotelSearchResult?.length,
                 maxResult: 100000,
                 ...tempFilter
             },
@@ -345,13 +330,10 @@ const HotelFilter = (props) => {
             `${API_URL}/filter`,{'filter_type':'hotel'}, {
             headers: {
                 accept: 'application/json',
-                // 'Content-Type': 'multipart/form-data',
             },
         }
         ).then((res) => {
-       
-        //    setMinMaxSlider(res.data.filter.max)
-         
+                
           setMinMaxSlider(minMaxSlider = { MinItem: res.data.filter.min, MaxItem: res.data.filter.max })
           setMultiSliderValue([res.data.filter.min, res.data.filter.max])
         }).catch(err => {
@@ -435,121 +417,8 @@ const HotelFilter = (props) => {
                             />
                         )}
                     />
-                    {/* {errors.sortBy && (
-        <Text style={style.errorMessage}>{errors.sortBy.message}</Text>
-    )} */}
+              
                 </View>
-
-                {/* <View style={style.filterField}>
-                    <Text style={style.filterFieldLabel}>Rating</Text>
-                    <Controller
-                        control={control}
-                        name="rating"
-                        rules={{
-                            required: {
-                                value: false,
-                                message: 'Select rating!',
-                            },
-                        }}
-                        render={({ field: { onChange, value } }) => (
-                            <Dropdown
-                                style={style.dropdown}
-                                placeholderStyle={style.placeholderStyle}
-                                selectedTextStyle={style.selectedTextStyle}
-                                inputSearchStyle={style.inputSearchStyle}
-                                iconStyle={style.iconStyle}
-                                data={RatingOption}
-                                {...register("rating")}
-                                name="rating"
-                                maxHeight={300}
-                                labelField="label"
-                                valueField="value"
-                                placeholder="Select sory by"
-                                searchPlaceholder="Search..."
-                                value={rating}
-                                onChange={item => {
-                                    onChange(item.value)
-                                    setRating(item.value);
-                                }}
-                            />
-                        )}
-                    />
-                </View> */}
-
-                {/* <View style={style.filterField}>
-                    <Text style={style.filterFieldLabel}>Trip Advisor Rating</Text>
-                    <Controller
-                        control={control}
-                        name="advisorRating"
-                        rules={{
-                            required: {
-                                value: false,
-                                message: 'Select Trip Advisor Rating!',
-                            },
-                        }}
-                        render={({ field: { onChange, value } }) => (
-                            <Dropdown
-                                style={style.dropdown}
-                                placeholderStyle={style.placeholderStyle}
-                                selectedTextStyle={style.selectedTextStyle}
-                                inputSearchStyle={style.inputSearchStyle}
-                                iconStyle={style.iconStyle}
-                                data={AdvicerRatingOption}
-                                {...register("advisorRating")}
-                                name="advisorRating"
-                                maxHeight={300}
-                                labelField="label"
-                                valueField="value"
-                                placeholder="Select sory by"
-                                searchPlaceholder="Search..."
-                                value={advisorRating}
-                                onChange={item => {
-                                    onChange(item.value)
-                                    setAdvisorRating(item.value);
-                                }}
-                            />
-                        )}
-                    />
-                </View> */}
-
-                {/* <View style={style.filterField}>
-                    <Text style={style.filterFieldLabel}>Fare Type</Text>
-                    <Controller
-                        control={control}
-                        name="fareType"
-                        rules={{
-                            required: {
-                                value: false,
-                                message: 'Select fareType!',
-                            },
-                        }}
-                        render={({ field: { onChange, value } }) => (
-                            <Dropdown
-                                style={style.dropdown}
-                                // placeholderStyle={style.placeholderStyle}
-                                // selectedTextStyle={style.selectedTextStyle}
-                                // inputSearchStyle={style.inputSearchStyle}
-                                placeholderStyle={{fontFamily:FONTS.mediam}}
-                                inputSearchStyle={{fontFamily:FONTS.mediam}}
-                                selectedTextStyle={{fontFamily:FONTS.mediam}}
-                                iconStyle={style.iconStyle}
-                                data={fareTypeOption}
-                                {...register("fareType")}
-                                name="fareType"
-                                maxHeight={300}
-                                labelField="label"
-                                valueField="value"
-                                placeholder="Select sory by"
-                                searchPlaceholder="Search..."
-                                value={fareType}
-                                onChange={item => {
-                                    onChange(item.value)
-                                    setfareType(item.value);
-                                }}
-                            />
-                        )}
-                    />
-                </View> */}
 
                 <View style={style.filterField}>
                     <Text style={style.filterFieldLabel}>Property Type</Text>
@@ -587,28 +456,7 @@ const HotelFilter = (props) => {
                     />
                 </View>
 
-                {/* <View style={style.filterField}>
-                    <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Text style={style.filterFieldLabel}>Rating</Text>
-                        <Text style={style.priceRange}>{startRating}</Text>
-                    </View>
-                    <Slider
-
-                        style={{ paddingVertical: 5, width: width, height: 20 }}
-                        minimumValue={0}
-                        maximumValue={6}
-                        step={0.5}
-                        minimumTrackTintColor={color.colorBtn}
-                        thumbTintColor={color.colorBtn}
-                        onValueChange={(val) => {
-                            setStartRating(startRating = val)
-                        }}
-
-                    />
-                </View> */}
-
-
-
+        
                 <View style={{ flexDirection: "row", justifyContent: "space-between", paddingTop: 10 }}>
                     <View style={style.filterField}>
                         <Text style={style.filterFieldLabel}>Star Rating</Text>
@@ -641,56 +489,15 @@ const HotelFilter = (props) => {
 
                         </View>
                     </View>
-                    {/* <View style={style.filterField}>
-                            <Text style={style.filterFieldLabel}>Locality</Text>
-                            <View style={style.checkBoxGrop}>
-                                {CheckLocalityValues.map((val, index) => (
-                                    <View style={style.checkBox} key={index}>
-                                        <TouchableHighlight underlayColor='transparent' onPress={() => {
-                                            if (!selectLocality.includes(val.value)) {
-                                                setSelectLocality([...selectLocality, val.value])
-                                                setCheckLocality(val.value)
-                                            } else {
-                                                setSelectLocality(selectLocality.filter((item) => item !== val.value))
-                                                setCheckLocality(null)
-                                            }
-                                        }}>
-                                            <View style={style.checkBox}>
-                                                {selectLocality.includes(val.value) ?
-                                                    < Ionicons style={style.checkInputIcon} name='checkbox-sharp' />
-                                                    :
-                                                    <Ionicons style={style.checkInputIcon} name='checkbox-outline' />
-                                                }
-                                                <Text style={style.checkInputLabel}>{val.label}</Text>
-                                            </View>
-
-                                        </TouchableHighlight>
-                                    </View>
-                                ))}
-                            </View>
-                        </View> */}
+                 
                 </View>
 
 
                 <View style={style.filterField}>
                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                         <Text style={style.filterFieldLabel}>Trip Advisor Rating</Text>
-                        {/* <Text style={style.priceRange}>{advisorRating}</Text> */}
                     </View>
-                    {/* <Slider
-                        style={{ paddingVertical: 5, width: width*0.85, height: 20 }}
-                        minimumValue={0}
-                        maximumValue={6}
-                        step={0.5}
-                        minimumTrackTintColor={COLORS.colorBtn}
-                        thumbTintColor={COLORS.colorBtn}
-                        onValueChange={(val) => {
-                            setAdvisorRating(advisorRating = val)
-                        }}
-
-                    /> */}
-
-
+                 
                     <View style={[style.checkBoxGrop, { flexDirection: 'row' }]}>
                         {
                             RatingList.map((val, index) => (
@@ -759,7 +566,6 @@ const HotelFilter = (props) => {
                                 }
 
                                 }
-                                // keyExtractor={(item,index) => index}
                                 numColumns={2}
                             />
 
@@ -769,34 +575,7 @@ const HotelFilter = (props) => {
                             <Text style={{ fontFamily: FONTS.font, color: COLORS.TextDarkGrey, textDecorationLine: 'underline' }}>{(facilityShow === true) ? 'See Less' : 'See More'}</Text>
                         </TouchableHighlight>
                     </View>
-                    {/* <View style={style.filterField}>
-                            <Text style={style.filterFieldLabel}>Locality</Text>
-                            <View style={style.checkBoxGrop}>
-                                {CheckLocalityValues.map((val, index) => (
-                                    <View style={style.checkBox} key={index}>
-                                        <TouchableHighlight underlayColor='transparent' onPress={() => {
-                                            if (!selectLocality.includes(val.value)) {
-                                                setSelectLocality([...selectLocality, val.value])
-                                                setCheckLocality(val.value)
-                                            } else {
-                                                setSelectLocality(selectLocality.filter((item) => item !== val.value))
-                                                setCheckLocality(null)
-                                            }
-                                        }}>
-                                            <View style={style.checkBox}>
-                                                {selectLocality.includes(val.value) ?
-                                                    < Ionicons style={style.checkInputIcon} name='checkbox-sharp' />
-                                                    :
-                                                    <Ionicons style={style.checkInputIcon} name='checkbox-outline' />
-                                                }
-                                                <Text style={style.checkInputLabel}>{val.label}</Text>
-                                            </View>
-
-                                        </TouchableHighlight>
-                                    </View>
-                                ))}
-                            </View>
-                        </View> */}
+                  
                 </View>
 
 
@@ -837,7 +616,6 @@ const style = StyleSheet.create({
         justifyContent: 'space-around',
     },
     checkInputIcon: {
-        // color: COLORS.colorBtn,
         color: 'grey',
         borderRadius: 2,
         fontSize: 18,

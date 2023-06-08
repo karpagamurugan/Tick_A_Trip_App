@@ -54,8 +54,6 @@ const style = StyleSheet.create({
         elevation: 16,
         borderRadius:10,
         flexDirection:'row'
-        // borderWidth:3,
-        // borderColor:'#FFCC00',
     },
     AlertBoxHead:{
         textAlign:'center',

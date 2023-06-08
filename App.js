@@ -55,7 +55,6 @@ function App() {
           <Stack.Screen name='google' component={GoogleLogin} />
         </Stack.Navigator>
       </NavigationContainer>
-      {/* <View>Dummy Text</View> */}
     </Provider>
 
 

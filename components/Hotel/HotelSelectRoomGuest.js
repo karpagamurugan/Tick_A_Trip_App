@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-import React, { useState, memo, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableHighlight, StyleSheet, Image, FlatList,Dimensions } from 'react-native'
 import style from '../common/commonStyle'
 import { Dropdown } from 'react-native-element-dropdown';
@@ -217,4 +217,4 @@ const styles = StyleSheet.create({
 
 })
 
-export default memo(HotelSelectRoomGuest)
+export default React.memo(HotelSelectRoomGuest)

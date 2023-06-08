@@ -645,10 +645,7 @@ const getCancelledFlightTickets = function* (data) {
 
         }
 
-        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {
-        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
-        // yield put({ type: actions.SET_USER_PROFILE, payload: err.data })
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
 
     }
@@ -668,7 +665,6 @@ const getUpcomingFlightTickets = function* (data) {
 
         }
 
-        // yield put({ type: CommonAction.COMMON_LOADER, payload: false })
     } catch (err) {
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err.message} })
     }
@@ -698,7 +694,6 @@ const flightTicketsDetails = function* (data) {
 }
 const getCompletedHotelTickets = function* (data) {
     const { payload } = data;
-    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
 
     try {
         const result = yield call(() =>
@@ -724,7 +719,6 @@ const getCompletedHotelTickets = function* (data) {
 }
 const getCancelledHotelTickets = function* (data) {
     const { payload } = data;
-    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
 
     try {
         const result = yield call(() =>
@@ -748,7 +742,6 @@ const getCancelledHotelTickets = function* (data) {
 }
 const getUpcomingHotelTickets = function* (data) {
     const { payload } = data;
-    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
 
     try {
         const result = yield call(() =>

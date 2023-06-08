@@ -86,111 +86,13 @@ const SignUp = ({ navigation }) => {
 
   
     return (
-        // <ScrollView contentInsetAdjustmentBehavior="automatic" showsVerticalScrollIndicator={false} horizontal={false} showsHorizontalScrollIndicator={false}>
         <View style={{ position: 'relative', width: width, backgroundColor: 'white', }}>
-            {/* <ImageBackground style={style.signUpImag} source={require('../../Assert/Images/signUp.png')} /> */}
             <ScrollView>
                 <View>
 
                     <Text style={style.headingText}>Sign up to TickaTrip</Text>
                     <View style={style.signUpForm}>
-                        {/* <View style={style.formGroup}>
-                            <Text style={style.label}>Gender *</Text>
-                            <Controller
-                                control={control}
-                                name="gender"
-                                rules={{
-                                    required: {
-                                        value: true,
-                                        message: 'Select your gender!',
-                                    },
-                                }}
-                                render={({ field: { onChange, value } }) => (
-                                    <Dropdown
-                                        maxHeight={150}
-                                        data={selectTitle}
-                                        labelField="value"
-                                        valueField="value"
-                                        value={title}
-                                        showsVerticalScrollIndicator={true}
-                                        placeholder="Select your gender"
-                                        {...register("gender")}
-                                        name="gender"
-                                        onChange={(item) => {
-                                            onChange(item.value)
-                                            setTitle(item.value)
-                                        }}
-                                        selectedTextProps={{
-                                            style: {
-                                                fontSize: 13,
-                                                fontWeight: '500',
-                                                fontFamily: FONTS.font,
-                                                letterSpacing: 0.5,
-                                                padding: 0,
-                                            },
-                                        }}
-                                        style={{ padding: 0, backgroundColor: '#EDF2F7', paddingVertical: 5, paddingHorizontal: 20, borderRadius: 5, }}
-                                        renderRightIcon={() => (
-                                            <MaterialIcon
-                                                name="chevron-down-circle-outline"
-                                                size={25}
-                                                style={{ fontSize: 18, color: COLORS.colorTheme, }}
-                                            />)}
-                                    />
-                                )}
-                            />
-                            {errors.gender && (
-                                <Text style={style.errorMessage}>{errors.gender.message}</Text>
-                            )}
-                        </View> */}
-                        {/* <View style={style.formGroup}>
-                            <Text style={style.label}>Maridal Status *</Text>
-                            <Controller
-                                control={control}
-                                name="marriedStatus"
-                                rules={{
-                                    required: {
-                                        value: true,
-                                        message: 'Select your maridal status!',
-                                    },
-                                }}
-                                render={({ field: { onChange, value } }) => (
-                                    <Dropdown
-                                        maxHeight={150}
-                                        data={maridalStatus}
-                                        labelField="value"
-                                        valueField="value"
-                                        value={marriedStatus}
-                                        showsVerticalScrollIndicator={true}
-                                        placeholder="Select program"
-                                        {...register("marriedStatus")}
-                                        name="marriedStatus"
-                                        onChange={(item) => {
-                                            onChange(item.value)
-                                            setMarriedStatus(item.value)
-                                        }}
-                                        selectedTextProps={{
-                                            style: {
-                                                fontSize: 13,
-                                                fontWeight: '500',
-                                                fontFamily: FONTS.font,
-                                                letterSpacing: 0.5,
-                                            },
-                                        }}
-                                        style={{ padding: 0, backgroundColor: '#EDF2F7', paddingVertical: 5, paddingHorizontal: 20, borderRadius: 5, }}
-                                        renderRightIcon={() => (
-                                            <MaterialIcon
-                                                name="chevron-down-circle-outline"
-                                                size={25}
-                                                style={{ fontSize: 18, color: COLORS.colorTheme, }}
-                                            />)}
-                                    />
-                                )}
-                            />
-                            {errors.marriedStatus && (
-                                <Text style={style.errorMessage}>{errors.marriedStatus.message}</Text>
-                            )}
-                        </View> */}
+                   
                         <View style={style.formGroup}>
                             <Text style={style.label}>User name <Text style={{color:'red'}}>*</Text></Text>
                             <Controller
@@ -334,24 +236,7 @@ const SignUp = ({ navigation }) => {
                                 <Text style={style.errorMessage}>{errors.dob.message}</Text>
                             )}
                         </View>
-                        {/* <View style={style.formGroup}>
-                            <Text style={style.label}>Postal Code *</Text>
-                            <Controller
-                                control={control}
-                                render={({ field: { onChange, value } }) => (
-                                    <TextInput  {...register("postalCode")} name="postalCode"
-                                        onChangeText={value => onChange(value)} maxLength={6}
-                                        value={value} keyboardType='numeric' placeholder='Enter the postalCode' style={style.input} />
-                                )}
-                                name="postalCode"
-                                rules={{
-                                    required: "Enter your postalCode!",
-                                }}
-                            />
-                            {errors.postalCode && (
-                                <Text style={style.errorMessage}>{errors.postalCode.message}</Text>
-                            )}
-                        </View> */}
+                       
                         <View style={style.formGroup}>
                             <Text style={style.label}>Password <Text style={{color:'red'}}>*</Text></Text>
                             <Controller
@@ -525,21 +410,12 @@ const SignUp = ({ navigation }) => {
                                 <TouchableOpacity style={{flexDirection: 'row', }} onPress={() => setPrivacyBox(!privacyBox)}>
                                     <View >
                                         {privacyBox === true ?
-                                            // <Fontisto
-                                            //     name='checkbox-active'
-                                            //     size={15}
-                                            //     style={{ color: COLORS.colorBtn }}
-                                            // />
-
+                                       
                                             <View style={[style.custmCheckBox,{backgroundColor:COLORS.colorBtn,paddingVertical:1,paddingHorizontal:2}]}>
                                             <Ionicons name='checkmark' color={'white'} size={17}/>
                                             </View>
                                             :
-                                            // <Fontisto
-                                            //     name='checkbox-passive'
-                                            //     size={15}
-                                            //     style={{ color: '#000' }}
-                                            // />
+                                    
                                             <View style={[style.custmCheckBox,{paddingVertical:1,paddingHorizontal:1}]}>
                                             <Ionicons name='checkmark' color={'white'} size={17}/>
                                             </View>
@@ -551,7 +427,6 @@ const SignUp = ({ navigation }) => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        {/* <Button title='Submit' onPress={handleSubmit(onSubmit)}/> */}
                         <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30 }}>
                             <TouchableOpacity disabled={(privacyBox !== true) || (policyBox !== true)} style={((privacyBox !== true) || (policyBox !== true)) ? style.buttonError : style.button} onPress={handleSubmit(onSubmit)}><Text style={{ color: '#fff',fontFamily:FONTS.mediam }} >SIGN UP</Text></TouchableOpacity>
                         </View>
@@ -610,7 +485,6 @@ const SignUp = ({ navigation }) => {
                 )}
             />
         </View>
-        // </ScrollView>
 
     )
 }

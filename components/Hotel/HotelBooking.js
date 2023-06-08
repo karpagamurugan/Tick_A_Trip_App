@@ -79,39 +79,8 @@ function HotelBooking({ route, navigation, props }) {
                     );
     
                     var price = parseFloat(totalFare?.MainTotalFare)
-                    // var dataList = {
-                    //     sessionId: hotelSessionId,
-                    //     productId: RoomType?.productId,
-                    //     tokenId: HotelDetail?.tokenId,
-                    //     hotelId: HotelDetail?.hotelId,
-                    //     rateBasisId: RoomType?.rateBasisId,
-                    //     clientRef: RoomType?.productId,
-                    //     customerName: data?.FirstName,
-                    //     customerEmail: data?.Email,
-                    //     customerPhone: data?.Phone,
-                    //     customerGst: "",
-                    //     transactionId: "",
-                    //     paymentStatus: "",
-                    //     bookingNote: "Remark",
-                    //     paxDetails: [],
-                    //     hotelName: HotelDetail?.hotelName,
-                    //     hotelCity: HotelDetail?.city,
-                    //     hotelCountry: HotelDetail?.country,
-                    //     hotelAddress: HotelDetail?.address,
-                    //     TotalFare: parseFloat(price * 100),
-                    // }
-
-                    // // dataList['transactionId'] = res.razorpay_payment_id;
-                    // // dataList['paymentStatus'] = res?.razorpay_payment_id ? 'true' : 'false';
-                    // dataList['paxDetails'] = tempData;
-                    // if (!!discountPrice) {
-                    //     dataList['couponDiscount'] = discountPrice;
-                    // }
-                    // dataList['TotalFare'] = (price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100;
-                
-
+                   
                     let dataList = {
-                        // occupancy: JSON.stringify(tempData),
                         checkin: moment(RoomGuestPlace?.depatureDate).format('YYYY-MM-DD'),
                         Checkout:moment(RoomGuestPlace?.arrivalDate).format('YYYY-MM-DD'),
                         amount: (price?.toString().split('').includes('.') ? Math.floor(price?.toString().split('.')[0]) * 100 + parseFloat(price?.toString().split('.')[1]) : parseFloat(price) * 100) / 100,
@@ -256,9 +225,7 @@ const ApplyCoupon = () => {
 
 return (
     <View style={{flex:1, backgroundColor: 'transparent' }}>
-        {/* <Appbar title={'Hotel Booking'}/> */}
         <HotelAppbar title={'Hotel Booking'} />
-        {/* <KeyboardAvoidingView behavior="height"> */}
 
             <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
                 <Image source={{ uri: HotelDetail?.thumbNailUrl }} style={{ height: height * 0.27, marginTop: 15 }} />
@@ -620,7 +587,6 @@ return (
 
                 </View>
             </ScrollView>
-        {/* </KeyboardAvoidingView> */}
         <TouchableHighlight  style={styles.ConfirmBtn} underlayColor={'transparent'} onPress={handleSubmit(onSubmit)}>
                     <Text style={styles.confirmBook}>Confirm & Book</Text>
         </TouchableHighlight>

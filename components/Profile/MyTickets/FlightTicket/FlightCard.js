@@ -75,7 +75,6 @@ let height = Dimensions.get('window').height;
                                 }}>
                                 <Text style={style.viewDetail}>View Ticket</Text>
                             </TouchableHighlight>
-                            {/* <ArrowIcon name='down' size={12} color='#0041F2' /> */}
                         </View>
 
                     </View>

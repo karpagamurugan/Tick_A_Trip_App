@@ -81,29 +81,6 @@ function ProfileTab() {
     )
 }
 
-function HotelTab() {
-    return (
-        <Stack.Navigator initialRouteName='Hotel' screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='Hotel' component={Hotel} />
-            <Stack.Screen name='HotelList' component={HotelList}/>
-            <Stack.Screen name='HotelRoomType' component={HotelRoomType}/>
-            <Stack.Screen name='HotelDetail' component={HotelDetail}/>
-        </Stack.Navigator>
-    )
-}
-
-function FlightTab() {
-    return (
-        <Stack.Navigator initialRouteName='flight'>
-            <Stack.Screen name="flight" component={Flight} options={{ headerShown: false }} />
-            <Stack.Screen name="FlightResult" component={FlightResult} options={{ headerShown: false }} />
-            <Stack.Screen name="flightBooking" component={FlightBooking} options={{ headerShown: false }} />
-            <Stack.Screen name="FlightDetails" component={FlightDetails} options={{ headerShown: false }} />
-            <Stack.Screen name="ContactInfo" component={ContactInfo} options={{ headerShown: false }} />
-        </Stack.Navigator>
-    )
-}
-
 function SearchTab() {
     return (
         <Stack.Navigator initialRouteName='search'>
@@ -147,27 +124,6 @@ const BottomNavigate = ({ navigation }) => {
                     }
                 })}
             />
-            {/* <Tab.Screen name="Search" component={SearchTab}
-                options={{
-                    tabBarLabel: 'Flight',
-                    tabBarIcon: ({ focused, color, size }) => (
-                        focused ?
-                            <View style={{ flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-                                <MaterialIcons color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='search' />
-                                <View>
-                                    <Image style={style.navActiveIcon} source={require('../../Assert/Images/active.png')} />
-                                </View>
-                            </View>
-                            :
-                            <MaterialIcons color={focused ? '#4C94F2' : '#a6a9ac'} size={focused ? 30 : 25} name='search' />
-                    ),
-                }}
-                listeners={({ navigation }) => ({
-                    tabPress: (e) => {
-                        navigation.navigate('search')
-                    }
-                })}
-            /> */}
             <Tab.Screen name="ProfileTab" component={ProfileTab}
                 options={{
                     tabBarLabel: 'Profile',

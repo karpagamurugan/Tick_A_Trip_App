@@ -11,11 +11,12 @@ import Appbar from '../common/Appbar'
 import RenderHtml from 'react-native-render-html';
 import { useDispatch, useSelector } from "react-redux";
 import actions from '../../redux/Flight/actions';
+import COLORS from "../constants/color";
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
 
-export default function FlightDetails(props) {
+function FlightDetails(props) {
     let data = props.route?.params?.item;
     var [selectedTab, setSelectedTab] = useState(0);
     const dispatch = useDispatch()
@@ -80,9 +81,18 @@ export default function FlightDetails(props) {
                                                         <View style={{ paddingHorizontal: 10 }}>
                                                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                                                 <View style={{ alignItems: 'center' }}>
-                                                                    <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={{
-                                                                        uri: API_IMG_URL + '/server/flightimage/' + data?.flightUrl
-                                                                    }} />
+
+                                                                    {
+
+                                                                        (data?.flightUrl === null || data?.flightUrl === undefined || data?.flightUrl === '') ?
+                                                                            <View style={{ height: 40, width: 40, borderRadius: 100, backgroundColor: COLORS.textBlue }}>
+                                                                                <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={require('../../Assert/Icons/flight_offer.png')} />
+                                                                            </View>
+                                                                            : <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={{
+                                                                                uri: API_IMG_URL + '/server/flightimage/' + data?.flightUrl
+                                                                            }} />
+                                                                    }
+
                                                                     <Text style={{ fontFamily: font.fontBold, color: color.colorText, fontSize: height * 0.021, width: width * 0.2 }}>{data?.flightName}</Text>
 
                                                                 </View>
@@ -101,13 +111,7 @@ export default function FlightDetails(props) {
                                                                         )
                                                                             ?.format("HH:mm:ss a")
                                                                             .substring(0, 5)}</Text>
-                                                                        {/* <Text style={styles.Textlite}>{moment(
-                                                                        item1.flightList
-                                                                            .DepartureDateTime
-                                                                    )
-                                                                        ?.format("hh:mm:ss a")
-                                                                        .substring(9, 11)
-                                                                        ?.toUpperCase()}</Text> */}
+
                                                                     </View>
                                                                     <FromArrow />
                                                                     <View style={{ alignItems: 'center' }}>
@@ -134,12 +138,7 @@ export default function FlightDetails(props) {
                                                                         )
                                                                             ?.format("HH:mm:ss a")
                                                                             .substring(0, 5)}</Text>
-                                                                        {/* <Text style={styles.Textlite}>{moment(
-                                                                        item1.flightList.ArrivalDateTime
-                                                                    )
-                                                                        ?.format("hh:mm:ss a")
-                                                                        .substring(9, 11)
-                                                                        ?.toUpperCase()}</Text> */}
+
                                                                     </View>
                                                                 </View>
                                                             </View>
@@ -154,8 +153,7 @@ export default function FlightDetails(props) {
                                     :
 
                                     <RenderHtml
-                                        //  ignoredDomTags={[]}
-                                        //  enableExperimentalBRCollapsing={true}
+
                                         contentWidth={width * 0.8}
                                         source={sourceFile}
                                     />
@@ -211,3 +209,5 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
 })
+
+export default React.memo(FlightDetails)

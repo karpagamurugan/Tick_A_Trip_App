@@ -5,7 +5,8 @@ import WebView from "react-native-webview";
 import { useDispatch } from "react-redux";
 import CommonAction from '../../redux/common/actions';
 import hotelActions from "../../redux/Hotel/actions";
-export default function HotelPaymentWebView({route,navigation}) {
+
+function HotelPaymentWebView({route,navigation}) {
     const width = Dimensions.get('window').width
     const height = Dimensions.get('window').height
   
@@ -31,7 +32,6 @@ export default function HotelPaymentWebView({route,navigation}) {
 
                 if(params?.referenceNum !== undefined ){
                     if(url.includes('https://tickatrip.travel/hotel-booking-confirm') ===true){
-                        // navigation.replace('hotelBookingConfirm')
                         navigation.reset({
                             index: 0,
                             routes: [{ name: 'hotelBookingConfirm' }]
@@ -72,3 +72,5 @@ export default function HotelPaymentWebView({route,navigation}) {
         </View>
     )
 }
+
+export default React.memo(HotelPaymentWebView)

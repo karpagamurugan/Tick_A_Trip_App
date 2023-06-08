@@ -5,7 +5,7 @@ import WebView from "react-native-webview";
 import { useDispatch } from "react-redux";
 import flightAction from '../../redux/Flight/actions';
 
-export default function FlightPaymentWebView({ route, navigation }) {
+ function FlightPaymentWebView({ route, navigation }) {
 
     const width = Dimensions.get('window').width
     const height = Dimensions.get('window').height
@@ -38,7 +38,6 @@ export default function FlightPaymentWebView({ route, navigation }) {
                             index: 0,
                             routes: [{ name: 'flightBookingConfirm' }]
                         })
-                        // navigation.navigate('flightBookingConfirm')
                         
                       dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: titleparms?.message } })
                     }else{
@@ -72,3 +71,6 @@ export default function FlightPaymentWebView({ route, navigation }) {
         </View>
     )
 }
+
+
+export default React.memo(FlightPaymentWebView)

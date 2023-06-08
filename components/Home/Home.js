@@ -51,19 +51,11 @@ const Home = ({ navigation }) => {
         <Text style={style.bannerTd}>Explore the  World with us</Text>
         <View style={style.bannerBtns}>
           <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('Hotel')}>
-            {/* <View style={style.bannerBtnsGrid}>
-              <View style={style.bannerBtnsIcon}>
-                <FontAwesome5 style={style.bannerBtnIconIn} name='hotel' />
-                </View>
-              <Text style={style.bannerBtnsTd}>Hotels</Text>
-            </View> */}
+         
             <HotelHome/>
           </TouchableHighlight>
           <TouchableHighlight underlayColor={"transparent"} onPress={() => navigation.navigate('flight')}>
-            {/* <View style={style.bannerBtnsGrid}>
-              <View style={style.bannerBtnsIcon}><MaterialCommunityIcons style={style.bannerBtnIconIn} name='airplane' /></View>
-              <Text style={style.bannerBtnsTd}>Flights</Text>
-            </View> */}
+            
             <FlightHome/>
           </TouchableHighlight>
         </View>
@@ -102,10 +94,7 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
   },
-  // PopularPlaceCard: {
-  //   // width: width * 0.4,
-  //   marginRight: 20
-  // },
+
   PopularPlaceHeadmore: {
     fontFamily: font.fontSemi,
     color: '#FE712A',
@@ -172,4 +161,4 @@ const style = StyleSheet.create({
     fontSize: 40,
   },
 })
-export default Home;
+export default React.memo(Home);

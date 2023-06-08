@@ -128,7 +128,6 @@ function FlightFilter(props) {
                     left: 0,
                     right: 0,
                 }}/>
-            {/* <View style={styles.modalContainer}> */}
          
                   <ScrollView style={styles.filterModelSec}>
                   <View style={{ padding: 10, borderRadius: 20,paddingBottom:30}}>
@@ -136,7 +135,6 @@ function FlightFilter(props) {
                         <View style={{ height: 0.5, backgroundColor: 'grey' }} />
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', paddingTop: 5, paddingHorizontal: 5 }}>
                             <Text style={styles.FilterTitle}>Price</Text>
-                            {/* <Text style={styles.priceRangeText}>{priceRange?.min}</Text> */}
                         </View>
                         <View style={{ alignItems: 'center' }}>
                             <MultiSlider
@@ -202,7 +200,6 @@ function FlightFilter(props) {
                                     {cabin.map((item, index) => (
                                         <View style={styles.radioButtonContainer} key={index}>
                                             <TouchableOpacity onPress={() => onRadioBtnClick(index)} style={styles.radioButton}>
-                                                {/* <View style={styles.radioButtonIcon} /> */}
 
                                                 {
                                                     (cabinIndex === index) ?
@@ -261,7 +258,6 @@ function FlightFilter(props) {
                         </View>
                     </View>
                   </ScrollView>
-            {/* </View> */}
         </View>
     )
 }
@@ -354,4 +350,4 @@ const styles = StyleSheet.create({
 })
 
 
-export default FlightFilter
+export default React.memo(FlightFilter)

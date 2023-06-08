@@ -505,7 +505,6 @@ const Flight = ({ navigation }) => {
                                 width: width * 0.5,
                                 paddingTop: -15,
                                 paddingBottom: 0,
-                                // backgroundColor:'red'
                               }}
                             />
 
@@ -730,7 +729,7 @@ const Flight = ({ navigation }) => {
   )
 }
 
-export default Flight
+export default React.memo(Flight)
 
 
 const style = StyleSheet.create({

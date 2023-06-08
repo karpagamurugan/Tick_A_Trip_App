@@ -61,7 +61,7 @@ const Login = ({ navigation }) => {
                       });
                 
                 } else {
-                    console.log(false);
+
                 }
                 }) 
             
@@ -70,7 +70,6 @@ const Login = ({ navigation }) => {
 
 
             const onFBButtonPress=()=>{
-                console.log('fb....')
             }
         
  
@@ -110,7 +109,6 @@ const Login = ({ navigation }) => {
                 <View style={style.SocialLogin}>
 
                     <TouchableHighlight underlayColor={'transparent'} 
-                    // onPress={()=>navigation.navigate('google',googleURL=`${state?.googleLoginUrl}`)}
                     onPress={()=>onGoogleButtonPress()}
                    >
                     <View style={style.socialIconBox}><Image style={style.SocialLoginIcon} source={require('../../Assert/Images/icon/google.png')} /></View>
@@ -174,7 +172,6 @@ const Login = ({ navigation }) => {
                                     onChangeText={value => onChange(value)}
                                     textContentType="newPassword"
                                     secureTextEntry={showPass}
-                                    //  style={style.LoginInput}
                                     placeholder="Enter the password" 
                                     placeholderTextColor={'grey'}
                                     />
@@ -195,13 +192,9 @@ const Login = ({ navigation }) => {
                     </View>
 
                     <View style={style.fogetPassword}>
-                        {/* <TouchableHighlight underlayColor={'transparent'} onPress={()=>navigation.navigate('ForgetVerify')}> */}
                         <TouchableHighlight underlayColor={'transparent'} onPress={()=>navigation.navigate('ForgetVerify')}>
                             <Text style={style.forgetText}>Forgot Password</Text>
                         </TouchableHighlight>
-                        {/* <TouchableHighlight underlayColor={'transparent'}>
-                            <Text style={style.forgetText}>SEND OTP</Text>
-                        </TouchableHighlight> */}
                     </View>
                     <View style={style.LoginBtnSec}>
                         <TouchableHighlight underlayColor={'transparent'} style={style.btnLogin} onPress={handleSubmit(onSubmit)}>
@@ -281,15 +274,12 @@ const style = StyleSheet.create({
     SplashBgImage: {
         width: width,
         height: height,
-        // display: 'flex',
         alignItems: 'center'
     },
     BrandLogoSplash: {
         width: '60%',
         height: '20%',
         resizeMode: 'contain',
-        // marginBottom: 30,
-        // backgroundColor:'white'
     },
     SocialLogin: {
         flexDirection: 'row'
@@ -299,7 +289,6 @@ const style = StyleSheet.create({
         width: 40,
         height: 40,
         marginLeft: 10,
-        // display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 7,

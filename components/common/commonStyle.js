@@ -20,7 +20,6 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        // borderColor: '#babab8',
         paddingVertical: 10,
     },
     HotelPopularList: {
@@ -35,9 +34,6 @@ const style = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'flex-end',
         justifyContent: 'space-between',
-        // borderRadius:20
-        // borderTopLeftRadius:10,
-        // borderTopRightRadius:10
     },
     hotelListCardReview: {
         flexDirection: 'row',
@@ -58,7 +54,6 @@ const style = StyleSheet.create({
     hotelListLocName: {
         fontFamily: FONTS.mediam,
         fontSize: 13,
-        // flex:1
     },
     ListHotelName: {
         fontFamily: FONTS.fontSemi,
@@ -272,8 +267,6 @@ const style = StyleSheet.create({
         borderColor:'#FFCC00',
     },
     AlertBoxHead:{
-        // borderBottomWidth:1,
-        // borderBottomColor:color.borderColor,
         textAlign:'center',
         color:COLORS.colorBtn,
         fontFamily:FONTS.mediam,

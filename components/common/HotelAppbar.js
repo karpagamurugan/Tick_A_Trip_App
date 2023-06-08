@@ -31,7 +31,6 @@ export default function HotelAppbar({ title }) {
                         borderBottomRightRadius: 40,
                     }]}>
                         <TouchableHighlight underlayColor={'transparent'} onPress={() => navigation.goBack()}>
-                            {/* <BackArrow height={18} width={18} /> */}
                             <MaterialIcon name='arrow-back-ios' color={COLORS.borderColor} size={height * 0.027} style={{ marginLeft: 8 }} />
 
                         </TouchableHighlight>
@@ -40,10 +39,7 @@ export default function HotelAppbar({ title }) {
                             <Hotel height={30} width={30} />
                             <Text style={{ fontSize: height * 0.013, color: COLORS.BtnColorDark, fontFamily: FONTS.font }}>Hotels</Text>
                         </View>
-                        {/* <View style={styles.searchCity}>
-                    <Text style={styles.searchIn}>{RoomGuestPlace?.Place}</Text>
-                    <Text style={styles.searchCount}>{RoomGuestPlace?.room} , { RoomGuestPlace?.Guest}</Text>
-                </View> */}
+                     
                         <View style={{ width: 10 }} />
 
                         <Text style={{ fontFamily: FONTS.fontBold, color: COLORS.bg, fontSize: height * 0.03, paddingLeft: 20 }}>{title}</Text>

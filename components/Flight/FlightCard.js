@@ -58,13 +58,7 @@ function timeConvert(n) {
                                 )
                                     ?.format("HH:mm:ss a")
                                     .substring(0, 5)}</Text>
-                                {/* <Text style={styles.Textlite}>{moment(
-                                    data.flights[0].flightList
-                                        .DepartureDateTime
-                                )
-                                    ?.format("HH:mm:ss a")
-                                    .substring(9, 11)
-                                    ?.toUpperCase()}</Text> */}
+                               
                             </View>
                             <FromArrow />
                             <View style={{ alignItems: 'center' }}>
@@ -110,14 +104,7 @@ function timeConvert(n) {
                                 )
                                     ?.format("HH:mm:ss a")
                                     .substring(0, 5)}</Text>
-                                {/* <Text style={styles.Textlite}>{moment(
-                                    data.flights[
-                                        data.flights.length - 1
-                                    ].flightList.ArrivalDateTime
-                                )
-                                    ?.format("hh:mm:ss a")
-                                    .substring(9, 11)
-                                    ?.toUpperCase()}</Text> */}
+                             
                             </View>
                         </View>
                     ))
@@ -196,9 +183,7 @@ const styles = StyleSheet.create({
 
     },
     filterApply: {
-        // alignItems: 'center',
         backgroundColor: COLORS.colorBtn,
-        // marginHorizontal: 20,
         marginVertical: 5,
         borderRadius: 5
     },
@@ -216,4 +201,4 @@ const styles = StyleSheet.create({
 
 
 })
-export default FlightCard
+export default React.memo(FlightCard)

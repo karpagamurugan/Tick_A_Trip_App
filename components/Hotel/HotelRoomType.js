@@ -7,7 +7,6 @@ import HotelAppbar from '../common/HotelAppbar'
 import HotelRoomTypeCard from './HotelRoomTypeCard'
 
 const HotelRoomType = ({navigation,route}) => {
-    // const {detail}=props
 
     const { HotelRoomType } = useSelector((state) => state.HotelReducer)
     
@@ -30,4 +29,4 @@ const HotelRoomType = ({navigation,route}) => {
     )
 }
 
-export default HotelRoomType
+export default React.memo(HotelRoomType)

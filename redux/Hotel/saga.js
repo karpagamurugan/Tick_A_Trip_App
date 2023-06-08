@@ -226,7 +226,6 @@ const setHotelBooking = function* (data) {
 
 
 const getHotelBookingDetail = function* (data) {
-    // yield put({ type: CommonAction.HOTEL_LOADER, payload: true })
     const { payload, navigation } = data
     try {
         const result = yield call(() =>
@@ -242,7 +241,6 @@ const getHotelBookingDetail = function* (data) {
             )
         );
         if (result.data.status === true) {
-            // navigation.navigate('hotelBookingConfirm')
             yield put({ type: actions.SET_HOTEL_BOOKING_DETAIL, payload: result.data.message });
             yield put({ type: CommonAction.HOTEL_LOADER, payload: false })
         } else {

@@ -21,7 +21,6 @@ function HotelBookingConfirm() {
     return (
 
         <View style={{ backgroundColor: 'white' }}>
-            {/* <Text>Booking Confirm</Text> */}
             <Appbar title={'Your booking information'} />
             <View style={{height:height *0.83}}>
             <ScrollView keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
@@ -39,8 +38,7 @@ function HotelBookingConfirm() {
                                     <Text  style={style.from}>Check In</Text>
                                     <Text style={[style.Depature,{fontSize:height*0.025}]}>{moment(BookingInfo?.check_in).format('dd M yyyy')}</Text>
                                 </View>
-                                {/* <FlightBg/> */}
-                                {/* <FlightImg /> */}
+                             
                                 <View>
                                     <Text style={style.from}>CheckOut</Text>
                                     <Text style={[style.Depature,{fontSize:height*0.025}]}>{moment(BookingInfo?.check_out).format('dd M yyyy')}</Text>
@@ -53,13 +51,11 @@ function HotelBookingConfirm() {
                             <View>
                                     <Text style={style.from}>Hotel Name</Text>
                                     <Text style={[style.Depature,{fontSize:height*0.023}]}>
-                                        {/* {BookingInfo?.roomBookDetails?.currency}  */}
                                         {BookingInfo?.hotel_name}</Text>
                                 </View>
                             <View>
                                     <Text style={style.from}>Total Price</Text>
                                     <Text style={[style.Depature,{fontSize:height*0.023}]}>
-                                        {/* {BookingInfo?.roomBookDetails?.currency}  */}
                                     {BookingInfo?.net_price}</Text>
                                 </View>
                                 <View>
@@ -83,104 +79,7 @@ function HotelBookingConfirm() {
         </View>
 
 
-        // <View style={{ backgroundColor: 'white', height: height }}>
-        //     {/* <Text>Booking Confirm</Text> */}
-        //     <Appbar title={'Your ticket information'} />
-
-
-        //     <View>
-        //         <ScrollView>
-        //             <View style={style.contentTitle}>
-        //                 <View>
-        //                     <Text style={style.subTitle}>
-        //                         TravelDate
-        //                     </Text>
-        //                     <Text style={style.dateText}>
-        //                         30 Sep 22
-        //                     </Text>
-        //                 </View>
-        //                 <View style={{ height: height * 0.05, width: 2.5, backgroundColor:COLORS.TextGrey }} />
-        //                 <View>
-        //                     <Text style={style.subTitle}>Flight Company</Text>
-        //                     <View style={style.flightText}>
-        //                         {/* <Text>img</Text> */}
-        //                         <View style={{backgroundColor:'red',height:25,width:25,borderRadius:50,elevation:10,shadowColor:COLORS.BtnColor}}/>
-        //                         <Text style={style.dateText}>
-        //                             Indio
-        //                         </Text>
-        //                     </View>
-        //                 </View>
-
-        //             </View>
-
-        //             <View style={style.bgStyle}>
-        //                 <View style={{ alignItems: 'center',paddingTop:10 }}>
-        //                     <Success />
-        //                     <Text style={style.booking}>BOOKING CONFIRMED</Text>
-        //                 </View>
-
-        //                 <View style={style.subContainer}>
-        //                     <View style={{ flexDirection: 'row', justifyContent: 'space-between',paddingHorizontal:10 }}>
-        //                         <View>
-        //                             <Text  style={style.from}>from</Text>
-        //                             <Text style={style.Depature}>CBE</Text>
-        //                         </View>
-        //                         {/* <FlightBg/> */}
-        //                         <FlightImg />
-        //                         <View>
-        //                             <Text style={style.from}>to</Text>
-        //                             <Text style={style.Depature}>CBE</Text>
-        //                         </View>
-
-        //                     </View>
-
-        //                     <View style={{height:15}}/>
-
-
-        //                     <View style={style.contentView}>
-        //                         <View>
-        //                             <Text style={style.from}>Departure</Text>
-        //                             <Text style={[style.Depature,{fontSize:height*0.027}]}>8:00</Text>
-        //                         </View>
-        //                         <View>
-        //                             <Text style={style.from}>arrival</Text>
-        //                             <Text style={[style.Depature,{fontSize:height*0.027}]}>8:00</Text>
-        //                         </View>
-        //                     </View>
-
-
-
-        //                     <View style={style.contentView}>
-        //                         <View>
-        //                             <Text style={style.from}>Class</Text>
-        //                             <Text style={[style.Depature,{fontSize:height*0.027}]}>8:00</Text>
-        //                         </View>
-        //                         <View>
-        //                             <Text style={style.from}>arrival</Text>
-        //                             <Text style={[style.Depature,{fontSize:height*0.027}]}>8:00</Text>
-        //                         </View>
-        //                     </View>
-
-
-        //                     <View style={style.contentView}>
-        //                         <View>
-        //                             <Text style={style.from}>Flight No</Text>
-        //                             <Text style={[style.Depature,{fontSize:height*0.027}]}>8:00</Text>
-        //                         </View>
-        //                         <View>
-        //                             <Text style={style.from}>arrival</Text>
-        //                             <Text style={[style.Depature,{fontSize:height*0.027}]}>8:00</Text>
-        //                         </View>
-        //                     </View>
-                            
-
-
-        //                 </View>
-
-        //             </View>
-        //         </ScrollView>
-        //     </View>
-        // </View>
+        
     )
 }
 
@@ -210,8 +109,6 @@ const style = StyleSheet.create({
         shadowOpacity: 0.44,
         shadowRadius: 10.32,
         elevation: 16,
-        // shadowColor:COLORS.AppbarColor
-        // padding:10,
     },
     subContainer: {
         backgroundColor: 'white',
@@ -244,8 +141,6 @@ const style = StyleSheet.create({
         fontSize:height*0.03
     },
     contentView:{
-        // flexDirection:'row',
-        // justifyContent:'space-between',
         paddingHorizontal:10
     }
 

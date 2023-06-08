@@ -37,7 +37,6 @@ const HotelCard = (props) => {
                                     halfStar={<FontAwesome name={'star-half-empty'} style={[styles.myStarStyle]} />}
                                 />
                             </View>
-                            {/* <Text style={style.hotelListCardReviewBlog}>109 Trip Blogs</Text> */}
                         </View>
                     </ImageBackground>
                 </View>
@@ -56,7 +55,6 @@ const HotelCard = (props) => {
                                     value:val,
                                     navigation: navigation,
                                 })
-                                // navigation.navigate('HotelDetail', { data: val })
 
                             }} underlayColor={'transparent'}>
                                 <View style={style.hotelListCardHotelName} >
@@ -126,15 +124,11 @@ const styles = StyleSheet.create({
         textShadowColor: '#fff',
         textShadowOffset: { width: 100, height: 100 },
         textShadowRadius: 2,
-        // fontSize:20,
     },
     myEmptyStarStyle: {
         color: 'white',
     },
     hotelListCardImageBg: {
-        // borderTopLeftRadius:10,
-        // borderTopRightRadius:10
-        // borderRadius:20
         height: 200
     },
     hotelListCardCon: {
@@ -146,4 +140,4 @@ const styles = StyleSheet.create({
         backgroundColor: '#babab8',
     }
 });
-export default HotelCard
+export default React.memo(HotelCard)

@@ -45,7 +45,6 @@ function Flight({ navigation }) {
 
     },[])
 
-    // setting tab item backgroundColor
     const hadleClick = (index) => {
         setSelectedTab(index)
     }

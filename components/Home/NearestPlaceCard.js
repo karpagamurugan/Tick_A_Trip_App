@@ -13,12 +13,10 @@ const NearestPlaceCard = () => {
         <View style={style.PopularPlaceCard}>
             <View style={style.PopularPlaceCardImage}>
                 <Image style={style.PopularPlaceCardImageSingle} source={require('../../Assert/Images/pop.png')}  />
-                {/* <Text style={style.PopularPlaceCardImageRev}><Entypo style={style.PopularPlaceCardImageRevStart} name='star' />4.5 (42K)</Text> */}
             </View>
             <View style={style.PopularPlaceCardCont}>
                 <Text style={style.PopularPlaceCardCity}>Thailand Package</Text>
-                {/* <Text style={style.PopularPlaceCardStay}>3 Days 2 Nights</Text>
-                <Text style={style.PopularPlaceCardPrice}>$456.00</Text> */}
+              
             </View>
         </View>
     )
@@ -54,7 +52,6 @@ const style = StyleSheet.create({
         borderBottomLeftRadius: 10,
     },
     PopularPlaceCardImage: {
-        // position: 'relative',
         borderRadius:8 ,
         overflow: 'hidden',
         shadowColor: "#000",
@@ -78,4 +75,4 @@ const style = StyleSheet.create({
     },
     PopularPlaceCard:{marginHorizontal:15}
 })
-export default NearestPlaceCard
+export default React.memo(NearestPlaceCard)

@@ -44,10 +44,7 @@ const AddTravellerForm = ({ navigation, route }) => {
     const [maxAgeLimit, setMaxAgeLimit] = useState('');
 
 
-    const handleDebugger = useCallback(
-        debounce((e) => console.log(e), 400)
-        , []);
-
+  
     const handleSelectionCode = (e) => {
         Keyboard.dismiss()
         setSelectedCountryCode(selectedCountryCode = { CountryCode: e.dial_code + "-" + e.name, IssuingName: '', Nationality: '', });
@@ -57,8 +54,6 @@ const AddTravellerForm = ({ navigation, route }) => {
             payload: []
         })
         setTravelRec(travelRec = { CountryCode: true, IssuingName: travelRec.IssuingName, Nationality: travelRec.Nationality });
-        handleDebugger()
-
 
     }
     const handleSelectIssuing = (e) => {
@@ -70,7 +65,6 @@ const AddTravellerForm = ({ navigation, route }) => {
             payload: []
         })
         setTravelRec(travelRec = { CountryCode: travelRec.CountryCode, IssuingName: true, Nationality: travelRec.Nationality });
-        handleDebugger()
     }
 
     const handleSelectNationality = (e) => {
@@ -82,7 +76,6 @@ const AddTravellerForm = ({ navigation, route }) => {
             payload: []
         })
         setTravelRec(travelRec = { CountryCode: travelRec.CountryCode, IssuingName: travelRec.IssuingName, Nationality: true });
-        handleDebugger()
     }
 
     const AdultTypes = (item) => {
@@ -98,7 +91,6 @@ const AddTravellerForm = ({ navigation, route }) => {
                 mm = '0' + mm
             }
             today = yyyy + '-' + mm + '-' + dd;
-            // const str = "2020-06-11";
             const dateadult = new Date(today);
             setDobDate(dateadult)
             setMaxAgeLimit(dateadult);
@@ -148,7 +140,6 @@ const AddTravellerForm = ({ navigation, route }) => {
             }
             todayI = yyyyI + '-' + mmI + '-' + ddI;
             const date4 = new Date(todayI);
-            // setDobDate(date4)
             setMinAgeLimit(date4)
             setMaxAgeLimit(new Date())
         }
@@ -185,7 +176,6 @@ const AddTravellerForm = ({ navigation, route }) => {
                 email: data.email,
                 area_code: data.phoneCode,
                 dob: moment(data.dobDate).format('YYYY-MM-DD'),
-                // phone_code: data.phoneCode,
                 phone: data.mobileNumber,
                 passport: data.passportNumber,
                 expire_date: moment(data.passportExDate).format('YYYY-MM-DD'),
@@ -328,7 +318,6 @@ const AddTravellerForm = ({ navigation, route }) => {
                                         {...register("nametitle")}
                                         onChange={(item) => {
                                             onChange(item.value)
-                                            //setTitle(item.value)
                                         }}
                                         selectedTextProps={{
                                             style: {
@@ -921,7 +910,6 @@ const AddTravellerForm = ({ navigation, route }) => {
                                                         type: userAction.GET_ADD_TRAVELLER_NATIONALITY,
                                                         payload: []
                                                     })
-                                                    // setTravelRec(travelRec = { selectedIssuing: true, CountryCode: travelRec.IssuingName, Nationality: travelRec.Nationality })
                                                 }}
                                             >
                                                 <AntIcon name="closecircle" size={15} color="gray" style={{
@@ -1041,8 +1029,6 @@ const AddTravellerForm = ({ navigation, route }) => {
                     </View>
                 </ScrollView>
                 <Controller
-                    // min={maxAgeLimit}
-                    // max={maxAgeLimit}
                     control={control}
                     name="dob"
                     rules={{
@@ -1055,7 +1041,6 @@ const AddTravellerForm = ({ navigation, route }) => {
                         <DatePicker
                             maximumDate={maxAgeLimit}
                             minimumDate={minAgeLimit}
-                            // minimumDate={maxAgeLimit}   
                             modal
                             open={open}
                             date={dobDate}

@@ -139,15 +139,11 @@ function UpdateProfile({ navigation }) {
                     type: res?.assets[0]?.type,
                     name: res?.assets[0].fileName,
                 })
-
-                // setImageUri(res?.assets[0]?.uri)
             }
         });
     }
 
     return (
-        // <KeyboardAvoidingView enabled style={{ height: height }} behavior={Platform.OS === 'ios' ? 'padding' : null}>
-
         <View style={styles.mainContainer}>
             <View style={styles.modalMainContainer}>
                 <Appbar title={'Edit Profile'} />
@@ -469,10 +465,6 @@ function UpdateProfile({ navigation }) {
                 />
             </View>
         </View>
-
-
-        // </KeyboardAvoidingView>
-
     )
 }
 

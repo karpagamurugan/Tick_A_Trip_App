@@ -50,7 +50,6 @@ const getAirportnameList = function* (data) {
 
 const FlightSearch = function* (data) {
     const { payload } = data
-
     try {
         const result = yield call(() =>
             axios.post(
@@ -63,8 +62,6 @@ const FlightSearch = function* (data) {
             }
             )
         );
-
-
         if (result?.data?.status === true) {
             let a = result?.data?.message.map(el => {
                 return {
@@ -115,6 +112,7 @@ const FlightSearch = function* (data) {
             yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: result?.data?.message?.errors } })
         }
     } catch (err) {
+        console.log('errrr',err)
         yield put({ type: CommonAction.SET_ALERT, payload: { status: true, message: err } })
         yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
     }
@@ -267,7 +265,6 @@ const getFlightTrips = function* (data) {
         if (result?.data?.status === true) {
             yield put({ type: actions.GET_FLIGHT_TRIPS_DETAIL, payload: result?.data });
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
-            // navigation.navigate('flightBookingConfirm')
         } else {
             yield put({ type: CommonAction.FLIGHT_LOADER, payload: false })
 
