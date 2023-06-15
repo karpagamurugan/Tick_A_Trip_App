@@ -34,11 +34,11 @@ import axios from "axios";
 let height = Dimensions.get('window').height;
 let width = Dimensions.get('window').width;
 
- function FlightBooking({ navigation, route }) {
+function FlightBooking({ navigation, route }) {
     const dispatch = useDispatch()
 
     const { get_Revalidate, } = useSelector((state) => state.FlightSearchReducer) //flight revalidation
-    const { AddTravaller_nationality, travelers_list, userProfileData, isLogin, AddTravaller_country_issuing,flight_Coupons} = useSelector((state) => state.userReducer) //get user data
+    const { AddTravaller_nationality, travelers_list, userProfileData, isLogin, AddTravaller_country_issuing, flight_Coupons } = useSelector((state) => state.userReducer) //get user data
 
     const { handleSubmit, register, control, formState: { errors }, reset, setValue } = useForm(); //controller for contact details
     const { register: register2, formState: { errors: errors2 }, handleSubmit: handleSubmit2, control: control2, reset: reset2, setValue: setValue2 } = useForm(); //controller for traveller detail
@@ -198,11 +198,11 @@ let width = Dimensions.get('window').width;
         }
         setTravellerSelectType(list)
 
-        if(filteredAdultList?.length === parseInt(adult) &&filteredChildList?.length === parseInt(child) 
-        &&filteredInfantList?.length === parseInt(infant)){
+        if (filteredAdultList?.length === parseInt(adult) && filteredChildList?.length === parseInt(child)
+            && filteredInfantList?.length === parseInt(infant)) {
             setShowAddTraveller(false)
 
-        }else{
+        } else {
             setShowAddTraveller(true)
         }
 
@@ -228,7 +228,7 @@ let width = Dimensions.get('window').width;
 
         setAllTravellerList(allTravellerList = tempList)
         setFlightInfoType(flightInfoType = { flightAdultList: adultList?.length, flightChildList: childList?.length, flightInfantList: infantList?.length })
-       
+
         TypeDropDownList()
     }
 
@@ -262,11 +262,11 @@ let width = Dimensions.get('window').width;
 
     const EditTravelDetails = (item, index) => {
 
-        if(item?.type?.toLowerCase() ==='adult'){
-            travellerSelectType.push({ name: 'Adult', value: 'Adult' } )
-        }else if(item?.type?.toLowerCase() ==='child'){
+        if (item?.type?.toLowerCase() === 'adult') {
+            travellerSelectType.push({ name: 'Adult', value: 'Adult' })
+        } else if (item?.type?.toLowerCase() === 'child') {
             travellerSelectType.push({ name: 'Child', value: 'Child' })
-        }else if(item?.type?.toLowerCase() ==='infant'){
+        } else if (item?.type?.toLowerCase() === 'infant') {
             travellerSelectType.push({ name: 'Infant', value: 'Infant' })
         }
 
@@ -280,27 +280,29 @@ let width = Dimensions.get('window').width;
         let addTravelLastName = { lastName: item.last_name }
         let addTravelnametitle = { nametitle: item.title }
         let addTravelselectedType = { selectedType: item.type }
-        let addTraveldob = { dob: item.dob}
-        let addTravelselectedgender='';
+        let addTraveldob = { dob: item.dob }
+        let addTravelselectedgender = '';
         setSelectedNationality({ getSelectId: item.nationality.id, Nationality: item.nationality.name })
         setSelectedIssueCtry({ getSelectId: item.issueCtry, issueCtry: item.issueCtry })
         setTravelRec({ Nationality: true })
         setShowissueCtry({ issueCtry: true })
         setDobDate(item.dob)
-        setTitle(title=item.title)
-        setSelectType(selectType=item.type)
+        setTitle(title = item.title)
+        setSelectType(selectType = item.type)
         if (item?.gender?.toLowerCase() === 'm') {
             setGender('Male')
-             addTravelselectedgender = { selectedgender: 'Male' }
+            addTravelselectedgender = { selectedgender: 'Male' }
         } else if (item?.gender?.toLowerCase() === 'f') {
             setGender('Female')
-             addTravelselectedgender = { selectedgender: 'Female' }
+            addTravelselectedgender = { selectedgender: 'Female' }
         } else {
-            setGender(gender=item.gender)
-             addTravelselectedgender = { selectedgender: item.gender }
+            setGender(gender = item.gender)
+            addTravelselectedgender = { selectedgender: item.gender }
         }
-        reset({ ...addTravelFirstName, ...addTravelLastName,...addTravelnametitle
-            ,...addTravelselectedgender,...addTraveldob,...addTravelselectedType })
+        reset({
+            ...addTravelFirstName, ...addTravelLastName, ...addTravelnametitle
+            , ...addTravelselectedgender, ...addTraveldob, ...addTravelselectedType
+        })
     }
 
 
@@ -315,7 +317,7 @@ let width = Dimensions.get('window').width;
             nationality: getSelectId?.Nationality,
             passport: data?.PassNo,
             expDate: data?.expDate,
-            issueCtry:getSelectIssueId.issueCtry
+            issueCtry: getSelectIssueId.issueCtry
         }
 
         TypeDropDownList()
@@ -331,10 +333,12 @@ let width = Dimensions.get('window').width;
         let addTravelLastName = { lastName: '' }
         let addTravelnametitle = { nametitle: '' }
         let addTravelselectedType = { selectedType: '' }
-        let addTraveldob = { dob: ''}
-        let addTravelselectedgender='';
-        reset({ ...addTravelFirstName, ...addTravelLastName,...addTravelnametitle,
-        ...addTravelselectedType,...addTraveldob,...addTravelselectedgender })
+        let addTraveldob = { dob: '' }
+        let addTravelselectedgender = '';
+        reset({
+            ...addTravelFirstName, ...addTravelLastName, ...addTravelnametitle,
+            ...addTravelselectedType, ...addTraveldob, ...addTravelselectedgender
+        })
     }
 
 
@@ -448,19 +452,19 @@ let width = Dimensions.get('window').width;
 
     const TravellerAddBtn = (data) => {
 
-            var AddedAdult = {
-                type: data?.selectedType,
-                title: data?.nametitle,
-                first_name: data?.firstName,
-                last_name: data?.lastName,
-                gender: data?.selectedgender,
-                dob: data?.dob,
-                nationality: getSelectId?.Nationality,
-                passport: data?.PassNo,
-                expDate: data?.expDate,
-                issueCtry:getSelectIssueId.issueCtry
-            }
-      
+        var AddedAdult = {
+            type: data?.selectedType,
+            title: data?.nametitle,
+            first_name: data?.firstName,
+            last_name: data?.lastName,
+            gender: data?.selectedgender,
+            dob: data?.dob,
+            nationality: getSelectId?.Nationality,
+            passport: data?.PassNo,
+            expDate: data?.expDate,
+            issueCtry: getSelectIssueId.issueCtry
+        }
+
         setAllTravellerList(allTravellerList = [...allTravellerList, AddedAdult])
 
         dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Traveller added Successfully' } })
@@ -490,253 +494,253 @@ let width = Dimensions.get('window').width;
             dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Accept the Privacy Policy' } })
         } else {
 
-        var AdultList =[];
-        var ChildList=[];
-        var InfantList=[];
+            var AdultList = [];
+            var ChildList = [];
+            var InfantList = [];
 
-        allTravellerList?.filter((e)=>{
-            if(e?.type.toLowerCase() === 'adult'){
-                AdultList.push(e)
-            }
-            if(e?.type.toLowerCase() === 'child'){
-                ChildList.push(e)
-            }
-            if(e?.type.toLowerCase() === 'infant'){
-                InfantList.push(e)
-            }
-        })
-
-        let price =parseInt(totalFare?.MainTotalFare)
-        let bookingData = {
-            customerName: data?.Name,
-            customerEmail: data?.Email,
-            customerPhone: data?.Phone,
-            area_code:  758,
-            isRefundable:get_Revalidate?.IsRefundable,
-            country_code:data?.CountryCode,
-            first_name: AdultList
-              ?.map((val) => val.first_name)
-              .reduce((total, value, index) => {
-                return index === 0 ? value : total + "<br>" + value;
-              }),
-            last_name: AdultList
-              ?.map((val) => val.last_name)
-              .reduce((total, value, index) => {
-                return index === 0 ? value : total + "<br>" + value;
-              }),
-            email_id: data.Email,
-            mobile_no: data.Phone,
-            dob: AdultList
-              ?.map((val) => moment(val.dob).format('YYYY-MM-DDThh:mm:ss'))
-              .reduce((total, value, index) => {
-                return index === 0 ? value : total + "<br>" + value;
-              }),
-            gender: AdultList
-              ?.map((val) => val.gender)
-              .reduce((total, value, index) => {
-                return index === 0 ? value : total + "<br>" + value;
-              }),
-            type: get_Revalidate?.FareType,
-            IsPassportMandatory:get_Revalidate?.IsPassportMandatory,
-            adult_flight: adult,
-            child_flight: child,
-            infant_flight: infant,
-            fare_source_code:  get_Revalidate?.FareSourceCode,
-            totalFare:get_Revalidate?.BaseFareAmount,
-            taxes:get_Revalidate?.TotalTaxAmount,
-            couponDiscount:parseFloat(discountPrice ??'0').toFixed(0),
-            totalAmount:price,
-            currency:CURRENCY,
-            PostCode:  data?.PostalCode,
-          };
-          bookingData['title'] = AdultList
-            ?.map((val) => val.title)
-            .reduce((total, value, index) => {
-              return index === 0 ? value : total + "<br>" + value;
-            });
-          if (get_Revalidate?.IsPassportMandatory) {
-            bookingData['issue_country'] = AdultList
-              ?.map((val) => val.issueCtry)
-              .reduce((total, value, index) => {
-                return index === 0 ? value : total + "<br>" + value;
-              });
-          }
-          bookingData['nationality'] = AdultList
-            ?.map((val) => val.nationality)
-            .reduce((total, value, index) => {
-              return index === 0 ? value : total + "<br>" + value;
-            });
-          if (get_Revalidate?.IsPassportMandatory) {
-            bookingData['passport_no'] = AdultList
-              ?.map((val) => val?.passport)
-              .reduce((total, value, index) => {
-                return index === 0 ? value : total + "<br>" + value;
-              });
-            bookingData['passport_expiry'] = AdultList
-              ?.map((val) => moment(val?.expDate).format('YYYY-MM-DD'))
-              .reduce((total, value, index) => {
-                return index === 0 ? value : total + "<br>" + value;
-              });
-          }
-          if (child > 0) {
-            bookingData['child_dob'] =
-              ChildList?.length === 0
-                ? ""
-                : ChildList
-                  ?.map((val) => (val.dob))
-                  .reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            bookingData['child_gender'] =
-            ChildList?.length === 0
-                ? ""
-                : ChildList
-                  ?.map((val) => val.gender)
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            bookingData['child_first_name'] =
-            ChildList?.length === 0
-                ? ""
-                : ChildList
-                  ?.map((val) => val.first_name)
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            bookingData['child_last_name'] =
-            ChildList?.length === 0
-                ? ""
-                : ChildList
-                  ?.map((val) => val.last_name)
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-      
-            bookingData['child_title'] =
-            ChildList?.length === 0
-                ? ""
-                : ChildList
-                  ?.map((val) => val.title)
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            if (get_Revalidate?.IsPassportMandatory) {
-              
-              bookingData['child_issue_country'] =
-              ChildList?.length === 0
-                  ? ""
-                  : ChildList
-                    ?.map((val) => val?.issueCtry)
-                    .reduce((total, value, index) => {
-                      return index === 0 ? value : total + "<br>" + value;
-                    });
-            }
-            if (get_Revalidate?.IsPassportMandatory) {
-              bookingData['child_passport_expiry_date'] = ChildList?.length === 0
-                ? ""
-                : ChildList
-                  ?.map((val) => moment(val.expDate).format('YYYY-MM-DD'))
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-              bookingData['child_passport_no'] = ChildList?.length === 0
-                ? ""
-                : ChildList
-                  ?.map((val) => val.passport)
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            }
-          }
-          if (infant > 0) {
-            bookingData['infant_dob'] =
-              InfantList?.length === 0
-                ? ""
-                : InfantList
-                  ?.map((val) => val.dob)
-                  .reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            bookingData['infant_gender'] =
-            InfantList?.length === 0
-                ? ""
-                : InfantList
-                  ?.map((val) => val.gender)
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            bookingData['infant_first_name'] =
-            InfantList?.length === 0
-                ? ""
-                : InfantList
-                  ?.map((val) => val.first_name)
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            bookingData['infant_last_name'] =
-            InfantList?.length === 0
-                ? ""
-                : InfantList
-                  ?.map((val) => val.last_name)
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            bookingData['infant_title'] =
-            InfantList?.length === 0
-                ? ""
-                : InfantList
-                  ?.map((val) => val.title)
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            if (get_Revalidate?.IsPassportMandatory) {
-              bookingData['infant_issue_country'] =
-              InfantList?.length === 0
-                  ? ""
-                  : InfantList
-                    ?.map((val) => val?.issueCtry)
-                    .reduce((total, value, index) => {
-                      return index === 0 ? value : total + "<br>" + value;
-                    });
-            }
-            if (get_Revalidate?.IsPassportMandatory) {
-              bookingData['infant_passport_expiry_date'] = InfantList?.length === 0
-                ? ""
-                : InfantList
-                  ?.map((val) =>moment(val.expDate).format('YYYY-MM-DD'))
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-              bookingData['infant_passport_no'] = InfantList?.length === 0
-                ? ""
-                : InfantList
-                  ?.map((val) => val.passport)
-                  ?.reduce((total, value, index) => {
-                    return index === 0 ? value : total + "<br>" + value;
-                  });
-            }
-          }
-                axios.post(
-                    `${API_URL}/revalidate`,
-                    {fare_source_code:get_Revalidate?.FareSourceCode}, {
-                    headers: {
-                        accept: 'application/json',
-                        'Content-Type': 'multipart/form-data',
-                    },
+            allTravellerList?.filter((e) => {
+                if (e?.type.toLowerCase() === 'adult') {
+                    AdultList.push(e)
                 }
-                ).then((result)=>{
-                    if (result?.data?.status === true) {
-                        dispatch({ type: FlightAction.GET_REVALIDATE, payload: result?.data?.message })
-                        dispatch({ type: FlightAction.GET_FLIGHT_CHECKOUT, payload: bookingData, navigation: navigation })
-                        dispatch({ type: CommonAction.FLIGHT_LOADER, payload: false })
-                    } else {
-                        dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Validation failed, Search again or try other flights' } })
-                        dispatch({ type: CommonAction.FLIGHT_LOADER, payload: false })
-                    }
-                })
+                if (e?.type.toLowerCase() === 'child') {
+                    ChildList.push(e)
+                }
+                if (e?.type.toLowerCase() === 'infant') {
+                    InfantList.push(e)
+                }
+            })
+
+            let price = parseInt(totalFare?.MainTotalFare)
+            let bookingData = {
+                customerName: data?.Name,
+                customerEmail: data?.Email,
+                customerPhone: data?.Phone,
+                area_code: 758,
+                isRefundable: get_Revalidate?.IsRefundable,
+                country_code: data?.CountryCode,
+                first_name: AdultList
+                    ?.map((val) => val.first_name)
+                    .reduce((total, value, index) => {
+                        return index === 0 ? value : total + "<br>" + value;
+                    }),
+                last_name: AdultList
+                    ?.map((val) => val.last_name)
+                    .reduce((total, value, index) => {
+                        return index === 0 ? value : total + "<br>" + value;
+                    }),
+                email_id: data.Email,
+                mobile_no: data.Phone,
+                dob: AdultList
+                    ?.map((val) => moment(val.dob).format('YYYY-MM-DDThh:mm:ss'))
+                    .reduce((total, value, index) => {
+                        return index === 0 ? value : total + "<br>" + value;
+                    }),
+                gender: AdultList
+                    ?.map((val) => val.gender)
+                    .reduce((total, value, index) => {
+                        return index === 0 ? value : total + "<br>" + value;
+                    }),
+                type: get_Revalidate?.FareType,
+                IsPassportMandatory: get_Revalidate?.IsPassportMandatory,
+                adult_flight: adult,
+                child_flight: child,
+                infant_flight: infant,
+                fare_source_code: get_Revalidate?.FareSourceCode,
+                totalFare: get_Revalidate?.BaseFareAmount,
+                taxes: get_Revalidate?.TotalTaxAmount,
+                couponDiscount: parseFloat(discountPrice ?? '0').toFixed(0),
+                totalAmount: price,
+                currency: get_Revalidate?.CurrencyCode,
+                PostCode: data?.PostalCode,
+            };
+            bookingData['title'] = AdultList
+                ?.map((val) => val.title)
+                .reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                });
+            if (get_Revalidate?.IsPassportMandatory) {
+                bookingData['issue_country'] = AdultList
+                    ?.map((val) => val.issueCtry)
+                    .reduce((total, value, index) => {
+                        return index === 0 ? value : total + "<br>" + value;
+                    });
+            }
+            bookingData['nationality'] = AdultList
+                ?.map((val) => val.nationality)
+                .reduce((total, value, index) => {
+                    return index === 0 ? value : total + "<br>" + value;
+                });
+            if (get_Revalidate?.IsPassportMandatory) {
+                bookingData['passport_no'] = AdultList
+                    ?.map((val) => val?.passport)
+                    .reduce((total, value, index) => {
+                        return index === 0 ? value : total + "<br>" + value;
+                    });
+                bookingData['passport_expiry'] = AdultList
+                    ?.map((val) => moment(val?.expDate).format('YYYY-MM-DD'))
+                    .reduce((total, value, index) => {
+                        return index === 0 ? value : total + "<br>" + value;
+                    });
+            }
+            if (child > 0) {
+                bookingData['child_dob'] =
+                    ChildList?.length === 0
+                        ? ""
+                        : ChildList
+                            ?.map((val) => (val.dob))
+                            .reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                bookingData['child_gender'] =
+                    ChildList?.length === 0
+                        ? ""
+                        : ChildList
+                            ?.map((val) => val.gender)
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                bookingData['child_first_name'] =
+                    ChildList?.length === 0
+                        ? ""
+                        : ChildList
+                            ?.map((val) => val.first_name)
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                bookingData['child_last_name'] =
+                    ChildList?.length === 0
+                        ? ""
+                        : ChildList
+                            ?.map((val) => val.last_name)
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+
+                bookingData['child_title'] =
+                    ChildList?.length === 0
+                        ? ""
+                        : ChildList
+                            ?.map((val) => val.title)
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                if (get_Revalidate?.IsPassportMandatory) {
+
+                    bookingData['child_issue_country'] =
+                        ChildList?.length === 0
+                            ? ""
+                            : ChildList
+                                ?.map((val) => val?.issueCtry)
+                                .reduce((total, value, index) => {
+                                    return index === 0 ? value : total + "<br>" + value;
+                                });
+                }
+                if (get_Revalidate?.IsPassportMandatory) {
+                    bookingData['child_passport_expiry_date'] = ChildList?.length === 0
+                        ? ""
+                        : ChildList
+                            ?.map((val) => moment(val.expDate).format('YYYY-MM-DD'))
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                    bookingData['child_passport_no'] = ChildList?.length === 0
+                        ? ""
+                        : ChildList
+                            ?.map((val) => val.passport)
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                }
+            }
+            if (infant > 0) {
+                bookingData['infant_dob'] =
+                    InfantList?.length === 0
+                        ? ""
+                        : InfantList
+                            ?.map((val) => val.dob)
+                            .reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                bookingData['infant_gender'] =
+                    InfantList?.length === 0
+                        ? ""
+                        : InfantList
+                            ?.map((val) => val.gender)
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                bookingData['infant_first_name'] =
+                    InfantList?.length === 0
+                        ? ""
+                        : InfantList
+                            ?.map((val) => val.first_name)
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                bookingData['infant_last_name'] =
+                    InfantList?.length === 0
+                        ? ""
+                        : InfantList
+                            ?.map((val) => val.last_name)
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                bookingData['infant_title'] =
+                    InfantList?.length === 0
+                        ? ""
+                        : InfantList
+                            ?.map((val) => val.title)
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                if (get_Revalidate?.IsPassportMandatory) {
+                    bookingData['infant_issue_country'] =
+                        InfantList?.length === 0
+                            ? ""
+                            : InfantList
+                                ?.map((val) => val?.issueCtry)
+                                .reduce((total, value, index) => {
+                                    return index === 0 ? value : total + "<br>" + value;
+                                });
+                }
+                if (get_Revalidate?.IsPassportMandatory) {
+                    bookingData['infant_passport_expiry_date'] = InfantList?.length === 0
+                        ? ""
+                        : InfantList
+                            ?.map((val) => moment(val.expDate).format('YYYY-MM-DD'))
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                    bookingData['infant_passport_no'] = InfantList?.length === 0
+                        ? ""
+                        : InfantList
+                            ?.map((val) => val.passport)
+                            ?.reduce((total, value, index) => {
+                                return index === 0 ? value : total + "<br>" + value;
+                            });
+                }
+            }
+            axios.post(
+                `${API_URL}/revalidate`,
+                { fare_source_code: get_Revalidate?.FareSourceCode }, {
+                headers: {
+                    accept: 'application/json',
+                    'Content-Type': 'multipart/form-data',
+                },
+            }
+            ).then((result) => {
+                if (result?.data?.status === true) {
+                    dispatch({ type: FlightAction.GET_REVALIDATE, payload: result?.data?.message })
+                    dispatch({ type: FlightAction.GET_FLIGHT_CHECKOUT, payload: bookingData, navigation: navigation })
+                    dispatch({ type: CommonAction.FLIGHT_LOADER, payload: false })
+                } else {
+                    dispatch({ type: CommonAction.SET_ALERT, payload: { status: true, message: 'Validation failed, Search again or try other flights' } })
+                    dispatch({ type: CommonAction.FLIGHT_LOADER, payload: false })
+                }
+            })
+        }
     }
-}
-   
+
     return (
         <View style={{ backgroundColor: 'white', flex: 1 }}>
             {/* appbar */}
@@ -745,34 +749,34 @@ let width = Dimensions.get('window').width;
                     <MaterialIcons name='keyboard-arrow-left' size={35} color={COLORS.textBlue} />
                 </TouchableHighlight>
                 <Flight height={34} width={34} />
-              
-                <View style={{flexDirection:'row',alignItems:'center'}}>
-                <View style={styles.appbarPlaceContainer}>
-                    <View style={{ paddingHorizontal: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', }}>
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <FromIcon height={15} width={15} />
-                            <View style={{ paddingLeft: 10 }}>
-                                <Text style={styles.appbarPlace}>{route?.params?.flightInfo?.fromCity}</Text>
+
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={styles.appbarPlaceContainer}>
+                        <View style={{ paddingHorizontal: 15, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-around', }}>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <FromIcon height={15} width={15} />
+                                <View style={{ paddingLeft: 10 }}>
+                                    <Text style={styles.appbarPlace}>{route?.params?.flightInfo?.fromCity}</Text>
+                                </View>
                             </View>
-                        </View>
 
-                        <View style={[styles.verticalLine]} />
+                            <View style={[styles.verticalLine]} />
 
-                        <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                            <ToIcon height={19} width={19} />
-                            <View style={{ paddingLeft: 10 }}>
-                                <Text style={styles.appbarPlace}>{route?.params?.flightInfo?.toCity}</Text>
+                            <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                <ToIcon height={19} width={19} />
+                                <View style={{ paddingLeft: 10 }}>
+                                    <Text style={styles.appbarPlace}>{route?.params?.flightInfo?.toCity}</Text>
+                                </View>
                             </View>
-                        </View>
 
+                        </View>
                     </View>
+                    <TouchableOpacity onPress={() => navigation.navigate('offers')} style={{ paddingLeft: 15 }}>
+                        <MaterialCommunityIcons name='brightness-percent' size={25} color='#4C94F2' />
+                        {(flight_Coupons?.length === 0) ? <></> : <View style={styles.offerDot}></View>}
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={() => navigation.navigate('offers')} style={{paddingLeft:15}}>
-                    <MaterialCommunityIcons name='brightness-percent' size={25} color='#4C94F2' />
-                    {(flight_Coupons?.length === 0) ? <></> : <View style={styles.offerDot}></View>}
-                </TouchableOpacity> 
-                </View>
-                
+
             </View>
             <ScrollView showsVerticalScrollIndicator={false} showsHorizontalScrollIndicator={false}>
                 <View>
@@ -830,7 +834,7 @@ let width = Dimensions.get('window').width;
                     <View style={styles.couponCode}>
                         <View style={{ flexDirection: 'row', justifyContent: "space-between", alignItems: 'center' }}>
                             <TextInput
-                                style={{ width: width * 0.75,height:height*0.045 }}
+                                style={{ width: width * 0.75, height: height * 0.045 }}
                                 placeholder='Add a coupon Code'
                                 onChangeText={e => {
                                     if (e?.length === 0) {
@@ -863,33 +867,33 @@ let width = Dimensions.get('window').width;
                     <View style={styles.bg}>
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Base Fare</Text>
-                            <Text style={styles.priceTag}><Text style={styles.price}>{get_Revalidate?.BaseFareAmount}/-</Text></Text>
+                            <Text style={styles.priceTag}>{get_Revalidate?.CurrencyCode} : <Text style={styles.price}>{get_Revalidate?.BaseFareAmount}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Taxes</Text>
-                            <Text style={styles.priceTag}> <Text style={styles.price}>{get_Revalidate?.TotalTaxAmount}/-</Text></Text>
+                            <Text style={styles.priceTag}>{get_Revalidate?.CurrencyCode} : <Text style={styles.price}>{get_Revalidate?.TotalTaxAmount}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
                         <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Discounts & {'\n'}Adjustments</Text>
-                            <Text style={styles.priceTag}> <Text style={styles.price}>{(discountPrice === '0') ? discountPrice : - discountPrice}/-</Text></Text>
+                            <Text style={styles.priceTag}>{get_Revalidate?.CurrencyCode} : <Text style={styles.price}>{(discountPrice === '0') ? discountPrice : - discountPrice}/-</Text></Text>
                         </View>
                         <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
 
-                        <View style={styles.amountContainer}>
+                        {/* <View style={styles.amountContainer}>
                             <Text style={styles.amountName}>Other charges</Text>
-                            <Text style={styles.priceTag}> <Text style={styles.price}>0/-</Text></Text>
+                            <Text style={styles.priceTag}>{get_Revalidate?.CurrencyCode} <Text style={styles.price}>0/-</Text></Text>
                         </View>
-                        <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} />
+                        <View style={{ backgroundColor: 'white', height: 0.5, opacity: 0.2, marginVertical: 7 }} /> */}
 
 
                         <View style={styles.total}>
                             <Text style={styles.totalText}>Total</Text>
                             <Text style={{ color: 'white', fontFamily: FONTS.fontBold }}>:</Text>
-                            <Text style={styles.priceTag}> {get_Revalidate?.CurrencyCode}  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{totalFare?.MainTotalFare}</Text></Text>
+                            <Text style={styles.priceTag}> {get_Revalidate?.CurrencyCode} :  <Text style={[styles.price, { fontSize: height * 0.03 }]}>{totalFare?.MainTotalFare}</Text></Text>
 
                         </View>
                     </View>
@@ -912,9 +916,9 @@ let width = Dimensions.get('window').width;
                             </TouchableOpacity>
                         }
                     </View>
-                    {(showAddTraveller === true)?
+                    {(showAddTraveller === true) ?
                         <View>
-                            <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
+                            <View style={[styles.editTextBorder, { paddingTop: Platform.OS === 'ios' ? 5 : 0 }]}>
                                 <Controller
                                     control={control}
                                     name="selectedType"
@@ -923,7 +927,7 @@ let width = Dimensions.get('window').width;
                                             value: true,
                                             message: "Select Your Type"
                                         }
-                                    }} 
+                                    }}
                                     render={({ field: { onChange, value } }) => (
                                         <Dropdown
                                             showsVerticalScrollIndicator={true}
@@ -962,7 +966,7 @@ let width = Dimensions.get('window').width;
                                 )}
                             </View>
                             <View style={{ flexDirection: "row", justifyContent: "space-between" }}>
-                                <View style={[styles.editTextBorder, {paddingTop:Platform.OS==='ios'?5:0,width:'24%'}]}>
+                                <View style={[styles.editTextBorder, { paddingTop: Platform.OS === 'ios' ? 5 : 0, width: '24%' }]}>
                                     <Controller
                                         control={control}
                                         name="nametitle"
@@ -994,7 +998,7 @@ let width = Dimensions.get('window').width;
                                                         paddingTop: 10,
                                                     },
                                                 }}
-                                                style={[styles.inputeEditor, { paddingHorizontal: 5}]}
+                                                style={[styles.inputeEditor, { paddingHorizontal: 5 }]}
                                                 renderRightIcon={() => (
                                                     <IoniconsIcon
                                                         name="chevron-down"
@@ -1066,7 +1070,7 @@ let width = Dimensions.get('window').width;
                                     <Text style={[styles.errormessage]}>{errors.lastName.message}</Text>
                                 )}
                             </View>
-                            <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
+                            <View style={[styles.editTextBorder, { paddingTop: Platform.OS === 'ios' ? 5 : 0 }]}>
                                 <Controller
                                     control={control}
                                     name="selectedgender"
@@ -1112,7 +1116,7 @@ let width = Dimensions.get('window').width;
                                     <Text style={[styles.errormessage, { paddingTop: 10, }]}>{errors.selectedgender.message}</Text>
                                 )}
                             </View>
-                            <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
+                            <View style={[styles.editTextBorder, { paddingTop: Platform.OS === 'ios' ? 5 : 0 }]}>
                                 <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowDatePicker(!showDatePicker)} style={{ paddingRight: 5 }}>
                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                         <Text style={{ color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
@@ -1122,11 +1126,11 @@ let width = Dimensions.get('window').width;
                                     </View>
                                 </TouchableHighlight>
                                 {errors.dob && (
-                                    <Text style={[styles.errormessage,{marginTop:10}]}>{errors.dob.message}</Text>
+                                    <Text style={[styles.errormessage, { marginTop: 10 }]}>{errors.dob.message}</Text>
                                 )}
                             </View>
                             <View>
-                                <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
+                                <View style={[styles.editTextBorder, { paddingTop: Platform.OS === 'ios' ? 5 : 0 }]}>
                                     <View
                                         style={{
                                             flexDirection: 'row',
@@ -1232,7 +1236,7 @@ let width = Dimensions.get('window').width;
                                                                     paddingHorizontal: 9,
                                                                     fontSize: 13,
                                                                     paddingVertical: 5,
-                                                                    fontFamily:FONTS.font
+                                                                    fontFamily: FONTS.font
                                                                 }}>{e?.name}</Text>
                                                         </TouchableHighlight>
                                                     )
@@ -1244,21 +1248,21 @@ let width = Dimensions.get('window').width;
                             </View>
                             <View>
                                 {
-                                    
+
                                     (get_Revalidate?.IsPassportMandatory) ?
                                         <View>
-                                            <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
+                                            <View style={[styles.editTextBorder, { paddingTop: Platform.OS === 'ios' ? 5 : 0 }]}>
                                                 <Controller
                                                     control={control}
                                                     name='PassNo'
-                                                    rules={(get_Revalidate?.IsPassportMandatory)?{
-                                                         
+                                                    rules={(get_Revalidate?.IsPassportMandatory) ? {
+
                                                         required: {
                                                             value: true,
                                                             message: "Enter Your Passport Number!"
                                                         }
-                                                    
-                                                    }:{}}
+
+                                                    } : {}}
                                                     render={({ field: { onChange, value } }) => (
                                                         <TextInput
                                                             placeholderTextColor={"gray"}
@@ -1278,7 +1282,7 @@ let width = Dimensions.get('window').width;
                                                     <Text style={[styles.errormessage]}>{errors.PassNo.message}</Text>
                                                 )}
                                             </View>
-                                            <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
+                                            <View style={[styles.editTextBorder, { paddingTop: Platform.OS === 'ios' ? 5 : 0 }]}>
                                                 <TouchableHighlight underlayColor={'transparent'} onPress={() => setShowEXPDatePicker(!showEXPDatePicker)} style={{ paddingRight: 5 }}>
                                                     <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                                                         <Text style={{ color: 'gray', paddingVertical: 10, paddingLeft: 7, }}>
@@ -1287,12 +1291,12 @@ let width = Dimensions.get('window').width;
                                                         <AntDesign Icon name="calendar" size={25} color="gray" />
                                                     </View>
                                                 </TouchableHighlight>
-                                                {(get_Revalidate?.IsPassportMandatory)?errors.expDate && (
-                                                    <Text style={[styles.errormessage,{marginTop:10}]}>{errors?.expDate?.message}</Text>
-                                                ):<></>}
+                                                {(get_Revalidate?.IsPassportMandatory) ? errors.expDate && (
+                                                    <Text style={[styles.errormessage, { marginTop: 10 }]}>{errors?.expDate?.message}</Text>
+                                                ) : <></>}
                                             </View>
                                             <View>
-                                                <View style={[styles.editTextBorder,{paddingTop:Platform.OS==='ios'?5:0}]}>
+                                                <View style={[styles.editTextBorder, { paddingTop: Platform.OS === 'ios' ? 5 : 0 }]}>
                                                     <View
                                                         style={{
                                                             flexDirection: 'row',
@@ -1450,7 +1454,7 @@ let width = Dimensions.get('window').width;
                     {allTravellerList?.map((item, index) => {
                         return (
                             <View key={index} style={[styles.travellerDetails, { marginBottom: 20 }]}>
-                                <View style={{ width:width*0.5,flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
+                                <View style={{ width: width * 0.5, flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center' }}>
                                     <View style={{ marginRight: 10 }}>
                                         <ProfileIcon height={22} width={22} />
                                     </View>
@@ -1525,12 +1529,12 @@ let width = Dimensions.get('window').width;
                 <Controller register
                     control={control}
                     name="expDate"
-                    rules={ (get_Revalidate?.IsPassportMandatory) ?{
+                    rules={(get_Revalidate?.IsPassportMandatory) ? {
                         required: {
                             value: true,
                             message: 'Select your Expiry Date!',
                         },
-                    }:{}}
+                    } : {}}
                     render={({ field: { onChange, value } }) => (
                         <DatePicker
                             minimumDate={new Date()}
@@ -1557,7 +1561,7 @@ let width = Dimensions.get('window').width;
                 onPress={handleSubmit2(ConfirmBooking)}>
                 <Text style={styles.confirmBook}>Confirm & Book</Text>
             </TouchableOpacity>
-           
+
         </View>
     )
 }
@@ -1601,7 +1605,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     confirmBook: { fontFamily: FONTS.mediam, color: 'white', fontSize: height * 0.027 },
-    editTextBorder: { backgroundColor: '#E9F3FF', borderWidth: 1, height: 50, borderRadius: 3, borderColor: '#2B64FF', marginBottom: 15, paddingHorizontal: 5,paddingTop:15 },
+    editTextBorder: { backgroundColor: '#E9F3FF', borderWidth: 1, height: 50, borderRadius: 3, borderColor: '#2B64FF', marginBottom: 15, paddingHorizontal: 5, paddingTop: 15 },
     formTitle: {
         fontSize: height * 0.020,
         color: '#2B64FF',
@@ -1650,7 +1654,7 @@ const styles = StyleSheet.create({
         borderRadius: 100,
         position: 'absolute',
         right: 0,
-    }
+    },
 })
 
 export default React.memo(FlightBooking)

@@ -23,9 +23,14 @@ import FlightFilter from './FlightFilter';
 import FlightCard from './FlightCard';
 import { forEach } from 'lodash';
 import CommonAction from '../../redux/common/actions';
+import { SvgUri, SvgXml } from 'react-native-svg';
+import axios from 'axios';
 
 var height = Dimensions.get('window').height;
 var width = Dimensions.get('window').width;
+
+
+
 
 function FlightResult({ navigation, route }) {
     const { Flight_search_result, Filtered_List } = useSelector((state) => state.FlightSearchReducer)
@@ -57,6 +62,24 @@ function FlightResult({ navigation, route }) {
         }
     }
 
+    const getSvg = async (uri) => {
+        const res = await axios.get(uri);
+        return res.data;
+    }
+
+    const SvgImageView = async ({url})=>{
+
+        const svgimg = await getSvg(url);
+        // axios.get(url).then((e)=>{svgimg=e?.data})
+
+        console.log('svgimg ',svgimg)
+
+        return (
+            <View>
+                {/* <SvgXml xml={svgimg} height={70} width={70}/> */}
+            </View>
+        )
+    }
     const FilterFlight = (min, max, Airline, cabin, stops) => {
         var tempAllFilterList = []
         var tempPriceList = []
@@ -270,83 +293,110 @@ function FlightResult({ navigation, route }) {
                                                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
                                                                 {
 
-                                                                    (e[0]?.flightUrl === null || e[0]?.flightUrl === undefined || e[0]?.flightUrl === '') ? <View style={{ height: 40, width: 40, borderRadius: 100, backgroundColor: 'red' }} />
-                                                                        : <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={{
-                                                                            uri: API_IMG_URL + '/server/flightimage/' + e[0]?.flightUrl
-                                                                        }} />
+                                                                    (e[0]?.flightUrl === null || e[0]?.flightUrl === undefined || e[0]?.flightUrl === '') ?
+                                                                        <View style={{ height: 40, width: 40, borderRadius: 100, backgroundColor: COLORS.textBlue }}>
+                                                                            <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={require('../../Assert/Icons/flight_offer.png')} />
+                                                                        </View>
+                                                                        :
+                                                                        (e[0]?.flightUrl.endsWith('.svg')) ?
+                                                                            <SvgUri
+                                                                                width={100}
+                                                                                height={100}
+                                                                                uri={API_IMG_URL + '/server/flightimage/' + e[0]?.flightUrl}
+                                                                            />
+
+                                                                            
+                                                                            // <SvgXml xml={getSvg(API_IMG_URL + '/server/flightimage/' + e[0]?.flightUrl)} height={50} width={50} />
+                                                                        //     <SvgUri
+                                                                        //     width="25%"
+                                                                        //     height="100%"
+                                                                        //     source={{uri:'https://tickatrip.travel/server/flightimage/1686747337Nouvelair-Logo.wine.svg'}}
+                                                                        //     // uri="https://tickatrip.travel/server/flightimage/1686747337Nouvelair-Logo.wine.svg"
+                                                                        //   />
+
+                                                                            :
+                                                                            <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={{
+                                                                                uri: API_IMG_URL + '/server/flightimage/' + e[0]?.flightUrl
+                                                                            }} />
+
+
+                                                                    // (e[0]?.flightUrl === null || e[0]?.flightUrl === undefined || e[0]?.flightUrl === '') ? <View style={{ height: 40, width: 40, borderRadius: 100, backgroundColor: 'red' }} />
+                                                                    //     : <Image style={{ height: 40, width: 40, borderRadius: 100 }} source={{
+                                                                    //         uri: API_IMG_URL + '/server/flightimage/' + e[0]?.flightUrl
+                                                                    //     }} />
                                                                 }
                                                                 <Text style={{ fontFamily: FONTS.fontBold, color: COLORS.colorText, fontSize: height * 0.021, width: width * 0.2, paddingLeft: 5 }}>{e[0]?.flightName}</Text>
                                                                 {
                                                                     e[0]?.flight_details?.map((data, ind) => {
-                                                                        return(
+                                                                        return (
                                                                             <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }} key={ind}>
-                                                                            <View style={{ alignItems: 'center' }}>
+                                                                                <View style={{ alignItems: 'center' }}>
 
-                                                                                <Text style={styles.Textlite}> {data.flights[0].departureLocation} {'\n'}(
-                                                                                    {
+                                                                                    <Text style={styles.Textlite}> {data.flights[0].departureLocation} {'\n'}(
+                                                                                        {
+                                                                                            data.flights[0].flightList
+                                                                                                .DepartureAirportLocationCode
+                                                                                        }
+                                                                                        )</Text>
+
+                                                                                    <Text style={styles.Text}>{moment(
                                                                                         data.flights[0].flightList
-                                                                                            .DepartureAirportLocationCode
-                                                                                    }
-                                                                                    )</Text>
-
-                                                                                <Text style={styles.Text}>{moment(
-                                                                                    data.flights[0].flightList
-                                                                                        .DepartureDateTime
-                                                                                )
-                                                                                    ?.format("HH:mm:ss a")
-                                                                                    .substring(0, 5)}</Text>
-
-                                                                            </View>
-                                                                            <FromArrow />
-                                                                            <View style={{ alignItems: 'center' }}>
-                                                                                <Text style={styles.Text}> {timeConvert(
-                                                                                    data.flights.reduce(
-                                                                                        (total, val) =>
-                                                                                        (total =
-                                                                                            total +
-                                                                                            parseFloat(
-                                                                                                val.flightList.JourneyDuration
-                                                                                                    ? parseFloat(
-                                                                                                        val.flightList
-                                                                                                            .JourneyDuration
-                                                                                                    )
-                                                                                                    : 0
-                                                                                            )),
-                                                                                        0
+                                                                                            .DepartureDateTime
                                                                                     )
-                                                                                )}</Text>
-                                                                                <FlightIcon />
-                                                                                <Text style={styles.Text}>{data?.totalStops} stop</Text>
+                                                                                        ?.format("HH:mm:ss a")
+                                                                                        .substring(0, 5)}</Text>
+
+                                                                                </View>
+                                                                                <FromArrow />
+                                                                                <View style={{ alignItems: 'center' }}>
+                                                                                    <Text style={styles.Text}> {timeConvert(
+                                                                                        data.flights.reduce(
+                                                                                            (total, val) =>
+                                                                                            (total =
+                                                                                                total +
+                                                                                                parseFloat(
+                                                                                                    val.flightList.JourneyDuration
+                                                                                                        ? parseFloat(
+                                                                                                            val.flightList
+                                                                                                                .JourneyDuration
+                                                                                                        )
+                                                                                                        : 0
+                                                                                                )),
+                                                                                            0
+                                                                                        )
+                                                                                    )}</Text>
+                                                                                    <FlightIcon />
+                                                                                    <Text style={styles.Text}>{data?.totalStops} stop</Text>
 
 
-                                                                            </View>
-                                                                            <BackArrow />
-                                                                            <View style={{ alignItems: 'center' }}>
-                                                                                <Text style={styles.Textlite}>{
-                                                                                    data.flights[
-                                                                                        data.flights.length - 1
-                                                                                    ].arrivalLocation
-                                                                                } {'\n'} (
-                                                                                    {
+                                                                                </View>
+                                                                                <BackArrow />
+                                                                                <View style={{ alignItems: 'center' }}>
+                                                                                    <Text style={styles.Textlite}>{
                                                                                         data.flights[
                                                                                             data.flights.length - 1
-                                                                                        ].flightList
-                                                                                            .ArrivalAirportLocationCode
-                                                                                    }
-                                                                                    )</Text>
-                                                                                <Text style={styles.Text}>{moment(
-                                                                                    data.flights[
-                                                                                        data.flights.length - 1
-                                                                                    ].flightList.ArrivalDateTime
-                                                                                )
-                                                                                    ?.format("HH:mm:ss a")
-                                                                                    .substring(0, 5)}</Text>
+                                                                                        ].arrivalLocation
+                                                                                    } {'\n'} (
+                                                                                        {
+                                                                                            data.flights[
+                                                                                                data.flights.length - 1
+                                                                                            ].flightList
+                                                                                                .ArrivalAirportLocationCode
+                                                                                        }
+                                                                                        )</Text>
+                                                                                    <Text style={styles.Text}>{moment(
+                                                                                        data.flights[
+                                                                                            data.flights.length - 1
+                                                                                        ].flightList.ArrivalDateTime
+                                                                                    )
+                                                                                        ?.format("HH:mm:ss a")
+                                                                                        .substring(0, 5)}</Text>
 
+                                                                                </View>
                                                                             </View>
-                                                                        </View>
                                                                         )
                                                                     }
-                                                                        
+
                                                                     )
                                                                 }
 
@@ -354,7 +404,7 @@ function FlightResult({ navigation, route }) {
 
                                                             <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, alignItems: 'flex-end' }}>
                                                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                                    <Text style={{ fontFamily: FONTS.font, color: COLORS.colorText }}>Rs:</Text>
+                                                                    <Text style={{ fontFamily: FONTS.font, color: COLORS.colorText }}>{e[0]?.CurrencyCode} :</Text>
                                                                     <Text style={{ fontFamily: FONTS.fontBold, color: COLORS.colorText, fontSize: height * 0.025, paddingLeft: 5 }}>{e[0]?.totalFare}</Text>
                                                                 </View>
                                                                 <View style={{ width: 1, height: height * 0.06, backgroundColor: 'grey' }} />
@@ -486,17 +536,18 @@ function FlightResult({ navigation, route }) {
 
                                                                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', marginHorizontal: 20, alignItems: 'flex-end' }}>
                                                                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                                                        <Text style={{ fontFamily: FONTS.font, color: COLORS.colorText }}>Rs:</Text>
+                                                                        <Text style={{ fontFamily: FONTS.font, color: COLORS.colorText }}>{e?.CurrencyCode}:</Text>
                                                                         <Text style={{ fontFamily: FONTS.fontBold, color: COLORS.colorText, fontSize: height * 0.025, paddingLeft: 5 }}>{e?.totalFare}</Text>
                                                                     </View>
                                                                     <View style={{ width: 1, height: height * 0.06, backgroundColor: 'grey' }} />
                                                                     <View style={styles.booknowBtn}>
                                                                         <TouchableHighlight underlayColor={'transparent'} onPress={() => {
-                                                                              dispatch({type:actions.SET_REVALIDATE,
-                                                                                payload:{'fare_source_code':e?.FareSourceCode},
-                                                                                navigation:navigation,
-                                                                                flightInfo:route?.params?.prefs,
-                                                                                itemInfo:e
+                                                                            dispatch({
+                                                                                type: actions.SET_REVALIDATE,
+                                                                                payload: { 'fare_source_code': e?.FareSourceCode },
+                                                                                navigation: navigation,
+                                                                                flightInfo: route?.params?.prefs,
+                                                                                itemInfo: e
                                                                             })
 
                                                                         }}>
